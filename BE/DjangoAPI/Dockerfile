@@ -21,6 +21,7 @@ COPY requirements.txt /app/
 
 # Install project dependencies within the virtual environment
 RUN /venv/bin/pip install --no-cache-dir -r requirements.txt
+RUN /venv/bin/pip install --upgrade psycopg2-binary
 
 # Copy the entire project to /app/
 COPY . /app/
