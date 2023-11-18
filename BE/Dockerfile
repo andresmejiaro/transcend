@@ -5,13 +5,11 @@ WORKDIR /app
 
 RUN apk add --no-cache bash
 
-COPY DjangoAPI .
+COPY server .
 
-# WORKDIR /app/DjangoAPI
+COPY django_project_setup.sh /app/django_project_setup.sh
+RUN chmod +x /app/django_project_setup.sh
 
-COPY djangoscript.sh /app/djangoscript.sh
-RUN chmod +x /app/djangoscript.sh
-
-ENTRYPOINT [ "/app/djangoscript.sh" ]
+ENTRYPOINT [ "/app/django_project_setup.sh" ]
 
 # CMD ["/bin/sh", "-c", "source /app/django_venv/bin/activate && python3 manage.py migrate && python3 manage.py runserver 0.0.0.0:8000"]

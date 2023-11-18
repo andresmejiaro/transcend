@@ -1,6 +1,6 @@
 #!/bin/bash
 
-PROJECT_DIR="/app/DjangoAPI/DjangoAPI"
+PROJECT_DIR="/app/server/server"
 
 python3 -m venv django_venv
 
@@ -22,16 +22,15 @@ pip install -r requirements.txt
 
 # Check if the project directory already exists
 if [ ! -d "$PROJECT_DIR" ]; then
-    django-admin startproject DjangoAPI
+    django-admin startproject server
 else
     echo "Project directory '$PROJECT_DIR' already exists. Skipping project creation."
 fi
 
-cd DjangoAPI
+cd server
 
 # Run makemigrations and migrate
-python3 manage.py makemigrations userauth
-python3 manage.py makemigrations pongapp
+python3 manage.py makemigrations
 python3 manage.py migrate
 
 # Create superuser if it doesn't exist
