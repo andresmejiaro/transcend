@@ -1,0 +1,27 @@
+# Ignore Python cache files
+__pycache__/
+*.pyc
+
+# Ignore environment-specific settings
+.env
+
+# Ignore Django-related files and directories
+*.log
+db.sqlite3
+media/
+# static/
+*.mo
+*.po
+migrations/
+staticfiles/
+
+# Ignore the virtual environment directory
+venv/
+django_venv/
+
+# Ignore files created by IDEs/editors
+.vscode/
+*.pyc
+
+# Ignore secrets and sensitive information
+secret_key.txt  # file containing secret key
