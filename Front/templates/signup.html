@@ -1,0 +1,43 @@
+
+
+
+
+<div class="row justify-content-center text-center">
+    <h3>Signup</h3>
+    <div class="mt-5">
+        <button class="btn btn-primary" id="signupIntra">
+            Signup intraa
+        </button>
+    </div>
+    <div class="col-md-6 mt-5">
+        <form id="signupForm">
+            <div class="form-group">
+                <label for="usernameSignupForm">Username</label>
+                <input type="text" class="form-control" id="usernameSignupForm" placeholder="Enter your username">
+            </div>
+        
+            <div class="form-group">
+                <label for="fullname">Fullname</label>
+                <input type="text" class="form-control" id="fullname" placeholder="Enter your fullname">
+            </div>
+        
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" class="form-control" id="password" placeholder="Enter your password">
+                <div id="passwordHelp" class="form-text">
+                    Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character.
+                </div>
+            </div>
+    
+            <div class="mb-3">
+                <label for="confirmPassword" class="form-label">Confirm Password</label>
+                <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm your password">
+                <div id="confirmPasswordHelp" class="form-text"></div>
+            </div>
+        
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+
+        <h4 mt-5>Already have an account? <a href="/login">Log In</a></h4>
+    </div>
+</div>
