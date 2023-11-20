@@ -1,7 +1,6 @@
 var button = document.getElementById("intra");
 
 const handleButtonClick = async () => {
-  console.log("BTNNN");
 
   const clientId ="u-s4t2ud-ca3a07a81bac42c6b896a950e6bcce0a4072c14b72a8aea1e48f732b55dd58e2";
   const redirectUri = "http%3A%2F%2Flocalhost%3A3000%2Fcallback";
@@ -15,4 +14,3 @@ button.addEventListener("click", function (event) {
   handleButtonClick();
 });
 
-console.log("LOGIN");

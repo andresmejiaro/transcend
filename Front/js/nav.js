@@ -1,5 +1,7 @@
 const logoutBtn = document.getElementById("logoutButton");
-logoutBtn.addEventListener("click", function (event) {
-  event.preventDefault();
-  handleLogout();
-});
+if (logoutBtn) {
+  logoutBtn.addEventListener("click", function (event) {
+    event.preventDefault();
+    handleLogout();
+  });
+}

@@ -17,7 +17,6 @@ const getCsrfToken = async () => {
   }
 };
 
-// CLARAMENTE MEJORAR ESTO!!!!!!!!!
 const isLogged = () => {
   username = sessionStorage.getItem("username");
   token = sessionStorage.getItem("jwt");
@@ -26,25 +25,25 @@ const isLogged = () => {
 };
 
 function handleLogout() {
-	sessionStorage.clear();
-	window.location.href = "/";
+  sessionStorage.clear();
+  window.location.href = "/";
 }
 
-// Pendiente a mejorar
-// async function makeRequest(url, options) {
-//     const csrfToken = await getCsrfToken();
-// 	console.log(csrfToken)
-//     if (csrfToken) {
-//         options.headers = {
-//             ...options.headers,
-//             'X-CSRFToken': csrfToken,
-//         };
-//     }
+async function makeRequest(url, options) {
+  const csrfToken = await getCsrfToken();
+  if (csrfToken) {
+    options.headers = {
+      ...options.headers,
+      "X-CSRFToken": csrfToken,
+    };
+  }
 
-//     const response = await fetch(url, options);
-//     const data = await response.json();
+  const response = await fetch(url, options);
 
-//     console.log(data);
+  if (!response.ok) {
+    throw new Error(`HTTP error! Status: ${response.status}`);
+  }
 
-//     return data;
-// }
+  const data = await response.json();
+  return data;
+}
