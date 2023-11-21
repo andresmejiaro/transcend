@@ -56,9 +56,7 @@ function validateEmail() {
 }
 
 // Event listeners for input validation
-document
-  .getElementById("usernameSignupForm")
-  .addEventListener("input", validateUsername);
+document.getElementById("usernameSignupForm").addEventListener("input", validateUsername);
 document.getElementById("fullname").addEventListener("input", validateFullname);
 document.getElementById("email").addEventListener("input", validateEmail);
 
@@ -67,26 +65,33 @@ const confirmPasswordInput = document.getElementById("confirmPassword");
 const passwordHelp = document.getElementById("passwordHelp");
 const confirmPasswordHelp = document.getElementById("confirmPasswordHelp");
 
+function checkPasswordStrength(password) {
+  if (password.length >= 8)
+    return true;
+  else
+    return false;
+}
+
 function validatePassword() {
   const password = passwordInput.value;
   const confirmPassword = confirmPasswordInput.value;
 
-  if (!checkPasswordStrength(password))
+  if (!checkPasswordStrength(password)) {
     passwordHelp.innerText = "Expected 8 or more characters";
+    passwordInput.classList.add("is-invalid");
+    passwordInput.classList.remove("is-valid");
+  } else {
+    passwordInput.classList.remove("is-invalid");
+    passwordInput.classList.add("is-valid");
+
+  }
+
 
   if (password !== confirmPassword) {
     confirmPasswordHelp.innerText = "Passwords do not match";
     return false;
   } else {
     confirmPasswordHelp.innerText = "";
-    return true;
-  }
-}
-
-function checkPasswordStrength(password) {
-  if (password.length >= 8) {
-    return false;
-  } else {
     return true;
   }
 }
@@ -99,34 +104,26 @@ function validateConfirmPassword() {
   const password = document.getElementById("password").value;
 
   if (confirmPassword !== password) {
-    if (checkPasswordStrength(password))
-      passwordHelp.innerText = "";
     confirmPasswordHelp.innerText = "Passwords do not match";
     confirmPasswordInput.classList.add("is-invalid");
     confirmPasswordInput.classList.remove("is-valid");
-    passwordInput.classList.add("is-invalid");
-    passwordInput.classList.remove("is-valid");
     return false;
   } else {
-    confirmPasswordHelp.innerText = "";
     confirmPasswordInput.classList.remove("is-invalid");
     confirmPasswordInput.classList.add("is-valid");
-    passwordInput.classList.remove("is-invalid");
-    passwordInput.classList.add("is-valid");
     return true;
   }
 }
 
 // Event listeners for input validation
 document.getElementById("password").addEventListener("input", validatePassword);
-document
-  .getElementById("confirmPassword")
-  .addEventListener("input", validateConfirmPassword);
+document.getElementById("confirmPassword").addEventListener("input", validateConfirmPassword);
 
 const tryFormPost = async () => {
   const username = document.getElementById("usernameSignupForm").value;
   const fullname = document.getElementById("fullname").value;
   const password = document.getElementById("password").value;
+  const email = document.getElementById("email").value;
 
   token = await getCsrfToken();
 
@@ -141,6 +138,7 @@ const tryFormPost = async () => {
     body: JSON.stringify({
       username: username,
       fullname: fullname,
+      email: email,
       password: password,
     }),
   })
@@ -152,12 +150,20 @@ const tryFormPost = async () => {
         window.location.href = "/home";
       } else {
         console.error("Error:", data.message);
+        displayError("Invalid credentials. Please try again.");
       }
     })
     .catch((error) => {
       console.error("Error:", error);
+      displayError("Invalid credentials. Please try again.");
     });
 };
+
+function displayError(message) {
+  const errorAlert = document.getElementById("errorAlert");
+  errorAlert.textContent = message;
+  errorAlert.style.display = "block";
+}
 
 const form = document.getElementById("signupForm");
 form.addEventListener(

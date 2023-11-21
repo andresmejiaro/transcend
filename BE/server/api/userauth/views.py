@@ -35,14 +35,15 @@ def signup_view(request):
             username = data.get('username')
             password = data.get('password')
             fullname = data.get('fullname')
+            email = data.get('email')
 
-            if not (username and password and fullname):
+            if not (username and password and fullname and email):
                 return JsonResponse({"status": "error", "message": "Username, password, or fullname is missing"}, status=400)
 
             if CustomUser.objects.filter(username=username).exists():
                 return JsonResponse({"status": "error", "message": "Username already exists"}, status=400)
 
-            user = CustomUser(username=username, fullname=fullname)
+            user = CustomUser(username=username, fullname=fullname, email=email)
             user.set_password(password)
             user.save()
             jwt_token = create_jwt_token(user.id, user.username)
