@@ -7,7 +7,7 @@ RUN rm /etc/nginx/conf.d/default.conf
 WORKDIR /usr/share/nginx/html
 
 # Copy the frontend files into the container
-COPY Front /usr/share/nginx/html
+# COPY Front /usr/share/nginx/html
 
 # Copy the custom Nginx configuration
 COPY nginx/default.conf /etc/nginx/conf.d/
