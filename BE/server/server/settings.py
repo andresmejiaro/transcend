@@ -41,8 +41,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 	'corsheaders',
 	'api',
+	'api.tournament',
 	# 'api.userauth',
-	# 'api.tournament',
 ]
 
 MIDDLEWARE = [
