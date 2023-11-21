@@ -89,8 +89,6 @@ def tournament_update(request, tournament_id):
     return JsonResponse({'status': 'error', 'message': 'Only POST requests are allowed'}, status=400)
 
 # Match CRUD views
-# ... (previous code)
-
 def match_create(request):
     if request.method == 'POST':
         try:
@@ -195,4 +193,102 @@ def match_update(request, match_id):
         except Exception as e:
             return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
         
+    return JsonResponse({'status': 'error', 'message': 'Only PUT requests are allowed'}, status=400)
+
+# User CRUD views
+
+@csrf_exempt
+def user_create(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            username = data.get('username')
+            password = data.get('password')
+            email = data.get('email')
+            first_name = data.get('first_name')
+            last_name = data.get('last_name')
+
+            if not (username and password and email and first_name and last_name):
+                return JsonResponse({"status": "error", "message": "Missing fields"}, status=400)
+
+            if User.objects.filter(username=username).exists():
+                return JsonResponse({"status": "error", "message": "Username already exists"}, status=400)
+
+            user = User(username=username, email=email, first_name=first_name, last_name=last_name)
+            user.set_password(password)
+            user.save()
+            response = JsonResponse({'status': 'ok', 'message': 'User created successfully'})
+            response['Access-Control-Allow-Methods'] = 'POST, OPTIONS'
+            response['Access-Control-Allow-Headers'] = 'Content-Type'
+
+            return response
+
+        except json.JSONDecodeError:
+            return JsonResponse({'status': 'error', 'message': 'Invalid JSON in the request body'}, status=400)
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
+
+    return JsonResponse({'status': 'error', 'message': 'Only POST requests are allowed'}, status=400)
+
+@csrf_exempt
+def user_list(request):
+    if request.method == 'GET':
+        try:
+            users = User.objects.all()
+            user_list = []
+            for user in users:
+                user_list.append({
+                    'id': user.id,
+                    'username': user.username,
+                    'email': user.email,
+                    'first_name': user.first_name,
+                    'last_name': user.last_name,
+                })
+            return JsonResponse({'status': 'ok', 'data': user_list})
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
+    return JsonResponse({'status': 'error', 'message': 'Only GET requests are allowed'}, status=400)
+
+@csrf_exempt
+def user_delete(request, user_id):
+    if request.method == 'DELETE':
+        try:
+            user = User.objects.get(id=user_id)
+            user.delete()
+            return JsonResponse({'status': 'ok', 'message': 'User deleted successfully'})
+        except User.DoesNotExist:
+            return JsonResponse({'status': 'error', 'message': 'User does not exist'}, status=400)
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
+    return JsonResponse({'status': 'error', 'message': 'Only DELETE requests are allowed'}, status=400)
+
+@csrf_exempt
+def user_update(request, user_id):
+    user = get_object_or_404(User, pk=user_id)
+    if request.method == "PUT":
+        try:
+            data = json.loads(request.body)
+            new_username = data.get('username')
+            new_password = data.get('password')
+            new_email = data.get('email')
+            new_first_name = data.get('first_name')
+            new_last_name = data.get('last_name')
+
+            if not (new_username and new_password and new_email and new_first_name and new_last_name):
+                return JsonResponse({"status": "error", "message": "Missing fields"}, status=400)
+
+            user.username = new_username
+            user.set_password(new_password)
+            user.email = new_email
+            user.first_name = new_first_name
+            user.last_name = new_last_name
+            user.save()
+            return JsonResponse({'status': 'ok', 'message': 'User updated successfully'})
+        except User.DoesNotExist:
+            return JsonResponse({'status': 'error', 'message': 'User does not exist'}, status=400)
+        except json.JSONDecodeError:
+            return JsonResponse({'status': 'error', 'message': 'Invalid JSON in the request body'}, status=400)
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
+
     return JsonResponse({'status': 'error', 'message': 'Only PUT requests are allowed'}, status=400)
