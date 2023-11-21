@@ -1,18 +1,21 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-class Tournaments(models.Model):
-    name = models.CharField(max_length=100)
-    start_date = models.DateTimeField(null=True, blank=True)
-    end_date = models.DateField(null=True, blank=True)
-
-class Matches(models.Model):
-    tournament = models.ForeignKey(Tournaments, on_delete=models.CASCADE, null=True, blank=True)
-    player1 = models.ForeignKey(User, on_delete=models.CASCADE, related_name='jugador1')
-    player2 = models.ForeignKey(User, on_delete=models.CASCADE, related_name='jugador2')
+class Match(models.Model):
+    player1 = models.ForeignKey(User, on_delete=models.CASCADE, related_name='player1')
+    player2 = models.ForeignKey(User, on_delete=models.CASCADE, related_name='player2')
     player1_score = models.IntegerField()
     player2_score = models.IntegerField()
     active = models.BooleanField(default=False)
 
     def __str__(self):
-        return f"Partida {self.id} - {self.player1} vs {self.player2}"
+        return f"Match {self.id} - {self.player1} vs {self.player2}"
+
+class Tournament(models.Model):
+    name = models.CharField(max_length=100)
+    start_date = models.DateTimeField(null=True, blank=True)
+    end_date = models.DateField(null=True, blank=True)
+    matches = models.ManyToManyField(Match, blank=True)
+
+    def __str__(self):
+        return f"Tournament {self.id} - {self.name}"
