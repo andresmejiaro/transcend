@@ -3,7 +3,11 @@ FROM python:3.7-alpine AS builder
 EXPOSE 8000
 WORKDIR /app
 
-RUN apk add --no-cache bash
+RUN apk add --no-cache bash \
+    && apk add --no-cache --virtual .build-deps \
+        build-base \
+        jpeg-dev \
+        zlib-dev
 
 COPY server .
 

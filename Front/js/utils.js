@@ -20,6 +20,7 @@ const getCsrfToken = async () => {
 const isLogged = () => {
   username = sessionStorage.getItem("username");
   token = sessionStorage.getItem("jwt");
+  
   if (!username || !token) return false;
   else return true;
 };

@@ -12,27 +12,33 @@
     <div class="col-md-6 mt-5">
         <form id="signupForm">
             <div class="form-group">
-                <label for="usernameSignupForm">Username</label>
-                <input type="text" class="form-control" id="usernameSignupForm" placeholder="Enter your username">
+                <label for="usernameSignupForm" class="form-label">Username</label>
+                <input type="text" class="form-control" id="usernameSignupForm" placeholder="Enter your username" required>
+                <div class="invalid-feedback" id="usernameHelp"></div>
             </div>
         
             <div class="form-group">
-                <label for="fullname">Fullname</label>
-                <input type="text" class="form-control" id="fullname" placeholder="Enter your fullname">
+                <label for="fullname" class="form-label">Fullname</label>
+                <input type="text" class="form-control" id="fullname" placeholder="Enter your fullname" required>
+                <div class="invalid-feedback" id="fullnameHelp"></div>
+            </div>
+        
+            <div class="form-group">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" class="form-control" id="email" placeholder="Enter your email" required>
+                <div class="invalid-feedback" id="emailHelp"></div>
             </div>
         
             <div class="mb-3">
                 <label for="password" class="form-label">Password</label>
-                <input type="password" class="form-control" id="password" placeholder="Enter your password">
-                <div id="passwordHelp" class="form-text">
-                    Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character.
-                </div>
+                <input type="password" class="form-control" id="password" placeholder="Enter your password" required>
+                <div class="invalid-feedback" id="passwordHelp"></div>
             </div>
-    
+            
             <div class="mb-3">
                 <label for="confirmPassword" class="form-label">Confirm Password</label>
-                <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm your password">
-                <div id="confirmPasswordHelp" class="form-text"></div>
+                <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm your password" required>
+                <div class="invalid-feedback" id="confirmPasswordHelp"></div>
             </div>
         
             <button type="submit" class="btn btn-primary">Submit</button>

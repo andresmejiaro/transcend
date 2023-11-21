@@ -8,11 +8,14 @@ source django_venv/bin/activate
 
 pip install --upgrade pip
 
+python3 -m pip install --upgrade pip setuptools wheel
+
 pip install django
 pip install psycopg2-binary
 pip install djangorestframework
 pip install django-cors-headers
 pip install passlib
+pip install Pillow
 
 pip freeze > requirements.txt
 
