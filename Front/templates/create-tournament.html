@@ -1,0 +1,30 @@
+
+
+
+
+<div class="row justify-content-center text-center">
+    <h3>Create a Tournament</h3>
+    <div class="col-md-6 mt-5">
+        <form id="createTornForm">
+            <div class="form-group">
+                <label for="nameTournament">The name</label>
+                <input type="text" class="form-control" id="nameTournament" placeholder="Enter a name">
+            </div> 
+            <div class="form-group">
+                <label for="dateTournament">The date</label>
+                <input type="datetime-local" class="form-control" id="dateTournament" placeholder="Enter a date">
+            </div>
+            <div class="form-group">
+                <label for="endTournament">The end date</label>
+                <input type="datetime-local" class="form-control" id="endTournament" placeholder="Enter a date">
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+        <div id="viewTournaments">
+            <h3>View Tournaments</h3>
+            <div id="tournaments"></div>
+            
+
+        </div>
+    </div>
+</div>
