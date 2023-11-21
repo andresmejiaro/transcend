@@ -135,7 +135,14 @@ def match_list(request):
             Matchs = Match.objects.all()
             match_list = []
             for match in Matchs:
-                match_list.append({'id': match.id, 'player1': match.player1.id, 'player2': match.player2.id, 'player1_score': match.player1_score, 'player2_score': match.player2_score, 'active': match.active})
+                match_list.append({
+                    'id': match.id,
+                    'player1': match.player1.id,
+                    'player2': match.player2.id,
+                    'player1_score': match.player1_score,
+                    'player2_score': match.player2_score,
+                    'active': match.active
+                    })
             return JsonResponse({'status': 'ok', 'data': match_list})
         except Exception as e:
             return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
@@ -196,7 +203,6 @@ def match_update(request, match_id):
     return JsonResponse({'status': 'error', 'message': 'Only PUT requests are allowed'}, status=400)
 
 # User CRUD views
-
 @csrf_exempt
 def user_create(request):
     if request.method == 'POST':
