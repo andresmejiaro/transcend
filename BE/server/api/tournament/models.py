@@ -15,4 +15,4 @@ class Matches(models.Model):
     active = models.BooleanField(default=False)
 
     def __str__(self):
-        return f"Partida {self.id} - {self.jugador1} vs {self.jugador2}"
+        return f"Partida {self.id} - {self.player1} vs {self.player2}"
