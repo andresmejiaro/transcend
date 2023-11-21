@@ -54,10 +54,10 @@ def tournament_list(request):
             return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
     return JsonResponse({'status': 'error', 'message': 'Only GET requests are allowed'}, status=400)
 
-def tournament_delete(request, tournament_id):
+def tournament_delete(request, pk):
     if request.method == 'DELETE':
+        tournament = get_object_or_404(Tournament, pk=pk)
         try:
-            tournament = Tournament.objects.get(id=tournament_id)
             tournament.delete()
             return JsonResponse({'status': 'ok', 'message': 'Tournament deleted successfully'})
         except Tournament.DoesNotExist:
@@ -66,8 +66,8 @@ def tournament_delete(request, tournament_id):
             return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
     return JsonResponse({'status': 'error', 'message': 'Only DELETE requests are allowed'}, status=400)
 
-def tournament_update(request, tournament_id):
-    tournament = get_object_or_404(Tournament, pk=tournament_id)
+def tournament_update(request, pk):
+    tournament = get_object_or_404(Tournament, pk=pk)
     if request.method == "PUT":
         try:
             data = json.loads(request.body)
@@ -148,10 +148,10 @@ def match_list(request):
             return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
     return JsonResponse({'status': 'error', 'message': 'Only GET requests are allowed'}, status=400)
 
-def match_delete(request, match_id):
+def match_delete(request, pk):
+    match = get_object_or_404(Match, pk=pk)
     if request.method == 'DELETE':
         try:
-            match = Match.objects.get(id=match_id)
             match.delete()
             return JsonResponse({'status': 'ok', 'message': 'Match deleted successfully'})
         except Match.DoesNotExist:
@@ -160,8 +160,8 @@ def match_delete(request, match_id):
             return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
     return JsonResponse({'status': 'error', 'message': 'Only DELETE requests are allowed'}, status=400)
 
-def match_update(request, match_id):
-    match = get_object_or_404(Match, pk=match_id)
+def match_update(request, pk):
+    match = get_object_or_404(Match, pk=pk)
     if request.method == "PUT":
         try:
             data = json.loads(request.body)
@@ -249,6 +249,9 @@ def user_list(request):
                     'email': user.email,
                     'first_name': user.first_name,
                     'last_name': user.last_name,
+                    'password': user.password,
+                    'staff_status': user.is_staff,
+                    'user_status': user.is_active,
                 })
             return JsonResponse({'status': 'ok', 'data': user_list})
         except Exception as e:
@@ -256,10 +259,10 @@ def user_list(request):
     return JsonResponse({'status': 'error', 'message': 'Only GET requests are allowed'}, status=400)
 
 @csrf_exempt
-def user_delete(request, user_id):
+def user_delete(request, pk):
+    user = get_object_or_404(User, pk=pk)
     if request.method == 'DELETE':
         try:
-            user = User.objects.get(id=user_id)
             user.delete()
             return JsonResponse({'status': 'ok', 'message': 'User deleted successfully'})
         except User.DoesNotExist:
@@ -269,8 +272,8 @@ def user_delete(request, user_id):
     return JsonResponse({'status': 'error', 'message': 'Only DELETE requests are allowed'}, status=400)
 
 @csrf_exempt
-def user_update(request, user_id):
-    user = get_object_or_404(User, pk=user_id)
+def user_update(request, pk):
+    user = get_object_or_404(User, pk=pk)
     if request.method == "PUT":
         try:
             data = json.loads(request.body)
