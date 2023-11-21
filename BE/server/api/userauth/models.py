@@ -6,10 +6,9 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 class CustomUser(AbstractUser):
+    email = models.EmailField(unique=True, null=False, blank=False)
     fullname = models.CharField(max_length=100, null=False, blank=False)
-
-    # Falta agregar algunaas cosas. Avatar...
-    # Registrar las ultimas partidas, un modelo aparte con vinculo al user?
+    # avatar = models.ImageField(upload_to='avatars/', null=True, blank=True)
 
 
     groups = models.ManyToManyField(
