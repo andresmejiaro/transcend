@@ -50,6 +50,12 @@ const urlRoutes = {
     description: "This is the callback page",
     js: ["./js/auth/callback.js"],
   },
+  "/create-tournaments": {
+    template: "/templates/create-tournament.html",
+    title: "create tournament | " + urlPageTitle,
+    description: "This is the create tournament page",
+    js: ["./js/create-tor.js"],
+  },
 };
 
 const ifLoggedRedirect = (location) => {
