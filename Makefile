@@ -1,5 +1,5 @@
-DOCKER = docker
-COMPOSE = docker-compose -f docker-compose.yml
+DOCKER = sudo docker
+COMPOSE = sudo docker-compose -f docker-compose.yml
 
 all: up
 
@@ -7,7 +7,7 @@ up:
 	@echo "\033[1;33mStarting containers\033[0m"
 	@$(COMPOSE) up -d --build
 	@$(DOCKER)-compose up
-
+	
 down:
 	@echo "\033[1;33mStopping containers\033[0m"
 	@$(DOCKER)-compose down
@@ -32,7 +32,9 @@ fclean:
 	@echo "\033[1;33mCleaning containers\033[0m"
 	@$(DOCKER)-compose down -v
 	@echo "\033[1;33mPruning Docker\033[0m"
-	@$(DOCKER) system prune -a --force --volumes
+	@$(DOCKER) system prune -a --force
+	@echo "\033[1;33mRemoving Docker Volumes\033[0m"
+	@$(DOCKER) volume prune --force
 
 status:
 	@echo "\n\033[1;33mContainers\033[0m"

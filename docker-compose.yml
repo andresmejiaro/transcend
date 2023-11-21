@@ -4,10 +4,11 @@ services:
   # Django web container for the Django app
   django:
     build:
-      context: ./BE/DjangoAPI/
+      context: ./BE/
       dockerfile: Dockerfile
+    container_name: 'django'
     volumes:
-      - .:/app/
+      - ./BE:/app/
     ports:
       - "8000:8000"
     depends_on:
@@ -22,6 +23,7 @@ services:
   # Database container for PostgreSQL
   db:
     image: postgres:latest
+    container_name: 'db'
     environment:
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_USER: ${POSTGRES_USER}
@@ -36,6 +38,7 @@ services:
   # pgAdmin container for database management
   pgadmin4:
     image: dpage/pgadmin4
+    container_name: 'pgadmin4'
     environment:
       PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
       PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
@@ -45,6 +48,8 @@ services:
       - db
     networks:
       - app-network
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin/
 
   nginx:
     container_name: 'nginx'
@@ -62,8 +67,10 @@ services:
 # Store data persistently in named volumes
 volumes:
   postgres_data:
+  pgadmin_data:
 
 # Define the networks
 networks:
   app-network:
+    name: ft_transcendence
     driver: bridge
