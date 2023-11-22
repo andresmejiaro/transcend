@@ -6,7 +6,41 @@ const usersContainer = document.getElementById('user');
 const form = document.getElementById("createTornForm");
 
 const createRequest = async () => {
-    // ... (unchanged)
+    console.log("Creating tournament");
+    const name = document.getElementById("nameTournament").value;
+    try {
+        const token = sessionStorage.getItem("jwt");
+        if (!token) {
+            console.log("JWT token not found");
+            return;
+        }
+        const username = sessionStorage.getItem("username");
+        if (!username) {
+            console.log("username not found");
+            return;
+        }
+
+        const url = "http://localhost:8000/api/tournament/create/" + "?token=" + token + "&username=" + username;
+        const options = {
+            method: "POST",
+            mode: "cors",
+            credentials: "include",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            },
+            body: JSON.stringify({
+                name: name
+            }),
+        };
+
+        await makeRequest(url, options);
+
+        // Refresh the list of tournaments after creating a new one
+        getListofTournaments();
+    } catch (error) {
+        console.log(error);
+    }
 };
 
 const getListofTournaments = async () => {
