@@ -1,5 +1,4 @@
-const urlPageTitle = "JS Single Page Application Router";
-import { urlRoutes } from "./routes";
+// import { urlRoutes } from './routes.js';
 
 document.addEventListener("click", (e) => {
   const { target } = e;

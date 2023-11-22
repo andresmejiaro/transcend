@@ -32,7 +32,7 @@ cd server
 # Run makemigrations and migrate
 python3 manage.py makemigrations api
 python3 manage.py makemigrations tournament
-# python3 manage.py makemigrations userauth
+python3 manage.py makemigrations userauth
 python3 manage.py migrate
 
 # Create superuser if it doesn't exist

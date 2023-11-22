@@ -41,8 +41,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 	'corsheaders',
 	'api',
+	'api.userauth',
 	'api.tournament',
-	# 'api.userauth',
 ]
 
 MIDDLEWARE = [
@@ -54,6 +54,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+	'api.middleware.jwt_verification_middleware'
 ]
 
 ROOT_URLCONF = 'server.urls'
@@ -128,22 +129,17 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
-
-# settings.py
-
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
-
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-# CSRF_COOKIE_NAME = 'csrftoken'
+CSRF_COOKIE_NAME = 'csrftoken'
 # CSRF_COOKIE_SECURE = True  # If your site is served over HTTPS
-# CSRF_COOKIE_HTTPONLY = True
+CSRF_COOKIE_HTTPONLY = True
+
+AUTH_USER_MODEL = 'userauth.CustomUser'
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",

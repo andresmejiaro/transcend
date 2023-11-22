@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from .models import Tournament, Match
-from django.contrib.auth.models import User
+from api.userauth.models import CustomUser as User
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 import json
@@ -223,7 +223,6 @@ def match_update(request, pk):
     return JsonResponse({'status': 'error', 'message': 'Only PUT requests are allowed'}, status=400)
 
 # User CRUD views
-@csrf_exempt
 def user_create(request):
     if request.method == 'POST':
         try:
@@ -258,7 +257,6 @@ def user_create(request):
 
     return JsonResponse({'status': 'error', 'message': 'Only POST requests are allowed'}, status=400)
 
-@csrf_exempt
 def user_list(request):
     if request.method == 'GET':
         try:
@@ -280,7 +278,6 @@ def user_list(request):
             return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
     return JsonResponse({'status': 'error', 'message': 'Only GET requests are allowed'}, status=400)
 
-@csrf_exempt
 def user_delete(request, pk):
     user = get_object_or_404(User, pk=pk)
     if request.method == 'DELETE':
@@ -293,7 +290,6 @@ def user_delete(request, pk):
             return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
     return JsonResponse({'status': 'error', 'message': 'Only DELETE requests are allowed'}, status=400)
 
-@csrf_exempt
 def user_update(request, pk):
     user = get_object_or_404(User, pk=pk)
     if request.method == "PUT":

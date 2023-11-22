@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import User
+from api.userauth.models import CustomUser as User
 
 class Match(models.Model):
     player1 = models.ForeignKey(User, on_delete=models.CASCADE, related_name='player1')
@@ -13,7 +13,6 @@ class Match(models.Model):
 
     def __str__(self):
         return f"Match {self.id} - {self.player1} vs {self.player2}"
-
 
 class Tournament(models.Model):
     # name: Type of tournament (e.g. 1v1, bracket, etc.)
