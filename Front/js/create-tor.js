@@ -3,55 +3,79 @@ const tournamentsContainer = document.getElementById("tournaments");
 const form = document.getElementById("createTornForm")
 
 const createRequest = async () => {
-	console.log("Creating tournament");
-	const name = document.getElementById("nameTournament").value;
-	try {
-		const token = await getCsrfToken();
-		const response = await fetch("http://localhost:8000/api/tournament/create/", {
-		  method: "POST",
-		  mode: "cors",
-		  credentials: "include",
-		  headers: {
-			"Content-Type": "application/json",
-			"X-CSRFToken": token,
-		  },
-		  body: JSON.stringify({
-			name: name
-		  }),
-		});
-	
-		if (!response.ok) {
-		  throw new Error(`HTTP error! Status: ${response.status}`);
-		}
-	
-		const data = await response.json();
-	
-		console.log(data)
-		getListofTournaments();
-	} catch (error) {
-		console.log(error);
-	}
-}
+    console.log("Creating tournament");
+    const name = document.getElementById("nameTournament").value;
+    const theDate = document.getElementById("dateTournament").value;
+    const theEndDate = document.getElementById("endTournament").value;
+
+    const token = sessionStorage.getItem("jwt");
+    if (!token) {
+        console.log("JWT token not found");
+        return;
+    }
+    const username = sessionStorage.getItem("username");
+    if (!username) {
+        console.log("username not found");
+        return;
+    }
+
+    csrfToken = await getCsrfToken();
+    const response = await fetch("http://localhost:8000/api/tournament/create/" + "?token=" + token + "&username=" + username, {
+        method: "POST",
+        mode: "cors",
+        credentials: "include",
+        headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": csrfToken,
+        },
+        body: JSON.stringify({
+            name: name,
+        }),
+    })
+    .then((response) => response.json())
+    .then((data) => {
+        if (data.status === "ok") {
+            sessionStorage.setItem("name", name);
+            sessionStorage.setItem("date", theDate);
+            sessionStorage.setItem("endDate", theEndDate);
+            window.location.href = "/create-tournaments";
+        } else {
+            console.error("Error:", data.message);
+        }
+    })
+    .catch((error) => {
+        console.error("Error:", error);
+    });
+};
+
 
 const getListofTournaments = async () => {
     console.log("Getting list of tournaments");
     try {
-        token = await getCsrfToken();
-        const response = await fetch("http://localhost:8000/api/tournament/list/", {
+        const token = sessionStorage.getItem("jwt");
+        if (!token) {
+            console.log("JWT token not found");
+            return;
+        }
+        const username = sessionStorage.getItem("username");
+        if (!username) {
+            console.log("username not found");
+            return;
+        }
+
+        const url = "http://localhost:8000/api/tournament/list/" + "?token=" + token + "&username=" + username;
+        const options = {
             method: "GET",
             mode: "cors",
             credentials: "include",
-			headers: {
-				"Content-Type": "application/json",
-				"X-CSRFToken": token,
-			},
-        });
-
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-
-        const data = await response.json();
+            headers: {
+                "Content-Type": "application/json",
+            },
+        };
+        console.log(token)
+        console.log(username)
+        
+        const data = await makeRequest(url, options);
 
         // Update the content of the 'tournaments' div with the list of tournaments
         tournamentsContainer.innerHTML = "";
@@ -82,28 +106,36 @@ const attachDeleteEventListeners = () => {
 
 const deleteTournament = async (tournamentId) => {
     try {
-        const token = await getCsrfToken();
-        const response = await fetch(`http://localhost:8000/api/tournament/delete/${tournamentId}/`, {
+        const token = sessionStorage.getItem("jwt");
+        if (!token) {
+            console.log("JWT token not found");
+            return;
+        };
+        const username = sessionStorage.getItem("username");
+        if (!username) {
+            console.log("username not found");
+            return;
+        };
+
+        const url = `http://localhost:8000/api/tournament/delete/${tournamentId}/` + "?token=" + token + "&username=" + username;
+        const options = {
             method: "DELETE",
             mode: "cors",
             credentials: "include",
             headers: {
                 "Content-Type": "application/json",
-                "X-CSRFToken": token,
             },
-        });
+        };
+        console.log(token)
+        console.log(username)
 
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
+        const data = await makeRequest(url, options);
 
-        const data = await response.json();
-
-        console.log(data);
-        getListofTournaments(); // Refresh the tournament list after deletion
-    } catch (error) {
-        console.log(error);
+        getListofTournaments();
     }
+    catch (error) {
+        console.log(error);
+    };
 };
 
 getListofTournaments();
