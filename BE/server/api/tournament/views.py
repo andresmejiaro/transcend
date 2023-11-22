@@ -9,20 +9,27 @@ import json
 # Create your views here.
 
 # Tournament CRUD views
-def touprnament_create(request):
+def tournament_create(request):
     if request.method == 'POST':
         try:
             data = json.loads(request.body)
             name = data.get('name')
+            start_date = data.get('start_date', None)
+            end_date = data.get('end_date', None)
+            match_ids = data.get('matches', [])
 
-            if not (name):
+            if not name:
                 return JsonResponse({"status": "error", "message": "Name is missing"}, status=400)
 
-            if Tournament.objects.filter(name=name).exists():
-                return JsonResponse({"status": "error", "message": "Tournament name already exists"}, status=400)
+            matches = []
+            for match_id in match_ids:
+                matches.append(Match.objects.get(pk=match_id))
+                if not matches[-1]:
+                    return JsonResponse({"status": "error", "message": "Invalid match ID"}, status=400)
 
-            tournament = Tournament(name=name)
+            tournament = Tournament(name=name, start_date=start_date, end_date=end_date)
             tournament.save()
+            tournament.matches.set(matches)
             response = JsonResponse({'status': 'ok', 'message': 'Tournament created successfully'})
             response['Access-Control-Allow-Methods'] = 'POST, OPTIONS'
             response['Access-Control-Allow-Headers'] = 'Content-Type'
@@ -47,7 +54,7 @@ def tournament_list(request):
                     'name': tournament.name,
                     'start_date': tournament.start_date,
                     'end_date': tournament.end_date,
-                    'matches': [match.id for match in tournament.matches.all()]  # Assuming matches have an 'id' field
+                    'matches': [match.id for match in tournament.matches.all()]
                 })
             return JsonResponse({'status': 'ok', 'data': tournament_list})
         except Exception as e:
@@ -72,13 +79,26 @@ def tournament_update(request, pk):
         try:
             data = json.loads(request.body)
             new_name = data.get('name')
+            new_start_date = data.get('start_date', None)
+            new_end_date = data.get('end_date', None)
+            new_match_ids = data.get('matches', [])
 
-            if not new_name:
-                return JsonResponse({"status": "error", "message": "Name is missing"}, status=400)
+            matches = []
+            for match_id in new_match_ids:
+                matches.append(Match.objects.get(pk=match_id))
+                if not matches[-1]:
+                    return JsonResponse({"status": "error", "message": "Invalid match ID"}, status=400)
 
-            tournament.name = new_name
+            if new_name:
+                tournament.name = new_name
+            if new_start_date:
+                tournament.start_date = new_start_date
+            if new_end_date:
+                tournament.end_date = new_end_date
+            tournament.matches.set(matches)
             tournament.save()
             return JsonResponse({'status': 'ok', 'message': 'Tournament updated successfully'})
+        
         except Tournament.DoesNotExist:
             return JsonResponse({'status': 'error', 'message': 'Tournament does not exist'}, status=400)
         except json.JSONDecodeError:
@@ -93,10 +113,10 @@ def match_create(request):
     if request.method == 'POST':
         try:
             data = json.loads(request.body)
-            player1_id = data.get('player1')  # Change the variable name to avoid confusion
+            player1_id = data.get('player1')
             player2_id = data.get('player2')
-            player1_score = data.get('player1_score')
-            player2_score = data.get('player2_score')
+            player1_score = data.get('player1_score', 0)
+            player2_score = data.get('player2_score', 0)
             active = data.get('active')
 
             # Convert player1_id and player2_id to User instances
@@ -219,6 +239,8 @@ def user_create(request):
 
             if User.objects.filter(username=username).exists():
                 return JsonResponse({"status": "error", "message": "Username already exists"}, status=400)
+            if User.objects.filter(email=email).exists():
+                return JsonResponse({"status": "error", "message": "Email already exists"}, status=400)
 
             user = User(username=username, email=email, first_name=first_name, last_name=last_name)
             user.set_password(password)
