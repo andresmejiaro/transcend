@@ -158,6 +158,10 @@ const attachDeleteEventListeners = () => {
                 const matchId = this.dataset.matchId;
                 deleteMatch(matchId);
             }
+            else if (this.dataset.userId) {
+                const userId = this.dataset.userId;
+                deleteUser(userId);
+            }
         });
     });
 };
@@ -224,6 +228,40 @@ const deleteMatch = async (matchId) => {
         const data = await makeRequest(url, options);
 
         getListofMatches();
+    }
+    catch (error) {
+        console.log(error);
+    };
+}
+
+const deleteUser = async (userId) => {
+    try {
+        const token = sessionStorage.getItem("jwt");
+        if (!token) {
+            console.log("JWT token not found");
+            return;
+        };
+        const username = sessionStorage.getItem("username");
+        if (!username) {
+            console.log("username not found");
+            return;
+        };
+
+        const url = `http://localhost:8000/api/user/delete/${userId}/` + "?token=" + token + "&username=" + username;
+        const options = {
+            method: "DELETE",
+            mode: "cors",
+            credentials: "include",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        };
+        console.log(token)
+        console.log(username)
+
+        const data = await makeRequest(url, options);
+
+        getListofUsers();
     }
     catch (error) {
         console.log(error);
