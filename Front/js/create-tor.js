@@ -1,53 +1,13 @@
 const tournamentsContainer = document.getElementById("tournaments");
+const matchesContainer = document.getElementById("matches");
+const usersContainer = document.getElementById('user');
 
-const form = document.getElementById("createTornForm")
+
+const form = document.getElementById("createTornForm");
 
 const createRequest = async () => {
-    console.log("Creating tournament");
-    const name = document.getElementById("nameTournament").value;
-    const theDate = document.getElementById("dateTournament").value;
-    const theEndDate = document.getElementById("endTournament").value;
-
-    const token = sessionStorage.getItem("jwt");
-    if (!token) {
-        console.log("JWT token not found");
-        return;
-    }
-    const username = sessionStorage.getItem("username");
-    if (!username) {
-        console.log("username not found");
-        return;
-    }
-
-    csrfToken = await getCsrfToken();
-    const response = await fetch("http://localhost:8000/api/tournament/create/" + "?token=" + token + "&username=" + username, {
-        method: "POST",
-        mode: "cors",
-        credentials: "include",
-        headers: {
-            "Content-Type": "application/json",
-            "X-CSRFToken": csrfToken,
-        },
-        body: JSON.stringify({
-            name: name,
-        }),
-    })
-    .then((response) => response.json())
-    .then((data) => {
-        if (data.status === "ok") {
-            sessionStorage.setItem("name", name);
-            sessionStorage.setItem("date", theDate);
-            sessionStorage.setItem("endDate", theEndDate);
-            window.location.href = "/create-tournaments";
-        } else {
-            console.error("Error:", data.message);
-        }
-    })
-    .catch((error) => {
-        console.error("Error:", error);
-    });
+    // ... (unchanged)
 };
-
 
 const getListofTournaments = async () => {
     console.log("Getting list of tournaments");
@@ -72,9 +32,9 @@ const getListofTournaments = async () => {
                 "Content-Type": "application/json",
             },
         };
-        console.log(token)
-        console.log(username)
-        
+        console.log(token);
+        console.log(username);
+
         const data = await makeRequest(url, options);
 
         // Update the content of the 'tournaments' div with the list of tournaments
@@ -82,8 +42,8 @@ const getListofTournaments = async () => {
         data.data.forEach(tournament => {
             const tournamentElement = document.createElement("div");
             tournamentElement.innerHTML = `
-                Tournament ID: ${tournament.id}, Name: ${tournament.name}
-                <button class="delete-button" data-tournament-id="${tournament.id}">Delete</button>
+                <p>Tournament ID: ${tournament.id}, Name: ${tournament.name}</p>
+                <button class="delete-button" data-tournament-id="${tournament.id}">Delete Tournament</button>
             `;
             tournamentsContainer.appendChild(tournamentElement);
         });
@@ -94,12 +54,110 @@ const getListofTournaments = async () => {
     }
 };
 
+const getListofMatches = async () => {
+    console.log("Getting list of matches");
+    try {
+        const token = sessionStorage.getItem("jwt");
+        if (!token) {
+            console.log("JWT token not found");
+            return;
+        }
+        const username = sessionStorage.getItem("username");
+        if (!username) {
+            console.log("username not found");
+            return;
+        }
+
+        const url = "http://localhost:8000/api/match/list/" + "?token=" + token + "&username=" + username;
+        const options = {
+            method: "GET",
+            mode: "cors",
+            credentials: "include",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        };
+        console.log(token);
+        console.log(username);
+
+        const data = await makeRequest(url, options);
+
+        // Update the content of the 'matches' div with the list of matches
+        matchesContainer.innerHTML = "";
+        data.data.forEach(match => {
+            const matchElement = document.createElement("div");
+            matchElement.innerHTML = `
+                <p>Match ID: ${match.id}</p>
+                <p>Player 1: ${match.player1.username}</p>
+                <p>Player 2: ${match.player2.username}</p>
+                <p>Scores: ${match.player1_score} - ${match.player2_score}</p>
+                <p>Active: ${match.active ? 'Yes' : 'No'}</p>
+                <button class="delete-button" data-match-id="${match.id}">Delete Match</button>
+            `;
+            matchesContainer.appendChild(matchElement);
+        });
+
+        attachDeleteEventListeners(); // Attach event listeners for delete buttons
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+const getListofUsers = async () => {
+    console.log("Getting list of users");
+    try {
+        const token = sessionStorage.getItem("jwt");
+        if (!token) {
+            console.log("JWT token not found");
+            return;
+        }
+
+        const url = "http://localhost:8000/api/user/list/" + "?token=" + token + "&username=" + username;
+        const options = {
+            method: "GET",
+            mode: "cors",
+            credentials: "include",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        };
+
+        const data = await makeRequest(url, options);
+        console.log("User data from the server:", data);
+
+        // Update the content of the 'users' div with the list of users
+        usersContainer.innerHTML = "";
+        data.data.forEach(user => {
+            console.log("Processing user:", user);
+            const userElement = document.createElement("div");
+            userElement.innerHTML = `
+                <p>User ID: ${user.id}</p>
+                <p>Username: ${user.username}</p>
+                <p>Email: ${user.email}</p>
+                <p>First Name: ${user.first_name}</p>
+                <p>Last Name: ${user.last_name}</p>
+                <button class="delete-button" data-user-id="${user.id}">Delete User</button>
+            `;
+            usersContainer.appendChild(userElement);
+        });
+
+        attachDeleteEventListeners(); // Attach event listeners for delete buttons
+    } catch (error) {
+        console.log("Error:", error);
+    }
+};
+
 const attachDeleteEventListeners = () => {
     const deleteButtons = document.querySelectorAll(".delete-button");
     deleteButtons.forEach(deleteButton => {
         deleteButton.addEventListener("click", function () {
-            const tournamentId = this.dataset.tournamentId;
-            deleteTournament(tournamentId);
+            if (this.dataset.tournamentId) {
+                const tournamentId = this.dataset.tournamentId;
+                deleteTournament(tournamentId);
+            } else if (this.dataset.matchId) {
+                const matchId = this.dataset.matchId;
+                deleteMatch(matchId);
+            }
         });
     });
 };
@@ -138,6 +196,42 @@ const deleteTournament = async (tournamentId) => {
     };
 };
 
+const deleteMatch = async (matchId) => {
+    try {
+        const token = sessionStorage.getItem("jwt");
+        if (!token) {
+            console.log("JWT token not found");
+            return;
+        };
+        const username = sessionStorage.getItem("username");
+        if (!username) {
+            console.log("username not found");
+            return;
+        };
+
+        const url = `http://localhost:8000/api/match/delete/${matchId}/` + "?token=" + token + "&username=" + username;
+        const options = {
+            method: "DELETE",
+            mode: "cors",
+            credentials: "include",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        };
+        console.log(token)
+        console.log(username)
+
+        const data = await makeRequest(url, options);
+
+        getListofMatches();
+    }
+    catch (error) {
+        console.log(error);
+    };
+}
+
+getListofUsers();
+getListofMatches();
 getListofTournaments();
 
 form.addEventListener("submit", function (event) {

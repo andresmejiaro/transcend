@@ -61,6 +61,24 @@ def tournament_list(request):
             return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
     return JsonResponse({'status': 'error', 'message': 'Only GET requests are allowed'}, status=400)
 
+def tournament_detail(request, pk):
+    if request.method == 'GET':
+        try:
+            tournament = Tournament.objects.get(pk=pk)
+            tournament_detail = {
+                'id': tournament.id,
+                'name': tournament.name,
+                'start_date': tournament.start_date,
+                'end_date': tournament.end_date,
+                'matches': [match.id for match in tournament.matches.all()]
+            }
+            return JsonResponse({'status': 'ok', 'data': tournament_detail})
+        except Tournament.DoesNotExist:
+            return JsonResponse({'status': 'error', 'message': 'Tournament does not exist'}, status=400)
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
+    return JsonResponse({'status': 'error', 'message': 'Only GET requests are allowed'}, status=400)
+
 def tournament_delete(request, pk):
     if request.method == 'DELETE':
         tournament = get_object_or_404(Tournament, pk=pk)
@@ -164,6 +182,25 @@ def match_list(request):
                     'active': match.active
                     })
             return JsonResponse({'status': 'ok', 'data': match_list})
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
+    return JsonResponse({'status': 'error', 'message': 'Only GET requests are allowed'}, status=400)
+
+def match_detail(request, pk):
+    if request.method == 'GET':
+        try:
+            match = Match.objects.get(pk=pk)
+            match_detail = {
+                'id': match.id,
+                'player1': match.player1.id,
+                'player2': match.player2.id,
+                'player1_score': match.player1_score,
+                'player2_score': match.player2_score,
+                'active': match.active
+            }
+            return JsonResponse({'status': 'ok', 'data': match_detail})
+        except Match.DoesNotExist:
+            return JsonResponse({'status': 'error', 'message': 'Match does not exist'}, status=400)
         except Exception as e:
             return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
     return JsonResponse({'status': 'error', 'message': 'Only GET requests are allowed'}, status=400)
@@ -274,6 +311,27 @@ def user_list(request):
                     'user_status': user.is_active,
                 })
             return JsonResponse({'status': 'ok', 'data': user_list})
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
+    return JsonResponse({'status': 'error', 'message': 'Only GET requests are allowed'}, status=400)
+
+def user_detail(request, pk):
+    if request.method == 'GET':
+        try:
+            user = User.objects.get(pk=pk)
+            user_detail = {
+                'id': user.id,
+                'username': user.username,
+                'email': user.email,
+                'first_name': user.first_name,
+                'last_name': user.last_name,
+                'password': user.password,
+                'staff_status': user.is_staff,
+                'user_status': user.is_active,
+            }
+            return JsonResponse({'status': 'ok', 'data': user_detail})
+        except User.DoesNotExist:
+            return JsonResponse({'status': 'error', 'message': 'User does not exist'}, status=400)
         except Exception as e:
             return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
     return JsonResponse({'status': 'error', 'message': 'Only GET requests are allowed'}, status=400)
