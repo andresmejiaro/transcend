@@ -183,3 +183,43 @@ form.addEventListener(
   },
   false
 );
+
+
+
+document.getElementById('togglePassword').addEventListener('click', function () {
+  togglePassword();
+});
+
+document.getElementById('toggleRePassword').addEventListener('click', function () {
+  toggleRePassword();
+});
+
+function togglePassword() {
+  var passwordInput = document.getElementById('password');
+  var eyeIcon = document.getElementById('togglePassword');
+  
+  if (passwordInput.type === 'password') {
+    passwordInput.type = 'text';
+    eyeIcon.classList.remove('bi-eye');
+    eyeIcon.classList.add('bi-eye-slash');
+  } else {
+    passwordInput.type = 'password';
+    eyeIcon.classList.remove('bi-eye-slash');
+    eyeIcon.classList.add('bi-eye');
+  }
+}
+
+function toggleRePassword() {
+  var passwordInput = document.getElementById('confirmPassword');
+  var eyeIcon = document.getElementById('toggleRePassword');
+  
+  if (passwordInput.type === 'password') {
+    passwordInput.type = 'text';
+    eyeIcon.classList.remove('bi-eye');
+    eyeIcon.classList.add('bi-eye-slash');
+  } else {
+    passwordInput.type = 'password';
+    eyeIcon.classList.remove('bi-eye-slash');
+    eyeIcon.classList.add('bi-eye');
+  }
+}

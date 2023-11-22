@@ -10,6 +10,13 @@ class CustomUser(AbstractUser):
     fullname = models.CharField(max_length=100, null=False, blank=False)
     avatar = models.ImageField(upload_to='avatars/', null=True, blank=True)
 
+    def update_avatar(self, new_avatar):
+        if self.avatar:
+            self.avatar.delete()
+
+        self.avatar = new_avatar
+        self.save()
+
 
     groups = models.ManyToManyField(
         Group,

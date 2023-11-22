@@ -13,6 +13,9 @@ const ifLoggedRedirect = (location) => {
   if (isLogged()) {
     if (location == "/login" || location == "/signup")
       window.location.href = "/";
+  } else {
+    if (location == "/user" || location == "/create-tournaments")
+      window.location.href = "/";
   }
 };
 

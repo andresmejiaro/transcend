@@ -18,28 +18,37 @@ const urlRoutes = {
     description: "This is the home page",
     js: ["./js/home.js"],
   },
-  "/user": {
-    template: "/templates/user.html",
-    title: "user | " + urlPageTitle,
-    description: "This is the user page",
-  },
   "/login": {
     template: "/templates/login.html",
     title: "Login | " + urlPageTitle,
     description: "This is the login page",
     js: ["./js/auth/login-handler.js", "./js/auth/intra-handler.js"],
+    css: "./css/signup.css"
   },
   "/signup": {
     template: "/templates/signup.html",
     title: "Login | " + urlPageTitle,
     description: "This is the login page",
-    js: ["./js/auth/signup-handler.js"],
+    js: ["./js/auth/signup-handler.js", "./js/auth/intra-handler.js"],
+    css: "./css/signup.css"
   },
   "/callback": {
     template: "/templates/callback.html",
     title: "callback | " + urlPageTitle,
     description: "This is the callback page",
     js: ["./js/auth/callback.js"],
+  },
+  "/user": {
+    template: "/templates/user.html",
+    title: "user | " + urlPageTitle,
+    description: "This is the user page",
+    js: ["./js/user.js"],
+  },
+  "/user-settings": {
+    template: "/templates/user-settings.html",
+    title: "user | " + urlPageTitle,
+    description: "This is the user page",
+    js: ["./js/user.js"],
   },
   "/create-tournaments": {
     template: "/templates/create-tournament.html",

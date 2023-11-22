@@ -1,7 +1,49 @@
+
+const tryLoginFormPost = async (data) => {
+  const username = data.login;
+  const password = "AUTH0_USER_NO_PASSWORD";
+  try {
+    const token = await getCsrfToken();
+    const response = await fetch("http://localhost:8000/api/user/login/", {
+      method: "POST",
+      mode: "cors",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": token,
+      },
+      body: JSON.stringify({
+        username: username,
+        password: password,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    const data = await response.json();
+
+    if (data.status === "ok") {
+      sessionStorage.setItem("username", username);
+      sessionStorage.setItem("jwt", data.token);
+      window.location.href = "/home";
+    } else {
+      console.error("Error:", data.message);
+      displayError(data.message);
+    }
+  } catch (error) {
+    console.error("Error:", error.message);
+    displayError("Invalid credentials. Please try again.");
+  }
+};
+
 const tryFormPost = async (data) => {
   const username = data.login;
   const fullname = data.displayname;
   const placeholderPassword = "AUTH0_USER_NO_PASSWORD";
+  const email = data.email;
+
   token = await getCsrfToken();
 
   fetch("http://localhost:8000/api/user/signup/", {
@@ -15,6 +57,7 @@ const tryFormPost = async (data) => {
     body: JSON.stringify({
       username: username,
       fullname: fullname,
+      email: email,
       password: placeholderPassword,
     }),
   })
@@ -32,6 +75,33 @@ const tryFormPost = async (data) => {
       console.error("Error:", error);
     });
 };
+
+const getInfoMe = async (username) => {
+  const response = await fetch(`http://localhost:8000/info-me/${username}/`, {
+    method: "GET",
+    mode: "cors",
+    credentials: "include",
+  });
+
+  if (response.ok) {
+    const data = await response.json();
+    if (data.status === "ok") {
+      const user = data.user;
+      console.log("User Info:", user);
+      return true
+    } else {
+      console.error("Error:", data.error);
+    }
+  } else {
+    console.error("Failed to fetch user info:", response.status);
+  }
+};
+const intrahandler = (userData) => {
+  if (getInfoMe(userData.username))
+    tryLoginFormPost(userData)
+  else
+    tryFormPost(userData)
+}
 
 async function getUserInfo(accessToken) {
   const apiUrl = "https://api.intra.42.fr/v2/me";
@@ -51,10 +121,10 @@ async function getUserInfo(accessToken) {
 
     userData = await response.json();
     document.getElementById("user").innerHTML = userData.displayname;
+    intrahandler(userData);
   } catch (error) {
     console.error("Error fetching user information:", error.message);
   }
-  tryFormPost(userData);
 }
 
 async function handleCallback() {

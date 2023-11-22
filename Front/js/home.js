@@ -22,9 +22,19 @@ const getMeInfo = async () => {
   if (data.status == "ok") {
     const usernameH = document.getElementById("home-username");
     const fullnameH = document.getElementById("home-fullname");
+    const avatarImage = document.getElementById("avatarImage");
 
     usernameH.innerHTML = "username: " + data.user.username;
     fullnameH.innerHTML = "fullname: " + data.user.fullname;
+
+    if (data.user.avatar_url) {
+      const completeAvatarUrl = `http://localhost:8000${data.user.avatar_url}`;
+      avatarImage.src = completeAvatarUrl;
+  } else {
+      // Handle case when avatar is not set
+      avatarImage.src = "default_avatar.png";
+  }
+    
   }
 };
 

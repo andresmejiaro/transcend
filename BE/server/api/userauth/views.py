@@ -6,6 +6,11 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 from django.middleware.csrf import get_token
 from .jwt_utils import create_jwt_token, validate_and_get_user_from_token
+from django.core.files.storage import default_storage
+from django.conf import settings
+from django.core.files.storage import default_storage
+from django.core.files.base import ContentFile
+import os
 
 @csrf_exempt
 def send_csrf_token_view(request):
@@ -38,7 +43,7 @@ def signup_view(request):
             email = data.get('email')
 
             if not (username and password and fullname and email):
-                return JsonResponse({"status": "error", "message": "Username, password, or fullname is missing"}, status=400)
+                return JsonResponse({"status": "error", "message": "Username, password, email or fullname is missing"}, status=400)
 
             if CustomUser.objects.filter(username=username).exists():
                 return JsonResponse({"status": "error", "message": "Username already exists"}, status=400)
@@ -91,7 +96,6 @@ def login_view(request):
 
     return JsonResponse({'status': 'error', 'message': 'Only POST requests are allowed'}, status=400)
 
-
 def info_me_jwt_view(request):
     if request.method == 'GET':
         try:
@@ -109,8 +113,74 @@ def info_me_jwt_view(request):
 
     return JsonResponse({'error': 'Only GET requests are allowed'}, status=400)
 
+@csrf_exempt
+def info_me_view(request):
+    if request.method == 'GET':
+        try:
+            username = request.GET.get('username', '')
+            user = CustomUser.objects.get(username=username)
+            user_data_response = {
+                'username': user.username,
+                'fullname': user.fullname,
+                'avatar_url': user.avatar.url if user.avatar else None
+            }
+            return JsonResponse({'status': 'ok', 'user': user_data_response})
 
-# @csrf_exempt
+        except Exception as e:
+            # Handle token validation failure
+            return JsonResponse({'error': str(e)}, status=401)
+
+    return JsonResponse({'error': 'Only GET requests are allowed'}, status=400)
+    
+@csrf_exempt
+def update_avatar_view(request, username):
+    try:
+        user = CustomUser.objects.get(username=username)
+
+        if request.method == 'POST':
+            if 'avatar' not in request.FILES:
+                return JsonResponse({'error': 'Missing avatar in files'}, status=400)
+
+            avatar = request.FILES['avatar']
+
+            # Check if the uploaded file is an image
+            if not avatar.name.lower().endswith(('.png', '.jpg', '.jpeg')):
+                return JsonResponse({'error': 'Invalid file format. Please upload a valid image.'}, status=400)
+
+            # Check if the uploaded file is too large
+            if avatar.size > 10 * 1024 * 1024:  # 10 MB
+                return JsonResponse({'error': 'File size exceeds the limit. Please upload a smaller image.'}, status=400)
+
+            filename, extension = os.path.splitext(avatar.name)
+            count = 1
+            while default_storage.exists(os.path.join('avatars', f'{filename}_{count}{extension}')):
+                count += 1
+            unique_filename = f'{filename}_{count}{extension}'
+            user.avatar.save(unique_filename, ContentFile(avatar.read()))
+            # user.update_avatar(avatar)
+            return JsonResponse({'status': 'ok', 'message': 'Avatar updated successfully'})
+        else:
+            return JsonResponse({'error': 'Invalid request method'}, status=400)
+
+    except CustomUser.DoesNotExist:
+        return JsonResponse({'error': 'User not found'}, status=404)
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
+
+# def update_avatar_view(request, username):
+#     print(request.FILES)  # Print files received in the request
+#     try:
+#         user = CustomUser.objects.get(username=username)
+#         if request.method == 'POST' and 'avatar' in request.FILES:
+#             avatar = request.FILES['avatar']
+#             print(avatar.name)  # Print the name of the received file
+#             user.update_avatar(avatar)
+#             return JsonResponse({'status': 'ok', 'message': 'Avatar updated successfully'})
+#         else:
+#             return JsonResponse({'error': 'Invalid request or missing avatar'}, status=400)
+#     except CustomUser.DoesNotExist:
+#         return JsonResponse({'error': 'User not found'}, status=404)
+
 # def get_user_from_username_view(request, username):
 #     if request.method == 'GET':
 #         try:
