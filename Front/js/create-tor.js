@@ -66,8 +66,6 @@ const getListofTournaments = async () => {
                 "Content-Type": "application/json",
             },
         };
-        console.log(token);
-        console.log(username);
 
         const data = await makeRequest(url, options);
 
@@ -111,8 +109,6 @@ const getListofMatches = async () => {
                 "Content-Type": "application/json",
             },
         };
-        console.log(token);
-        console.log(username);
 
         const data = await makeRequest(url, options);
 
@@ -157,12 +153,10 @@ const getListofUsers = async () => {
         };
 
         const data = await makeRequest(url, options);
-        console.log("User data from the server:", data);
 
         // Update the content of the 'users' div with the list of users
         usersContainer.innerHTML = "";
         data.data.forEach(user => {
-            console.log("Processing user:", user);
             const userElement = document.createElement("div");
             userElement.innerHTML = `
                 <p>User ID: ${user.id}</p>
@@ -222,8 +216,6 @@ const deleteTournament = async (tournamentId) => {
                 "Content-Type": "application/json",
             },
         };
-        console.log(token)
-        console.log(username)
 
         const data = await makeRequest(url, options);
 
@@ -256,8 +248,6 @@ const deleteMatch = async (matchId) => {
                 "Content-Type": "application/json",
             },
         };
-        console.log(token)
-        console.log(username)
 
         const data = await makeRequest(url, options);
 
@@ -290,8 +280,6 @@ const deleteUser = async (userId) => {
                 "Content-Type": "application/json",
             },
         };
-        console.log(token)
-        console.log(username)
 
         const data = await makeRequest(url, options);
 
