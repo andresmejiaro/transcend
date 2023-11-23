@@ -122,6 +122,7 @@ def info_me_view(request):
             user_data_response = {
                 'username': user.username,
                 'fullname': user.fullname,
+                'email': user.email,
                 'avatar_url': user.avatar.url if user.avatar else None
             }
             return JsonResponse({'status': 'ok', 'user': user_data_response})

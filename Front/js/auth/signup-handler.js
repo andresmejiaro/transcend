@@ -60,10 +60,10 @@ document.getElementById("usernameSignupForm").addEventListener("input", validate
 document.getElementById("fullname").addEventListener("input", validateFullname);
 document.getElementById("email").addEventListener("input", validateEmail);
 
-const passwordInput = document.getElementById("password");
-const confirmPasswordInput = document.getElementById("confirmPassword");
-const passwordHelp = document.getElementById("passwordHelp");
-const confirmPasswordHelp = document.getElementById("confirmPasswordHelp");
+const passwordInput = document.getElementById("passwordSignup");
+const confirmPasswordInput = document.getElementById("confirmPasswordSignup");
+const passwordHelp = document.getElementById("passwordHelpSignup");
+const confirmPasswordHelp = document.getElementById("confirmPasswordHelpSignup");
 
 function checkPasswordStrength(password) {
   if (password.length >= 8)
@@ -83,7 +83,7 @@ function validatePassword() {
   } else {
     passwordInput.classList.remove("is-invalid");
     passwordInput.classList.add("is-valid");
-
+    passwordHelp.innerText = ""
   }
 
 
@@ -98,10 +98,8 @@ function validatePassword() {
 
 // Validation function for confirm password
 function validateConfirmPassword() {
-  const confirmPasswordInput = document.getElementById("confirmPassword");
-  const confirmPasswordHelp = document.getElementById("confirmPasswordHelp");
   const confirmPassword = confirmPasswordInput.value;
-  const password = document.getElementById("password").value;
+  const password = passwordInput.value;
 
   if (confirmPassword !== password) {
     confirmPasswordHelp.innerText = "Passwords do not match";
@@ -111,18 +109,19 @@ function validateConfirmPassword() {
   } else {
     confirmPasswordInput.classList.remove("is-invalid");
     confirmPasswordInput.classList.add("is-valid");
+    confirmPasswordHelp.innerText = "";
     return true;
   }
 }
 
 // Event listeners for input validation
-document.getElementById("password").addEventListener("input", validatePassword);
-document.getElementById("confirmPassword").addEventListener("input", validateConfirmPassword);
+document.getElementById("passwordSignup").addEventListener("input", validatePassword);
+document.getElementById("confirmPasswordSignup").addEventListener("input", validateConfirmPassword);
 
 const tryFormPost = async () => {
   const username = document.getElementById("usernameSignupForm").value;
   const fullname = document.getElementById("fullname").value;
-  const password = document.getElementById("password").value;
+  const password = document.getElementById("passwordSignup").value;
   const email = document.getElementById("email").value;
 
   token = await getCsrfToken();
@@ -195,7 +194,7 @@ document.getElementById('toggleRePassword').addEventListener('click', function (
 });
 
 function togglePassword() {
-  var passwordInput = document.getElementById('password');
+  var passwordInput = document.getElementById('passwordSignup');
   var eyeIcon = document.getElementById('togglePassword');
   
   if (passwordInput.type === 'password') {
@@ -210,7 +209,7 @@ function togglePassword() {
 }
 
 function toggleRePassword() {
-  var passwordInput = document.getElementById('confirmPassword');
+  var passwordInput = document.getElementById('confirmPasswordSignup');
   var eyeIcon = document.getElementById('toggleRePassword');
   
   if (passwordInput.type === 'password') {

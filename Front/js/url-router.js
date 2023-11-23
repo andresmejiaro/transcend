@@ -71,16 +71,17 @@ const urlLocationHandler = async () => {
 
   if (route.css) {
     const head = document.head;
-    const link = document.createElement("link");
 
-    link.type = "text/css";
-    link.rel = "stylesheet";
-    link.href = route.css;
+    route.css.forEach((cssFile) => {
+      const link = document.createElement("link");
 
-    head.appendChild(link);
+      link.type = "text/css";
+      link.rel = "stylesheet";
+      link.href = cssFile;
+
+      head.appendChild(link);
+    });
   }
-
-  // if (route.js && !isScriptLinked(route.js)) {
   if (route.js) {
     route.js.forEach((jsFile) => {
       if (jsFile && !document.querySelector(`script[src="${jsFile}"]`)) {
