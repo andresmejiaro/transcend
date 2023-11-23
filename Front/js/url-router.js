@@ -1,4 +1,3 @@
-// import { urlRoutes } from "./routes";
 
 document.addEventListener("click", (e) => {
   const { target } = e;

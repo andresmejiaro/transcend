@@ -38,10 +38,6 @@ function validatePassword() {
 const tryFormPost = async () => {
   const username = document.getElementById("usernameLoginForm").value;
   const password = document.getElementById("password").value;
-
-  console.log("HELO")
-
-
   const placeholderPassword = "AUTH0_USER_NO_PASSWORD";
   if (password == placeholderPassword) {
     console.log("invalid password autho");

@@ -39,9 +39,8 @@ python3 manage.py makemigrations userauth
 python3 manage.py migrate
 
 # Create superuser if it doesn't exist
-if [ -z "$(python manage.py shell -c 'from django.contrib.auth.models import User; print(User.objects.filter(username=os.environ["POSTGRES_USER"]).exists())')" ]; then
-    python manage.py createsuperuser --username="$POSTGRES_USER" --email=admin@example.com --noinput
-fi
+python manage.py createsuperuser --username="$POSTGRES_USER" --email=admin@example.com --noinput
+
 
 # Run the development server
 python3 manage.py runserver 0.0.0.0:8000
