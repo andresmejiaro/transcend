@@ -1,7 +1,7 @@
-from .jwt.sign import sign
-from .jwt.verify import verify
-from .jwt.decode import decode
-from .models import CustomUser
+from .userauth.jwt.sign import sign
+from .userauth.jwt.verify import verify
+from .userauth.jwt.decode import decode
+from .userauth.models import CustomUser
     
     
 secret_key = 'hola'
