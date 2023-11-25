@@ -569,7 +569,7 @@ def create_matches(tournament, sorted_players, sit_out_player=None):
     for i in range(1 if sit_out_player else 0, num_players, 2):
         if i + 1 < num_players:
             player1 = sorted_players[i - 1] if sit_out_player else sorted_players[i]
-            player2 = sorted_players[i]
+            player2 = sorted_players[i + 1]  # Use i+1 for the second player
             player1_score = 0
             player2_score = 0
             winner = None
@@ -607,11 +607,6 @@ def game_matchmaking(request, pk):
             if tournament is None:
                 return JsonResponse({'status': 'error', 'message': 'Tournament does not exist'}, status=400)
 
-            print(request)
-            form = TournamentForm(request.GET)
-            if not form.is_valid():
-                logging.error(form.errors)
-                return JsonResponse({'status': 'error', 'message': 'Invalid form'}, status=400)
             players = tournament.players.all()
 
             # Determine if there is a player sitting out
@@ -619,9 +614,9 @@ def game_matchmaking(request, pk):
 
             num_rounds = calculate_rounds(players.count())
             if tournament.round == num_rounds:
-                return JsonResponse({'status': 'error', 'message': 'Tournament is over'}, status=400)
+                return JsonResponse({'status': 'error', 'message': 'Tournament is over'}, status=388)
 
-            sorted_players = players.order_by('name')
+            sorted_players = players.order_by('id')
 
             matches = []
             if tournament.round == 1:
@@ -642,8 +637,8 @@ def game_matchmaking(request, pk):
             return JsonResponse({'status': 'ok', 'message': 'Matchmaking successful', 'matches': match_list})
 
         except Tournament.DoesNotExist:
-            return JsonResponse({'status': 'error', 'message': 'Tournament does not exist'}, status=400)
+            return JsonResponse({'status': 'error', 'message': 'Tournament does not exist'}, status=377)
         except Exception as e:
-            return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=366)
 
-    return JsonResponse({'status': 'error', 'message': 'Only GET requests are allowed'}, status=400)
+    return JsonResponse({'status': 'error', 'message': 'Only GET requests are allowed'}, status=355)
