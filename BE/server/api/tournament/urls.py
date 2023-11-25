@@ -7,6 +7,7 @@ urlpatterns = [
     path('tournament/create/', tournament_create, name="create"),
     path('tournament/', tournament_list, name="list"),
     path('tournament/<int:pk>/', tournament_operations, name="detail"),
+    path('tournament/<int:pk>/rounds/', tournament_rounds, name="round"),
     # Match
     path('match/create/', match_create, name='creatematch'),
     path('match/', match_list, name='listmatches'),

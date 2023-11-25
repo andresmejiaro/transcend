@@ -162,6 +162,27 @@ def tournament_operations(request, pk):
     else:
         return JsonResponse({'status': 'error', 'message': f'Unsupported HTTP method: {request.method}'}, status=400)
 
+def tournament_rounds(request, pk):
+    if request.method == 'GET':
+        try:
+            tournament = Tournament.objects.get(id=pk)
+            rounds = Round.objects.filter(tournament=tournament)
+            round_list = []
+            for round in rounds:
+                round_list.append({
+                    'id': round.id,
+                    'tournament': round.tournament.id,
+                    'round_number': round.round_number,
+                    'matches': [match.id for match in round.matches.all()]
+                })
+            return JsonResponse({'status': 'ok', 'data': round_list})
+        except Tournament.DoesNotExist:
+            return JsonResponse({'status': 'error', 'message': 'Tournament does not exist'}, status=400)
+        except Exception as e:
+
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
+    return JsonResponse({'status': 'error', 'message': 'Only GET requests are allowed'}, status=400)
+
 # Match CRUD views
 def match_create(request):
     if request.method == 'POST':
