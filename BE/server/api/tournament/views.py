@@ -697,7 +697,7 @@ def game_matchmaking(request, pk):
                 sit_out_player = None
 
             num_rounds = calculate_rounds(players.count())
-            if tournament.round == num_rounds:
+            if tournament.round >= num_rounds:
                 winner = max(players, key=lambda player: calculate_player_score(player, tournament=tournament))
                 tournament.winner = winner
                 tournament.end_date = timezone.now()
