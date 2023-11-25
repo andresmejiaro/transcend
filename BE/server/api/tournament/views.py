@@ -7,8 +7,7 @@ from django.shortcuts import get_object_or_404
 from django.utils import timezone
 import json
 import math
-from .forms import TournamentForm
-import logging
+import random
 
 # Create your views here.
 
@@ -583,23 +582,58 @@ def user_all_matches(request, pk):
             return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
     return JsonResponse({'status': 'error', 'message': 'Only GET requests are allowed'}, status=400)
 
+def user_all_tournaments(request, pk):
+    if request.method == 'GET':
+        try:
+            user = User.objects.get(id=pk)
+            tournaments = Tournament.objects.filter(players=user) | Tournament.objects.filter(observers=user)
+            tournament_list = []
+            for tournament in tournaments:
+                tournament_list.append({
+                    'id': tournament.id,
+                    'name': tournament.name,
+                    'start_date': tournament.start_date,
+                    'end_date': tournament.end_date,
+                    'round': tournament.round,
+                    'players': [player.id for player in tournament.players.all()],
+                    'observers': [observer.id for observer in tournament.observers.all()],            
+                })
+            return JsonResponse({'status': 'ok', 'data': tournament_list})
+        except User.DoesNotExist:
+            return JsonResponse({'status': 'error', 'message': 'User does not exist'}, status=400)
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
+    return JsonResponse({'status': 'error', 'message': 'Only GET requests are allowed'}, status=400)
+
 # Tournament Matchmaking
-def create_matches(tournament, sorted_players, sit_out_player=None):
+def create_matches(sorted_players):
     matches = []
     num_players = len(sorted_players)
-    
-    for i in range(1 if sit_out_player else 0, num_players, 2):
-        if i + 1 < num_players:
-            player1 = sorted_players[i - 1] if sit_out_player else sorted_players[i]
-            player2 = sorted_players[i + 1]  # Use i+1 for the second player
-            player1_score = 0
-            player2_score = 0
-            winner = None
-            match = Match(player1=player1, player2=player2, player1_score=player1_score, player2_score=player2_score, winner=winner)
-            match.save()
-            matches.append(match)
+
+    # Adjust the range to handle odd number of players
+    for i in range(0, num_players - 1, 2):
+        player1 = sorted_players[i]
+        player2 = sorted_players[i + 1]
+
+        player1_score = 0
+        player2_score = 0
+        winner = None
+
+        match = Match(
+            player1=player1,
+            player2=player2,
+            player1_score=player1_score,
+            player2_score=player2_score,
+            winner=winner
+        )
+
+        match.save()
+        matches.append(match)
 
     return matches
+
+
+
 
 def create_round(tournament, matches):
     new_round = Round(tournament=tournament, round_number=tournament.round + 1)
@@ -622,16 +656,18 @@ def calculate_player_score(player, tournament=None):
 def game_matchmaking(request, pk):
     if request.method == 'GET':
         try:
-            # tournament = get_object_or_404(Tournament, pk=pk)
             tournament = Tournament.objects.get(id=pk)
-            print(tournament)
+
             if tournament is None:
                 return JsonResponse({'status': 'error', 'message': 'Tournament does not exist'}, status=400)
 
             players = tournament.players.all()
 
             # Determine if there is a player sitting out
-            sit_out_player = players.order_by('?').last() if players.count() % 2 != 0 else None
+            if players.count() % 2 != 0:
+                sit_out_player = random.choice(players)
+            else:
+                sit_out_player = None
 
             num_rounds = calculate_rounds(players.count())
             if tournament.round == num_rounds:
@@ -640,14 +676,19 @@ def game_matchmaking(request, pk):
                 return JsonResponse({'status': 'ok', 'message': f'Tournament winner is {winner.username}'})
 
             sorted_players = players.order_by('id')
+            
+            if sit_out_player:
+                sorted_players = [player for player in sorted_players if player != sit_out_player]
+            print(sit_out_player)
+            print(sorted_players)
 
             matches = []
             if tournament.round == 1:
-                matches = create_matches(tournament, sorted_players, sit_out_player)
+                matches = create_matches(sorted_players)
             else:
                 player_scores = {player.id: calculate_player_score(player, tournament=tournament) for player in players}
                 sorted_players = sorted(players, key=lambda player: player_scores[player.id])
-                matches = create_matches(tournament, sorted_players, sit_out_player)
+                matches = create_matches(sorted_players)
 
             create_round(tournament, matches)
 
@@ -657,7 +698,7 @@ def game_matchmaking(request, pk):
             # Prepare the response with match details
             match_list = [{'match_id': match.id, 'total_rounds': num_rounds, 'player1_id': match.player1.id, 'player2_id': match.player2.id} for match in matches]
 
-            return JsonResponse({'status': 'ok', 'message': 'Matchmaking successful', 'matches': match_list})
+            return JsonResponse({'status': 'ok', 'message': 'Matchmaking successful', 'sit_out_player': sit_out_player.id if sit_out_player else None, 'matches': match_list})
 
         except Tournament.DoesNotExist:
             return JsonResponse({'status': 'error', 'message': 'Tournament does not exist'}, status=377)

@@ -20,6 +20,7 @@ urlpatterns = [
     path('user/', user_list, name='user_list'),
     path('user/<int:pk>/', user_operations, name='user_detail'),
     path('user/<int:pk>/match/', user_all_matches, name='user_match'),
+    path('user/<int:pk>/tournament/', user_all_tournaments, name='user_tournament'),
     # Game
     path('game/matchmaking/<int:pk>/', game_matchmaking, name='game_matchmaking'),
 ]
