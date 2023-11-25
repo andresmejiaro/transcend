@@ -39,7 +39,7 @@ def tournament_create(request):
             tournament.players.set(valid_players[1])
             tournament.observers.set(valid_observers[1])
 
-            response = JsonResponse({'status': 'ok', 'message': 'Tournament created successfully'})
+            response = JsonResponse({'status': 'ok', 'tournament_id': tournament.id, 'message': 'Tournament created successfully'})
             response['Access-Control-Allow-Methods'] = 'POST, OPTIONS'
             response['Access-Control-Allow-Headers'] = 'Content-Type'
             response['Access-Control-Allow-Origin'] = '*'  # Add this line for broader CORS support
