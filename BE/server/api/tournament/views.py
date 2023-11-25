@@ -632,9 +632,6 @@ def create_matches(sorted_players):
 
     return matches
 
-
-
-
 def create_round(tournament, matches):
     new_round = Round(tournament=tournament, round_number=tournament.round + 1)
     new_round.save()
@@ -687,7 +684,7 @@ def game_matchmaking(request, pk):
                 matches = create_matches(sorted_players)
             else:
                 player_scores = {player.id: calculate_player_score(player, tournament=tournament) for player in players}
-                sorted_players = sorted(players, key=lambda player: player_scores[player.id])
+                sorted_players = sorted(sorted_players, key=lambda player: player_scores[player.id])
                 matches = create_matches(sorted_players)
 
             create_round(tournament, matches)
