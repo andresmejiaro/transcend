@@ -184,6 +184,7 @@ def tournament_rounds(request, pk):
 
             return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
     return JsonResponse({'status': 'error', 'message': 'Only GET requests are allowed'}, status=400)
+# -----------------------------
 
 # Match CRUD views
 def match_create(request):
@@ -349,6 +350,7 @@ def match_operations(request, pk):
 
     else:
         return JsonResponse({'status': 'error', 'message': f'Unsupported HTTP method: {request.method}'}, status=400)
+# -----------------------------
 
 # Round CRUD views
 def round_create(request):
@@ -467,6 +469,7 @@ def round_operations(request, pk):
 
     else:
         return JsonResponse({'status': 'error', 'message': f'Unsupported HTTP method: {request.method}'}, status=400)
+# -----------------------------
 
 # User CRUD views
 def user_create(request):
@@ -627,6 +630,7 @@ def user_all_tournaments(request, pk):
         except Exception as e:
             return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
     return JsonResponse({'status': 'error', 'message': 'Only GET requests are allowed'}, status=400)
+# -----------------------------
 
 # Tournament Matchmaking
 def create_matches(sorted_players):
@@ -672,7 +676,7 @@ def calculate_player_score(player, tournament=None):
     if tournament:
         player_score += tournament.round
     return player_score
-
+# Actual matchmaking view
 def game_matchmaking(request, pk):
     if request.method == 'GET':
         try:
@@ -728,3 +732,4 @@ def game_matchmaking(request, pk):
             return JsonResponse({'status': 'error', 'message': str(e)}, status=366)
 
     return JsonResponse({'status': 'error', 'message': 'Only GET requests are allowed'}, status=355)
+# -----------------------------
