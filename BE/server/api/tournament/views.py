@@ -597,7 +597,6 @@ def calculate_player_score(player, tournament=None):
         player_score += tournament.round
     return player_score
 
-
 def game_matchmaking(request, pk):
     if request.method == 'GET':
         try:
@@ -614,7 +613,9 @@ def game_matchmaking(request, pk):
 
             num_rounds = calculate_rounds(players.count())
             if tournament.round == num_rounds:
-                return JsonResponse({'status': 'error', 'message': 'Tournament is over'}, status=388)
+                winner = max(players, key=lambda player: calculate_player_score(player, tournament=tournament))
+                tournament.winner = winner
+                return JsonResponse({'status': 'ok', 'message': f'Tournament winner is {winner.username}'})
 
             sorted_players = players.order_by('id')
 
@@ -632,7 +633,7 @@ def game_matchmaking(request, pk):
             tournament.save()
 
             # Prepare the response with match details
-            match_list = [{'match_id': match.id, 'player1_id': match.player1.id, 'player2_id': match.player2.id} for match in matches]
+            match_list = [{'match_id': match.id, 'total_rounds': num_rounds, 'player1_id': match.player1.id, 'player2_id': match.player2.id} for match in matches]
 
             return JsonResponse({'status': 'ok', 'message': 'Matchmaking successful', 'matches': match_list})
 
