@@ -1,6 +1,8 @@
 import subprocess
 import json
 
+# NOT WORKING YET
+
 def run_test(command):
     print(f"\033[94mRunning test: {command}\033[0m")
     result = subprocess.run(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, encoding="utf-8")
