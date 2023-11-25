@@ -57,7 +57,7 @@ const getListofTournaments = async () => {
             return;
         }
 
-        const url = "http://localhost:8000/api/tournament/list/" + "?token=" + token + "&username=" + username;
+        const url = "http://localhost:8000/api/tournament/" + "?token=" + token + "&username=" + username;
         const options = {
             method: "GET",
             mode: "cors",
@@ -100,7 +100,7 @@ const getListofMatches = async () => {
             return;
         }
 
-        const url = "http://localhost:8000/api/match/list/" + "?token=" + token + "&username=" + username;
+        const url = "http://localhost:8000/api/match/" + "?token=" + token + "&username=" + username;
         const options = {
             method: "GET",
             mode: "cors",
@@ -142,7 +142,7 @@ const getListofUsers = async () => {
             return;
         }
 
-        const url = "http://localhost:8000/api/user/list/" + "?token=" + token + "&username=" + username;
+        const url = "http://localhost:8000/api/user/" + "?token=" + token + "&username=" + username;
         const options = {
             method: "GET",
             mode: "cors",
@@ -207,7 +207,7 @@ const deleteTournament = async (tournamentId) => {
             return;
         };
 
-        const url = `http://localhost:8000/api/tournament/delete/${tournamentId}/` + "?token=" + token + "&username=" + username;
+        const url = `http://localhost:8000/api/tournament/${tournamentId}/` + "?token=" + token + "&username=" + username;
         const options = {
             method: "DELETE",
             mode: "cors",
@@ -239,7 +239,7 @@ const deleteMatch = async (matchId) => {
             return;
         };
 
-        const url = `http://localhost:8000/api/match/delete/${matchId}/` + "?token=" + token + "&username=" + username;
+        const url = `http://localhost:8000/api/match/${matchId}/` + "?token=" + token + "&username=" + username;
         const options = {
             method: "DELETE",
             mode: "cors",
@@ -271,7 +271,7 @@ const deleteUser = async (userId) => {
             return;
         };
 
-        const url = `http://localhost:8000/api/user/delete/${userId}/` + "?token=" + token + "&username=" + username;
+        const url = `http://localhost:8000/api/user/${userId}/` + "?token=" + token + "&username=" + username;
         const options = {
             method: "DELETE",
             mode: "cors",
