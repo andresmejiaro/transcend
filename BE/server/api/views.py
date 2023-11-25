@@ -4,5 +4,6 @@ from django.views.decorators.csrf import csrf_exempt
 
 
 @csrf_exempt
+# Create your views here.
 def test_view(request):
 	return JsonResponse({'message': 'Test passed'})

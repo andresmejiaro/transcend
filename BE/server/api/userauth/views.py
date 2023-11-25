@@ -5,7 +5,7 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
 from django.middleware.csrf import get_token
-from .jwt_utils import create_jwt_token, validate_and_get_user_from_token
+from ..jwt_utils import create_jwt_token, validate_and_get_user_from_token
 from django.core.files.storage import default_storage
 from django.conf import settings
 from django.core.files.storage import default_storage
@@ -32,7 +32,6 @@ def validate_jwt_token_view(request):
 
     return JsonResponse({'error': 'Only POST requests are allowed'}, status=400)
 
-
 def signup_view(request):
     if request.method == 'POST':
         try:
@@ -41,6 +40,7 @@ def signup_view(request):
             password = data.get('password')
             fullname = data.get('fullname')
             email = data.get('email')
+            is_superuser = data.get('is_superuser')
 
             if not (username and password and fullname and email):
                 return JsonResponse({"status": "error", "message": "Username, password, email or fullname is missing"}, status=400)
@@ -50,6 +50,8 @@ def signup_view(request):
 
             user = CustomUser(username=username, fullname=fullname, email=email)
             user.set_password(password)
+            if is_superuser:
+                user.is_superuser = True
             user.save()
             jwt_token = create_jwt_token(user.id, user.username)
             response = JsonResponse({'status': 'ok', 'message': 'User created successfully', 'token': jwt_token})

@@ -1,12 +1,12 @@
-DOCKER = docker
-COMPOSE = docker-compose -f docker-compose.yml
+DOCKER = sudo docker
+COMPOSE = sudo docker-compose -f docker-compose.yml
 
 all: up
 
 up:
 	@echo "\033[1;33mStarting containers\033[0m"
 	@$(COMPOSE) up -d --build
-	@$(DOCKER)-compose up
+	# @$(DOCKER)-compose up
 	
 down:
 	@echo "\033[1;33mStopping containers\033[0m"
