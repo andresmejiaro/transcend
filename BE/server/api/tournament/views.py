@@ -653,6 +653,7 @@ def create_matches(sorted_players):
             player1_score=player1_score,
             player2_score=player2_score,
             winner=winner,
+            date_played=timezone.now(),
             active=True
         )
         
