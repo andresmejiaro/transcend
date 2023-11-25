@@ -307,9 +307,9 @@ def match_operations(request, pk):
             date_played = data.get('date_played', None)
             active = data.get('active')
 
+
             if not User.objects.filter(id=player1_id).exists() or not User.objects.filter(id=player2_id).exists():
                 return JsonResponse({"status": "error", "message": "Player does not exist"}, status=400)
-
             if not (player1_score >= 0 and player2_score >= 0):
                 return JsonResponse({"status": "error", "message": "Score must be positive"}, status=400)
 
@@ -541,6 +541,7 @@ def user_operations(request, pk):
             'password': user.password,
             'staff_status': user.is_staff,
             'user_status': user.is_active,
+            'avatar': user.avatar.url if user.avatar else ''
         }
         return JsonResponse({'status': 'ok', 'data': user_detail})
 
@@ -651,9 +652,10 @@ def create_matches(sorted_players):
             player2=player2,
             player1_score=player1_score,
             player2_score=player2_score,
-            winner=winner
+            winner=winner,
+            active=True
         )
-
+        
         match.save()
         matches.append(match)
 
