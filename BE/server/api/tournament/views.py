@@ -231,7 +231,7 @@ def match_list(request):
                     'player2': match.player2.id,
                     'player1_score': match.player1_score,
                     'player2_score': match.player2_score,
-                    'winner': match.winner.id,
+                    'winner': match.winner.id if match.winner else None,
                     'date_played': match.date_played,
                     'active': match.active
                     })
