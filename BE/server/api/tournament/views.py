@@ -559,9 +559,31 @@ def user_operations(request, pk):
     else:
         return JsonResponse({'status': 'error', 'message': f'Unsupported HTTP method: {request.method}'}, status=400)
 
+def user_all_matches(request, pk):
+    if request.method == 'GET':
+        try:
+            user = User.objects.get(id=pk)
+            matches = Match.objects.filter(player1=user) | Match.objects.filter(player2=user)
+            match_list = []
+            for match in matches:
+                match_list.append({
+                    'id': match.id,
+                    'player1': match.player1.id,
+                    'player2': match.player2.id,
+                    'player1_score': match.player1_score,
+                    'player2_score': match.player2_score,
+                    'winner': match.winner.id if match.winner else None,
+                    'date_played': match.date_played,
+                    'active': match.active
+                    })
+            return JsonResponse({'status': 'ok', 'data': match_list})
+        except User.DoesNotExist:
+            return JsonResponse({'status': 'error', 'message': 'User does not exist'}, status=400)
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
+    return JsonResponse({'status': 'error', 'message': 'Only GET requests are allowed'}, status=400)
 
-
-# Game views
+# Tournament Matchmaking
 def create_matches(tournament, sorted_players, sit_out_player=None):
     matches = []
     num_players = len(sorted_players)
