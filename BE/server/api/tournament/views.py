@@ -73,6 +73,7 @@ def tournament_list(request):
                     'start_date': tournament.start_date,
                     'end_date': tournament.end_date,
                     'round': tournament.round,
+                    'winner': tournament.winner.id if tournament.winner else None,
                     'players': [player.id for player in tournament.players.all()],
                     'observers': [observer.id for observer in tournament.observers.all()],            
                 })
@@ -94,6 +95,7 @@ def tournament_operations(request, pk):
                 'start_date': tournament_instance.start_date,
                 'end_date': tournament_instance.end_date,
                 'round': tournament_instance.round,
+                'winner': tournament_instance.winner.id if tournament_instance.winner else None, # 'None' if 'winner' is 'None
                 'players': [player.id for player in tournament_instance.players.all()],
                 'observers': [observer.id for observer in tournament_instance.observers.all()],
             }
@@ -691,6 +693,8 @@ def game_matchmaking(request, pk):
             if tournament.round == num_rounds:
                 winner = max(players, key=lambda player: calculate_player_score(player, tournament=tournament))
                 tournament.winner = winner
+                tournament.end_date = timezone.now()
+                tournament.save()
                 return JsonResponse({'status': 'ok', 'message': f'Tournament winner is {winner.username}'})
 
             sorted_players = players.order_by('id')
