@@ -7,11 +7,11 @@ import argparse
 
 # For PUT DELETE POST
 # python3 apitester.py <endpoint> <method> --data <data>
-# python3 apitester.py http://localhost:8000/api/tournament/1/ PUT --data '{"name": "test", "type": "test", "start_date": "2021-04-20T00:00:00Z", "end_date": "2021-04-20T00:00:00Z", "round": 1, "players": [1, 2, 3], "observers": [1, 2, 3]}'
-# python3 apitester.py http://localhost:8000/api/tournament/1/ DELETE
+# python3 apitester.py tournament/1/ PUT --data '{"name": "test", "type": "test", "start_date": "2021-04-20T00:00:00Z", "end_date": "2021-04-20T00:00:00Z", "round": 1, "players": [1, 2, 3], "observers": [1, 2, 3]}'
+# python3 apitester.py tournament/1/ DELETE
 # For GET
 # python3 apitester.py <endpoint> <method>
-# python3 apitester.py http://localhost:8000/api/tournament/1/ GET
+# python3 apitester.py tournament/1/ GET
 
 BASE_URL = "http://localhost:8000/api/"  # Replace with your actual base URL
 
