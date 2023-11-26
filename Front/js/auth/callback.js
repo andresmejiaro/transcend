@@ -1,4 +1,3 @@
-
 const tryLoginFormPost = async (data) => {
   const username = data.login;
   const password = "AUTH0_USER_NO_PASSWORD";
@@ -77,28 +76,32 @@ const tryFormPost = async (data) => {
 };
 
 const getInfoMe = async (username) => {
-  const response = await fetch(`http://localhost:8000/api/get_user_id/${username}/`,  {
-    method: "GET",
-    mode: "cors",
-    credentials: "include",
-  });
-
-  if (response.ok) {
-    const data = await response.json();
-    console.log(data)
-    if (data.username)
-      return true
-    else
-      return false
-  } 
+  try {
+    const response = await fetch(
+      `http://localhost:8000/api/get_user_id/${username}/`,
+      {
+        method: "GET",
+        mode: "cors",
+        credentials: "include",
+      }
+    );
+    if (response.ok) {
+      const data = await response.json();
+      if (data.username) return true;
+      else return false;
+    } else return false;
+  } catch (error) {
+    return false;
+  }
 };
 
-const intrahandler = (userData) => {
-  if (getInfoMe(userData.login))
-    tryLoginFormPost(userData)
+const intrahandler = async (userData) => {
+  const exists = await getInfoMe(userData.login)
+  if (exists)
+    tryLoginFormPost(userData);
   else
-    tryFormPost(userData)
-}
+    tryFormPost(userData);
+};
 
 async function getUserInfo(accessToken) {
   const apiUrl = "https://api.intra.42.fr/v2/me";
