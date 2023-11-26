@@ -77,7 +77,7 @@ const tryFormPost = async (data) => {
 };
 
 const getInfoMe = async (username) => {
-  const response = await fetch(`http://localhost:8000/info-me/${username}/`, {
+  const response = await fetch(`http://localhost:8000/api/get_user_id/${username}/`,  {
     method: "GET",
     mode: "cors",
     credentials: "include",
@@ -85,19 +85,16 @@ const getInfoMe = async (username) => {
 
   if (response.ok) {
     const data = await response.json();
-    if (data.status === "ok") {
-      const user = data.user;
-      console.log("User Info:", user);
+    console.log(data)
+    if (data.username)
       return true
-    } else {
-      console.error("Error:", data.error);
-    }
-  } else {
-    console.error("Failed to fetch user info:", response.status);
-  }
+    else
+      return false
+  } 
 };
+
 const intrahandler = (userData) => {
-  if (getInfoMe(userData.username))
+  if (getInfoMe(userData.login))
     tryLoginFormPost(userData)
   else
     tryFormPost(userData)

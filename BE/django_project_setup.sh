@@ -16,6 +16,8 @@ pip install djangorestframework
 pip install django-cors-headers
 pip install passlib
 pip install Pillow
+pip install pyotp
+pip install qrcode
 
 pip freeze > requirements.txt
 

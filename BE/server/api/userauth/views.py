@@ -11,27 +11,11 @@ from django.conf import settings
 from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
 import os
+import pyotp
+import qrcode
 
-@csrf_exempt
-def send_csrf_token_view(request):
-    csrf_token = get_token(request)
-    response = JsonResponse({'token': csrf_token})
-    return response
 
-@csrf_exempt
-def validate_jwt_token_view(request):
-    if request.method == 'POST':
-        try:
-            data = json.loads(request.body)
-            token = data.get('token')
-            token = validate_and_get_user_from_token(token)
-            return JsonResponse(token)
-
-        except Exception as e:
-            return JsonResponse({'error': str(e)}, status=400)
-
-    return JsonResponse({'error': 'Only POST requests are allowed'}, status=400)
-
+# AUTH
 def signup_view(request):
     if request.method == 'POST':
         try:
@@ -48,13 +32,15 @@ def signup_view(request):
             if CustomUser.objects.filter(username=username).exists():
                 return JsonResponse({"status": "error", "message": "Username already exists"}, status=400)
 
-            user = CustomUser(username=username, fullname=fullname, email=email)
+            user = CustomUser(username=username,
+                              fullname=fullname, email=email)
             user.set_password(password)
             if is_superuser:
                 user.is_superuser = True
             user.save()
             jwt_token = create_jwt_token(user.id, user.username)
-            response = JsonResponse({'status': 'ok', 'message': 'User created successfully', 'token': jwt_token})
+            response = JsonResponse(
+                {'status': 'ok', 'message': 'User created successfully', 'token': jwt_token})
             response['Access-Control-Allow-Methods'] = 'POST, OPTIONS'
             response['Access-Control-Allow-Headers'] = 'Content-Type'
 
@@ -68,9 +54,6 @@ def signup_view(request):
     return JsonResponse({'status': 'error', 'message': 'Only POST requests are allowed'}, status=400)
 
 
-def signupIntra(request):
-	pass
-
 def login_view(request):
     if request.method == 'POST':
         try:
@@ -82,7 +65,10 @@ def login_view(request):
 			
             if user.check_password(password):
                 jwt_token = create_jwt_token(user.id, user.username)
-                response = JsonResponse({'status': 'ok', 'message': 'Login successful', 'token': jwt_token})
+                if user.is_2fa_enabled:
+                    response = JsonResponse({'status': '2FA', 'message': 'Login successful', 'token': jwt_token})
+                else:
+                    response = JsonResponse({'status': 'ok', 'message': 'Login successful', 'token': jwt_token})
                 response['Access-Control-Allow-Methods'] = 'POST, OPTIONS'
                 response['Access-Control-Allow-Headers'] = 'Content-Type'
                 return response
@@ -98,28 +84,35 @@ def login_view(request):
 
     return JsonResponse({'status': 'error', 'message': 'Only POST requests are allowed'}, status=400)
 
-def info_me_jwt_view(request):
-    if request.method == 'GET':
-        try:
-            username = request.GET.get('username', '')
-            user = CustomUser.objects.get(username=username)
-            user_data_response = {
-                'username': user.username,
-                'fullname': user.fullname
-            }
-            return JsonResponse({'status': 'ok', 'user': user_data_response})
+# TOKENS
+@csrf_exempt
+def send_csrf_token_view(request):
+    csrf_token = get_token(request)
+    response = JsonResponse({'token': csrf_token})
+    return response
 
-        except Exception as e:
-            # Handle token validation failure
-            return JsonResponse({'error': str(e)}, status=401)
-
-    return JsonResponse({'error': 'Only GET requests are allowed'}, status=400)
 
 @csrf_exempt
-def info_me_view(request):
+def validate_jwt_token_view(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            token = data.get('token')
+            token = validate_and_get_user_from_token(token)
+            return JsonResponse(token)
+
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=400)
+
+    return JsonResponse({'error': 'Only POST requests are allowed'}, status=400)
+
+
+
+# USER HANDLILNG & CRUD
+@csrf_exempt
+def info_me_view(request, username):
     if request.method == 'GET':
         try:
-            username = request.GET.get('username', '')
             user = CustomUser.objects.get(username=username)
             user_data_response = {
                 'username': user.username,
@@ -134,7 +127,8 @@ def info_me_view(request):
             return JsonResponse({'error': str(e)}, status=401)
 
     return JsonResponse({'error': 'Only GET requests are allowed'}, status=400)
-    
+
+
 @csrf_exempt
 def update_avatar_view(request, username):
     try:
@@ -170,55 +164,116 @@ def update_avatar_view(request, username):
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)
 
-# def update_avatar_view(request, username):
-#     print(request.FILES)  # Print files received in the request
-#     try:
-#         user = CustomUser.objects.get(username=username)
-#         if request.method == 'POST' and 'avatar' in request.FILES:
-#             avatar = request.FILES['avatar']
-#             print(avatar.name)  # Print the name of the received file
-#             user.update_avatar(avatar)
-#             return JsonResponse({'status': 'ok', 'message': 'Avatar updated successfully'})
-#         else:
-#             return JsonResponse({'error': 'Invalid request or missing avatar'}, status=400)
-#     except CustomUser.DoesNotExist:
-#         return JsonResponse({'error': 'User not found'}, status=404)
+@csrf_exempt
+def get_user_from_username(username):
+	try:
+		user = CustomUser.objects.get(username=username)
+		return user
+	except CustomUser.DoesNotExist:
+		return None
 
-# def get_user_from_username_view(request, username):
-#     if request.method == 'GET':
-#         try:
-#             token = request.GET.get('token', '')
-#             user_data = validate_and_get_user_from_token(token)
-#             return JsonResponse({'user': user_data})
+@csrf_exempt
+def get_user_id(request, username):
+    if request.method == 'GET':
+        try:
+            if username:
+                user = get_user_from_username(username)
+                if user:
+                    return JsonResponse({'user_id': user.id, 'username': user.username})
+                else:
+                    return JsonResponse({'message': 'User not found'}, status=404)
+            else:
+                return JsonResponse({'message': 'Username missing in the request body'}, status=400)
 
-#         except Exception as e:
-#             return JsonResponse({'error': str(e)}, status=401)
+        except json.JSONDecodeError:
+            return JsonResponse({'message': 'Invalid JSON in the request body'}, status=400)
 
-#     return JsonResponse({'error': 'Only GET requests are allowed'}, status=400)
+    return JsonResponse({'message': 'Only GET requests are allowed'}, status=400)
 
-# def get_user_from_username(username):
-# 	try:
-# 		user = CustomUser.objects.get(username=username)
-# 		return user
-# 	except CustomUser.DoesNotExist:
-# 		return None
 
-# @csrf_exempt
-# def get_user_by_username(request):
-# 	if request.method == 'GET':
-# 		try:
-# 			data = json.loads(request.body.decode('utf-8'))
-# 			username = data.get('username')
-# 			if username:
-# 				user = get_user_from_username(username)
-# 				if user:
-# 					return JsonResponse({'user_id': user.id, 'username': user.username})
-# 				else:
-# 					return JsonResponse({'message': 'User not found'}, status=404)
-# 			else:
-# 				return JsonResponse({'message': 'Username missing in the request body'}, status=400)
+# 2FA -------
+def generate_secret_key():
+    return pyotp.random_base32()
 
-# 		except json.JSONDecodeError:
-# 			return JsonResponse({'message': 'Invalid JSON in the request body'}, status=400)
 
-# 	return JsonResponse({'message': 'Only GET requests are allowed'}, status=400)
+def generate_qr_code(secret_key, user_id):
+    totp = pyotp.TOTP(secret_key)
+    uri = totp.provisioning_uri(
+        name=f"user_{user_id}", issuer_name="Pixel Pong")
+    img = qrcode.make(uri)
+    img_path = f'static/qrcode_{user_id}.png'
+    img.save(img_path)
+    return img_path
+
+
+def save_secret_key_in_database(user_id, secret_key):
+    user_profile, created = CustomUser.objects.get_or_create(
+        id=user_id, defaults={'secret_key': secret_key})
+    if not created:
+        user_profile.secret_key = secret_key
+        user_profile.save()
+
+
+def get_secret_key_from_database(user_id):
+    user_profile = CustomUser.objects.get(id=user_id)
+    return user_profile.secret_key
+
+
+@csrf_exempt
+def display_qr_code(request, user_id):
+    user = CustomUser.objects.get(id=user_id)
+    if not user.is_2fa_enabled:
+        return JsonResponse({'message': '2FA is already disabled.'})
+    secret_key = generate_secret_key()
+    img_path = generate_qr_code(secret_key, user_id)
+    save_secret_key_in_database(user_id, secret_key)
+    return JsonResponse({'qrcode_path': img_path, 'user_id': user_id})
+
+
+@csrf_exempt
+def enable_2fa(request, user_id):
+    user = CustomUser.objects.get(id=user_id)
+    if user.is_2fa_enabled:
+        return JsonResponse({'message': '2FA is already enabled.'})
+
+    secret_key = pyotp.random_base32()
+    img_path = generate_qr_code(secret_key, user.id)
+    user.enable_2fa(secret_key)
+    return JsonResponse({'qrcode_path': img_path, 'message': 'Scan the QR code with your authenticator app to enable 2FA.'})
+
+
+@csrf_exempt
+def disable_2fa(request, user_id):
+    user = CustomUser.objects.get(id=user_id)
+    if not user.is_2fa_enabled:
+        return JsonResponse({'message': '2FA is already disabled.'})
+    user.disable_2fa()
+    return JsonResponse({'message': '2FA has been disabled.'})
+
+
+@csrf_exempt
+def verify_totp_code(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            user_id = data.get('user_id')
+            totp_code = data.get('totp_code')
+            
+            user = CustomUser.objects.get(id=user_id)
+
+            if not user.is_2fa_enabled:
+                return JsonResponse({'message': '2FA is not enabled for this user.'}, status=400)
+
+            totp = pyotp.TOTP(user.secret_key)
+            is_valid = totp.verify(totp_code)
+
+            if is_valid:
+                return JsonResponse({'message': 'TOTP is valid'})
+            else:
+                return JsonResponse({'message': 'Invalid TOTP'}, status=400)
+        except CustomUser.DoesNotExist:
+            return JsonResponse({'message': 'User not found'}, status=400)
+        except pyotp.OTPError as e:
+            return JsonResponse({'message': f'Error: {str(e)}'}, status=400)
+    return JsonResponse({'status': 'error', 'message': 'Only POST requests are allowed'}, status=400)
+

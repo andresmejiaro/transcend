@@ -9,7 +9,7 @@ const getMeInfo = async () => {
       console.log("username not found");
       return;
     }
-    const url = "http://localhost:8000/api/user/info-me-jwt/" + "?token=" + token + "&username=" + username;
+    const url = "http://localhost:8000/api/user/info-me/" + username + "/" + "?token=" + token;
     const options = {
       method: "GET",
       mode: "cors",

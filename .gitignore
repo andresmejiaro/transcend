@@ -8,12 +8,16 @@ __pycache__/
 # Ignore Django-related files and directories
 *.log
 db.sqlite3
-media/
+# media/
 # static/
 *.mo
 *.po
 migrations/
 staticfiles/
+
+# Ignore django avatar imgs and qrcodes
+BE/server/static/
+BE/server/media/avatars/
 
 # Ignore the virtual environment directory
 venv/

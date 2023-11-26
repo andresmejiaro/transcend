@@ -10,11 +10,11 @@ document.addEventListener("click", (e) => {
 
 const ifLoggedRedirect = (location) => {
   if (isLogged()) {
-    if (location == "/login" || location == "/signup")
-      window.location.href = "/";
+    if (location == "/login" || location == "/signup" || location == "/home" || location == "/")
+      window.location.href = "/home-logged";
   } else {
     if (location == "/user" || location == "/create-tournaments")
-      window.location.href = "/";
+      window.location.href = "/home";
   }
 };
 
@@ -54,9 +54,9 @@ const urlLocationHandler = async () => {
           (response) => response.text()
         );
       } else {
-        navRouter.innerHTML = await fetch("/templates/nav-anonymous.html").then(
-          (response) => response.text()
-        );
+        // navRouter.innerHTML = await fetch("/templates/nav-anonymous.html").then(
+        //   (response) => response.text()
+        // );
       }
     }
   } else {

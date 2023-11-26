@@ -61,7 +61,7 @@ const getMeSettingsInfo = async () => {
       console.log("username not found");
       return;
     }
-    const url = "http://localhost:8000/api/user/info-me-jwt/" + "?token=" + token + "&username=" + username;
+    const url = "http://localhost:8000/api/user/info-me/" + "?token=" + token + "&username=" + username;
     const options = {
       method: "GET",
       mode: "cors",

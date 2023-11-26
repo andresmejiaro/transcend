@@ -2,11 +2,8 @@
   <div class="col-md-8 form-container">
     <div class="row justify-content-center text-center">
       <h3>Signup</h3>
-      <div class="mt-5">
-        <button class="btn btn-primary" id="intra">Signup intra</button>
-      </div>
     </div>
-    <div class="col-md-6 mt-5 mx-auto text-white">
+    <div class="col-md-6 mt-5 mx-auto text-white text-center">
       <form id="signupForm">
         <div class="form-group mb-3">
           <label for="usernameSignupForm" class="form-label">Username</label>
@@ -58,7 +55,7 @@
               class="input-group-text bg-transparent text-white border-0"
               id="eyeIcon"
             >
-              <i class="bi bi-eye" id="togglePassword"></i>
+              <i class="bi bi-eye" id="togglePassword" style="color: #D97E39;"></i>
             </span>
           </div>
           <div class="invalid-feedback" id="passwordHelpSignup" style="display: block;"></div>
@@ -80,7 +77,7 @@
               class="input-group-text bg-transparent text-white border-0"
               id="eyeIcon"
             >
-              <i class="bi bi-eye" id="toggleRePassword"></i>
+              <i class="bi bi-eye" id="toggleRePassword" style="color: #D97E39;"></i>
             </span>
           </div>
           <div class="invalid-feedback" id="confirmPasswordHelpSignup" style="display: block;"></div>
@@ -91,11 +88,16 @@
           style="display: none"
         ></div>
         <div style="text-align: center;">
-          <button type="submit" class="btn btn-primary mt-3">Submit</button>
+          <button type="submit" class="btn mt-3">
+            <img src="../assets/buttons/signin.svg" alt="" class="img-fluid">
+          </button>
         </div>
       </form>
 
-      <h4 class="mt-5">Already have an account? <a href="/login">Log In</a></h4>
+      <h6 class="mt-5">Already have an account?</h6>
+      <h6>
+        <a href="/login">Log In</a>
+      </h6>
     </div>
   </div>
   <div class="col-md-4 image-container"></div>

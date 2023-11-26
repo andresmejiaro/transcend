@@ -1,44 +1,58 @@
-const useSessionStorageEffect = (key, callback) => {
-  const initialValue = sessionStorage.getItem(key);
+// const useSessionStorageEffect = (key, callback) => {
+//   const initialValue = sessionStorage.getItem(key);
 
-  callback(initialValue);
+//   callback(initialValue);
 
-  window.addEventListener("storage", (event) => {
-    if (event.key === key) {
-      callback(event.newValue);
-    }
-  });
+//   window.addEventListener("storage", (event) => {
+//     if (event.key === key) {
+//       callback(event.newValue);
+//     }
+//   });
 
-  return () => {
-    window.removeEventListener("storage", callback);
-  };
-};
+//   return () => {
+//     window.removeEventListener("storage", callback);
+//   };
+// };
 
-const handleChange = (newValue) => {
-  const usernameElement = document.getElementById("username-nav");
-  const loggedElement = document.getElementById("logged");
+// const handleChange = (newValue) => {
+//   const usernameElement = document.getElementById("username-nav");
+//   const loggedElement = document.getElementById("logged");
 
-  if (newValue) {
-    usernameElement.innerHTML = newValue;
+//   if (newValue) {
+//     usernameElement.innerHTML = newValue;
 
-    loggedElement.innerHTML = `<p>Welcome, ${newValue}!</p><button id="submitButton" class="btn btn-primary">Submit</button>`;
+//     loggedElement.innerHTML = `<p>Welcome, ${newValue}!</p><button id="submitButton" class="btn btn-primary">Submit</button>`;
 
-    const submitButton = document.getElementById("submitButton");
-    if (submitButton) {
-      submitButton.addEventListener("click", function (event) {
-        event.preventDefault();
-        handleLogout();
-      });
-    }
-  } else {
-    loggedElement.innerHTML = "Not logged in";
-  }
-};
+//     const submitButton = document.getElementById("submitButton");
+//     if (submitButton) {
+//       submitButton.addEventListener("click", function (event) {
+//         event.preventDefault();
+//         handleLogout();
+//       });
+//     }
+//   } else {
+//     loggedElement.innerHTML = "Not logged in";
+//   }
+// };
 
-const cleanup = useSessionStorageEffect("username", handleChange);
+// const cleanup = useSessionStorageEffect("username", handleChange);
 
-const cleanupFunction = () => {
-	window.removeEventListener("storage", handleChange);
-};
+// const cleanupFunction = () => {
+// 	window.removeEventListener("storage", handleChange);
+// };
 
-cleanupFunction();
+// cleanupFunction();
+
+
+
+// 
+
+document.body.addEventListener('click', function () {
+  // Apply the fade-out effect
+  document.body.classList.add('fade-out');
+
+  // Change location after the transition ends
+  setTimeout(function () {
+    window.location.href = '/home';
+  }, 700); // Match this time with your CSS transition time
+});

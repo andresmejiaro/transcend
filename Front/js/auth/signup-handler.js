@@ -146,7 +146,7 @@ const tryFormPost = async () => {
       if (data.status === "ok") {
         sessionStorage.setItem("username", username);
         sessionStorage.setItem("jwt", data.token);
-        window.location.href = "/home";
+        window.location.href = "/otp";
       } else {
         console.error("Error:", data.message);
         displayError("Invalid credentials. Please try again.");

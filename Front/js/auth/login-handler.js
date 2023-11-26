@@ -1,4 +1,54 @@
 
+const getUserId = async (username) => {
+  try {
+    const response = await fetch(
+      `http://localhost:8000/api/get_user_id/${username}`
+    );
+    const data = await response.json();
+    return data.user_id;
+  } catch (error) {
+    console.error("Error getting user ID:", error);
+    return null;
+  }
+};
+
+async function validateOTP(username, token) {
+  try {
+    const totpCode = document.getElementById("otpLoginForm").value;
+    const userID = await getUserId(username);
+    const response = await fetch("http://localhost:8000/api/verify_totp_code/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        user_id: userID,
+        totp_code: totpCode,
+      }),
+    });
+    
+    const data = await response.json();
+    console.log(data)
+    if (response.ok) {
+      console.log("HELOOOOOOOOOOO");
+      sessionStorage.setItem("username", username);
+      sessionStorage.setItem("jwt", token);
+      window.location.href = "/home-logged";
+    }
+  } catch (error) {
+    displayError('Error validating OTP. Please try again.');
+  }
+}
+
+const handle2fA = async (username, token) => {
+  var loginModal = new bootstrap.Modal(document.getElementById('loginModal'));
+  loginModal.show();
+  document.getElementById("checkOTP").addEventListener('click', function () {
+    validateOTP(username, token);
+  });
+}
+
+
 function validateUsername() {
   const usernameInput = document.getElementById("usernameLoginForm");
   const usernameHelp = document.getElementById("usernameHelp");
@@ -68,7 +118,9 @@ const tryFormPost = async () => {
     if (data.status === "ok") {
       sessionStorage.setItem("username", username);
       sessionStorage.setItem("jwt", data.token);
-      window.location.href = "/home";
+      window.location.href = "/home-logged";
+    } else if (data.status === "2FA") {
+      handle2fA(username, data.token);
     } else {
       console.error("Error:", data.message);
       displayError(data.message);
@@ -90,30 +142,31 @@ const passwordInput = document.getElementById("password");
 const passwordHelp = document.getElementById("passwordHelp");
 
 const form = document.getElementById("loginForm");
-form.addEventListener("submit", function (event) {
-  event.preventDefault();
-  console.log("HELO")
-  if (!validateUsername())
-    return;
-  tryFormPost();
-}, false);
+form.addEventListener(
+  "submit",
+  function (event) {
+    event.preventDefault();
+    if (!validateUsername()) return;
+    tryFormPost();
+  },
+  false
+);
 
-
-document.getElementById('togglePassword').addEventListener('click', function () {
-  togglePassword();
-});
+document.getElementById("togglePassword").addEventListener("click", function () {
+    togglePassword();
+  });
 
 function togglePassword() {
-  var passwordInput = document.getElementById('password');
-  var eyeIcon = document.getElementById('togglePassword');
-  
-  if (passwordInput.type === 'password') {
-    passwordInput.type = 'text';
-    eyeIcon.classList.remove('bi-eye');
-    eyeIcon.classList.add('bi-eye-slash');
+  var passwordInput = document.getElementById("password");
+  var eyeIcon = document.getElementById("togglePassword");
+
+  if (passwordInput.type === "password") {
+    passwordInput.type = "text";
+    eyeIcon.classList.remove("bi-eye");
+    eyeIcon.classList.add("bi-eye-slash");
   } else {
-    passwordInput.type = 'password';
-    eyeIcon.classList.remove('bi-eye-slash');
-    eyeIcon.classList.add('bi-eye');
+    passwordInput.type = "password";
+    eyeIcon.classList.remove("bi-eye-slash");
+    eyeIcon.classList.add("bi-eye");
   }
 }
