@@ -22,7 +22,7 @@ services:
 
   # Database container for PostgreSQL
   db:
-    image: postgres:latest
+    image: postgres:bullseye
     container_name: 'db'
     environment:
       POSTGRES_DB: ${POSTGRES_DB}
