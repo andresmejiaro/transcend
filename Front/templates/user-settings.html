@@ -1,0 +1,92 @@
+<!-- <h2>Update Avatar</h2> -->
+<!-- <form id="updateAvatarForm" enctype="multipart/form-data">
+    <div class="mb-3">
+        <label for="avatar" class="form-label">Choose Avatar</label>
+        <input type="file" class="form-control" id="avatar" name="avatar" accept="image/*" required>
+        <div id="avatarMsg"></div>
+    </div>
+    <button type="submit" class="btn btn-primary" id="updateAvatarBtn">Update Avatar</button>
+</form>
+-->
+
+<div class="row" style="margin-top: 5rem; min-height: 70vh">
+  <div class="col-md-4 text-center">
+    <form id="updateAvatarForm" enctype="multipart/form-data">
+      <div
+        class="mb-3 justify-content-center text-center mx-auto"
+        style="max-width: 50%"
+      >
+        <div>
+          <img
+            src="../assets/imgs/default-avatar.jpeg"
+            id="avatarImageUserSettings"
+            alt="Avatar"
+            class="img-fluid"
+          />
+        </div>
+        <label for="avatar" class="form-label">Choose Avatar</label>
+        <input
+          type="file"
+          class="form-control"
+          id="avatar"
+          name="avatar"
+          accept="image/*"
+          required
+        />
+        <div id="avatarMsg"></div>
+        <div>
+          <button type="submit" class="btn btn-primary" id="updateAvatarBtn">
+            Update Avatar
+          </button>
+        </div>
+      </div>
+    </form>
+    <div class="mt-auto">
+      <a href="/user" class="btn bg-white"> Back to Profile </a>
+    </div>
+  </div>
+  <div class="col-md-8 text-center">
+    <form id="userSettingForm">
+      <div class="row justify-content-center">
+        <div class="form-group col-md-5 mb-3">
+          <label for="userSettingsUsername" class="form-label">Username</label>
+          <input
+            type="text"
+            class="form-control input-signup"
+            id="userSettingsUsername"
+            placeholder="Enter your username"
+            required
+            readonly
+          />
+        </div>
+        <div class="form-group col-md-5 mb-3">
+          <label for="userSettingsFullname" class="form-label">Fullname</label>
+          <input
+            type="text"
+            class="form-control input-signup"
+            id="userSettingsFullname"
+            placeholder="Enter your username"
+            required
+            readonly
+          />
+          <div class="invalid-feedback" id="usernameHelp2"></div>
+        </div>
+      </div>
+      <div class="row justify-content-center">
+        <div class="form-group col-md-5 mb-3">
+          <label for="userSettingsEmail" class="form-label">Email</label>
+          <input
+            type="text"
+            class="form-control input-signup"
+            id="userSettingsEmail"
+            placeholder="Enter your username"
+            required
+            readonly
+          />
+          <div class="invalid-feedback" id="usernameHelp1"></div>
+        </div>
+      </div>
+      <button class="btn bg-white">Edit</button>
+    </form>
+  </div>
+</div>

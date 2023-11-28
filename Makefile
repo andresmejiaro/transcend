@@ -6,7 +6,7 @@ all: up
 up:
 	@echo "\033[1;33mStarting containers\033[0m"
 	@$(COMPOSE) up -d --build
-	@$(DOCKER)-compose up
+	# @$(DOCKER)-compose up
 	
 down:
 	@echo "\033[1;33mStopping containers\033[0m"

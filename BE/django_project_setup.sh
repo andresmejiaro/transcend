@@ -8,11 +8,16 @@ source django_venv/bin/activate
 
 pip install --upgrade pip
 
+python3 -m pip install --upgrade pip setuptools wheel
+
 pip install django
 pip install psycopg2-binary
 pip install djangorestframework
 pip install django-cors-headers
 pip install passlib
+pip install Pillow
+pip install pyotp
+pip install qrcode
 
 pip freeze > requirements.txt
 
@@ -31,8 +36,8 @@ cd server
 
 # Run makemigrations and migrate
 python3 manage.py makemigrations api
-# python3 manage.py makemigrations tournament
-# python3 manage.py makemigrations userauth
+python3 manage.py makemigrations tournament
+python3 manage.py makemigrations userauth
 python3 manage.py migrate
 
 # Create superuser if it doesn't exist

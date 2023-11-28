@@ -1,0 +1,87 @@
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+	margin: 0;
+	padding: 0;
+	color: white;
+}
+
+
+body {
+	margin: 0;
+	padding: 0;
+	font-family: 'Open Sans', sans-serif;
+	font-family: 'VT323', monospace;
+	background-color: black;
+}
+
+body::-webkit-scrollbar {
+	width: 0 !important;
+}
+
+h1 {
+	font-size: 4rem;
+	font-weight: bold;
+	margin-bottom: 1rem;
+}
+
+h2 {
+	font-size: 3.5rem;
+	font-weight: bold;
+	margin-bottom: 1rem;
+}
+
+h3 {
+	font-size: 3rem;
+	font-weight: bold;
+	margin-bottom: 0.75rem;
+}
+
+h4 {
+	font-size: 2.5rem;
+	font-weight: bold;
+	margin-bottom: 0.75rem;
+}
+
+h5 {
+	font-size: 2rem;
+	font-weight: bold;
+	margin-bottom: 0.5rem;
+}
+
+h6 {
+	font-size: 1.75rem;
+	font-weight: bold;
+	margin-bottom: 0.5rem;
+}
+
+p {
+	font-size: 1.5rem;
+	line-height: 1.5;
+	margin-bottom: 1rem;
+}
+
+
+
+.container-fluid {
+	padding: 0;
+	margin: 0;
+}
+
+
+/* Navbar */
+.navbar-logged-pong {
+	background: linear-gradient(180deg, #1699CE -396.32%, #17638C -182.35%, #191A32 108.95%);
+	color: #FEFEE9;
+	border: 4px solid white;
+	background-clip: padding-box;
+	transition: border-color 0.2s ease-in-out;
+}
+
+.nav-link-logged-pong {
+	color: #FEFEE9;
+}

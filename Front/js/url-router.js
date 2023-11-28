@@ -1,5 +1,3 @@
-const urlPageTitle = "JS Single Page Application Router";
-import { urlRoutes } from "./routes";
 
 document.addEventListener("click", (e) => {
   const { target } = e;
@@ -12,8 +10,11 @@ document.addEventListener("click", (e) => {
 
 const ifLoggedRedirect = (location) => {
   if (isLogged()) {
-    if (location == "/login" || location == "/signup")
-      window.location.href = "/";
+    if (location == "/login" || location == "/signup" || location == "/home" || location == "/")
+      window.location.href = "/home-logged";
+  } else {
+    if (location == "/user" || location == "/create-tournaments")
+      window.location.href = "/home";
   }
 };
 
@@ -53,9 +54,9 @@ const urlLocationHandler = async () => {
           (response) => response.text()
         );
       } else {
-        navRouter.innerHTML = await fetch("/templates/nav-anonymous.html").then(
-          (response) => response.text()
-        );
+        // navRouter.innerHTML = await fetch("/templates/nav-anonymous.html").then(
+        //   (response) => response.text()
+        // );
       }
     }
   } else {
@@ -69,16 +70,17 @@ const urlLocationHandler = async () => {
 
   if (route.css) {
     const head = document.head;
-    const link = document.createElement("link");
 
-    link.type = "text/css";
-    link.rel = "stylesheet";
-    link.href = route.css;
+    route.css.forEach((cssFile) => {
+      const link = document.createElement("link");
 
-    head.appendChild(link);
+      link.type = "text/css";
+      link.rel = "stylesheet";
+      link.href = cssFile;
+
+      head.appendChild(link);
+    });
   }
-
-  // if (route.js && !isScriptLinked(route.js)) {
   if (route.js) {
     route.js.forEach((jsFile) => {
       if (jsFile && !document.querySelector(`script[src="${jsFile}"]`)) {

@@ -20,6 +20,7 @@ const getCsrfToken = async () => {
 const isLogged = () => {
   username = sessionStorage.getItem("username");
   token = sessionStorage.getItem("jwt");
+  
   if (!username || !token) return false;
   else return true;
 };
@@ -39,11 +40,16 @@ async function makeRequest(url, options) {
   }
 
   const response = await fetch(url, options);
+  
 
   if (!response.ok) {
     throw new Error(`HTTP error! Status: ${response.status}`);
   }
 
-  const data = await response.json();
-  return data;
+  const contentType = response.headers.get("content-type");
+  if (contentType && contentType.includes("application/json")) {
+    return await response.json();
+  } else {
+    return await response.text(); // Return non-JSON response as text
+  }
 }
