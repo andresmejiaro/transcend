@@ -53,11 +53,23 @@ const urlLocationHandler = async () => {
         navRouter.innerHTML = await fetch("/templates/nav-logged.html").then(
           (response) => response.text()
         );
-      } else {
-        // navRouter.innerHTML = await fetch("/templates/nav-anonymous.html").then(
-        //   (response) => response.text()
-        // );
-      }
+        if (!document.querySelector(`script[src="./js/nav.js"]`)) {
+          const body = document.body;
+          const script = document.createElement("script");
+          script.type = "text/javascript";
+          script.src = "./js/nav.js";
+          script.async = false;
+          body.appendChild(script);
+        }
+        if (!document.querySelector(`script[src="./js/nav-friends.js"]`)) {
+          const body = document.body;
+          const script = document.createElement("script");
+          script.type = "text/javascript";
+          script.src = "./js/nav-friends.js";
+          script.async = false;
+          body.appendChild(script);
+        }
+      } 
     }
   } else {
     console.error("Element with id 'nav-router' not found in the DOM");
@@ -94,17 +106,6 @@ const urlLocationHandler = async () => {
         body.appendChild(script);
       }
     });
-  }
-
-  if (!document.querySelector(`script[src="./js/nav.js"]`)) {
-    const body = document.body;
-    const script = document.createElement("script");
-
-    script.type = "text/javascript";
-    script.src = "./js/nav.js";
-    script.async = false;
-
-    body.appendChild(script);
   }
 };
 

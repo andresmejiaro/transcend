@@ -85,3 +85,8 @@ p {
 .nav-link-logged-pong {
 	color: #FEFEE9;
 }
+
+.pm0 {
+	padding: 0!important;
+	margin: 0!important;
+}
