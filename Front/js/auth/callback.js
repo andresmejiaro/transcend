@@ -37,15 +37,35 @@ const tryLoginFormPost = async (data) => {
   }
 };
 
-const tryFormPost = async (data) => {
+async function handleUpload(username, avatarUrl, token) {
+  await fetch(`http://localhost:8000/api/user/update-avatar/${username}/`, {
+    method: 'POST',
+    method: "POST",
+    mode: "cors",
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json",
+      "X-CSRFToken": token,
+    },
+    body: JSON.stringify({ avatar_url: avatarUrl }),
+  })
+    .then(response => response.json())
+    .then(data => {
+      // console.log(data);
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      alert('An error occurred while uploading the avatar.');
+    });
+}
+
+const tryFormPost = async (data, token) => {
   const username = data.login;
   const fullname = data.displayname;
   const placeholderPassword = "AUTH0_USER_NO_PASSWORD";
   const email = data.email;
 
-  token = await getCsrfToken();
-
-  fetch("http://localhost:8000/api/user/signup/", {
+  await fetch("http://localhost:8000/api/user/signup/", {
     method: "POST",
     mode: "cors",
     credentials: "include",
@@ -65,7 +85,6 @@ const tryFormPost = async (data) => {
       if (data.status === "ok") {
         sessionStorage.setItem("username", username);
         sessionStorage.setItem("jwt", data.token);
-        window.location.href = "/home";
       } else {
         console.error("Error:", data.message);
       }
@@ -97,10 +116,14 @@ const getInfoMe = async (username) => {
 
 const intrahandler = async (userData) => {
   const exists = await getInfoMe(userData.login)
+  token = await getCsrfToken();
   if (exists)
     tryLoginFormPost(userData);
-  else
-    tryFormPost(userData);
+  else {
+    await tryFormPost(userData, token);
+    await handleUpload(userData.login, userData.image.link, token);
+    window.location.href = "/home";
+  }
 };
 
 async function getUserInfo(accessToken) {
@@ -154,7 +177,6 @@ async function handleCallback() {
 
     const tokenData = await response.json();
 
-    console.log("Access Token:", tokenData.access_token);
     getUserInfo(tokenData.access_token);
   }
 }
