@@ -149,7 +149,7 @@ const tryFormPost = async () => {
         window.location.href = "/otp";
       } else {
         console.error("Error:", data.message);
-        displayError("Invalid credentials. Please try again.");
+        displayError(`${data.message}. Please try again.`);
       }
     })
     .catch((error) => {

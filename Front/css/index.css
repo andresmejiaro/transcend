@@ -85,3 +85,12 @@ p {
 .nav-link-logged-pong {
 	color: #FEFEE9;
 }
+
+/* Adding to Bootstrap classes */
+.mt-5r {
+	margin-top: 5rem;
+}
+
+.mt-10r {
+	margin-top: 10rem;
+}
