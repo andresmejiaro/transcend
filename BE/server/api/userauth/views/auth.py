@@ -29,6 +29,9 @@ def signup_view(request):
             if not (username and password and fullname and email):
                 return JsonResponse({"status": "error", "message": "Username, password, email or fullname is missing"}, status=400)
 
+            if CustomUser.objects.filter(email=email).exists():
+                return JsonResponse({"status": "error", "message": "Email already exists"}, status=400)
+            
             if CustomUser.objects.filter(username=username).exists():
                 return JsonResponse({"status": "error", "message": "Username already exists"}, status=400)
 
