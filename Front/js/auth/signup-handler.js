@@ -146,11 +146,10 @@ const tryFormPost = async () => {
         password: password,
       }),
     });
-
     if (response.status === "ok") {
       sessionStorage.setItem("username", username);
-      sessionStorage.setItem("jwt", data.token);
-      // window.location.href = "/otp";
+      sessionStorage.setItem("jwt", response.token);
+      window.location.href = "/otp";
     } else {
       console.error("Error:", response.message);
       displayError(`${response.message}. Please try again.`);

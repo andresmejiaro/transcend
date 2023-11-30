@@ -43,9 +43,7 @@ const urlLocationHandler = async () => {
 
 
   // set the description of the document to the description of the route
-  document
-    .querySelector('meta[name="description"]')
-    .setAttribute("content", route.description);
+  document.querySelector('meta[name="description"]').setAttribute("content", route.description);
 
   if (route.css) {
     const head = document.head;
@@ -74,6 +72,23 @@ const urlLocationHandler = async () => {
       }
     });
   }
+
+
+  const navRouter = document.getElementById("nav-router");
+  if (navRouter) {
+    const existingContent = navRouter.innerHTML.trim();
+    if (!existingContent.includes("nav-logged")) {
+      if (isLogged()) {
+        navRouter.innerHTML = await fetch("/templates/nav-logged.html").then(
+          (response) => response.text()
+        );
+      }
+    }
+  } else {
+    console.error("Element with id 'nav-router' not found in the DOM");
+  }
+
+
 
   if (isLogged() && !document.querySelector(`script[src="./js/nav.js"]`)) {
     const body = document.body;

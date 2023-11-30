@@ -2,9 +2,7 @@ window.DJANGO_API_BASE_URL = "http://localhost:8000";
 
 function getCSRFCookie() {
   let name = "csrftoken" + "=";
-  console.log(document.cookie)
   let decodedCookie = decodeURIComponent(document.cookie);
-  console.log(decodedCookie);
   let ca = decodedCookie.split(";");
   for (let i = 0; i < ca.length; i++) {
     let c = ca[i];
@@ -33,19 +31,18 @@ function handleLogout() {
 async function makeRequest(useCsrf, url, options, queries) {
 	
   let JWTToken = null;
-  console.log(useCsrf, url, options, queries);
+  //console.log(useCsrf, url, options, queries);
   if (useCsrf) {
     const csrfToken = getCSRFCookie();
-	console.log(csrfToken)
-    // if (csrfToken) {
-    //   options.headers = {
-    //     ...options.headers,
-    //     "X-CSRFToken": csrfToken,
-    //   };
-    // } else {
-    //   console.log("LADRON ! Cross Site Request Forgery Detected");
-    //   return;
-    // }
+    if (csrfToken) {
+      options.headers = {
+      ...options.headers,
+         "X-CSRFToken": csrfToken,
+      };
+    } else {
+       console.log("LADRON ! Cross Site Request Forgery Detected");
+       return;
+    }
 
     JWTToken = sessionStorage.getItem("jwt");
     if (!JWTToken) {

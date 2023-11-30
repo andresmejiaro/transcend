@@ -15,8 +15,7 @@ const infoToNavHome = async () => {
       },
     };
 
-    const data = await makeRequest(true, url, options);
-
+    const data = await makeRequest(true, url, options, "");
     if (data.status === "ok") {
       const usernameH = document.getElementById("usernameNav");
       const avatarImage = document.getElementById("avatarImageNav");
@@ -37,3 +36,8 @@ const infoToNavHome = async () => {
 };
 
 infoToNavHome();
+
+document.getElementById("logoutButton").addEventListener("click", function(e) {
+  e.preventDefault();
+  handleLogout();
+});
