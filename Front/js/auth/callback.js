@@ -19,7 +19,7 @@ const tryLoginFormPostIntra = async (data) => {
 	});
 
 	sessionStorage.setItem("username", username);
-	window.location.href = "/home";
+	sessionStorage.setItem("jwt", response.token);
   } catch (error) {
 	console.error("Error:", error.message);
 	displayError("Invalid credentials. Please try again.");
@@ -74,6 +74,7 @@ const tryFormPostIntra = async (data) => {
 
 	if (response.status === "ok") {
 	  sessionStorage.setItem("username", username);
+    sessionStorage.setItem("jwt", response.token);
 	} else {
 	  console.error("Error:", response.message);
 	}
@@ -84,15 +85,10 @@ const tryFormPostIntra = async (data) => {
 
 const getInfoMe = async (username) => {
   try {
-	const url = `${window.DJANGO_API_BASE_URL}/api/get_user_id/${username}`;
-	const response = await makeRequest(true, url);
+	const url = `${window.DJANGO_API_BASE_URL}/api/user/exists/${username}`;
+	const response = await makeRequest(false, url);
 
-	if (response) {
-	  return response.user_id;
-	} else {
-	  console.error("Error getting user ID:", response.message);
-	  return false;
-	}
+	return response;
   } catch (error) {
 	console.error("Error getting user ID:", error.message);
 	return false;
@@ -101,12 +97,13 @@ const getInfoMe = async (username) => {
 
 const intrahandler = async (userData) => {
   const exists = await getInfoMe(userData.login);
-  if (exists) tryLoginFormPostIntra(userData);
+  if (exists)
+  	await tryLoginFormPostIntra(userData);
   else {
-	await tryFormPostIntra(userData);
-	await handleUpload(userData.login, userData.image.link);
-	window.location.href = "/home";
+		await tryFormPostIntra(userData);
+		await handleUpload(userData.login, userData.image.link);
   }
+	window.location.href = "/home-logged";
 };
 
 async function getUserInfo(accessToken) {

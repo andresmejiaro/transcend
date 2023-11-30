@@ -122,4 +122,12 @@ def get_user_id(request, username):
 
     return JsonResponse({'message': 'Only GET requests are allowed'}, status=400)
 
+@csrf_exempt
+def user_exists(request, username):
+    try:
+        user = CustomUser.objects.get(username=username)
+        return JsonResponse({"status": "exists"})
+    except CustomUser.DoesNotExist:
+        return JsonResponse({"error": "no user found"})
+
 
