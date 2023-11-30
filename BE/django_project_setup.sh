@@ -2,6 +2,8 @@
 
 PROJECT_DIR="/app/server/server"
 
+./wait-for-it.sh db:5432
+
 python3 -m venv django_venv
 
 source django_venv/bin/activate
@@ -44,7 +46,21 @@ python3 manage.py migrate
 python manage.py createsuperuser --username="$POSTGRES_USER" --email=admin@example.com --noinput
 
 
-# Run the development server
-python3 manage.py runserver 0.0.0.0:8000
+# Define a function for graceful shutdown
+function graceful_shutdown() {
+    echo "Received SIGTERM. Shutting down gracefully..."
+    kill -TERM $PID
+    wait $PID
+    echo "Shutdown complete."
+    exit 0
+}
 
-deactivate
+# Trap SIGTERM for graceful shutdown
+trap graceful_shutdown SIGTERM
+
+# Start the Django development server
+python3 manage.py runserver 0.0.0.0:8000 &
+PID=$!
+
+# Wait for the process to finish
+wait $PID
