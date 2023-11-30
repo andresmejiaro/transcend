@@ -12,8 +12,8 @@ RUN apk add --no-cache bash \
 COPY server .
 
 COPY django_project_setup.sh /app/django_project_setup.sh
+COPY wait-for-it.sh /app/wait-for-it.sh
 RUN chmod +x /app/django_project_setup.sh
+RUN chmod +x /app/wait-for-it.sh
 
 ENTRYPOINT [ "/app/django_project_setup.sh" ]
-
-# CMD ["/bin/sh", "-c", "source /app/django_venv/bin/activate && python3 manage.py migrate && python3 manage.py runserver 0.0.0.0:8000"]
