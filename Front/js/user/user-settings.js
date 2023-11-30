@@ -1,100 +1,94 @@
 document.getElementById("updateAvatarForm").addEventListener(
   "submit",
   function (e) {
-    e.preventDefault();
-    changeAvatar();
+	e.preventDefault();
+	changeAvatar();
   },
   false
 );
 
 const changeAvatar = async () => {
   const avatarInput = document.getElementById("avatar");
-  const token = sessionStorage.getItem("jwt");
-
-  if (!token) {
-    console.log("JWT token not found");
-    return;
-  }
-
   const username = sessionStorage.getItem("username");
 
   if (!username) {
-    console.log("username not found");
-    return;
+	console.log("username not found");
+	return;
   }
 
-  const url = `http://localhost:8000/api/user/update-avatar/${username}/?token=${token}`;
-
-  const formData = new FormData();
-  formData.append("avatar", avatarInput.files[0]);
-
-  const options = {
-    method: "POST",
-    mode: "cors",
-    credentials: "include",
-    body: formData,
-  };
-
   try {
-    const response = await makeRequest(url, options);
+	const url = `${window.DJANGO_API_BASE_URL}/api/user/update-avatar/${username}/`;
 
-    console.log(response);
-    const msg = document.getElementById("avatarMsg");
+	const formData = new FormData();
+	formData.append("avatar", avatarInput.files[0]);
 
-    if (response.status === "ok") {
-      msg.innerText = response.message;
-      msg.classList.add("text-success");
-      setTimeout(function () {
-        location.reload();
-      }, 1000);
-    } else {
-      msg.innerText = response.error;
-      msg.classList.add("text-error");
-    }
+	const options = {
+	  method: "POST",
+	  mode: "cors",
+	  credentials: "include",
+	  body: formData,
+	};
+
+	const response = await makeRequest(true, url, options);
+
+	console.log(response);
+	const msg = document.getElementById("avatarMsg");
+
+	if (response.status === "ok") {
+	  msg.innerText = response.message;
+	  msg.classList.add("text-success");
+	  setTimeout(function () {
+		location.reload();
+	  }, 1000);
+	} else {
+	  msg.innerText = response.error;
+	  msg.classList.add("text-error");
+	}
   } catch (error) {
-    console.error("Error:", error);
+	console.error("Error:", error.message);
   }
 };
 
 const getMeSettingsInfo = async () => {
-  const token = sessionStorage.getItem("jwt");
-  if (!token) {
-    console.log("JWT token not found");
-    return;
-  }
   const username = sessionStorage.getItem("username");
-  if (!username) {
-    console.log("username not found");
-    return;
-  }
-  const url =
-    "http://localhost:8000/api/user/info-me/" +
-    username +
-    "/" +
-    "?token=" +
-    token;
 
-  const options = {
-    method: "GET",
-    mode: "cors",
-    credentials: "include",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  };
-  const data = await makeRequest(url, options);
-  if (data.status == "ok") {
-    const username = document.getElementById("userSettingsUsername");
-    const fullname = document.getElementById("userSettingsFullname");
-    const email = document.getElementById("userSettingsEmail");
-    const avatarImage = document.getElementById("avatarImageUserSettings");
-    username.placeholder = data.user.username;
-    fullname.placeholder = data.user.fullname;
-    email.placeholder = data.user.email;
-    if (data.user.avatar_url) {
-      const completeAvatarUrl = `http://localhost:8000${data.user.avatar_url}`;
-      avatarImage.src = completeAvatarUrl;
-    }
+  if (!username) {
+	console.log("username not found");
+	return;
+  }
+
+  try {
+	const url = `${window.DJANGO_API_BASE_URL}/api/user/info-me/${username}/`;
+
+	const options = {
+	  method: "GET",
+	  mode: "cors",
+	  credentials: "include",
+	  headers: {
+		"Content-Type": "application/json",
+	  },
+	};
+
+	const data = await makeRequest(true, url, options);
+
+	if (data.status === "ok") {
+	  const usernameElement = document.getElementById("userSettingsUsername");
+	  const fullnameElement = document.getElementById("userSettingsFullname");
+	  const emailElement = document.getElementById("userSettingsEmail");
+	  const avatarImage = document.getElementById("avatarImageUserSettings");
+
+	  usernameElement.placeholder = data.user.username;
+	  fullnameElement.placeholder = data.user.fullname;
+	  emailElement.placeholder = data.user.email;
+
+	  if (data.user.avatar_url) {
+		const completeAvatarUrl = `${window.DJANGO_API_BASE_URL}${data.user.avatar_url}`;
+		avatarImage.src = completeAvatarUrl;
+	  }
+	}
+  } catch (error) {
+	console.error("Error:", error.message);
+	// Handle error actions, e.g., display an error message
   }
 };
 

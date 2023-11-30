@@ -13,10 +13,9 @@ from django.core.files.base import ContentFile
 import os
 from django.utils.text import slugify
 from urllib import request as urllib_request
+from django.views.decorators.csrf import requires_csrf_token
 
-
-# USER HANDLILNG & CRUD
-@csrf_exempt
+@requires_csrf_token
 def info_me_view(request, username):
     if request.method == 'GET':
         try:
@@ -36,7 +35,7 @@ def info_me_view(request, username):
     return JsonResponse({'error': 'Only GET requests are allowed'}, status=400)
 
 
-@csrf_exempt
+@requires_csrf_token
 def update_avatar_view(request, username):
     try:
         user = CustomUser.objects.get(username=username)
@@ -98,7 +97,6 @@ def update_avatar_view(request, username):
     except Exception as e:
         return JsonResponse({'err': str(e)}, status=400)
 
-@csrf_exempt
 def get_user_from_username(username):
 	try:
 		user = CustomUser.objects.get(username=username)
@@ -106,7 +104,7 @@ def get_user_from_username(username):
 	except CustomUser.DoesNotExist:
 		return None
 
-@csrf_exempt
+@requires_csrf_token
 def get_user_id(request, username):
     if request.method == 'GET':
         try:
@@ -123,5 +121,13 @@ def get_user_id(request, username):
             return JsonResponse({'message': 'Invalid JSON in the request body'}, status=400)
 
     return JsonResponse({'message': 'Only GET requests are allowed'}, status=400)
+
+@csrf_exempt
+def user_exists(request, username):
+    try:
+        user = CustomUser.objects.get(username=username)
+        return JsonResponse({"status": "exists"})
+    except CustomUser.DoesNotExist:
+        return JsonResponse({"error": "no user found"})
 
 

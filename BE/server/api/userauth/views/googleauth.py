@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from ..models import CustomUser
 from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.csrf import csrf_exempt, requires_csrf_token
 import json
 from django.middleware.csrf import get_token
 from ...jwt_utils import create_jwt_token, validate_and_get_user_from_token
@@ -42,7 +42,6 @@ def get_secret_key_from_database(user_id):
     return user_profile.secret_key
 
 
-@csrf_exempt
 def display_qr_code(request, user_id):
     user = CustomUser.objects.get(id=user_id)
     if not user.is_2fa_enabled:
@@ -52,8 +51,7 @@ def display_qr_code(request, user_id):
     save_secret_key_in_database(user_id, secret_key)
     return JsonResponse({'qrcode_path': img_path, 'user_id': user_id})
 
-
-@csrf_exempt
+@requires_csrf_token
 def enable_2fa(request, user_id):
     user = CustomUser.objects.get(id=user_id)
     if user.is_2fa_enabled:
@@ -64,8 +62,6 @@ def enable_2fa(request, user_id):
     user.enable_2fa(secret_key)
     return JsonResponse({'qrcode_path': img_path, 'message': 'Scan the QR code with your authenticator app to enable 2FA.'})
 
-
-@csrf_exempt
 def disable_2fa(request, user_id):
     user = CustomUser.objects.get(id=user_id)
     if not user.is_2fa_enabled:
@@ -73,8 +69,7 @@ def disable_2fa(request, user_id):
     user.disable_2fa()
     return JsonResponse({'message': '2FA has been disabled.'})
 
-
-@csrf_exempt
+@requires_csrf_token
 def verify_totp_code(request):
     if request.method == 'POST':
         try:
