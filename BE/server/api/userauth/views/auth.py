@@ -16,6 +16,7 @@ import qrcode
 
 
 # AUTH
+@csrf_exempt
 def signup_view(request):
     if request.method == 'POST':
         try:
@@ -56,7 +57,7 @@ def signup_view(request):
 
     return JsonResponse({'status': 'error', 'message': 'Only POST requests are allowed'}, status=400)
 
-
+@csrf_exempt
 def login_view(request):
     if request.method == 'POST':
         try:

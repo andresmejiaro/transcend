@@ -42,7 +42,6 @@ def get_secret_key_from_database(user_id):
     return user_profile.secret_key
 
 
-@csrf_exempt
 def display_qr_code(request, user_id):
     user = CustomUser.objects.get(id=user_id)
     if not user.is_2fa_enabled:
@@ -53,7 +52,6 @@ def display_qr_code(request, user_id):
     return JsonResponse({'qrcode_path': img_path, 'user_id': user_id})
 
 
-@csrf_exempt
 def enable_2fa(request, user_id):
     user = CustomUser.objects.get(id=user_id)
     if user.is_2fa_enabled:
@@ -64,8 +62,6 @@ def enable_2fa(request, user_id):
     user.enable_2fa(secret_key)
     return JsonResponse({'qrcode_path': img_path, 'message': 'Scan the QR code with your authenticator app to enable 2FA.'})
 
-
-@csrf_exempt
 def disable_2fa(request, user_id):
     user = CustomUser.objects.get(id=user_id)
     if not user.is_2fa_enabled:
@@ -74,7 +70,6 @@ def disable_2fa(request, user_id):
     return JsonResponse({'message': '2FA has been disabled.'})
 
 
-@csrf_exempt
 def verify_totp_code(request):
     if request.method == 'POST':
         try:

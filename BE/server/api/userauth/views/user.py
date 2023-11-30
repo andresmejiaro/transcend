@@ -15,8 +15,6 @@ from django.utils.text import slugify
 from urllib import request as urllib_request
 
 
-# USER HANDLILNG & CRUD
-@csrf_exempt
 def info_me_view(request, username):
     if request.method == 'GET':
         try:
@@ -36,7 +34,6 @@ def info_me_view(request, username):
     return JsonResponse({'error': 'Only GET requests are allowed'}, status=400)
 
 
-@csrf_exempt
 def update_avatar_view(request, username):
     try:
         user = CustomUser.objects.get(username=username)
@@ -98,7 +95,6 @@ def update_avatar_view(request, username):
     except Exception as e:
         return JsonResponse({'err': str(e)}, status=400)
 
-@csrf_exempt
 def get_user_from_username(username):
 	try:
 		user = CustomUser.objects.get(username=username)
@@ -106,7 +102,6 @@ def get_user_from_username(username):
 	except CustomUser.DoesNotExist:
 		return None
 
-@csrf_exempt
 def get_user_id(request, username):
     if request.method == 'GET':
         try:

@@ -41,27 +41,6 @@ const urlLocationHandler = async () => {
   document.getElementById("content").innerHTML = html;
   document.title = route.title;
 
-  const navRouter = document.getElementById("nav-router");
-  if (navRouter) {
-    const existingContent = navRouter.innerHTML.trim();
-    if (existingContent.includes("nav-logged")) {
-      console.log("Nav logged template is already present");
-    } else if (existingContent.includes("nav-anonymous")) {
-      console.log("Nav anonymous template is already present");
-    } else {
-      if (isLogged()) {
-        navRouter.innerHTML = await fetch("/templates/nav-logged.html").then(
-          (response) => response.text()
-        );
-      } else {
-        // navRouter.innerHTML = await fetch("/templates/nav-anonymous.html").then(
-        //   (response) => response.text()
-        // );
-      }
-    }
-  } else {
-    console.error("Element with id 'nav-router' not found in the DOM");
-  }
 
   // set the description of the document to the description of the route
   document
@@ -96,7 +75,7 @@ const urlLocationHandler = async () => {
     });
   }
 
-  if (!document.querySelector(`script[src="./js/nav.js"]`)) {
+  if (isLogged() && !document.querySelector(`script[src="./js/nav.js"]`)) {
     const body = document.body;
     const script = document.createElement("script");
 
