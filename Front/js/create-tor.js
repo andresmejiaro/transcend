@@ -38,7 +38,7 @@ const createRequest = async () => {
       }),
     };
 
-    await makeRequest(url, options);
+    await makeRequest(true, url, options, "");
 
     // Refresh the list of tournaments after creating a new one
     getListofTournaments();
@@ -76,10 +76,9 @@ const getListofTournaments = async () => {
       },
     };
 
-    const data = await makeRequest(url, options);
+    const data = await makeRequest(true, url, options, "");
 
     if (data.data.length === 0) {
-      console.log("hel");
       const tournamentElement = document.createElement("div");
       tournamentElement.innerHTML = `<p>There are currently no tournaments</p>`;
       tournamentsContainer.appendChild(tournamentElement);
@@ -141,7 +140,7 @@ const getListofMatches = async () => {
       },
     };
 
-    const data = await makeRequest(url, options);
+    const data = await makeRequest(true, url, options, "");
 
     // Update the content of the 'matches' div with the list of matches
     matchesContainer.innerHTML = "";
@@ -190,7 +189,7 @@ const getListofUsers = async () => {
       },
     };
 
-    const data = await makeRequest(url, options);
+    const data = await makeRequest(true, url, options, "");
 
     // Update the content of the 'users' div with the list of users
     usersContainer.innerHTML = "";
@@ -259,7 +258,7 @@ const deleteTournament = async (tournamentId) => {
       },
     };
 
-    const data = await makeRequest(url, options);
+    const data = await makeRequest(true, url, options, "");
 
     getListofTournaments();
   } catch (error) {
@@ -295,7 +294,7 @@ const deleteMatch = async (matchId) => {
       },
     };
 
-    const data = await makeRequest(url, options);
+    const data = await makeRequest(true, url, options, "");
 
     getListofMatches();
   } catch (error) {
@@ -331,7 +330,7 @@ const deleteUser = async (userId) => {
       },
     };
 
-    const data = await makeRequest(url, options);
+    const data = await makeRequest(true, url, options, "");
 
     getListofUsers();
   } catch (error) {

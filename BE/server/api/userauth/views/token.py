@@ -13,7 +13,7 @@ from django.core.files.base import ContentFile
 import os
 
 
-# TOKENS
+# ESTE ENDPOINT NO DEBERIA EXISTIR
 @csrf_exempt
 def send_csrf_token_view(request):
     csrf_token = get_token(request)
@@ -21,7 +21,6 @@ def send_csrf_token_view(request):
     return response
 
 
-@csrf_exempt
 def validate_jwt_token_view(request):
     if request.method == 'POST':
         try:
