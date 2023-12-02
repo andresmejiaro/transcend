@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from ..models import CustomUser
 from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
 import json
 from django.middleware.csrf import get_token
 from ...jwt_utils import create_jwt_token, validate_and_get_user_from_token
@@ -16,6 +16,8 @@ import qrcode
 
 
 # AUTH
+@csrf_exempt
+@ensure_csrf_cookie
 def signup_view(request):
     if request.method == 'POST':
         try:
@@ -56,7 +58,8 @@ def signup_view(request):
 
     return JsonResponse({'status': 'error', 'message': 'Only POST requests are allowed'}, status=400)
 
-
+@csrf_exempt
+@ensure_csrf_cookie
 def login_view(request):
     if request.method == 'POST':
         try:

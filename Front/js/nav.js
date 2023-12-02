@@ -1,45 +1,43 @@
-const logoutBtn = document.getElementById("logoutButton");
-if (logoutBtn) {
-  logoutBtn.addEventListener("click", function (event) {
-    event.preventDefault();
-    handleLogout();
-  });
-}
-
 const infoToNavHome = async () => {
-  const token = sessionStorage.getItem("jwt");
-  if (!token) {
-    console.log("JWT token not found");
-    return;
-  }
   const username = sessionStorage.getItem("username");
   if (!username) {
-    console.log("username not found");
     return;
   }
-  const url = "http://localhost:8000/api/user/info-me/" + username  + "/" + "?token=" + token;
-  const options = {
-    method: "GET",
-    mode: "cors",
-    credentials: "include",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  };
-  const data = await makeRequest(url, options);
-  if (data.status == "ok") {
-    const usernameH = document.getElementById("usernameNav");
-    const avatarImage = document.getElementById("avatarImageNav");
 
-    usernameH.innerHTML = data.user.username;
+  try {
+    const url = `${window.DJANGO_API_BASE_URL}/api/user/info-me/${username}/`;
+    const options = {
+      method: "GET",
+      mode: "cors",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
 
-    if (data.user.avatar_url) {
-      const completeAvatarUrl = `http://localhost:8000${data.user.avatar_url}`;
-      avatarImage.src = completeAvatarUrl;
-    } else {
-      avatarImage.src = "../assets/imgs/default-avatar.jpeg";
+    const data = await makeRequest(true, url, options, "");
+    if (data.status === "ok") {
+      const usernameH = document.getElementById("usernameNav");
+      const avatarImage = document.getElementById("avatarImageNav");
+
+      usernameH.innerHTML = data.user.username;
+
+      if (data.user.avatar_url) {
+        const completeAvatarUrl = `${window.DJANGO_API_BASE_URL}${data.user.avatar_url}`;
+        avatarImage.src = completeAvatarUrl;
+      } else {
+        avatarImage.src = "../assets/imgs/default-avatar.jpeg";
+      }
     }
+
+  } catch (error) {
+    console.log(error);
   }
 };
 
 infoToNavHome();
+
+document.getElementById("logoutButton").addEventListener("click", function(e) {
+  e.preventDefault();
+  handleLogout();
+});
