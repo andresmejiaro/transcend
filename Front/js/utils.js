@@ -30,7 +30,6 @@ function handleLogout() {
 
 async function makeRequest(useCsrf, url, options, queries) {
 	
-  let JWTToken = null;
   //console.log(useCsrf, url, options, queries);
   if (useCsrf) {
     const csrfToken = getCSRFCookie();
@@ -44,25 +43,28 @@ async function makeRequest(useCsrf, url, options, queries) {
        return;
     }
 
-    JWTToken = sessionStorage.getItem("jwt");
-    if (!JWTToken) {
-      console.log("JWT token not found");
-      return;
-    }
-    url = `${url}?token=${JWTToken}`;
-  }
+    const JWTToken = sessionStorage.getItem("jwt");
+    if (JWTToken) {
+      options.headers = {
+      ...options.headers,
+         "Authorization": `Bearer ${JWTToken}`,
+      };
+    } else {
+       console.log("LADRON ! JWT not correct");
+       return;
+    };
+  };
 
-  if (queries && useCsrf) {
-    url = `${url}${queries}`;
-  } else if (queries) {
+  if (queries) {
     url = `${url}?${queries}`;
   }
 
   const response = await fetch(url, options);
 
   if (!response.ok) {
-    throw new Error(`HTTP error! Status: ${response.status}`);
-  }
+      if (location != "/login" && location != "/signup" && location != "/home" && location != "/" && location != "/callback")
+        handleLogout();
+  };
 
   const contentType = response.headers.get("content-type");
   if (contentType && contentType.includes("application/json")) {

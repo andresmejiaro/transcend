@@ -28,7 +28,6 @@ const load2FA = async () => {
       const response = await makeRequest(true, url);
 
       if (response) {
-        console.log(response);
         document.getElementById(
           "qrcodeImage"
         ).src = `${window.DJANGO_API_BASE_URL}/${response.qrcode_path}`;

@@ -31,7 +31,6 @@ const changeAvatar = async () => {
 
 	const response = await makeRequest(true, url, options);
 
-	console.log(response);
 	const msg = document.getElementById("avatarMsg");
 
 	if (response.status === "ok") {
