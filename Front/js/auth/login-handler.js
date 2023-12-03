@@ -1,53 +1,56 @@
-
 const getUserId = async (username) => {
   try {
-    const response = await fetch(
-      `http://localhost:8000/api/get_user_id/${username}`
-    );
-    const data = await response.json();
-    return data.user_id;
+	const url = `${window.DJANGO_API_BASE_URL}/api/get_user_id/${username}`;
+	const response = await makeRequest(true, url);
+
+	if (response) {
+	  return response.user_id;
+	} else {
+	  console.error("Error getting user ID:", response.message);
+	  return null;
+	}
   } catch (error) {
-    console.error("Error getting user ID:", error);
-    return null;
+	console.error("Error getting user ID:", error.message);
+	return null;
   }
 };
 
 async function validateOTP(username, token) {
   try {
-    const totpCode = document.getElementById("otpLoginForm").value;
-    const userID = await getUserId(username);
-    const response = await fetch("http://localhost:8000/api/verify_totp_code/", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        user_id: userID,
-        totp_code: totpCode,
-      }),
-    });
-    
-    const data = await response.json();
-    console.log(data)
-    if (response.ok) {
-      console.log("HELOOOOOOOOOOO");
-      sessionStorage.setItem("username", username);
-      sessionStorage.setItem("jwt", token);
-      window.location.href = "/home-logged";
-    }
+	const totpCode = document.getElementById("otpLoginForm").value;
+	const userID = await getUserId(username);
+	const url = `${window.DJANGO_API_BASE_URL}/api/verify_totp_code/`;
+
+	const response = await makeRequest(true, url, {
+	  method: "POST",
+	  headers: {
+		"Content-Type": "application/json",
+	  },
+	  body: JSON.stringify({
+		user_id: userID,
+		totp_code: totpCode,
+	  }),
+	});
+
+	if (response.ok) {
+	  window.location.href = "/home-logged";
+	} else {
+	  console.error("Error:", response.message);
+	  displayError(response.message);
+	}
   } catch (error) {
-    displayError('Error validating OTP. Please try again.');
+	console.error("Error:", error.message);
+	displayError("Error validating OTP. Please try again.");
   }
 }
 
 const handle2fA = async (username, token) => {
-  var loginModal = new bootstrap.Modal(document.getElementById('loginModal'));
+  var loginModal = new bootstrap.Modal(document.getElementById("loginModal"));
   loginModal.show();
-  document.getElementById("checkOTP").addEventListener('click', function () {
-    validateOTP(username, token);
+  document.getElementById("checkOTP").addEventListener("click", function () {
+	validateOTP(username, token);
   });
-}
-
+};
 
 function validateUsername() {
   const usernameInput = document.getElementById("usernameLoginForm");
@@ -55,15 +58,15 @@ function validateUsername() {
   const username = usernameInput.value;
 
   if (username.length < 4) {
-    usernameHelp.innerText = "Write at least 4 characters";
-    usernameInput.classList.add("is-invalid");
-    usernameInput.classList.remove("is-valid");
-    return false;
+	usernameHelp.innerText = "Write at least 4 characters";
+	usernameInput.classList.add("is-invalid");
+	usernameInput.classList.remove("is-valid");
+	return false;
   } else {
-    usernameHelp.innerText = "";
-    usernameInput.classList.remove("is-invalid");
-    usernameInput.classList.add("is-valid");
-    return true;
+	usernameHelp.innerText = "";
+	usernameInput.classList.remove("is-invalid");
+	usernameInput.classList.add("is-valid");
+	return true;
   }
 }
 
@@ -76,12 +79,12 @@ function validatePassword() {
   const password = passwordInput.value;
 
   if (!checkPasswordStrength(password)) {
-    passwordHelp.innerText = "Expected 8 or more characters";
-    passwordInput.classList.add("is-invalid");
-    passwordInput.classList.remove("is-valid");
+	passwordHelp.innerText = "Expected 8 or more characters";
+	passwordInput.classList.add("is-invalid");
+	passwordInput.classList.remove("is-valid");
   } else {
-    passwordInput.classList.remove("is-invalid");
-    passwordInput.classList.add("is-valid");
+	passwordInput.classList.remove("is-invalid");
+	passwordInput.classList.add("is-valid");
   }
 }
 
@@ -89,45 +92,41 @@ const tryFormPost = async () => {
   const username = document.getElementById("usernameLoginForm").value;
   const password = document.getElementById("password").value;
   const placeholderPassword = "AUTH0_USER_NO_PASSWORD";
+
   if (password == placeholderPassword) {
-    console.log("invalid password autho");
-    return;
+	console.log("Invalid password autho");
+	return;
   }
+
   try {
-    const token = await getCsrfToken();
-    const response = await fetch("http://localhost:8000/api/user/login/", {
-      method: "POST",
-      mode: "cors",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-        "X-CSRFToken": token,
-      },
-      body: JSON.stringify({
-        username: username,
-        password: password,
-      }),
-    });
+	const url = `${window.DJANGO_API_BASE_URL}/api/user/login/`;
 
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
-    }
+	const response = await makeRequest(false, url, {
+	  method: "POST",
+	  mode: "cors",
+	  credentials: "include",
+	  headers: {
+		"Content-Type": "application/json",
+	  },
+	  body: JSON.stringify({
+		username: username,
+		password: password,
+	  }),
+	});
 
-    const data = await response.json();
-
-    if (data.status === "ok") {
-      sessionStorage.setItem("username", username);
-      sessionStorage.setItem("jwt", data.token);
-      window.location.href = "/home-logged";
-    } else if (data.status === "2FA") {
-      handle2fA(username, data.token);
-    } else {
-      console.error("Error:", data.message);
-      displayError(data.message);
-    }
+	if (response.status === "ok") {
+	  sessionStorage.setItem("username", username);
+	  sessionStorage.setItem("jwt", response.token);
+	  window.location.href = "/home-logged";
+	} else if (response.status === "2FA") {
+	  handle2fA(username, response.token);
+	} else {
+	  console.error("Error:", response.message);
+	  displayError(response.message);
+	}
   } catch (error) {
-    console.error("Error:", error.message);
-    displayError("Invalid credentials. Please try again.");
+	console.error("Error:", error.message);
+	displayError("Invalid credentials. Please try again.");
   }
 };
 
@@ -137,7 +136,9 @@ function displayError(message) {
   errorAlert.style.display = "block";
 }
 
-document.getElementById("usernameLoginForm").addEventListener("input", validateUsername);
+document
+  .getElementById("usernameLoginForm")
+  .addEventListener("input", validateUsername);
 const passwordInput = document.getElementById("password");
 const passwordHelp = document.getElementById("passwordHelp");
 
@@ -145,15 +146,17 @@ const form = document.getElementById("loginForm");
 form.addEventListener(
   "submit",
   function (event) {
-    event.preventDefault();
-    if (!validateUsername()) return;
-    tryFormPost();
+	event.preventDefault();
+	if (!validateUsername()) return;
+	tryFormPost();
   },
   false
 );
 
-document.getElementById("togglePassword").addEventListener("click", function () {
-    togglePassword();
+document
+  .getElementById("togglePassword")
+  .addEventListener("click", function () {
+	togglePassword();
   });
 
 function togglePassword() {
@@ -161,12 +164,12 @@ function togglePassword() {
   var eyeIcon = document.getElementById("togglePassword");
 
   if (passwordInput.type === "password") {
-    passwordInput.type = "text";
-    eyeIcon.classList.remove("bi-eye");
-    eyeIcon.classList.add("bi-eye-slash");
+	passwordInput.type = "text";
+	eyeIcon.classList.remove("bi-eye");
+	eyeIcon.classList.add("bi-eye-slash");
   } else {
-    passwordInput.type = "password";
-    eyeIcon.classList.remove("bi-eye-slash");
-    eyeIcon.classList.add("bi-eye");
+	passwordInput.type = "password";
+	eyeIcon.classList.remove("bi-eye-slash");
+	eyeIcon.classList.add("bi-eye");
   }
 }

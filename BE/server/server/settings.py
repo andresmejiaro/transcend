@@ -145,8 +145,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CSRF_COOKIE_NAME = 'csrftoken'
 # CSRF_COOKIE_SECURE = True  # If your site is served over HTTPS
-CSRF_COOKIE_SAMESITE = None
-CSRF_COOKIE_HTTPONLY = True
+#CSRF_COOKIE_SAMESITE = Lax
+CSRF_COOKIE_USE_SESSIONS = True
 
 AUTH_USER_MODEL = 'userauth.CustomUser'
 

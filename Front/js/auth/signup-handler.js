@@ -56,20 +56,22 @@ function validateEmail() {
 }
 
 // Event listeners for input validation
-document.getElementById("usernameSignupForm").addEventListener("input", validateUsername);
+document
+  .getElementById("usernameSignupForm")
+  .addEventListener("input", validateUsername);
 document.getElementById("fullname").addEventListener("input", validateFullname);
 document.getElementById("email").addEventListener("input", validateEmail);
 
 const passwordInput = document.getElementById("passwordSignup");
 const confirmPasswordInput = document.getElementById("confirmPasswordSignup");
 const passwordHelp = document.getElementById("passwordHelpSignup");
-const confirmPasswordHelp = document.getElementById("confirmPasswordHelpSignup");
+const confirmPasswordHelp = document.getElementById(
+  "confirmPasswordHelpSignup"
+);
 
 function checkPasswordStrength(password) {
-  if (password.length >= 8)
-    return true;
-  else
-    return false;
+  if (password.length >= 8) return true;
+  else return false;
 }
 
 function validatePassword() {
@@ -83,9 +85,8 @@ function validatePassword() {
   } else {
     passwordInput.classList.remove("is-invalid");
     passwordInput.classList.add("is-valid");
-    passwordHelp.innerText = ""
+    passwordHelp.innerText = "";
   }
-
 
   if (password !== confirmPassword) {
     confirmPasswordHelp.innerText = "Passwords do not match";
@@ -115,8 +116,12 @@ function validateConfirmPassword() {
 }
 
 // Event listeners for input validation
-document.getElementById("passwordSignup").addEventListener("input", validatePassword);
-document.getElementById("confirmPasswordSignup").addEventListener("input", validateConfirmPassword);
+document
+  .getElementById("passwordSignup")
+  .addEventListener("input", validatePassword);
+document
+  .getElementById("confirmPasswordSignup")
+  .addEventListener("input", validateConfirmPassword);
 
 const tryFormPost = async () => {
   const username = document.getElementById("usernameSignupForm").value;
@@ -124,38 +129,35 @@ const tryFormPost = async () => {
   const password = document.getElementById("passwordSignup").value;
   const email = document.getElementById("email").value;
 
-  token = await getCsrfToken();
+  try {
+    const url = `${window.DJANGO_API_BASE_URL}/api/user/signup/`;
 
-  fetch("http://localhost:8000/api/user/signup/", {
-    method: "POST",
-    mode: "cors",
-    credentials: "include",
-    headers: {
-      "Content-Type": "application/json",
-      "X-CSRFToken": token,
-    },
-    body: JSON.stringify({
-      username: username,
-      fullname: fullname,
-      email: email,
-      password: password,
-    }),
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      if (data.status === "ok") {
-        sessionStorage.setItem("username", username);
-        sessionStorage.setItem("jwt", data.token);
-        window.location.href = "/otp";
-      } else {
-        console.error("Error:", data.message);
-        displayError("Invalid credentials. Please try again.");
-      }
-    })
-    .catch((error) => {
-      console.error("Error:", error);
-      displayError("Invalid credentials. Please try again.");
+    const response = await makeRequest(false, url, {
+      method: "POST",
+      mode: "cors",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        username: username,
+        fullname: fullname,
+        email: email,
+        password: password,
+      }),
     });
+    if (response.status === "ok") {
+      sessionStorage.setItem("username", username);
+      sessionStorage.setItem("jwt", response.token);
+      window.location.href = "/otp";
+    } else {
+      console.error("Error:", response.message);
+      displayError(`${response.message}. Please try again.`);
+    }
+  } catch (error) {
+    console.error("Error:", error.message);
+    displayError("Invalid credentials. Please try again.");
+  }
 };
 
 function displayError(message) {
@@ -183,42 +185,44 @@ form.addEventListener(
   false
 );
 
+document
+  .getElementById("togglePassword")
+  .addEventListener("click", function () {
+    togglePassword();
+  });
 
-
-document.getElementById('togglePassword').addEventListener('click', function () {
-  togglePassword();
-});
-
-document.getElementById('toggleRePassword').addEventListener('click', function () {
-  toggleRePassword();
-});
+document
+  .getElementById("toggleRePassword")
+  .addEventListener("click", function () {
+    toggleRePassword();
+  });
 
 function togglePassword() {
-  var passwordInput = document.getElementById('passwordSignup');
-  var eyeIcon = document.getElementById('togglePassword');
-  
-  if (passwordInput.type === 'password') {
-    passwordInput.type = 'text';
-    eyeIcon.classList.remove('bi-eye');
-    eyeIcon.classList.add('bi-eye-slash');
+  var passwordInput = document.getElementById("passwordSignup");
+  var eyeIcon = document.getElementById("togglePassword");
+
+  if (passwordInput.type === "password") {
+    passwordInput.type = "text";
+    eyeIcon.classList.remove("bi-eye");
+    eyeIcon.classList.add("bi-eye-slash");
   } else {
-    passwordInput.type = 'password';
-    eyeIcon.classList.remove('bi-eye-slash');
-    eyeIcon.classList.add('bi-eye');
+    passwordInput.type = "password";
+    eyeIcon.classList.remove("bi-eye-slash");
+    eyeIcon.classList.add("bi-eye");
   }
 }
 
 function toggleRePassword() {
-  var passwordInput = document.getElementById('confirmPasswordSignup');
-  var eyeIcon = document.getElementById('toggleRePassword');
-  
-  if (passwordInput.type === 'password') {
-    passwordInput.type = 'text';
-    eyeIcon.classList.remove('bi-eye');
-    eyeIcon.classList.add('bi-eye-slash');
+  var passwordInput = document.getElementById("confirmPasswordSignup");
+  var eyeIcon = document.getElementById("toggleRePassword");
+
+  if (passwordInput.type === "password") {
+    passwordInput.type = "text";
+    eyeIcon.classList.remove("bi-eye");
+    eyeIcon.classList.add("bi-eye-slash");
   } else {
-    passwordInput.type = 'password';
-    eyeIcon.classList.remove('bi-eye-slash');
-    eyeIcon.classList.add('bi-eye');
+    passwordInput.type = "password";
+    eyeIcon.classList.remove("bi-eye-slash");
+    eyeIcon.classList.add("bi-eye");
   }
 }

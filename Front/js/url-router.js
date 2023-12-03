@@ -41,44 +41,9 @@ const urlLocationHandler = async () => {
   document.getElementById("content").innerHTML = html;
   document.title = route.title;
 
-  const navRouter = document.getElementById("nav-router");
-  if (navRouter) {
-    const existingContent = navRouter.innerHTML.trim();
-    if (existingContent.includes("nav-logged")) {
-      console.log("Nav logged template is already present");
-    } else if (existingContent.includes("nav-anonymous")) {
-      console.log("Nav anonymous template is already present");
-    } else {
-      if (isLogged()) {
-        navRouter.innerHTML = await fetch("/templates/nav-logged.html").then(
-          (response) => response.text()
-        );
-        if (!document.querySelector(`script[src="./js/nav.js"]`)) {
-          const body = document.body;
-          const script = document.createElement("script");
-          script.type = "text/javascript";
-          script.src = "./js/nav.js";
-          script.async = false;
-          body.appendChild(script);
-        }
-        if (!document.querySelector(`script[src="./js/nav-friends.js"]`)) {
-          const body = document.body;
-          const script = document.createElement("script");
-          script.type = "text/javascript";
-          script.src = "./js/nav-friends.js";
-          script.async = false;
-          body.appendChild(script);
-        }
-      } 
-    }
-  } else {
-    console.error("Element with id 'nav-router' not found in the DOM");
-  }
 
   // set the description of the document to the description of the route
-  document
-    .querySelector('meta[name="description"]')
-    .setAttribute("content", route.description);
+  document.querySelector('meta[name="description"]').setAttribute("content", route.description);
 
   if (route.css) {
     const head = document.head;
@@ -106,6 +71,34 @@ const urlLocationHandler = async () => {
         body.appendChild(script);
       }
     });
+  }
+
+
+  const navRouter = document.getElementById("nav-router");
+  if (navRouter) {
+    const existingContent = navRouter.innerHTML.trim();
+    if (!existingContent.includes("nav-logged")) {
+      if (isLogged()) {
+        navRouter.innerHTML = await fetch("/templates/nav-logged.html").then(
+          (response) => response.text()
+        );
+      }
+    }
+  } else {
+    console.error("Element with id 'nav-router' not found in the DOM");
+  }
+
+
+
+  if (isLogged() && !document.querySelector(`script[src="./js/nav.js"]`)) {
+    const body = document.body;
+    const script = document.createElement("script");
+
+    script.type = "text/javascript";
+    script.src = "./js/nav.js";
+    script.async = false;
+
+    body.appendChild(script);
   }
 };
 

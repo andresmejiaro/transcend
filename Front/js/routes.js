@@ -79,4 +79,13 @@ const urlRoutes = {
     // js: ["./js/create-tor.js"],
     // css: ["./css/tournaments.css"]
   },
+  "/local-game": {
+    template: "/templates/local-game.html",
+    title: "Local Game | " + urlPageTitle,
+    description: "This is the local pong page",
+    js: ["./pongJs/environment.js","./pongJs/MovingRectangle.js",
+    "./pongJs/Ball.js","./pongJs/Paddle.js","./pongJs/Player.js", 
+    "./pongJs/Game.js","./pongJs/main.js"],
+    css: ["./css/local-game.css"]
+  }
 };

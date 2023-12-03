@@ -1,27 +1,25 @@
-const getCsrfToken = async () => {
-  try {
-    const response = await fetch("http://localhost:8000/api/user/csrftoken/", {
-      method: "GET",
-      credentials: "include",
-    });
-    const data = await response.json();
-    if (data.token) {
-      return data.token;
-    } else {
-      console.error("Error:", data.message);
-      return null;
+window.DJANGO_API_BASE_URL = "http://localhost:8000";
+
+function getCSRFCookie() {
+  let name = "csrftoken" + "=";
+  let decodedCookie = decodeURIComponent(document.cookie);
+  let ca = decodedCookie.split(";");
+  for (let i = 0; i < ca.length; i++) {
+    let c = ca[i];
+    while (c.charAt(0) == " ") {
+      c = c.substring(1);
     }
-  } catch (error) {
-    console.error("Error:", error);
-    return null;
+    if (c.indexOf(name) == 0) {
+      return c.substring(name.length, c.length);
+    }
   }
-};
+  return "";
+}
 
 const isLogged = () => {
   username = sessionStorage.getItem("username");
-  token = sessionStorage.getItem("jwt");
-  
-  if (!username || !token) return false;
+  	
+  if (!username) return false;
   else return true;
 };
 
@@ -30,17 +28,37 @@ function handleLogout() {
   window.location.href = "/";
 }
 
-async function makeRequest(url, options) {
-  const csrfToken = await getCsrfToken();
-  if (csrfToken) {
-    options.headers = {
+async function makeRequest(useCsrf, url, options, queries) {
+	
+  let JWTToken = null;
+  //console.log(useCsrf, url, options, queries);
+  if (useCsrf) {
+    const csrfToken = getCSRFCookie();
+    if (csrfToken) {
+      options.headers = {
       ...options.headers,
-      "X-CSRFToken": csrfToken,
-    };
+         "X-CSRFToken": csrfToken,
+      };
+    } else {
+       console.log("LADRON ! Cross Site Request Forgery Detected");
+       return;
+    }
+
+    JWTToken = sessionStorage.getItem("jwt");
+    if (!JWTToken) {
+      console.log("JWT token not found");
+      return;
+    }
+    url = `${url}?token=${JWTToken}`;
+  }
+
+  if (queries && useCsrf) {
+    url = `${url}${queries}`;
+  } else if (queries) {
+    url = `${url}?${queries}`;
   }
 
   const response = await fetch(url, options);
-  
 
   if (!response.ok) {
     throw new Error(`HTTP error! Status: ${response.status}`);

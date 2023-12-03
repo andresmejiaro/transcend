@@ -90,3 +90,11 @@ p {
 	padding: 0!important;
 	margin: 0!important;
 }
+
+.mt-5r {
+	margin-top: 5rem;
+}
+
+.mt-10r {
+	margin-top: 10rem;
+}
