@@ -1,23 +1,5 @@
 let userID = 0;
 
-const getUserId = async () => {
-  try {
-    const username = sessionStorage.getItem("username");
-    const url = `${window.DJANGO_API_BASE_URL}/api/get_user_id/${username}`;
-    const response = await makeRequest(true, url);
-
-    if (response) {
-      return response.user_id;
-    } else {
-      console.error("Error getting user ID:", response.message);
-      return null;
-    }
-  } catch (error) {
-    console.error("Error getting user ID:", error.message);
-    return null;
-  }
-};
-
 const load2FA = async () => {
   try {
     const id = await getUserId();

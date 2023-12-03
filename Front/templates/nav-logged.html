@@ -1,52 +1,112 @@
-<!-- <nav class="navbar navbar-light bg-light" id="nav-logged">
-  <div class="container-fluid">
-    <div class="navbar-text">
-      <span id="username-nav"></span>
-    </div>
-
-    <ul class="navbar-nav d-flex">
-      <li class="nav-item">
-        <a class="nav-link" href="/home">Home</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="/user">User</a>
-      </li>
-      <li class="nav-item">
-        <button class="nav-link" id="logoutButton">Logout</button>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="/create-tournaments">Tournament</a>
-    </ul>
-  </div>
-</nav> -->
-
 <nav class="navbar navbar-expand-lg navbar-light bg-light navbar-logged-pong">
   <div class="container">
-    <img src="../assets/imgs/pong-logo.svg" alt="" width="30" height="24">
+    <img src="../assets/imgs/pong-logo.svg" alt="" width="30" height="24" />
     <!-- <a class="navbar-brand nav-link-logged-pong" href="#">Logo</a> -->
     <div class="mx-auto d-flex align-items-center">
-      <ul class="navbar-nav" style="font-size: 1.75rem;">
+      <ul class="navbar-nav" style="font-size: 1.75rem">
         <li class="nav-item">
           <a class="nav-link nav-link-logged-pong" href="/home">Home</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link nav-link-logged-pong" href="/create-tournaments">Tournaments</a>
+          <a class="nav-link nav-link-logged-pong" href="/create-tournaments"
+            >Tournaments</a
+          >
         </li>
         <li class="nav-item">
-          <a class="nav-link nav-link-logged-pong" href="/leaderboards">Leaderboards</a>
+          <a class="nav-link nav-link-logged-pong" href="/leaderboards"
+            >Leaderboards</a
+          >
         </li>
         <li class="nav-item">
-          <button class="nav-link nav-link-logged-pong" id="logoutButton">Logout</button>
+          <a
+            class="nav-link nav-link-logged-pong"
+            data-bs-toggle="modal"
+            data-bs-target="#friendsModal"
+          >
+            <img
+              src="../assets/imgs/friends-icon.svg"
+              alt="Friends"
+              class="img-fluid"
+              style="width: 20px; cursor: pointer"
+            />
+          </a>
+        </li>
+        <li class="nav-item">
+          <button class="nav-link nav-link-logged-pong" id="logoutButton">
+            Logout
+          </button>
         </li>
       </ul>
     </div>
 
     <a href="/user" class="nav-link-logged-pong d-flex align-items-center">
-      <span id="usernameNav" style="margin-right: 1rem;">username</span>
-      <img src="../assets/imgs/default-avatar.jpeg" id="avatarImageNav" alt="Avatar" class="img-fluid" style="max-width: 40px;">
+      <span id="usernameNav" style="margin-right: 1rem">username</span>
+      <img
+        src="../assets/imgs/default-avatar.jpeg"
+        id="avatarImageNav"
+        alt="Avatar"
+        class="img-fluid"
+        style="max-width: 40px"
+      />
     </a>
-    
-    <img src="../assets/imgs/pong-logo.svg" alt="" width="30" height="24">
 
+    <img src="../assets/imgs/pong-logo.svg" alt="" width="30" height="24" />
   </div>
 </nav>
+
+<div
+  class="modal fade"
+  id="friendsModal"
+  tabindex="-1"
+  aria-labelledby="friendsModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content" style="background: #191f38">
+      <div class="modal-header justify-content-center">
+        <div class="col">
+          <div class="row text-center">
+            <h5 class="modal-title" id="friendsModalLabel">Online: x</h5>
+          </div>
+          <div class="row text-center">
+            <div>
+              <button
+                class="btn"
+                style="background: #fffeee; color: #4ca2bb"
+                id="friendsModalInvite"
+              >
+                Add a friend
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-body" id="modal-body-friends">
+        <p>List of friends...</p>
+        <div id="friends-list">
+          <div class="d-flex align-items-center">
+            <div
+              class="rounded-circle p-2"
+              style="width: 15px; height: 15px; background: #94ba85"
+            ></div>
+            <div class="mx-1"></div>
+            <p class="pm0">Mateo</p>
+          </div>
+          <div class="d-flex align-items-center">
+            <div
+              class="rounded-circle p-2"
+              style="width: 15px; height: 15px; background: #fffeee"
+            ></div>
+            <div class="mx-1"></div>
+            <p class="pm0">Mateo</p>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

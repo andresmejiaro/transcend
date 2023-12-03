@@ -73,3 +73,60 @@ async function makeRequest(useCsrf, url, options, queries) {
     return await response.text(); // Return non-JSON response as text
   }
 }
+
+
+const getUserId = async () => {
+  try {
+    const username = sessionStorage.getItem("username");
+    const url = `${window.DJANGO_API_BASE_URL}/api/get_user_id/${username}`;
+    const options = {
+      method: "GET",
+      mode: "cors",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    const response = await makeRequest(true, url, options);
+
+    if (response) {
+      return response.user_id;
+    } else {
+      console.error("Error getting user ID:", response.message);
+      return null;
+    }
+  } catch (error) {
+    console.error("Error getting user ID:", error.message);
+    return null;
+  }
+};
+
+
+const getIdFromUsername = async (clientUsername) => {
+  try {
+    const url = `${window.DJANGO_API_BASE_URL}/api/get_user_id/${clientUsername}`;
+    const options = {
+      method: "GET",
+      mode: "cors",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    const response = await makeRequest(true, url, options);
+
+    if (response) {
+      return response.user_id;
+    } else {
+      console.error("Error getting user ID:", response.message);
+      return null;
+    }
+  } catch (error) {
+    console.error("Error getting user ID:", error.message);
+    return null;
+  }
+};
+
+

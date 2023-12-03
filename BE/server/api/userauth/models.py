@@ -1,9 +1,9 @@
 from django.db import models
-
 # Create your models here.
 from django.contrib.auth.models import AbstractUser, Group, Permission
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+
 
 class CustomUser(AbstractUser):
     email = models.EmailField(unique=True, null=False, blank=False)
@@ -46,3 +46,6 @@ class CustomUser(AbstractUser):
         related_name='customuser_set',  # Choose a suitable related_name
         related_query_name='user',
     )
+
+    def __str__(self):
+        return f'{self.id} {self.username}'

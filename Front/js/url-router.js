@@ -97,6 +97,18 @@ const urlLocationHandler = async () => {
 
     body.appendChild(script);
   }
+
+  if (isLogged() && !document.querySelector(`script[src="./js/nav-friends.js"]`)) {
+    const body = document.body;
+    const script = document.createElement("script");
+
+    script.type = "text/javascript";
+    script.src = "./js/nav-friends.js";
+    script.async = false;
+
+    body.appendChild(script);
+  }
+
 };
 
 // add an event listener to the window that watches for url changes

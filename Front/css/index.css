@@ -86,7 +86,11 @@ p {
 	color: #FEFEE9;
 }
 
-/* Adding to Bootstrap classes */
+.pm0 {
+	padding: 0!important;
+	margin: 0!important;
+}
+
 .mt-5r {
 	margin-top: 5rem;
 }

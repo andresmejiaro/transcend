@@ -43,6 +43,7 @@ INSTALLED_APPS = [
 	'api',
 	'api.userauth',
 	'api.tournament',
+	'api.friends',
 ]
 
 MIDDLEWARE = [
