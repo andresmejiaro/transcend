@@ -6,7 +6,5 @@ class Friendship(models.Model):
     friends = models.ManyToManyField(CustomUser, related_name='friends', blank=True)
     blocked_users = models.ManyToManyField(CustomUser, related_name='blocked_users', blank=True)
 
-    invitations = models.ManyToManyField(CustomUser, related_name='invitations', blank=True)
-
     def __str__(self):
         return f'{self.user.id} {self.user.username}\'s friends'
