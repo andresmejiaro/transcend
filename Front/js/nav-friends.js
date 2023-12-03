@@ -17,16 +17,20 @@ const handleInvite = async () => {
         // If input is not visible, show the input and button
         modalBody.innerHTML = `
             <input type="text" id="invitationInput" placeholder="Enter friend's name">
-            <button id="sendInvitationBtn" class="btn btn-success">Submit</button>
+            <button id="sendInvitationBtn" class="btn btn-success">Send Invitation</button>
         `;
 
-        // Add event listener for the new button
-        const sendInvitationBtn = document.getElementById('sendInvitationBtn');
-        sendInvitationBtn.addEventListener('click', function (event) {
+      const sendInvitationBtn = document.getElementById('sendInvitationBtn');
+      sendInvitationBtn.addEventListener('click', (function () {
+        return async function (event) {
             event.preventDefault();
-            // Handle the logic for sending the invitation
-            console.log('Invitation sent to:', document.getElementById('invitationInput').value);
-        });
+            console.log("clicked");
+            const clientUsername = document.getElementById('invitationInput').value;
+            const inviteId = await getIdFromUsername(clientUsername);
+            console.log(inviteId);
+            inviteFriend(inviteId);
+        };
+      })());
     }
 };
 
@@ -38,3 +42,101 @@ document.getElementById('friendsModal').addEventListener('shown.bs.modal', funct
         handleInvite();
     });
 });
+
+
+const inviteFriend = async (inviteId) => {
+  const userId = await getUserId();
+
+  try {
+    const url = `${window.DJANGO_API_BASE_URL}/api/user/${userId}/addfriend/`;
+
+    const options = {
+      method: "POST",
+      mode: "cors",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+          friend_id: inviteId,
+      }),
+    };
+
+    const data = await makeRequest(true, url, options);
+
+    if (data.status === "ok") {
+        alert("friend added");
+    }
+  } catch (error) {
+    console.error("Error:", error.message);
+  }
+};
+
+
+const listFriends = async () => {
+    const userId = await getUserId();
+
+    try {
+        const url = `${window.DJANGO_API_BASE_URL}/api/user/${userId}/friendlist/`;
+
+        const options = {
+            method: "GET",
+            mode: "cors",
+            credentials: "include",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        };
+
+        const data = await makeRequest(true, url, options);
+
+        if (data.status === "ok") {
+            const friendsListContainer = document.getElementById("friends-list");
+
+            friendsListContainer.innerHTML = '';
+
+            data.data.forEach((friendName) => {
+              const friendElement = document.createElement("div");
+                friendElement.classList.add("d-flex", "align-items-center");
+
+                const circleElement = document.createElement("div");
+                circleElement.classList.add("rounded-circle", "p-2");
+                circleElement.style.width = "15px";
+                circleElement.style.height = "15px";
+                circleElement.style.background = "#94ba85";
+
+                const mxElement = document.createElement("div");
+                mxElement.classList.add("mx-1");
+
+                const pElement = document.createElement("p");
+                pElement.classList.add("pm0");
+                pElement.textContent = friendName.username;
+
+                friendElement.appendChild(circleElement);
+                friendElement.appendChild(mxElement);
+                friendElement.appendChild(pElement);
+
+                friendsListContainer.appendChild(friendElement);
+            });
+        }
+    } catch (error) {
+        console.error("Error:", error.message);
+    }
+};
+
+listFriends();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

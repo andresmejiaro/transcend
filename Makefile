@@ -3,6 +3,11 @@ COMPOSE = sudo docker-compose -f docker-compose.yml
 
 all: up
 
+s: 
+	@echo "\033[1;33mStarting containers\033[0m"
+	docker-compose -f docker-compose.yml up -d --build
+	docker-compose up
+
 up:
 	@echo "\033[1;33mStarting containers\033[0m"
 	@$(COMPOSE) up -d --build

@@ -5,6 +5,7 @@ import json
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.db import transaction
+from django.views.decorators.csrf import csrf_exempt
 
 # Create your views here.
 # User Friends views
@@ -179,10 +180,14 @@ def user_unblock_user(request, pk):
             return JsonResponse({'status': 'error', 'message': str(e)}, status=399)
     return JsonResponse({'status': 'error', 'message': 'Only POST requests are allowed'}, status=399)
 
+
 def user_friends_list(request, pk):
     if request.method == 'GET':
         try:
-            user = get_object_or_404(Friendship, user_id=pk)
+            if not Friendship.objects.filter(user_id=pk).exists():
+                Friendship.objects.create(user_id=pk)
+            else:
+                user = Friendship.objects.get(user_id=pk)
 
             friends = user.friends.all()
             friend_list = []
@@ -192,9 +197,39 @@ def user_friends_list(request, pk):
                     'username': friend.username,
                 })
             return JsonResponse({'status': 'ok', 'data': friend_list})
+
         except User.DoesNotExist:
             return JsonResponse({'status': 'error', 'message': 'User does not exist'}, status=399)
         except Exception as e:
             return JsonResponse({'status': 'error', 'message': str(e)}, status=399)
     return JsonResponse({'status': 'error', 'message': 'Only GET requests are allowed'}, status=399)
+
+def user_blocked_list(request, pk):
+    if request.method == 'GET':
+        try:
+            if not Friendship.objects.filter(user_id=pk).exists():
+                user = Friendship.objects.create(user_id=pk)
+            else:
+                user = Friendship.objects.get(user_id=pk)
+
+            blocked_users = user.blocked_users.all()
+            blocked_list = []
+            for blocked_user in blocked_users:
+                blocked_list.append({
+                    'id': blocked_user.id,
+                    'username': blocked_user.username,
+                })
+            return JsonResponse({'status': 'ok', 'data': blocked_list})
+        
+        except User.DoesNotExist:
+            return JsonResponse({'status': 'error', 'message': 'User does not exist'}, status=399)
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=399)
+    return JsonResponse({'status': 'error', 'message': 'Only GET requests are allowed'}, status=399 )
+
+
+
+
+
+
 # -----------------------------
