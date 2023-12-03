@@ -65,6 +65,34 @@ services:
     environment:
       - DJANGO_API_BASE_URL=http://localhost:8000
 
+  # Daphne container for the websockets
+  daphne:
+    build:
+      context: ./BE/
+      dockerfile: Dockerfile.daphne
+    container_name: 'daphne'
+    volumes:
+      - ./BE:/app/
+    depends_on:
+      - db
+    env_file:
+      - .env
+    ports:
+      - "8001:8001"
+    networks:
+      - app-network
+    restart:
+      on-failure
+
+  # Redis container for the websockets
+  redis:
+    image: "redis:latest"
+    container_name: "redis"
+    command: ["redis-server", "--bind", "redis", "--port", "6379"]
+    # ports:
+    #   - "6379:6379"
+    networks:
+      - app-network
 
 # Store data persistently in named volumes
 volumes:

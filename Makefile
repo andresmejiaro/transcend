@@ -1,5 +1,5 @@
-DOCKER = docker
-COMPOSE = docker-compose -f docker-compose.yml
+DOCKER = sudo docker
+COMPOSE = sudo docker-compose -f docker-compose.yml
 
 all: up
 

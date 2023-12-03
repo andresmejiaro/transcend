@@ -1,0 +1,32 @@
+FROM python:3.8-slim
+
+EXPOSE 8001
+WORKDIR /app
+
+RUN pip install --no-cache-dir \
+    daphne \
+    django \
+    psycopg2-binary \
+    django-cors-headers \
+    passlib \
+    Pillow \
+    pyotp \
+    qrcode \
+    requests \
+    channels \
+    channels-redis
+
+RUN pip install --upgrade pip
+
+COPY server .
+
+COPY requirements.txt .
+
+COPY wait-for-it.sh .
+RUN chmod +x wait-for-it.sh
+
+RUN pip install -r requirements.txt
+
+WORKDIR /app/server
+
+CMD ["../wait-for-it.sh", "db:5432", "--", "daphne", "-b", "0.0.0.0", "-p", "8001", "server.routing:application"]

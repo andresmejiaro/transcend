@@ -14,12 +14,13 @@ python3 -m pip install --upgrade pip setuptools wheel
 
 pip install django
 pip install psycopg2-binary
-pip install djangorestframework
 pip install django-cors-headers
 pip install passlib
 pip install Pillow
 pip install pyotp
 pip install qrcode
+pip install channels
+pip install channels-redis
 
 pip freeze > requirements.txt
 
@@ -41,6 +42,7 @@ python3 manage.py makemigrations api
 python3 manage.py makemigrations tournament
 python3 manage.py makemigrations userauth
 python3 manage.py makemigrations friends
+python3 manage.py makemigrations pong_app
 python3 manage.py migrate
 
 # Create superuser if it doesn't exist

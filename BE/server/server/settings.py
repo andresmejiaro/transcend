@@ -44,6 +44,8 @@ INSTALLED_APPS = [
 	'api.userauth',
 	'api.tournament',
 	'api.friends',
+    'channels',
+    'pong_app',
 ]
 
 MIDDLEWARE = [
@@ -77,6 +79,19 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'server.wsgi.application'
+
+ASGI_APPLICATION = "server.routing.application"
+
+# Configure channels layers to use Redis as the backend.
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('redis', 6379)],
+            "capacity": 1500,
+        },
+    },
+}
 
 
 # Database

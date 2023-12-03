@@ -24,7 +24,8 @@ urlpatterns = [
     path('api/', include('api.tournament.urls')),
     path('api/', include('api.userauth.urls')),
     path('api/', include('api.friends.urls')),
-	
+
+    path('', include('pong_app.urls')),
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

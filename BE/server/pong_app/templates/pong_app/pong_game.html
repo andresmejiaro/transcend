@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pong Game</title>
+</head>
+<body>
+    <div id="status">Connecting...</div>
+    <div id="messages"></div>
+    <button id="pressButton" onclick="sendButtonPress()">Press the Button</button>
+
+    <script>
+        // Extract room_name and username from the URL
+        const pathSegments = window.location.pathname.split('/');
+        const roomName = pathSegments[pathSegments.length - 2];
+        const username = prompt("Enter your username:");
+
+        const socket = new WebSocket(`ws://localhost:8001/ws/pong/${roomName}/?username=${username}`);
+
+        socket.addEventListener('open', (event) => {
+            printMessage('Connected to WebSocket.');
+        });
+
+        socket.addEventListener('message', (event) => {
+            const data = JSON.parse(event.data);
+            printMessage(data.message);
+        });
+
+        socket.addEventListener('close', (event) => {
+            printMessage('Connection closed.');
+        });
+
+        function sendButtonPress() {
+            socket.send(JSON.stringify({ type: 'button.press' }));
+        }
+
+        function printMessage(message) {
+            const messagesDiv = document.getElementById('messages');
+            const messageElement = document.createElement('div');
+            messageElement.textContent = message;
+            messagesDiv.appendChild(messageElement);
+        }
+    </script>
+</body>
+</html>
