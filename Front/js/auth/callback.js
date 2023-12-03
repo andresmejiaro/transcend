@@ -97,7 +97,6 @@ const getInfoMe = async (username) => {
 
 const intrahandler = async (userData) => {
   const exists = await getInfoMe(userData.login);
-  console.log(exists)
   if (!exists.error)
   	await tryLoginFormPostIntra(userData);
   else {

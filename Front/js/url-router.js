@@ -9,13 +9,10 @@ document.addEventListener("click", (e) => {
 });
 
 const ifLoggedRedirect = (location) => {
-  if (isLogged()) {
-    if (location == "/login" || location == "/signup" || location == "/home" || location == "/")
-      window.location.href = "/home-logged";
-  } else {
-    if (location == "/user" || location == "/create-tournaments")
+  if (!isLogged()) {
+    if (location != "/login" && location != "/signup" && location != "/home" && location != "/" && location != "/callback")
       window.location.href = "/home";
-  }
+  };
 };
 
 const urlRoute = (event) => {
