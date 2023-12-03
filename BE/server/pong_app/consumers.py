@@ -96,6 +96,8 @@ class PongConsumer(AsyncWebsocketConsumer):
         # Check if the message is a button press
         if message.get('type') == 'button.press':
             await self.handle_button_press()
+        if message.get('type') == 'disconnect':
+            await self.disconnect(message.get('close_code'))
 
     async def handle_button_press(self):
         # Get the game for the current room
@@ -106,6 +108,9 @@ class PongConsumer(AsyncWebsocketConsumer):
             # If the button is pressed, get the opponent's channel
             opponent_channel = game.get_opponent_channel(self.channel_name)
 
+            # Disconnect the current player
+            await self.disconnect(close_code=1000)
+
             # Send a message to the opponent
             await self.channel_layer.send(
                 opponent_channel,
@@ -115,8 +120,15 @@ class PongConsumer(AsyncWebsocketConsumer):
                 }
             )
 
-            # Send a message to the current player
-            await self.send_chat_message("Congratulations! You pressed the button and won!")
+            # Disconnect the opponent
+            await self.channel_layer.send(
+                opponent_channel,
+                {
+                    'type': 'disconnect',
+                    'close_code': 1000
+                }
+            )
+
 
     async def send_chat_message(self, message):
         # Send a message to the WebSocket
