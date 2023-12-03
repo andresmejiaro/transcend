@@ -10,7 +10,6 @@ const handleInvite = async () => {
 
     // Check if the input field is already present
     const isInputVisible = modalBody.querySelector('#invitationInput') !== null;
-
     if (isInputVisible) {
         // If input is visible, switch back to the initial content
         modalBody.innerHTML = initialContent;
@@ -18,7 +17,7 @@ const handleInvite = async () => {
         // If input is not visible, show the input and button
         modalBody.innerHTML = `
             <input type="text" id="invitationInput" placeholder="Enter friend's name">
-            <button id="sendInvitationBtn" class="btn btn-success">Send Invitation</button>
+            <button id="sendInvitationBtn" class="btn btn-success">Submit</button>
         `;
 
         // Add event listener for the new button
