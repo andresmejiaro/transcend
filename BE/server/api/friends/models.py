@@ -1,19 +1,12 @@
 from django.db import models
+from api.userauth.models import CustomUser
 
-class UserFriends(models.Model):
+class Friendship(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name='user_friends')
     friends = models.ManyToManyField(CustomUser, related_name='friends', blank=True)
     blocked_users = models.ManyToManyField(CustomUser, related_name='blocked_users', blank=True)
-    pending_invites = models.ManyToManyField(CustomUser, related_name='pending_invites', blank=True)
-    sent_requests = models.ManyToManyField(CustomUser, related_name='sent_requests', blank=True)
 
-    def send_friend_request(self, target_user):
-        # Logic to send a friend request
-        pass
+    invitations = models.ManyToManyField(CustomUser, related_name='invitations', blank=True)
 
-    def remove_friend(self, friend_user):
-        # Logic to remove a friend
-        pass
-
-
-from .models import CustomUser
+    def __str__(self):
+        return f'{self.user.id} {self.user.username}\'s friends'

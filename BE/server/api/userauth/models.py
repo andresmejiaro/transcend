@@ -1,16 +1,14 @@
 from django.db import models
-from django.conf import settings
 # Create your models here.
 from django.contrib.auth.models import AbstractUser, Group, Permission
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+
 class CustomUser(AbstractUser):
     email = models.EmailField(unique=True, null=False, blank=False)
     fullname = models.CharField(max_length=100, null=False, blank=False)
     avatar = models.ImageField(upload_to='avatars/', null=True, blank=True)
-
-    friends = models.ManyToManyField(settings.AUTH_USER_MODEL, null=True, blank=True)
 
     def update_avatar(self, new_avatar):
         if self.avatar:
@@ -49,3 +47,5 @@ class CustomUser(AbstractUser):
         related_query_name='user',
     )
 
+    def __str__(self):
+        return f'{self.id} {self.username}'
