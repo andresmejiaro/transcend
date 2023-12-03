@@ -24,11 +24,12 @@ const handleInvite = async () => {
       sendInvitationBtn.addEventListener('click', (function () {
         return async function (event) {
             event.preventDefault();
-            console.log("clicked");
             const clientUsername = document.getElementById('invitationInput').value;
             const inviteId = await getIdFromUsername(clientUsername);
-            console.log(inviteId);
-            inviteFriend(inviteId);
+            if (!inviteId)
+              alert("User not found")
+            else
+              inviteFriend(inviteId);
         };
       })());
     }
@@ -65,7 +66,7 @@ const inviteFriend = async (inviteId) => {
     const data = await makeRequest(true, url, options);
 
     if (data.status === "ok") {
-        alert("friend added");
+        window.location.href = "/home-logged"
     }
   } catch (error) {
     console.error("Error:", error.message);
