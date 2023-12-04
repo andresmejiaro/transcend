@@ -2,10 +2,10 @@ class Paddle extends MovingRectangle{
     #binds;
     #maxSpeed;
 
-    constructor(position ={x:30,y:0}, speed ={x:0,y:0},
-        size ={x:10,y:30}, color = "white",
-        binds ={up:"UNUSED_DEFAULT_KEY", down:"UNUSED_DEFAULT_KEY",
-        left:"UNUSED_DEFAULT_KEY", right:"UNUSED_DEFAULT_KEY"}) {
+    constructor(position = {x : 30, y : 0}, speed = {x : 0, y : 0},
+        size = {x : 10, y : 30}, color = "white",
+        binds ={up : "UNUSED_DEFAULT_KEY", down : "UNUSED_DEFAULT_KEY",
+        left : "UNUSED_DEFAULT_KEY", right : "UNUSED_DEFAULT_KEY"}){
         super();
         super.initialize(position, speed, size, color);
         this.#binds = binds;
@@ -53,9 +53,7 @@ class Paddle extends MovingRectangle{
             yNewPos = canvas.height - this.getSize.y;
         super.setPosition({x: xNewPos, 
                     y : yNewPos});
-        this.setSpeed({x:xSpeed, y:ySpeed});
-        this.updateCorners();
-				
+        this.setSpeed({x : xSpeed, y : ySpeed});
     }
 
     draw() {

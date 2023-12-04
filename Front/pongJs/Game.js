@@ -21,7 +21,7 @@ class Game {
     startScreen(){
         
         ctx.clearRect(0,0, canvas.width, canvas.height);
-        if (this.#backgroundLoaded || true){
+        if (this.#backgroundLoaded){
             ctx.fillText(`Press Enter to Start`, 50, 30);
             if (keysPressed["Enter"])
                 requestAnimationFrame(() => this.gameSetup());

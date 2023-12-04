@@ -19,6 +19,7 @@ class MovingRectangle {
         this.#color = color;
         ctx.fillStyle = this.#color;
         this.updateCorners();
+        
     }
 
     get getPosition(){
@@ -47,20 +48,20 @@ class MovingRectangle {
     }
     
     setPosition({x = this.#position[x], y = this.#position[y]}){
-        this.#position ={x,y};
+        this.#position = {x,y};
         this.updateCorners();
     }
 
     setSpeed({x = this.#speed.x, y = this.#speed.y}){
-        this.#speed ={x,y};
+        this.#speed = {x,y};
     }
 
     setSize({x = this.#size.x, y = this.#size.y}){
-        this.#size ={x,y};
+        this.#size = {x,y};
     }
 
     setColor(color){
-        this.#color =color;
+        this.#color = color;
     }
 
     draw() {

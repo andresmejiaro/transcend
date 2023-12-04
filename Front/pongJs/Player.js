@@ -2,7 +2,6 @@ class Player {
     #name
     #binds
     #score
-    #screenSide
 
     constructor(name = "Player", binds = {up:"UNUSED_DEFAULT_KEY", 
     down:"UNUSED_DEFAULT_KEY", left:"UNUSED_DEFAULT_KEY", 
@@ -10,7 +9,6 @@ class Player {
         this.#name = name;
         this.#binds = binds;
         this.#score = 0;
-        this.#screenSide = screenSide;
     }
 
     get score(){
