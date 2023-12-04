@@ -48,7 +48,7 @@ const urlRoutes = {
   },
   "/home-logged": {
     template: "/templates/home-logged.html",
-    title: "Home | " + urlPageTitle,
+    title: "Home- | " + urlPageTitle,
     description: "This is the home page",
     js: ["./js/home-loggedin.js"],
   },

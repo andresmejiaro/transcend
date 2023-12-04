@@ -89,7 +89,7 @@ def main():
     parser = argparse.ArgumentParser(description='Make API requests.')
     parser.add_argument('endpoint', type=str, help='API endpoint')
     parser.add_argument('method', type=str, help='HTTP method (GET, POST, PUT, DELETE)')
-    parser.add_argument('--data', type=str, help='Data to be sent in the request (for POST and PUT methods)')
+    parser.add_argument('--data', type=str, help='Data to bsent in the request (for POST and PUT methods)')
 
     args = parser.parse_args()
 
