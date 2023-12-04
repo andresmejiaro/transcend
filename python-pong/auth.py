@@ -105,10 +105,12 @@ def startAuth():
 
 def startPlay():
     # Ask for play options
-    play_options_choice = click.prompt("Choose an option: 1 (Play Now) or 2 (Play Tournament)", type=click.IntRange(1, 2))
+    play_options_choice = click.prompt("Choose an option: 1 (Play Now) or 2 (Play Tournament) or 3 (Play Against IA)", type=click.IntRange(1, 3))
     if play_options_choice == 1:
         click.echo("Let's start playing now!")
     elif play_options_choice == 2:
         click.echo("Get ready for the tournament!")
+    elif play_options_choice == 3:
+        click.echo("Get ready for the IA!")
 
 
