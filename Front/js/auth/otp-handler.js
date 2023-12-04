@@ -43,7 +43,7 @@ async function verifyTOTP() {
     document.getElementById("statusMessage").innerText = response.message;
 
     if (response.ok) {
-      window.location.href = "/home";
+      window.location.href = "/home-logged";
       // Handle further actions based on the verification result
     }
   } catch (error) {

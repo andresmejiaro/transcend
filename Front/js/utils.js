@@ -60,12 +60,14 @@ async function makeRequest(useCsrf, url, options, queries) {
   }
 
   const response = await fetch(url, options);
-
   if (!response.ok) {
-      if (location != "/login" && location != "/signup" && location != "/home" && location != "/" && location != "/callback")
-        handleLogout();
-  };
-
+    const allowedLocations = ["/login", "/signup", "/home", "/", "/callback", "/otp"];
+    if (!allowedLocations.includes(window.location.pathname)) {
+      handleLogout();
+    }
+  }
+  
+  
   const contentType = response.headers.get("content-type");
   if (contentType && contentType.includes("application/json")) {
     return await response.json();

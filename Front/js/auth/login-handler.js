@@ -1,20 +1,3 @@
-const getUserId = async (username) => {
-  try {
-	const url = `${window.DJANGO_API_BASE_URL}/api/get_user_id/${username}`;
-	const response = await makeRequest(true, url);
-
-	if (response) {
-	  return response.user_id;
-	} else {
-	  console.error("Error getting user ID:", response.message);
-	  return null;
-	}
-  } catch (error) {
-	console.error("Error getting user ID:", error.message);
-	return null;
-  }
-};
-
 async function validateOTP(username, token) {
   try {
 	const totpCode = document.getElementById("otpLoginForm").value;

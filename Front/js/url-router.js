@@ -11,7 +11,7 @@ document.addEventListener("click", (e) => {
 const ifLoggedRedirect = (location) => {
   if (!isLogged()) {
     if (location != "/login" && location != "/signup" && location != "/home" && location != "/" && location != "/callback")
-      window.location.href = "/home";
+      window.location.href = "/home-logged";
   };
 };
 
