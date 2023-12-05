@@ -4,11 +4,11 @@ services:
   # Django web container for the Django app
   django:
     build:
-      context: ./srcs/backend/
+      context: ./backend/
       dockerfile: Dockerfile
     container_name: 'django'
     volumes:
-      - ./srcs/backend:/app/
+      - ./backend:/app/
     ports:
       - "8000:8000"
     depends_on:
@@ -54,10 +54,10 @@ services:
   nginx:
     container_name: 'nginx'
     build:
-      context: ./srcs/
+      context: ./
       dockerfile: nginx/Dockerfile
     volumes:
-      - ./srcs/frontend:/usr/share/nginx/html
+      - ./frontend:/usr/share/nginx/html
     ports:
       - "3000:3000"
     networks:
@@ -68,11 +68,11 @@ services:
   # Daphne container for the websockets
   daphne:
     build:
-      context: ./srcs/backend/
+      context: ./backend/
       dockerfile: Dockerfile.daphne
     container_name: 'daphne'
     volumes:
-      - ./srcs/backend:/app/
+      - ./backend:/app/
     depends_on:
       - db
     env_file:
