@@ -1,7 +1,20 @@
 .home-div {
 	margin: 0;
-	background: url('./assets/imgs/home.svg') center center no-repeat;
-	background-size: cover;
-	height: 100vh;
+	position: fixed;
+	top: 0;
+	left: 0;
 	width: 100%;
+	height: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.home-div img {
+	max-width: 100%;
+	max-height: 100%;
+	object-fit: contain;
+	/* This maintains aspect ratio and fits the container */
+	border: 20px solid #000000;
+	/* Adjust the frame thickness and color as needed */
 }

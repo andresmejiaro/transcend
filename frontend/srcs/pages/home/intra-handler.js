@@ -1,3 +1,9 @@
+function showButtons() {
+  setTimeout(function() {
+    document.getElementById('home-div').style.opacity = '1';
+  }, 1000);
+}
+
 var button = document.getElementById("intra");
 
 const handleButtonClick = async () => {

@@ -25,7 +25,7 @@ const isLogged = () => {
 
 function handleLogout() {
   sessionStorage.clear();
-  window.location.href = "/";
+  window.location.href = "/home";
 }
 
 async function makeRequest(useCsrf, url, options, queries) {
