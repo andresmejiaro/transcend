@@ -3,43 +3,82 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pong Game</title>
+    <title>WebSocket Test</title>
 </head>
 <body>
-    <div id="status">Connecting...</div>
-    <div id="messages"></div>
-    <button id="pressButton" onclick="sendButtonPress()">Press the Button</button>
+    <div>
+        <label for="client_id">Client ID:</label>
+        <input type="text" id="client_id" placeholder="Enter your client ID">
+        <button onclick="connectWebSocket()">Connect</button>
+    </div>
+
+    <div>
+        <h2>Connected Users</h2>
+        <ul id="userList"></ul>
+    </div>
+
+    <div>
+        <h2>Chat</h2>
+        <div id="chatBox" style="height: 200px; border: 1px solid #ccc; overflow: auto;"></div>
+        <input type="text" id="messageInput" placeholder="Type your message">
+        <button onclick="sendMessage()">Send</button>
+    </div>
 
     <script>
-        // Extract room_name and username from the URL
-        const pathSegments = window.location.pathname.split('/');
-        const roomName = pathSegments[pathSegments.length - 2];
-        const username = prompt("Enter your username:");
+        let clientID;
+        let socket;
 
-        const socket = new WebSocket(`ws://localhost:8001/ws/pong/${roomName}/?username=${username}`);
+        function connectWebSocket() {
+            clientID = document.getElementById('client_id').value;
+            socket = new WebSocket(`ws://127.0.0.1:8000/ws/lobby/?client_id=${clientID}`);
 
-        socket.addEventListener('open', (event) => {
-            printMessage('Connected to WebSocket.');
-        });
+            socket.onopen = function (event) {
+                console.log("WebSocket connection opened:", event);
+                getListOfUsers();
+            };
 
-        socket.addEventListener('message', (event) => {
-            const data = JSON.parse(event.data);
-            printMessage(data.message);
-        });
+            socket.onmessage = function (event) {
+                const data = JSON.parse(event.data);
+                console.log("Received message:", data);
 
-        socket.addEventListener('close', (event) => {
-            printMessage('Connection closed.');
-        });
+                if (data.action === 'list_users') {
+                    updateListOfUsers(data.message);
+                } else if (data.action === 'chat_message') {
+                    displayChatMessage(data.sender, data.message);
+                }
+            };
 
-        function sendButtonPress() {
-            socket.send(JSON.stringify({ type: 'button.press' }));
+            socket.onclose = function (event) {
+                console.log("WebSocket connection closed:", event);
+            };
         }
 
-        function printMessage(message) {
-            const messagesDiv = document.getElementById('messages');
-            const messageElement = document.createElement('div');
-            messageElement.textContent = message;
-            messagesDiv.appendChild(messageElement);
+        function getListOfUsers() {
+            setInterval(function () {
+                const message = { type: 'send_message', data: { action: 'get_list_users', data: '' } };
+                socket.send(JSON.stringify(message));
+            }, 5000);
+        }
+
+        function updateListOfUsers(users) {
+            const userList = document.getElementById('userList');
+            userList.innerHTML = users.map(user => `<li>${user}</li>`).join('');
+        }
+
+        function sendMessage() {
+            const messageInput = document.getElementById('messageInput');
+            const message = messageInput.value;
+
+            const messageData = { type: 'send_message', data: { action: 'chat_message', message: message } };
+            socket.send(JSON.stringify(messageData));
+
+            messageInput.value = '';
+        }
+
+        function displayChatMessage(sender, message) {
+            const chatBox = document.getElementById('chatBox');
+            chatBox.innerHTML += `<p><strong>${sender}:</strong> ${message}</p>`;
+            chatBox.scrollTop = chatBox.scrollHeight; // Scroll to the bottom
         }
     </script>
 </body>
