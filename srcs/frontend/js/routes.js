@@ -78,7 +78,7 @@ const urlRoutes = {
 
   "/create-tournaments": {
     template: "/templates/create-tournament.html",
-    title: urlPageTitle + "Tournaments",
+    title: urlPageTitle + " - Tournaments",
     description: "This is the create tournament page",
     js: ["./js/create-tor.js"],
     css: ["./css/tournaments.css"]
