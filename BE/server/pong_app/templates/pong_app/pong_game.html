@@ -1,84 +1,142 @@
+<!-- index.html -->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WebSocket Test</title>
+    <title>WebSocket Chat</title>
+    <style>
+        /* Add your custom styles here */
+        #chat-box {
+            height: 300px;
+            overflow-y: scroll;
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        #user-list {
+            float: left;
+            width: 200px;
+            height: 300px;
+            overflow-y: scroll;
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-right: 10px;
+        }
+    </style>
 </head>
 <body>
     <div>
-        <label for="client_id">Client ID:</label>
-        <input type="text" id="client_id" placeholder="Enter your client ID">
-        <button onclick="connectWebSocket()">Connect</button>
+        <label for="client-id">Client ID:</label>
+        <input type="text" id="client-id" />
+        <button onclick="connect()">Connect</button>
+        <button onclick="disconnect()">Disconnect</button>
+        <button onclick="getListofUsers()">Get User List</button>
     </div>
 
-    <div>
-        <h2>Connected Users</h2>
-        <ul id="userList"></ul>
-    </div>
+    <div id="user-list"></div>
 
     <div>
-        <h2>Chat</h2>
-        <div id="chatBox" style="height: 200px; border: 1px solid #ccc; overflow: auto;"></div>
-        <input type="text" id="messageInput" placeholder="Type your message">
+        <div id="chat-box"></div>
+        <input type="text" id="chat-message" />
         <button onclick="sendMessage()">Send</button>
     </div>
 
     <script>
-        let clientID;
-        let socket;
+        const clientIDInput = document.getElementById('client-id');
+        const chatBox = document.getElementById('chat-box');
+        const userList = document.getElementById('user-list');
+        const chatMessageInput = document.getElementById('chat-message');
 
-        function connectWebSocket() {
-            clientID = document.getElementById('client_id').value;
+        let socket = null;
+
+        function connect() {
+            const clientID = clientIDInput.value;
+            if (clientID.trim() === '') {
+                alert('Please enter a valid Client ID.');
+                return;
+            }
+
             socket = new WebSocket(`ws://127.0.0.1:8000/ws/lobby/?client_id=${clientID}`);
 
-            socket.onopen = function (event) {
-                console.log("WebSocket connection opened:", event);
-                getListOfUsers();
+            socket.onopen = (event) => {
+                console.log('WebSocket Connection opened:', event);
             };
 
-            socket.onmessage = function (event) {
+            socket.onmessage = (event) => {
                 const data = JSON.parse(event.data);
-                console.log("Received message:", data);
-
-                if (data.action === 'list_users') {
-                    updateListOfUsers(data.message);
-                } else if (data.action === 'chat_message') {
-                    displayChatMessage(data.sender, data.message);
-                }
+                handleWebSocketData(data);
             };
 
-            socket.onclose = function (event) {
-                console.log("WebSocket connection closed:", event);
+            socket.onclose = (event) => {
+                console.log('WebSocket Connection closed:', event);
             };
         }
 
-        function getListOfUsers() {
-            setInterval(function () {
-                const message = { type: 'send_message', data: { action: 'get_list_users', data: '' } };
-                socket.send(JSON.stringify(message));
-            }, 5000);
-        }
-
-        function updateListOfUsers(users) {
-            const userList = document.getElementById('userList');
-            userList.innerHTML = users.map(user => `<li>${user}</li>`).join('');
+        function disconnect() {
+            if (socket !== null) {
+                socket.close();
+                socket = null;
+            }
         }
 
         function sendMessage() {
-            const messageInput = document.getElementById('messageInput');
-            const message = messageInput.value;
-
-            const messageData = { type: 'send_message', data: { action: 'chat_message', message: message } };
-            socket.send(JSON.stringify(messageData));
-
-            messageInput.value = '';
+            const message = chatMessageInput.value;
+            if (message.trim() !== '' && socket !== null) {
+                const data = {
+                    type: 'chat_message',
+                    data: { message },
+                };
+                socket.send(JSON.stringify(data));
+                chatMessageInput.value = '';
+            }
         }
 
-        function displayChatMessage(sender, message) {
-            const chatBox = document.getElementById('chatBox');
-            chatBox.innerHTML += `<p><strong>${sender}:</strong> ${message}</p>`;
-            chatBox.scrollTop = chatBox.scrollHeight; // Scroll to the bottom
+        function getListofUsers() {
+            if (socket !== null) {
+                const data = {
+                    type: 'get_list_users',
+                };
+                socket.send(JSON.stringify(data));
+            }
+        }
+
+        function handleWebSocketData(data) {
+            const messageType = data.type;
+            const messageData = data.data;
+
+            switch (messageType) {
+                case 'list_of_users':
+                    updateUserList(messageData.message);
+                    break;
+
+                case 'chat_message':
+                    updateChatBox(messageData.sender, messageData.message);
+                    break;
+
+                // Add more cases for other message types as needed
+
+                default:
+                    console.log('Unhandled message type:', messageType);
+            }
+        }
+
+        function updateUserList(users) {
+            userList.innerHTML = '<strong>Connected Users:</strong>';
+            users.forEach(user => {
+                const userItem = document.createElement('div');
+                userItem.textContent = user;
+                userList.appendChild(userItem);
+            });
+        }
+
+        function updateChatBox(sender, message) {
+            const chatMessage = document.createElement('div');
+            chatMessage.textContent = `${sender}: ${message}`;
+            chatBox.appendChild(chatMessage);
+            chatBox.scrollTop = chatBox.scrollHeight;
         }
     </script>
 </body>

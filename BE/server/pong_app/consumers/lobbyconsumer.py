@@ -1,6 +1,8 @@
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 from urllib.parse import parse_qs
+from channels.db import database_sync_to_async
+
 
 class LobbyConsumer(AsyncWebsocketConsumer):
     
@@ -9,6 +11,15 @@ class LobbyConsumer(AsyncWebsocketConsumer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.room_group_name = 'Website_Lobby'
+
+    @database_sync_to_async
+    def get_user(self, client_id):
+        from api.userauth.models import CustomUser as User
+        user = User.objects.get(client_id=client_id)
+        if user:
+            return user
+        else:
+            return None
 
     async def connect(self):
         # parse the query string to find client_id
@@ -22,13 +33,20 @@ class LobbyConsumer(AsyncWebsocketConsumer):
             self.channel_name
         )
 
-        await self.accept()
+        # Check if the client_id belongs to a user
+
+
+        # Check if the user is already in the list of users
+        if self.client_id in LobbyConsumer.list_of_users:
+            # Reject the connection
+            await self.close()
+        else:
+            await self.accept()
 
         # Add the user to the list of users
         LobbyConsumer.list_of_users.append(self.client_id)
 
         await self.send(text_data=json.dumps({
-            'action': 'connection',
             'message': f"You are connected to the game room {self.room_group_name}",
         }))
 
@@ -38,7 +56,6 @@ class LobbyConsumer(AsyncWebsocketConsumer):
             {
                 'type': 'broadcast_message',
                 'data': {
-                    'action': 'new_player',
                     'message': f"{self.client_id} has joined {self.room_group_name}",
                 }
             }
@@ -59,7 +76,6 @@ class LobbyConsumer(AsyncWebsocketConsumer):
             {
                 'type': 'broadcast_message',
                 'data': {
-                    'action': 'player_left',
                     'message': f"{self.client_id} has left {self.room_group_name}",
                 }
             }
@@ -68,32 +84,100 @@ class LobbyConsumer(AsyncWebsocketConsumer):
     async def receive(self, text_data):
         # You can handle specific actions received from the client here
         data = json.loads(text_data)
-        action = data['data'].get('action', '')
+        message_type = data.get('type', '')
 
-        print(f"Received message: {action}")
+        print(f"Received data whole: {data}")
+        print(f"Received type: {message_type}")
 
-        if action == 'chat_message':
+        if message_type == 'chat_message':
             # Broadcast chat messages to the room
             await self.channel_layer.group_send(
                 self.room_group_name,
                 {
                     'type': 'broadcast_message',
                     'data': {
-                        'action': 'chat_message',
-                        'message': data.get('message', ''),
+                        'message': data.get('data', {}).get('message', ''),
+                        'sender': self.client_id,
+                    }
+
+                }
+            )
+
+        elif message_type == 'get_list_users':
+            print(f"Sending list of users: {LobbyConsumer.list_of_users}")
+            # Send list of users directly to the client that requested it
+            await self.send(text_data=json.dumps({
+                'type': 'list_of_users',  # This is a custom type that we defined
+                'data': {
+                    'message': LobbyConsumer.list_of_users,
+                }
+            }))
+
+        elif message_type == 'ping':
+            # Send a pong message back to the client
+            await self.send(text_data=json.dumps({
+                'type': 'pong',
+                'data': {
+                    'message': 'pong',
+                }
+            }))
+
+        elif message_type == 'private_message':
+            # Send a private message to a specific client
+            recipient_client_id = data.get('data', {}).get('recipient_client_id', '')
+            message = data.get('data', {}).get('message', '')
+            await self.channel_layer.send(
+                f"ws.{recipient_client_id}",
+                {
+                    'type': 'broadcast_message',
+                    'data': {
+                        'message': message,
                         'sender': self.client_id,
                     }
                 }
             )
 
-        if action == 'get_list_users':
-            print(f"Sending list of users: {LobbyConsumer.list_of_users}")
-            # Send list of users directly to the client that requested it
-            await self.send(text_data=json.dumps({
-                'action': 'list_users',
-                'message': LobbyConsumer.list_of_users,
-            }))
-
     async def broadcast_message(self, event):
-        # Send the message to the WebSocket
-        await self.send(text_data=json.dumps(event['data']))
+        # Check if the event contains a 'data' key
+        if 'data' in event:
+            data = event['data']
+        else:
+            data = event
+
+        message_type = data.get('type', '')
+
+        # Handle regular and private messages differently
+        if message_type == 'chat_message':
+            # Broadcast chat messages to the room
+            await self.channel_layer.group_send(
+                self.room_group_name,
+                {
+                    'type': 'broadcast_message',
+                    'data': {
+                        'message': data.get('data', {}).get('message', ''),
+                        'sender': data.get('data', {}).get('sender', ''),
+                    }
+                }
+            )
+
+        elif message_type == 'private_message':
+            recipient_channel_name = data.get('data', {}).get('recipient_channel_name', '')
+            message = data.get('data', {}).get('message', '')
+            
+            # Send a private message to a specific client
+            await self.channel_layer.send(
+                recipient_channel_name,
+                {
+                    'type': 'broadcast_message',
+                    'data': {
+                        'message': message,
+                        'sender': data.get('data', {}).get('sender', ''),
+                    }
+                }
+            )
+
+        else:
+            # Send the message to the WebSocket
+            await self.send(text_data=json.dumps(data))
+
+

@@ -14,14 +14,10 @@ class WebSocketClient:
         self.ws_thread.start()
 
     def send_message(self, action, data):
-        
         if self.ws and self.ws.sock and self.ws.sock.connected:
             message = {
-                'type': 'send_message',
-                'data': {
-                    'action': action,
-                    'data': data,
-                }
+                'type': action,
+                'data': data,
             }
             self.ws.send(json.dumps(message))
             print(f"Sent message: {message}")
@@ -36,7 +32,9 @@ def on_ping(ws, message):
     print(f"Received Ping")
     ws.send(json.dumps({
         "type": "ping",
-        "message": "pong"
+        "data": {
+            "message": "pong"
+        }
     }))
 
 def on_message(ws, message):
@@ -58,12 +56,10 @@ if __name__ == "__main__":
         # Add a delay to allow time for the WebSocket connection to be established
         time.sleep(2)  # You might need to adjust the duration based on your server setup
 
-        # Send a get_list_users action to the server
-        ws_client.send_message('get_list_users', '')
-
-        # Keep the main thread alive to handle Ctrl+C
+        # Send a get_list_users action to the server every 10 seconds
         while True:
-            time.sleep(1)
+            ws_client.send_message('get_list_users', '')
+            time.sleep(10)
 
     except KeyboardInterrupt:
         # Handle Ctrl+C to gracefully stop the program
