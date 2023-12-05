@@ -1,14 +1,29 @@
 from Game import Game
 from Player import Player
 import json
+import click
+from auth import startAuth, startPlay
+import requests
+from pynput import keyboard
+import curses
+import time
+import sys
 
 dictKeyboard = {}
-leftP = Player("Andres",binds={"up" : "w", "down":"s", "left":"xx","right":"xx"})
-rightP = Player("Javier",binds={"up" : "t", "down":"g", "left":"xx","right":"xx"})
 
-game1 = Game(dictKeyboard, leftP, rightP)
 
-from pynput import keyboard
+
+def check_server_status():
+    url = "http://localhost:8000/api/test/"
+    
+    try:
+        response = requests.get(url)
+        response.raise_for_status()  # Raise an HTTPError for bad responses (4xx and 5xx)
+        return True  # Server is running and responded successfully
+    except requests.exceptions.RequestException as e:
+        print(f"Error checking server status: {e}")
+        return False  # Server is not running or encountered an error
+
 
 def update_key_status(key_status):
     def on_press(key):
@@ -20,19 +35,9 @@ def update_key_status(key_status):
     listener = keyboard.Listener(on_press=on_press, on_release=on_release)
     listener.start()
 
-listener = update_key_status(dictKeyboard)
-
-
-game1.start()
-
-
-
-
-import curses
-import time
-
 def scaler(prior, priorMax, posMax):
     return int(posMax * prior / priorMax)
+
 
 def rectdrawer(dictCanvas: dict, obj:str, stdscr, 
                enclousure = {"xl" : 0,"xh": 858,"yl": 0,"yh": 525}):
@@ -46,10 +51,15 @@ def rectdrawer(dictCanvas: dict, obj:str, stdscr,
             stdscr.addstr(i, j, "x")
 
 
+def curses_main(stdscr, username):
+    leftP = Player(username,binds={"up" : "w", "down":"s", "left":"xx","right":"xx"})
+    rightP = Player("Javier",binds={"up" : "t", "down":"g", "left":"xx","right":"xx"})
 
+    game1 = Game(dictKeyboard, leftP, rightP)
 
-def main(stdscr):
-    # Initialize curses
+    listener = update_key_status(dictKeyboard)
+    game1.start()
+
     curses.curs_set(0)  # Hide cursor
     stdscr.nodelay(True)  # Non-blocking input
     stdscr.clear()  # Clear the screen
@@ -62,26 +72,38 @@ def main(stdscr):
         report[actualT] = {}
         report[actualT]["keyboard"] = dictKeyboard.copy()
         report[actualT]["canvas"] = game1.reportScreen()
-        rectdrawer(report[actualT]["canvas"],"ball",stdscr)
-        rectdrawer(report[actualT]["canvas"],"leftPaddle",stdscr)
-        rectdrawer(report[actualT]["canvas"],"rightPaddle",stdscr)
-        height,width = stdscr.getmaxyx()
+        rectdrawer(report[actualT]["canvas"], "ball", stdscr)
+        rectdrawer(report[actualT]["canvas"], "leftPaddle", stdscr)
+        rectdrawer(report[actualT]["canvas"], "rightPaddle", stdscr)
+        height, width = stdscr.getmaxyx()
         scoreb = ''
         report[actualT]["score"] = game1.reportScore()
         for key, value in report[actualT]["score"].items():
             scoreb += f"{key}: {value} "
-        stdscr.addstr(2,int((width - len(scoreb))/2), scoreb)
+        stdscr.addstr(2, int((width - len(scoreb)) / 2), scoreb)
         stdscr.refresh()  # Refresh the screen to show updates
         fps = 30
-        time.sleep(1/fps)  # Adjust for desired refresh rate
+        time.sleep(1 / fps)  # Adjust for desired refresh rate
         if not game1.isAlive():
             curses.echo()
-            with open(actualT + ".json","w") as file:
+            with open(actualT + ".json", "w") as file:
                 json.dump(report, file)
             break
-        
 
-    stdscr.clear()
+@click.command()
+def main():
+    click.echo("Hello! Welcome to the Game CLI.")
 
-# Run the program
-curses.wrapper(main)
+    if not check_server_status():
+        print("Server is not running or encountered an error. Exiting.")
+        sys.exit()
+
+    username = startAuth()
+
+    startPlay()
+    time.sleep(0.5)
+    curses.wrapper(curses_main, username)
+
+
+if __name__ == "__main__":
+    main()
