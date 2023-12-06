@@ -1,142 +1,183 @@
-<!-- index.html -->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WebSocket Chat</title>
-    <style>
-        /* Add your custom styles here */
-        #chat-box {
-            height: 300px;
-            overflow-y: scroll;
-            border: 1px solid #ccc;
-            padding: 10px;
-            margin-bottom: 10px;
-        }
-
-        #user-list {
-            float: left;
-            width: 200px;
-            height: 300px;
-            overflow-y: scroll;
-            border: 1px solid #ccc;
-            padding: 10px;
-            margin-right: 10px;
-        }
-    </style>
+    <title>WebSocket Test</title>
 </head>
 <body>
-    <div>
-        <label for="client-id">Client ID:</label>
-        <input type="text" id="client-id" />
-        <button onclick="connect()">Connect</button>
-        <button onclick="disconnect()">Disconnect</button>
-        <button onclick="getListofUsers()">Get User List</button>
-    </div>
+    <h1>WebSocket Test</h1>
 
-    <div id="user-list"></div>
+    <label for="clientId">Client ID:</label>
+    <input type="text" id="clientId" required>
+    <button type="button" onclick="connectWebSocket()">Connect</button>
+    <button type="button" onclick="disconnectWebSocket()">Disconnect</button>
 
-    <div>
-        <div id="chat-box"></div>
-        <input type="text" id="chat-message" />
-        <button onclick="sendMessage()">Send</button>
-    </div>
+    <form id="messageForm">
+        <label for="message">Enter Message:</label>
+        <textarea id="message" required></textarea>
+        <button type="button" onclick="sendMessage()">Send Message</button>
+    </form>
+
+    <div id="output"></div>
+
+    <button type="button" onclick="getListUsers()">Get List of Users</button>
+    <button type="button" onclick="getListUserChannels()">Get List of User Channels</button>
+    <button type="button" onclick="getListGroups()">Get List of Groups</button>
+    <button type="button" onclick="createGroup()">Create Group</button>
+    <button type="button" onclick="joinGroup()">Join Group</button>
+    <button type="button" onclick="leaveGroup()">Leave Group</button>
+    <button type="button" onclick="leaveAllGroups()">Leave All Groups</button>
+    <button type="button" onclick="removeUserFromGroup()">Remove User from Group</button>
+
 
     <script>
-        const clientIDInput = document.getElementById('client-id');
-        const chatBox = document.getElementById('chat-box');
-        const userList = document.getElementById('user-list');
-        const chatMessageInput = document.getElementById('chat-message');
+        let socket;
 
-        let socket = null;
+        function connectWebSocket() {
+            const clientIdInput = document.getElementById('clientId');
+            const clientId = clientIdInput.value;
 
-        function connect() {
-            const clientID = clientIDInput.value;
-            if (clientID.trim() === '') {
-                alert('Please enter a valid Client ID.');
-                return;
+            // Close existing WebSocket connection, if any
+            if (socket && socket.readyState === WebSocket.OPEN) {
+                socket.close();
             }
 
-            socket = new WebSocket(`ws://127.0.0.1:8000/ws/lobby/?client_id=${clientID}`);
+            // Establish a new WebSocket connection
+            socket = new WebSocket(`ws://localhost:8000/ws/lobby/?client_id=${clientId}`);
 
-            socket.onopen = (event) => {
-                console.log('WebSocket Connection opened:', event);
-            };
+            // Connection opened
+            socket.addEventListener('open', (event) => {
+                console.log('WebSocket Connection Opened:', event);
+            });
 
-            socket.onmessage = (event) => {
-                const data = JSON.parse(event.data);
-                handleWebSocketData(data);
-            };
+            // Listen for messages from the server
+            socket.addEventListener('message', (event) => {
+                console.log('WebSocket Message Received:', event.data);
+                displayMessage(event.data);
+            });
 
-            socket.onclose = (event) => {
-                console.log('WebSocket Connection closed:', event);
-            };
+            // Listen for any errors that occur.
+            socket.addEventListener('error', (event) => {
+                console.error('WebSocket Error:', event);
+            });
+
+            // Connection closed
+            socket.addEventListener('close', (event) => {
+                console.log('WebSocket Connection Closed:', event);
+            });
         }
 
-        function disconnect() {
-            if (socket !== null) {
+        function disconnectWebSocket() {
+            // Close the WebSocket connection
+            if (socket && socket.readyState === WebSocket.OPEN) {
                 socket.close();
-                socket = null;
+                console.log('WebSocket Connection Closed Manually');
             }
         }
 
         function sendMessage() {
-            const message = chatMessageInput.value;
-            if (message.trim() !== '' && socket !== null) {
-                const data = {
-                    type: 'chat_message',
-                    data: { message },
-                };
-                socket.send(JSON.stringify(data));
-                chatMessageInput.value = '';
+            const messageInput = document.getElementById('message');
+            const message = messageInput.value;
+
+            // Send the message to the server
+            socket.send(JSON.stringify({
+                type: 'lobby_message',
+                data: {
+                    message: message
+                }
+            }));
+
+            // Clear the input field
+            messageInput.value = '';
+        }
+
+        function getListUsers() {
+            // Send a request to get the list of users
+            socket.send(JSON.stringify({
+                type: 'get_list_users'
+            }));
+        }
+
+        function getListUserChannels() {
+            // Send a request to get the list of user channels
+            socket.send(JSON.stringify({
+                type: 'get_list_user_channels'
+            }));
+        }
+
+        function getListGroups() {
+            // Send a request to get the list of groups
+            socket.send(JSON.stringify({
+                type: 'get_list_of_groups'
+            }));
+        }
+
+        function createGroup() {
+            const groupName = prompt('Enter group name:');
+            if (groupName) {
+                // Send a request to create a group
+                socket.send(JSON.stringify({
+                    type: 'create_group',
+                    data: {
+                        group_name: groupName
+                    }
+                }));
             }
         }
 
-        function getListofUsers() {
-            if (socket !== null) {
-                const data = {
-                    type: 'get_list_users',
-                };
-                socket.send(JSON.stringify(data));
+        function joinGroup() {
+            const groupName = prompt('Enter group name:');
+            if (groupName) {
+                // Send a request to join a group
+                socket.send(JSON.stringify({
+                    type: 'join_group',
+                    data: {
+                        group_name: groupName
+                    }
+                }));
             }
         }
 
-        function handleWebSocketData(data) {
-            const messageType = data.type;
-            const messageData = data.data;
-
-            switch (messageType) {
-                case 'list_of_users':
-                    updateUserList(messageData.message);
-                    break;
-
-                case 'chat_message':
-                    updateChatBox(messageData.sender, messageData.message);
-                    break;
-
-                // Add more cases for other message types as needed
-
-                default:
-                    console.log('Unhandled message type:', messageType);
+        function leaveGroup() {
+            const groupName = prompt('Enter group name:');
+            if (groupName) {
+                // Send a request to leave a group
+                socket.send(JSON.stringify({
+                    type: 'leave_group',
+                    data: {
+                        group_name: groupName
+                    }
+                }));
             }
         }
 
-        function updateUserList(users) {
-            userList.innerHTML = '<strong>Connected Users:</strong>';
-            users.forEach(user => {
-                const userItem = document.createElement('div');
-                userItem.textContent = user;
-                userList.appendChild(userItem);
-            });
+        function leaveAllGroups() {
+            // Send a request to leave all groups
+            socket.send(JSON.stringify({
+                type: 'leave_all_groups'
+            }));
         }
 
-        function updateChatBox(sender, message) {
-            const chatMessage = document.createElement('div');
-            chatMessage.textContent = `${sender}: ${message}`;
-            chatBox.appendChild(chatMessage);
-            chatBox.scrollTop = chatBox.scrollHeight;
+        function removeUserFromGroup() {
+            const groupName = prompt('Enter group name:');
+            const userId = prompt('Enter user ID:');
+            if (groupName && userId) {
+                // Send a request to remove a user from a group
+                socket.send(JSON.stringify({
+                    type: 'remove_user_from_group',
+                    data: {
+                        group_name: groupName,
+                        user_id: userId
+                    }
+                }));
+            }
+        }
+
+        function displayMessage(message) {
+            const outputDiv = document.getElementById('output');
+            outputDiv.innerHTML += `<p>${message}</p>`;
         }
     </script>
 </body>
