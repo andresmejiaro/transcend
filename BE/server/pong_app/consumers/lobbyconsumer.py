@@ -67,6 +67,8 @@ class LobbyConsumer(AsyncWebsocketConsumer):
             await self._send_private_message(data)
         elif message_type == 'send_message_to_group':
             await self._send_message_to_group(data)
+        elif message_type == 'invite_to_group':
+            await self._invite_to_group(data)
 
 
     async def leave_all_groups(self):
@@ -291,3 +293,39 @@ class LobbyConsumer(AsyncWebsocketConsumer):
                     'message': f"{group_name} does not exist",
                 }
             }))
+
+    async def group_message(self, event):
+        data = event['data']
+        await self.send(text_data=json.dumps({
+            'type': 'group_message',
+            'data': data,
+        }))
+
+    async def _invite_to_group(self, data):
+        group_name = data.get('data', {}).get('group_name', '')
+        user_id = data.get('data', {}).get('user_id', '')
+        if group_name in self.list_of_groups and user_id in self.list_of_user_channels:
+            await self.channel_layer.send(
+                LobbyConsumer.list_of_user_channels[user_id],
+                {
+                    'type': 'invite_to_group',
+                    'data': {
+                        'group_name': group_name,
+                        'sender': self.client_id,
+                    }
+                }
+            )
+        else:
+            await self.send(text_data=json.dumps({
+                'type': 'group_not_exist',
+                'data': {
+                    'message': f"{group_name} does not exist",
+                }
+            }))
+
+    async def invite_to_group(self, event):
+        data = event['data']
+        await self.send(text_data=json.dumps({
+            'type': 'invite_to_group',
+            'data': data,
+        }))
