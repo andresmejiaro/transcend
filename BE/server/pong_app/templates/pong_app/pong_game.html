@@ -61,6 +61,8 @@
         <button type="button" onclick="getListGroups()">Get List of Groups</button>
         <button type="button" onclick="createGroup()">Create Group</button>
         <button type="button" onclick="joinGroup()">Join Group</button>
+        <button type="button" onclick="leaveGroup()">Leave Group</button>
+        <button type="button" onclick="leaveAllGroups()">Leave All Groups</button>
 
         <!-- Additional features for private and group messages -->
         <h2>Private Message</h2>
@@ -73,6 +75,13 @@
         <label for="groupMessage">Group Message:</label>
         <textarea id="groupMessage" required></textarea>
         <button type="button" onclick="sendGroupMessage()">Send Group Message</button>
+
+        <h2>Invite to Group</h2>
+        <label for="inviteUserId">User ID:</label>
+        <input type="text" id="inviteUserId" required>
+        <label for="inviteGroupName">Group Name:</label>
+        <input type="text" id="inviteGroupName" required>
+        <button type="button" onclick="inviteToGroup()">Invite to Group</button>
     </div>
 
     <script>
@@ -183,6 +192,26 @@
             }
         }
 
+        function leaveGroup() {
+            const groupName = prompt('Enter group name:');
+            if (groupName) {
+                // Send a request to leave a group
+                socket.send(JSON.stringify({
+                    type: 'leave_group',
+                    data: {
+                        group_name: groupName
+                    }
+                }));
+            }
+        }
+
+        function leaveAllGroups() {
+            // Send a request to leave all groups
+            socket.send(JSON.stringify({
+                type: 'leave_all_groups'
+            }));
+        }
+
         function sendPrivateMessage() {
             const privateUserIdInput = document.getElementById('privateUserId');
             const privateUserId = privateUserIdInput.value;
@@ -209,6 +238,22 @@
                 data: {
                     group_name: 'current_group_name',  // Replace with the actual group name
                     message: groupMessage
+                }
+            }));
+        }
+
+        function inviteToGroup() {
+            const inviteUserIdInput = document.getElementById('inviteUserId');
+            const inviteUserId = inviteUserIdInput.value;
+            const inviteGroupNameInput = document.getElementById('inviteGroupName');
+            const inviteGroupName = inviteGroupNameInput.value;
+
+            // Send invite to the specified user to join the specified group
+            socket.send(JSON.stringify({
+                type: 'invite_to_group',
+                data: {
+                    user_id: inviteUserId,
+                    group_name: inviteGroupName
                 }
             }));
         }
@@ -264,4 +309,3 @@
     </script>
 </body>
 </html>
-           

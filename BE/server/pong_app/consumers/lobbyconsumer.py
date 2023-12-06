@@ -54,9 +54,9 @@ class LobbyConsumer(AsyncWebsocketConsumer):
         elif message_type == 'ping':
             await self._send_pong()
         elif message_type == 'create_group':
-            await self._handle_create_group(data)
+            await self._handle_group_operation(data, operation_type='create')
         elif message_type == 'join_group':
-            await self._handle_join_group(data)
+            await self._handle_group_operation(data, operation_type='join')
         elif message_type == 'leave_group':
             await self._leave_group(data.get('data', {}).get('group_name', ''))
         elif message_type == 'leave_all_groups':
@@ -64,23 +64,28 @@ class LobbyConsumer(AsyncWebsocketConsumer):
         elif message_type == 'remove_user_from_group':
             await self._remove_user_from_group(data.get('data', {}).get('group_name', ''), data.get('data', {}).get('user_id', ''))
         elif message_type == 'send_private_message':
-            await self._send_private_message(data)
+            await self._handle_send_private_message(data)
         elif message_type == 'send_message_to_group':
-            await self._send_message_to_group(data)
+            await self._handle_send_message_to_group(data)
         elif message_type == 'invite_to_group':
-            await self._invite_to_group(data)
-
+            await self._handle_invite_to_group(data)
 
     async def leave_all_groups(self):
         await self._leave_group(self.global_lobby_group)
         await self._leave_group(self.client_id)
 
-        self.list_of_user_ids.remove(self.client_id)
-        del self.list_of_user_channels[self.client_id]
-        del self.list_of_user_objects[self.client_id]
+        if self.client_id in self.list_of_user_ids:
+            self.list_of_user_ids.remove(self.client_id)
+
+        if self.client_id in self.list_of_user_channels:
+            del self.list_of_user_channels[self.client_id]
+
+        if self.client_id in self.list_of_user_objects:
+            del self.list_of_user_objects[self.client_id]
 
         for group_name, group_info in self.list_of_groups.items():
             await self._remove_user_from_group(group_name, self.client_id)
+
 
     async def disconnect(self, close_code):
         await self.leave_all_groups()
@@ -139,7 +144,6 @@ class LobbyConsumer(AsyncWebsocketConsumer):
         )
 
     async def _broadcast_site_wide_message(self, data):
-
         await self.channel_layer.group_send(
             self.global_lobby_group,
             {
@@ -183,33 +187,32 @@ class LobbyConsumer(AsyncWebsocketConsumer):
             }
         }))
 
-    async def _handle_create_group(self, data):
+    async def _handle_group_operation(self, data, operation_type):
         group_name = data.get('data', {}).get('group_name', '')
-        await self._create_group(group_name)
-        await self.send(text_data=json.dumps({
-            'type': 'group_created',
-            'data': {
-                'message': f"You have created and joined {group_name}",
-            }
-        }))
-
-    async def _handle_join_group(self, data):
-        group_name = data.get('data', {}).get('group_name', '')
-        if group_name not in self.list_of_groups:
+        try:
+            if operation_type == 'join':
+                await self._join_group(group_name)
+                await self.send(text_data=json.dumps({
+                    'type': 'group_joined',
+                    'data': {
+                        'message': f"You have joined {group_name}",
+                    }
+                }))
+            elif operation_type == 'create':
+                await self._create_group(group_name)
+                await self.send(text_data=json.dumps({
+                    'type': 'group_created',
+                    'data': {
+                        'message': f"You have created and joined {group_name}",
+                    }
+                }))
+        except Exception as e:
             await self.send(text_data=json.dumps({
                 'type': 'group_not_exist',
                 'data': {
                     'message': f"{group_name} does not exist",
                 }
             }))
-            return
-        await self._join_group(group_name)
-        await self.send(text_data=json.dumps({
-            'type': 'group_joined',
-            'data': {
-                'message': f"You have joined {group_name}",
-            }
-        }))
 
     async def _leave_group(self, group_name):
         await self.channel_layer.group_discard(
@@ -240,20 +243,17 @@ class LobbyConsumer(AsyncWebsocketConsumer):
         else:
             self.list_of_groups[group_name] = {'members': [self.client_id]}
 
-    async def _send_private_message(self, data): 
+    async def _handle_send_private_message(self, data):
         user_id = data.get('data', {}).get('user_id', '')
         message = data.get('data', {}).get('message', '')
         if user_id in self.list_of_user_channels:
-            await self.channel_layer.send(
-                LobbyConsumer.list_of_user_channels[user_id],
-                {
-                    'type': 'private_message',
-                    'data': {
-                        'message': message,
-                        'sender': self.client_id,
-                    }
+            await self._send_message(user_id, {
+                'type': 'private_message',
+                'data': {
+                    'message': message,
+                    'sender': self.client_id,
                 }
-            )
+            })
         else:
             await self.send(text_data=json.dumps({
                 'type': 'user_not_exist',
@@ -262,6 +262,56 @@ class LobbyConsumer(AsyncWebsocketConsumer):
                 }
             }))
 
+    async def _handle_send_message_to_group(self, data):
+        group_name = data.get('data', {}).get('group_name', '')
+        message = data.get('data', {}).get('message', '')
+        if group_name in self.list_of_groups:
+            members = self.list_of_groups[group_name]['members']
+            for member in members:
+                if member in self.list_of_user_channels:
+                    await self._send_message(member, {
+                        'type': 'group_message',
+                        'data': {
+                            'message': message,
+                            'sender': self.client_id,
+                        }
+                    })
+        else:
+            await self.send(text_data=json.dumps({
+                'type': 'group_not_exist',
+                'data': {
+                    'message': f"{group_name} does not exist",
+                }
+            }))
+
+    async def _handle_invite_to_group(self, data):
+        group_name = data.get('data', {}).get('group_name', '')
+        user_id = data.get('data', {}).get('user_id', '')
+        if group_name in self.list_of_groups and user_id in self.list_of_user_channels:
+            await self._send_message(user_id, {
+                'type': 'invite_to_group',
+                'data': {
+                    'group_name': group_name,
+                    'sender': self.client_id,
+                }
+            })
+        else:
+            await self.send(text_data=json.dumps({
+                'type': 'group_not_exist',
+                'data': {
+                    'message': f"{group_name} does not exist",
+                }
+            }))
+
+    async def _send_message(self, recipient, message_data):
+        await self.channel_layer.send(
+            LobbyConsumer.list_of_user_channels[recipient],
+            {
+                'type': message_data['type'],
+                'data': message_data,
+            }
+        )
+
     async def private_message(self, event):
         data = event['data']
         await self.send(text_data=json.dumps({
@@ -269,59 +319,12 @@ class LobbyConsumer(AsyncWebsocketConsumer):
             'data': data,
         }))
 
-    async def _send_message_to_group(self, data):
-        group_name = data.get('data', {}).get('group_name', '')
-        message = data.get('data', {}).get('message', '')
-        if group_name in self.list_of_groups:
-            members = self.list_of_groups[group_name]['members']
-            for member in members:
-                if member in self.list_of_user_channels:
-                    await self.channel_layer.send(
-                        LobbyConsumer.list_of_user_channels[member],
-                        {
-                            'type': 'group_message',
-                            'data': {
-                                'message': message,
-                                'sender': self.client_id,
-                            }
-                        }
-                    )
-        else:
-            await self.send(text_data=json.dumps({
-                'type': 'group_not_exist',
-                'data': {
-                    'message': f"{group_name} does not exist",
-                }
-            }))
-
     async def group_message(self, event):
         data = event['data']
         await self.send(text_data=json.dumps({
             'type': 'group_message',
             'data': data,
         }))
-
-    async def _invite_to_group(self, data):
-        group_name = data.get('data', {}).get('group_name', '')
-        user_id = data.get('data', {}).get('user_id', '')
-        if group_name in self.list_of_groups and user_id in self.list_of_user_channels:
-            await self.channel_layer.send(
-                LobbyConsumer.list_of_user_channels[user_id],
-                {
-                    'type': 'invite_to_group',
-                    'data': {
-                        'group_name': group_name,
-                        'sender': self.client_id,
-                    }
-                }
-            )
-        else:
-            await self.send(text_data=json.dumps({
-                'type': 'group_not_exist',
-                'data': {
-                    'message': f"{group_name} does not exist",
-                }
-            }))
 
     async def invite_to_group(self, event):
         data = event['data']
