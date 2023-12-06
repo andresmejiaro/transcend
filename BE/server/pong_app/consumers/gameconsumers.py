@@ -4,6 +4,7 @@ from urllib.parse import parse_qs
 
 class GameManager:
     def __init__(self):
+        # A dictionary of room names to TwoPlayerGame objects eg. {'room1': TwoPlayerGame, 'room2': TwoPlayerGame}
         self.games = {}
 
     def get_game(self, room_name):
@@ -13,8 +14,11 @@ class GameManager:
 
 class TwoPlayerGame:
     def __init__(self, room_name):
+        # The name of the room eg. 'room1'
         self.room_name = room_name
+        # The name of the group eg. 'pong_room1'
         self.room_group_name = f"pong_{room_name}"
+        # A list of tuples of the form (channel_name, username) eg. [('channel1', 'user1'), ('channel2', 'user2')]
         self.players = []
         self.button_pressed = False
 
@@ -128,7 +132,6 @@ class PongConsumer(AsyncWebsocketConsumer):
                     'close_code': 1000
                 }
             )
-
 
     async def send_chat_message(self, message):
         # Send a message to the WebSocket
