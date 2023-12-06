@@ -300,12 +300,18 @@
             const type = data.type;
             const messageData = data.data;
 
-            if (type === 'private_message') {
+            if (type === 'list_of_user_ids') {
+                updateUsersList(messageData.message);
+            } else if (type === 'list_of_groups') {
+                updateGroupsList(Object.keys(messageData.message));
+            } else if (type === 'private_message') {
                 displayMessage(`Private message from ${messageData.sender}: ${messageData.message}`);
             } else if (type === 'group_message') {
                 displayMessage(`Group message from ${messageData.sender}: ${messageData.message}`);
+            } else if (type === 'group_invite') {
+                displayMessage(`Group invite from ${messageData.sender}: ${messageData.message}`);
             }
-        });
+    });
     </script>
 </body>
 </html>

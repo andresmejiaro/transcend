@@ -15,7 +15,7 @@ class LobbyConsumer(AsyncWebsocketConsumer):
         super().__init__(*args, **kwargs)
 
     @database_sync_to_async
-    def get_user(cls, client_id):
+    def get_user(self, client_id):
         from api.userauth.models import CustomUser as User
         try:
             user = User.objects.get(pk=client_id)
