@@ -5,32 +5,75 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WebSocket Test</title>
+    <style>
+        body {
+            display: flex;
+        }
+
+        #sidebar {
+            width: 200px;
+            background-color: #f1f1f1;
+            padding: 20px;
+        }
+
+        #chat {
+            flex: 1;
+            padding: 20px;
+        }
+
+        #userList, #groupList {
+            list-style-type: none;
+            padding: 0;
+            cursor: pointer;
+        }
+
+        #userList li, #groupList li {
+            margin-bottom: 10px;
+        }
+    </style>
 </head>
 <body>
-    <h1>WebSocket Test</h1>
+    <div id="sidebar">
+        <h2>Users</h2>
+        <ul id="userList"></ul>
+        <h2>Groups</h2>
+        <ul id="groupList"></ul>
+    </div>
 
-    <label for="clientId">Client ID:</label>
-    <input type="text" id="clientId" required>
-    <button type="button" onclick="connectWebSocket()">Connect</button>
-    <button type="button" onclick="disconnectWebSocket()">Disconnect</button>
+    <div id="chat">
+        <h1>WebSocket Test</h1>
 
-    <form id="messageForm">
-        <label for="message">Enter Message:</label>
-        <textarea id="message" required></textarea>
-        <button type="button" onclick="sendMessage()">Send Message</button>
-    </form>
+        <label for="clientId">Client ID:</label>
+        <input type="text" id="clientId" required>
+        <button type="button" onclick="connectWebSocket()">Connect</button>
+        <button type="button" onclick="disconnectWebSocket()">Disconnect</button>
 
-    <div id="output"></div>
+        <form id="messageForm">
+            <label for="message">Enter Message:</label>
+            <textarea id="message" required></textarea>
+            <button type="button" onclick="sendMessage()">Send Message</button>
+        </form>
 
-    <button type="button" onclick="getListUsers()">Get List of Users</button>
-    <button type="button" onclick="getListUserChannels()">Get List of User Channels</button>
-    <button type="button" onclick="getListGroups()">Get List of Groups</button>
-    <button type="button" onclick="createGroup()">Create Group</button>
-    <button type="button" onclick="joinGroup()">Join Group</button>
-    <button type="button" onclick="leaveGroup()">Leave Group</button>
-    <button type="button" onclick="leaveAllGroups()">Leave All Groups</button>
-    <button type="button" onclick="removeUserFromGroup()">Remove User from Group</button>
+        <div id="output"></div>
 
+        <button type="button" onclick="getListUsers()">Get List of Users</button>
+        <button type="button" onclick="getListUserChannels()">Get List of User Channels</button>
+        <button type="button" onclick="getListGroups()">Get List of Groups</button>
+        <button type="button" onclick="createGroup()">Create Group</button>
+        <button type="button" onclick="joinGroup()">Join Group</button>
+
+        <!-- Additional features for private and group messages -->
+        <h2>Private Message</h2>
+        <label for="privateUserId">User ID:</label>
+        <input type="text" id="privateUserId" required>
+        <textarea id="privateMessage" required></textarea>
+        <button type="button" onclick="sendPrivateMessage()">Send Private Message</button>
+
+        <h2>Group Message</h2>
+        <label for="groupMessage">Group Message:</label>
+        <textarea id="groupMessage" required></textarea>
+        <button type="button" onclick="sendGroupMessage()">Send Group Message</button>
+    </div>
 
     <script>
         let socket;
@@ -140,45 +183,85 @@
             }
         }
 
-        function leaveGroup() {
-            const groupName = prompt('Enter group name:');
-            if (groupName) {
-                // Send a request to leave a group
-                socket.send(JSON.stringify({
-                    type: 'leave_group',
-                    data: {
-                        group_name: groupName
-                    }
-                }));
-            }
-        }
+        function sendPrivateMessage() {
+            const privateUserIdInput = document.getElementById('privateUserId');
+            const privateUserId = privateUserIdInput.value;
+            const privateMessageInput = document.getElementById('privateMessage');
+            const privateMessage = privateMessageInput.value;
 
-        function leaveAllGroups() {
-            // Send a request to leave all groups
+            // Send private message to the specified user
             socket.send(JSON.stringify({
-                type: 'leave_all_groups'
+                type: 'send_private_message',
+                data: {
+                    user_id: privateUserId,
+                    message: privateMessage
+                }
             }));
         }
 
-        function removeUserFromGroup() {
-            const groupName = prompt('Enter group name:');
-            const userId = prompt('Enter user ID:');
-            if (groupName && userId) {
-                // Send a request to remove a user from a group
-                socket.send(JSON.stringify({
-                    type: 'remove_user_from_group',
-                    data: {
-                        group_name: groupName,
-                        user_id: userId
-                    }
-                }));
-            }
+        function sendGroupMessage() {
+            const groupMessageInput = document.getElementById('groupMessage');
+            const groupMessage = groupMessageInput.value;
+
+            // Send group message to the currently joined group
+            socket.send(JSON.stringify({
+                type: 'send_message_to_group',
+                data: {
+                    group_name: 'current_group_name',  // Replace with the actual group name
+                    message: groupMessage
+                }
+            }));
         }
 
         function displayMessage(message) {
             const outputDiv = document.getElementById('output');
             outputDiv.innerHTML += `<p>${message}</p>`;
         }
+
+        function updateList(listId, items) {
+            const list = document.getElementById(listId);
+            list.innerHTML = '';
+            items.forEach(item => {
+                const listItem = document.createElement('li');
+                listItem.textContent = item;
+                list.appendChild(listItem);
+            });
+        }
+
+        function updateUsersList(users) {
+            updateList('userList', users);
+        }
+
+        function updateGroupsList(groups) {
+            updateList('groupList', groups);
+        }
+
+        // Add event listeners for receiving updated user and group lists
+        socket.addEventListener('message', (event) => {
+            const data = JSON.parse(event.data);
+            const type = data.type;
+            const messageData = data.data;
+
+            if (type === 'list_of_user_ids') {
+                updateUsersList(messageData.message);
+            } else if (type === 'list_of_groups') {
+                updateGroupsList(Object.keys(messageData.message));
+            }
+        });
+
+        // Function to handle private messages from the server
+        socket.addEventListener('message', (event) => {
+            const data = JSON.parse(event.data);
+            const type = data.type;
+            const messageData = data.data;
+
+            if (type === 'private_message') {
+                displayMessage(`Private message from ${messageData.sender}: ${messageData.message}`);
+            } else if (type === 'group_message') {
+                displayMessage(`Group message from ${messageData.sender}: ${messageData.message}`);
+            }
+        });
     </script>
 </body>
 </html>
+           

@@ -65,6 +65,8 @@ class LobbyConsumer(AsyncWebsocketConsumer):
             await self._remove_user_from_group(data.get('data', {}).get('group_name', ''), data.get('data', {}).get('user_id', ''))
         elif message_type == 'send_private_message':
             await self._send_private_message(data)
+        elif message_type == 'send_message_to_group':
+            await self._send_message_to_group(data)
 
 
     async def leave_all_groups(self):
@@ -236,7 +238,7 @@ class LobbyConsumer(AsyncWebsocketConsumer):
         else:
             self.list_of_groups[group_name] = {'members': [self.client_id]}
 
-    async def _send_private_message(self, data):
+    async def _send_private_message(self, data): 
         user_id = data.get('data', {}).get('user_id', '')
         message = data.get('data', {}).get('message', '')
         if user_id in self.list_of_user_channels:
@@ -255,5 +257,37 @@ class LobbyConsumer(AsyncWebsocketConsumer):
                 'type': 'user_not_exist',
                 'data': {
                     'message': f"{user_id} does not exist",
+                }
+            }))
+
+    async def private_message(self, event):
+        data = event['data']
+        await self.send(text_data=json.dumps({
+            'type': 'private_message',
+            'data': data,
+        }))
+
+    async def _send_message_to_group(self, data):
+        group_name = data.get('data', {}).get('group_name', '')
+        message = data.get('data', {}).get('message', '')
+        if group_name in self.list_of_groups:
+            members = self.list_of_groups[group_name]['members']
+            for member in members:
+                if member in self.list_of_user_channels:
+                    await self.channel_layer.send(
+                        LobbyConsumer.list_of_user_channels[member],
+                        {
+                            'type': 'group_message',
+                            'data': {
+                                'message': message,
+                                'sender': self.client_id,
+                            }
+                        }
+                    )
+        else:
+            await self.send(text_data=json.dumps({
+                'type': 'group_not_exist',
+                'data': {
+                    'message': f"{group_name} does not exist",
                 }
             }))
