@@ -86,7 +86,6 @@ class LobbyConsumer(AsyncWebsocketConsumer):
         for group_name, group_info in self.list_of_groups.items():
             await self._remove_user_from_group(group_name, self.client_id)
 
-
     async def disconnect(self, close_code):
         await self.leave_all_groups()
         await self._announce_user_leave()
