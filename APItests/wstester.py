@@ -14,8 +14,14 @@ async def websocket_client(client_id, message_type, command, data):
         await websocket.send(json.dumps(message))
         print(f"Sent message: {json.dumps(message)}")
 
-        response = await websocket.recv()
-        print(f"Received response: {response}")
+        try:
+            while True:
+                response = await websocket.recv()
+                print(f"Received response: {response}")
+        except websockets.exceptions.ConnectionClosed:
+            print("WebSocket connection closed.")
+        except KeyboardInterrupt:
+            print("Manually interrupted. Exiting...")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="WebSocket Client for LobbyConsumer testing")
@@ -26,6 +32,9 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    asyncio.get_event_loop().run_until_complete(
-        websocket_client(args.client_id, args.type, args.command, json.loads(args.data))
-    )
+    try:
+        asyncio.get_event_loop().run_until_complete(
+            websocket_client(args.client_id, args.type, args.command, json.loads(args.data))
+        )
+    except KeyboardInterrupt:
+        pass  # Handle Ctrl+C manually to avoid traceback

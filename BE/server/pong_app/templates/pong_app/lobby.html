@@ -3,91 +3,113 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WebSocket Chat</title>
+    <title>WebSocket Test</title>
 </head>
 <body>
+    <h1>WebSocket Test</h1>
+    <label for="clientId">Enter Client ID:</label>
+    <input type="text" id="clientId" placeholder="Enter client ID">
+    <button onclick="connectWebSocket()">Connect</button>
+    
+    <hr>
+    
+    <h2>WebSocket Commands</h2>
+    <label for="groupName">Group Name:</label>
+    <input type="text" id="groupName" placeholder="Enter group name">
+    <label for="message">Message:</label>
+    <textarea id="message" placeholder="Enter message"></textarea>
+    <button onclick="sendCommand('get_website_user_list')">Get Website User List</button>
+    <button onclick="sendCommand('get_website_group_list')">Get Website Group List</button>
+    <button onclick="createGroup()">Create Group</button>
+    <button onclick="sendCommand('delete_group')">Delete Group</button>
+    <button onclick="changeGroupName()">Change Group Name</button>
+    <button onclick="sendMessageToGroup()">Send Message to Group</button>
 
-<h1>WebSocket Chat</h1>
+    <script>
+        const clientIdInput = document.getElementById('clientId');
+        const groupNameInput = document.getElementById('groupName');
+        const messageInput = document.getElementById('message');
+        let socket;
 
-<label for="client_id">Enter Client ID:</label>
-<input type="text" id="client_id" placeholder="Enter your client ID">
-<button onclick="connectToWebSocket()">Connect</button>
-
-<hr>
-
-<h2>Chat Room</h2>
-<div id="chat" style="height: 200px; overflow-y: auto; border: 1px solid #ccc; padding: 10px;"></div>
-
-<label for="message">Message:</label>
-<input type="text" id="message" placeholder="Type your message">
-<button onclick="sendMessage()">Send</button>
-
-<script>
-    const clientIDInput = document.getElementById('client_id');
-    const chatDiv = document.getElementById('chat');
-    const messageInput = document.getElementById('message');
-
-    let socket;
-
-    function connectToWebSocket() {
-        const clientID = clientIDInput.value.trim();
-        if (!clientID) {
-            alert('Please enter a valid client ID');
-            return;
-        }
-
-        // Establish WebSocket connection
-        socket = new WebSocket(`ws://localhost:8000/ws/lobby/?client_id=${clientID}`);
-
-        // Set up WebSocket event listeners
-        socket.addEventListener('open', (event) => {
-            console.log('WebSocket connection opened:', event);
-        });
-
-        socket.addEventListener('message', (event) => {
-            const data = JSON.parse(event.data);
-            console.log('WebSocket message received:', data);
-
-            if (data.type === 'message') {
-                appendMessage(data.group_name, data.message);
+        function connectWebSocket() {
+            const clientId = clientIdInput.value.trim();
+            if (!clientId) {
+                alert('Please enter a valid client ID.');
+                return;
             }
-        });
 
-        socket.addEventListener('close', (event) => {
-            console.log('WebSocket connection closed:', event);
-        });
-    }
+            const wsUrl = `ws://localhost:8000/ws/lobby/?client_id=${clientId}`;
+            socket = new WebSocket(wsUrl);
 
-    function sendMessage() {
-        const message = messageInput.value.trim();
-        if (!message) {
-            alert('Please enter a message');
-            return;
+            socket.onopen = () => {
+                console.log(`WebSocket connected for client ${clientId}`);
+            };
+
+            socket.onmessage = (event) => {
+                const data = JSON.parse(event.data);
+                console.log('Received:', data);
+            };
+
+            socket.onclose = () => {
+                console.log('WebSocket closed.');
+            };
+
+            socket.onerror = (error) => {
+                console.error('WebSocket error:', error);
+            };
         }
 
-        // Send message to WebSocket
-        socket.send(JSON.stringify({
-            type: 'command',
-            command: 'send_message',
-            data: {
-                group_name: 'website_lobby',
+        function sendCommand(command) {
+            const data = { /* Any data you want to send with the command */ };
+            const message = {
+                type: 'command',
+                command,
+                data,
+            };
+
+            if (socket && socket.readyState === WebSocket.OPEN) {
+                socket.send(JSON.stringify(message));
+                console.log('Sent:', message);
+            } else {
+                console.error('WebSocket not connected.');
+            }
+        }
+
+        function createGroup() {
+            const groupName = groupNameInput.value.trim();
+            if (!groupName) {
+                alert('Please enter a group name.');
+                return;
+            }
+
+            sendCommand('create_group');
+        }
+
+        function changeGroupName() {
+            const groupName = groupNameInput.value.trim();
+            if (!groupName) {
+                alert('Please enter a group name.');
+                return;
+            }
+
+            sendCommand('change_group_name');
+        }
+
+        function sendMessageToGroup() {
+            const groupName = groupNameInput.value.trim();
+            const message = messageInput.value.trim();
+            if (!groupName || !message) {
+                alert('Please enter both group name and message.');
+                return;
+            }
+
+            const data = {
+                group_name: groupName,
                 message: message,
-            }
-        }));
+            };
 
-        // Clear the message input
-        messageInput.value = '';
-    }
-
-    function appendMessage(groupName, message) {
-        const messageElement = document.createElement('div');
-        messageElement.textContent = `[${groupName}] ${message}`;
-        chatDiv.appendChild(messageElement);
-
-        // Scroll to the bottom to show the latest message
-        chatDiv.scrollTop = chatDiv.scrollHeight;
-    }
-</script>
-
+            sendCommand('send_message_to_group');
+        }
+    </script>
 </body>
 </html>
