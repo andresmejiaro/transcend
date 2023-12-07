@@ -213,41 +213,51 @@ class LobbyConsumer(AsyncWebsocketConsumer):
             self.close(code=4004, reason='Invalid client_id')
 
     async def disconnect(self, close_code):
-        if self.client_id in LobbyConsumer.list_of_users:
-            user = LobbyConsumer.list_of_users[self.client_id]
-            groups = user.get_groups()
-            print(type(groups))  # This should print <class 'list'>
+        try:
+            if self.client_id in LobbyConsumer.list_of_users:
+                user = LobbyConsumer.list_of_users[self.client_id]
+                groups = user.get_groups()
+                print(type(groups))  # This should print <class 'list'>
 
-            for group in groups:
-                await group.remove_member(self.client_id, self.channel_name)
-                group_member_count = group.get_member_count()
-                if group_member_count == 0 and group.get_group_name() != 'website_lobby':
-                    print(f"Group {group.get_group_name()} has no members, deleting group")
-                    self.delete_a_group(group.get_group_name())
-        
-            async with asyncio.Lock():
-                LobbyConsumer.list_of_users.pop(self.client_id)
+                for group in groups:
+                    await group.remove_member(self.client_id, self.channel_name)
+                    group_member_count = group.get_member_count()
+                    if group_member_count == 0 and group.get_group_name() != 'website_lobby':
+                        print(f"Group {group.get_group_name()} has no members, deleting group")
+                        self.delete_a_group(group.get_group_name())
+            
+                async with asyncio.Lock():
+                    LobbyConsumer.list_of_users.pop(self.client_id)
 
-            print(f"User {self.client_id} disconnected")
-        else:
-            print("User not connected")
+                print(f"User {self.client_id} disconnected")
+            else:
+                print("User not connected")
+
+        except ValueError:
+            print(f"Invalid client_id: {self.client_id}")
+            self.close(code=4004, reason='Invalid client_id')
 
     async def receive(self, text_data):
-        text_data_json = json.loads(text_data)
-        message_type = text_data_json.get('type', '')
-        command = text_data_json.get('command', '')
-        data = text_data_json.get('data', {})
+        try:
+            text_data_json = json.loads(text_data)
+            message_type = text_data_json.get('type', '')
+            command = text_data_json.get('command', '')
+            data = text_data_json.get('data', {})
 
-        print(f"Received message: {text_data_json}")
-        print(f"Message type: {message_type}")
-        print(f"Command: {command}")
-        print(f"Data: {data}")
+            print(f"Received message: {text_data_json}")
+            print(f"Message type: {message_type}")
+            print(f"Command: {command}")
+            print(f"Data: {data}")
 
-        if message_type == 'command':
-            # Call the appropriate command based on the received data
-            await self.lobbycommands.execute_command(command, data)
-        else:
-            print("Invalid message type")
+            if message_type == 'command':
+                # Call the appropriate command based on the received data
+                await self.lobbycommands.execute_command(command, data)
+            else:
+                print("Invalid message type")
+
+        except ValueError:
+            print("Invalid JSON")
+            await self.send_info_to_client('error', 'Invalid JSON')
 
 
     # Send information to client or group
@@ -291,12 +301,15 @@ class LobbyConsumer(AsyncWebsocketConsumer):
     )
     # -------------------------------
 
-    # Group Methods
+    # Class Groups Object Methods
     # Working
     async def create_a_group(self, room_name):
         print(f"Actual Creating and Sending: {room_name}")
         new_group = Group(room_name, self)
-        LobbyConsumer.list_of_groups.update({room_name: new_group})
+
+        async with asyncio.Lock():
+            LobbyConsumer.list_of_groups.update({room_name: new_group})
+
         await self.channel_layer.group_add(
             room_name,
             self.channel_name,
@@ -309,7 +322,7 @@ class LobbyConsumer(AsyncWebsocketConsumer):
 
     #  Working
     async def delete_a_group(self, room_name):
-        if room_name in LobbyConsumer.list_of_groups:
+        if room_name in LobbyConsumer.list_of_groups and room_name != 'website_lobby':
             group = LobbyConsumer.list_of_groups[room_name]
             members = group.get_all_member_ids()
             for member in members:
@@ -318,11 +331,19 @@ class LobbyConsumer(AsyncWebsocketConsumer):
                 room_name,
                 self.channel_name,
             )
-            LobbyConsumer.list_of_groups.pop(room_name)
+
+            async with asyncio.Lock():
+                LobbyConsumer.list_of_groups.pop(room_name)
+
             await self.send_info_to_client('group_deleted', {'group_name': room_name})
             print(f"Group {room_name} deleted")
         else:
-            print(f"Group {room_name} does not exist")
+            if room_name == 'website_lobby':
+                await self.send_info_to_client('error', f'Cannot delete group {room_name}')
+                print(f"Cannot delete group {room_name}")
+            else:
+                await self.send_info_to_client('error', f'Group {room_name} does not exist')
+                print(f"Group {room_name} does not exist")
     
     # Working
     async def change_group_name(self, old_room_name, new_room_name):
@@ -336,6 +357,6 @@ class LobbyConsumer(AsyncWebsocketConsumer):
         else:
             print(f"Group {old_room_name} does not exist")
 
-
+    # Class Users Object Methods
 
 

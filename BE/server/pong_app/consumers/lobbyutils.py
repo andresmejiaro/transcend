@@ -41,12 +41,13 @@ class LobbyCommands(object):
     async def change_group_name(self, data):
         old_room_name = data.get('old_group_name')
         new_room_name = data.get('new_group_name')
-        await self.lobby_functions._change_room_name(old_room_name, new_room_name)
-   
+        await self.lobby_functions._change_room_name(old_room_name, new_room_name)  
     # Working
     async def join_group(self, data):
         room_name = data.get('group_name')
         await self.lobby_functions._join_a_group(room_name)
+
+
 
 
 
@@ -109,4 +110,3 @@ class LobbyFunctions(object):
         else:
             await self.lobby_consumer.send_info_to_client('error', 'Group does not exist')
 
-            
