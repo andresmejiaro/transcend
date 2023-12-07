@@ -88,7 +88,6 @@ class User(object):
         return f"{self.user_id}"
 
 
-
 class LobbyConsumer(AsyncWebsocketConsumer):
     website_lobby = Group('website_lobby')
     list_of_groups = {'website_lobby': website_lobby}
@@ -185,65 +184,52 @@ class LobbyConsumer(AsyncWebsocketConsumer):
         else:
             print("Invalid message type")
 
-    # async def _send_group_member_count(self, group_name, member_count):
-    #     await self.send(text_data=json.dumps({
-    #         'type': 'group_member_count',
-    #         'group_name': group_name,
-    #         'member_count': member_count
-    #     }))
+    # Group
+    async def create_a_group(self, room_name):
+        if room_name in LobbyConsumer.list_of_groups:
+            print(f"Group {room_name} already exists")
+        else:
+            new_group = Group(room_name)
+            LobbyConsumer.list_of_groups.update({room_name: new_group})
+            print(f"Group {room_name} created")
 
-    # async def _send_group_member_list(self, group_name, member_list):
-    #     await self.send(text_data=json.dumps({
-    #         'type': 'group_member_list',
-    #         'group_name': group_name,
-    #         'member_list': member_list
-    #     }))
+    async def delete_a_group(self, room_name):
+        if room_name in LobbyConsumer.list_of_groups:
+            group = LobbyConsumer.list_of_groups[room_name]
+            members = group.get_all_user_ids()
+            for member in members:
+                await group.remove_member(member, LobbyConsumer.list_of_channels[member])
+            LobbyConsumer.list_of_groups.pop(room_name)
+            print(f"Group {room_name} deleted")
+        else:
+            print(f"Group {room_name} does not exist")
 
-    # async def _send_user_list(self):
-    #     user_list = []
-    #     for user in LobbyConsumer.list_of_users.values():
-    #         user_list.append(user.get_user_id())
+    async def change_room_name(self, old_room_name, new_room_name):
+        if old_room_name in LobbyConsumer.list_of_groups:
+            group = LobbyConsumer.list_of_groups[old_room_name]
+            group.change_group_name(new_room_name)
+            LobbyConsumer.list_of_groups.pop(old_room_name)
+            LobbyConsumer.list_of_groups.update({new_room_name: group})
+            print(f"Group {old_room_name} changed to {new_room_name}")
+        else:
+            print(f"Group {old_room_name} does not exist")
 
-    #     await self.send(text_data=json.dumps({
-    #         'type': 'user_list',
-    #         'user_list': user_list
-    #     }))
+    # Group User Methods
+    async def create_a_user(self, user_id, channel_name, user_model):
+        if user_id not in LobbyConsumer.list_of_users:
+            user = User(user_id, channel_name, user_model)
+            LobbyConsumer.list_of_users.update({user_id: user})
+            print(f"User {user_id} created")
+        else:
+            print(f"User {user_id} already exists")
 
-    # async def _send_message(self, group_name, message):
-    #     # Check if the group_name is a group or a user for private messaging
-    #     print(f'Sending message: {message} to group: {group_name} with type: {type(group_name)}')
-    #     if group_name in LobbyConsumer.list_of_groups:
-    #         print("SENDING MESSAGE TO GROUP")
-    #         await self.channel_layer.group_send(
-    #             group_name,
-    #             {
-    #                 'type': 'lobby_message',
-    #                 'message': message
-    #             }
-    #         )
-    #     elif group_name in LobbyConsumer.list_of_channels:
-    #         print("SENDING MESSAGE TO USER")
-    #         recipient_channel_name = LobbyConsumer.list_of_channels[group_name]
-    #         await self.channel_layer.send(
-    #             recipient_channel_name,
-    #             {
-    #                 'type': 'lobby_message',
-    #                 'message': message
-    #             }
-    #         )
-    #     else:
-    #         print("Invalid recipient: ", group_name)
+    async def delete_a_user(self, user_id):
+        if user_id in LobbyConsumer.list_of_users:
+            LobbyConsumer.list_of_users.pop(user_id)
+            print(f"User {user_id} deleted")
+        else:
+            print(f"User {user_id} does not exist")
 
-    #     # echo message back to sender
-    #     await self.send(text_data=json.dumps({
-    #         'type': 'lobby.message',
-    #         'message': message
-    #     }))
-
-    # async def lobby_message(self, event):
-    #     print("Sending lobby message")
-    #     message = event['message']
-    #     await self.send(text_data=json.dumps({
-    #         'type': 'lobby.message',
-    #         'message': message
-    #     }))
+    # Information
+    async def send_user_list(self):
+        await self.lobbyfunctions._send_user_list()
