@@ -3,113 +3,146 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WebSocket Test</title>
+    <title>WebSocket API Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        #sidebar {
+            width: 200px;
+            height: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: #f1f1f1;
+            padding-top: 20px;
+            padding-left: 10px;
+            overflow-x: hidden;
+        }
+
+        #content {
+            margin-left: 200px;
+            padding: 20px;
+        }
+
+        #userList {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .userItem {
+            margin-bottom: 10px;
+        }
+    </style>
 </head>
 <body>
-    <h1>WebSocket Test</h1>
-    <label for="clientId">Enter Client ID:</label>
-    <input type="text" id="clientId" placeholder="Enter client ID">
-    <button onclick="connectWebSocket()">Connect</button>
-    
-    <hr>
-    
-    <h2>WebSocket Commands</h2>
-    <label for="groupName">Group Name:</label>
-    <input type="text" id="groupName" placeholder="Enter group name">
-    <label for="message">Message:</label>
-    <textarea id="message" placeholder="Enter message"></textarea>
-    <button onclick="sendCommand('get_website_user_list')">Get Website User List</button>
-    <button onclick="sendCommand('get_website_group_list')">Get Website Group List</button>
-    <button onclick="createGroup()">Create Group</button>
-    <button onclick="sendCommand('delete_group')">Delete Group</button>
-    <button onclick="changeGroupName()">Change Group Name</button>
-    <button onclick="sendMessageToGroup()">Send Message to Group</button>
 
-    <script>
-        const clientIdInput = document.getElementById('clientId');
-        const groupNameInput = document.getElementById('groupName');
-        const messageInput = document.getElementById('message');
-        let socket;
+<div id="sidebar">
+    <label for="clientIdInput">Client ID:</label>
+    <input type="text" id="clientIdInput">
+    <button onclick="connect()">Connect</button>
 
-        function connectWebSocket() {
-            const clientId = clientIdInput.value.trim();
-            if (!clientId) {
-                alert('Please enter a valid client ID.');
-                return;
-            }
+    <h3>User List</h3>
+    <ul id="userList"></ul>
+</div>
 
-            const wsUrl = `ws://localhost:8000/ws/lobby/?client_id=${clientId}`;
-            socket = new WebSocket(wsUrl);
+<div id="content">
+    <h1>WebSocket API Test</h1>
 
-            socket.onopen = () => {
-                console.log(`WebSocket connected for client ${clientId}`);
-            };
+    <label for="messageInput">Message:</label>
+    <input type="text" id="messageInput">
+    <button onclick="sendPrivateMessage()">Send Private Message</button>
 
-            socket.onmessage = (event) => {
-                const data = JSON.parse(event.data);
-                console.log('Received:', data);
-            };
+    <label for="groupInput">Group Name:</label>
+    <input type="text" id="groupInput">
+    <button onclick="joinGroup()">Join Group</button>
+    <button onclick="leaveGroup()">Leave Group</button>
 
-            socket.onclose = () => {
-                console.log('WebSocket closed.');
-            };
+    <h3>Group Chat</h3>
+    <ul id="groupChat"></ul>
+</div>
 
-            socket.onerror = (error) => {
-                console.error('WebSocket error:', error);
-            };
-        }
+<script>
+    let ws;
+    const clientIdInput = document.getElementById('clientIdInput');
+    const messageInput = document.getElementById('messageInput');
+    const groupInput = document.getElementById('groupInput');
+    const userList = document.getElementById('userList');
+    const groupChat = document.getElementById('groupChat');
 
-        function sendCommand(command) {
-            const data = { /* Any data you want to send with the command */ };
-            const message = {
-                type: 'command',
-                command,
-                data,
-            };
+    function connect() {
+        const clientId = clientIdInput.value;
+        ws = new WebSocket(`ws://localhost:8000/ws/lobby/?client_id=${clientId}`);
 
-            if (socket && socket.readyState === WebSocket.OPEN) {
-                socket.send(JSON.stringify(message));
-                console.log('Sent:', message);
-            } else {
-                console.error('WebSocket not connected.');
-            }
-        }
+        ws.onopen = () => {
+            console.log('WebSocket connection opened');
+        };
 
-        function createGroup() {
-            const groupName = groupNameInput.value.trim();
-            if (!groupName) {
-                alert('Please enter a group name.');
-                return;
-            }
+        ws.onmessage = (event) => {
+            const data = JSON.parse(event.data);
+            handleWebSocketMessage(data);
+        };
 
-            sendCommand('create_group');
-        }
+        ws.onclose = () => {
+            console.log('WebSocket connection closed');
+        };
+    }
 
-        function changeGroupName() {
-            const groupName = groupNameInput.value.trim();
-            if (!groupName) {
-                alert('Please enter a group name.');
-                return;
-            }
+    function sendPrivateMessage() {
+        const recipientId = prompt('Enter recipient ID:');
+        const message = messageInput.value;
 
-            sendCommand('change_group_name');
-        }
-
-        function sendMessageToGroup() {
-            const groupName = groupNameInput.value.trim();
-            const message = messageInput.value.trim();
-            if (!groupName || !message) {
-                alert('Please enter both group name and message.');
-                return;
-            }
-
-            const data = {
-                group_name: groupName,
+        const data = {
+            type: 'private_message',
+            command: 'send_private_message',
+            data: {
+                recipient_id: recipientId,
                 message: message,
-            };
+            },
+        };
 
-            sendCommand('send_message_to_group');
-        }
-    </script>
+        ws.send(JSON.stringify(data));
+    }
+
+    function joinGroup() {
+        const groupName = groupInput.value;
+
+        const data = {
+            type: 'group_message',
+            command: 'join_group',
+            data: {
+                group_name: groupName,
+            },
+        };
+
+        ws.send(JSON.stringify(data));
+    }
+
+    function leaveGroup() {
+        const groupName = groupInput.value;
+
+        const data = {
+            type: 'group_message',
+            command: 'leave_group',
+            data: {
+                group_name: groupName,
+            },
+        };
+
+        ws.send(JSON.stringify(data));
+    }
+
+    function handleWebSocketMessage(data) {
+        const messageList = document.createElement('li');
+        const messageItem = document.createElement('p');
+        messageItem.textContent = JSON.stringify(data);
+        messageList.appendChild(messageItem);
+        groupChat.appendChild(messageList);
+    }
+</script>
+
 </body>
 </html>

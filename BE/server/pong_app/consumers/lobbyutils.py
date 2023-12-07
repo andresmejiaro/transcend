@@ -49,17 +49,18 @@ class LobbyCommands(object):
     # Not Working
     async def leave_group(self, data):
         room_name = data.get('group_name')
-        await self.lobby_functions._leave_a_group(room_name)
-    
+        await self.lobby_functions._leave_a_group(room_name)   
     # -------------------------------
 
     # User Commands
-    # Not Working
+    # Working
     async def create_a_user(self, data):
         print(f'Creating user: {data}')
         client_id = data.get('client_id')
         channel_name = data.get('channel_name')
         await self.lobby_functions._create_a_user(client_id, channel_name)
+    # -------------------------------
+
 
 # lobbyfunctions.py
 class LobbyFunctions(object):
@@ -132,7 +133,6 @@ class LobbyFunctions(object):
                 await self.lobby_consumer.send_info_to_client('error', 'User not in group')
         else:
             await self.lobby_consumer.send_info_to_client('error', 'Group does not exist')
-    
     # -------------------------------
 
     # User Methods

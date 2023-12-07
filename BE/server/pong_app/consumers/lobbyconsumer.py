@@ -187,14 +187,17 @@ class LobbyConsumer(AsyncWebsocketConsumer):
                     website_lobby = LobbyConsumer.list_of_groups['website_lobby']
                     self.user.add_group(website_lobby)
                     # Make a channel layer group for the user
+                    user_channel = f'user_{self.client_id}'
                     await self.channel_layer.group_add(
-                        user_model.username,
+                        user_channel,
                         self.user.get_channel_name(),
                     )
 
                     # Add the user to the list of users
                     async with asyncio.Lock():
                         LobbyConsumer.list_of_users.update({self.client_id: self.user})
+                        LobbyConsumer.list_of_channels[str(self.client_id)] = self.channel_name
+
 
                     # Add the user to the website_lobby group
                     await website_lobby.add_member(self.client_id, self.channel_name)
@@ -250,8 +253,11 @@ class LobbyConsumer(AsyncWebsocketConsumer):
             print(f"Data: {data}")
 
             if message_type == 'command':
-                # Call the appropriate command based on the received data
                 await self.lobbycommands.execute_command(command, data)
+            elif message_type == 'private_message':
+                await self.send_private_message(data)
+            elif message_type == 'group_message':
+                await self.send_group_message(data)
             else:
                 print("Invalid message type")
 
@@ -299,6 +305,59 @@ class LobbyConsumer(AsyncWebsocketConsumer):
         }
     )
     # -------------------------------
+
+    async def send_private_message(self, data):
+        recipient_id = data.get('recipient_id')
+        message = data.get('message')
+
+        if recipient_id and message:
+            recipient_channel = LobbyConsumer.list_of_channels.get(str(recipient_id))
+            print(f"Recipient channel: {recipient_channel}")
+            if recipient_channel:
+                await self.channel_layer.send(
+                    recipient_channel,
+                    {
+                        'type': 'handle_private_message',
+                        'command': 'private_message',
+                        'data': {
+                            'sender_id': self.client_id,
+                            'message': message,
+                        }
+                    }
+                )
+            else:
+                await self.send_info_to_client('error', 'Recipient not found')
+
+    async def handle_private_message(self, event):
+        command = event['command']
+        data = event['data']
+        await self.send_info_to_client(command, data)
+
+    async def send_group_message(self, data):
+        group_name = data.get('group_name')
+        message = data.get('message')
+
+        if group_name and message:
+            group = LobbyConsumer.list_of_groups.get(group_name)
+            if group:
+                await group.lobby_consumer.send_info_to_group(
+                    group_name,
+                    'group_message',
+                    {
+                        'data': {
+                            'sender_id': self.client_id,
+                            'message': message,
+                        }
+                    }
+                )
+            else:
+                await self.send_info_to_client('error', 'Group not found')
+        else:
+            await self.send_info_to_client('error', 'Invalid group message data')
+
+
+
+
 
     # Class Groups Object Methods
     # Working
