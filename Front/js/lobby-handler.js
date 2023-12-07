@@ -13,7 +13,6 @@ const connectWebSocket = async () => {
 
         lobbySocket.addEventListener('message', (event) => {
             const data = JSON.parse(event.data);
-            console.log('WebSocket message received:', data);
 
             if (data.type === 'message') {
                 console.log(data.group_name, data.message);
@@ -41,7 +40,7 @@ const getOnlineUsers = async () => {
             console.log('WebSocket message received:', data);
         });
 
-        sendWebSocketMessage('command', { command: 'get_group_user_list', data: {} });
+        sendWebSocketMessage('command', { command: 'get_website_group_list', data: {} });
     } catch (error) {
         console.error('Error while connecting to WebSocket:', error.message);
     }
