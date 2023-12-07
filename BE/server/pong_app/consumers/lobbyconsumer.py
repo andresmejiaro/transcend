@@ -224,8 +224,29 @@ class LobbyConsumer(AsyncWebsocketConsumer):
         else:
             print("Invalid message type")
 
+    # Information
+    async def send_info_to_client(self, command, data):
+        print(f'SENDING: information to client: {command}, {data}')
+        await self.send(text_data=json.dumps({
+            'type': 'information',
+            'command': command,
+            'data': data,
+        }))
+
+    async def send_info_to_group(self, group_name, command, data):
+        print(f'SENDING: information to group: {group_name}, {command}, {data}')
+        await self.channel_layer.group_send(
+            group_name,
+            {
+                'type': 'information',
+                'command': command,
+                'data': data,
+            }
+        )
+
     # Group
     async def create_a_group(self, room_name):
+
         if room_name in LobbyConsumer.list_of_groups:
             print(f"Group {room_name} already exists")
         else:
@@ -236,6 +257,8 @@ class LobbyConsumer(AsyncWebsocketConsumer):
                 self.channel_name,
             )
             print(f"Group {room_name} created by {self.client_id}")
+            # Send to user that group was created
+            await self.send_info_to_client('group_created', {'group_name': room_name})
 
     async def delete_a_group(self, room_name):
         if room_name in LobbyConsumer.list_of_groups:
@@ -294,21 +317,4 @@ class LobbyConsumer(AsyncWebsocketConsumer):
         else:
             print(f"User {user_id} does not exist")
 
-    # Information
-    async def send_info_to_client(self, command, data):
-        print(f'SENDING: information to client: {command}, {data}')
-        await self.send(text_data=json.dumps({
-            'type': 'information',
-            'command': command,
-            'data': data,
-        }))
 
-    async def send_info_to_group(self, group_name, command, data):
-        await self.channel_layer.group_send(
-            group_name,
-            {
-                'type': 'information',
-                'command': command,
-                'data': data,
-            }
-        )

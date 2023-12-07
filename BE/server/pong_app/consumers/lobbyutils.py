@@ -103,7 +103,6 @@ class LobbyFunctions(object):
     # Group Methods
     async def _create_a_group(self, room_name):
         self.lobby_consumer.create_a_group(room_name)
-        await self.lobby_consumer.send_group_list()
 
     async def _delete_group(self, room_name):
         self.lobby_consumer.delete_a_group(room_name)
@@ -120,13 +119,17 @@ class LobbyFunctions(object):
             await self.lobby_consumer.send_info_to_client('information', group_member_list)
     # -------------------------------
 
-    #  User Methods
+    #  Lobby Information
     async def _send_website_user_list(self):
         list_of_users = self.lobby_consumer.list_of_users
         user_list = []
         for user in list_of_users:
-            user_list.append(user.user_id)
+            user_list.append(user)
         await self.lobby_consumer.send_info_to_client('information', user_list)
-        
+
     async def _send_website_group_list(self):
-        await self.lobby_consumer.send_webiste_group_list()
+        list_of_groups = self.lobby_consumer.list_of_groups
+        group_list = []
+        for group in list_of_groups:
+            group_list.append(group)
+        await self.lobby_consumer.send_info_to_client('information', group_list)
