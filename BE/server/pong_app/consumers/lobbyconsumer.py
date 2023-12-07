@@ -251,6 +251,7 @@ class LobbyConsumer(AsyncWebsocketConsumer):
             print(f"Message type: {message_type}")
             print(f"Command: {command}")
             print(f"Data: {data}")
+            
 
             if message_type == 'command':
                 await self.lobbycommands.execute_command(command, data)
@@ -278,7 +279,6 @@ class LobbyConsumer(AsyncWebsocketConsumer):
         print(f'RECIEVED group information: {command}, {data}')
         # Send the information to the connected client
         await self.send_info_to_client(command, data)
-
     # Working
     async def send_info_to_client(self, command, data):
         print(f'SENDING: information to client: {command}, {data}')
@@ -287,7 +287,6 @@ class LobbyConsumer(AsyncWebsocketConsumer):
             'command': command,
             'data': data,
     }))
-        
     # Working
     async def send_info_to_group(self, group_name, command, data):
         print(f'SENDING: information to group: {group_name}, {command}, {data}')
@@ -306,6 +305,8 @@ class LobbyConsumer(AsyncWebsocketConsumer):
     )
     # -------------------------------
 
+    # Send Messages to Client or Group
+    # Working
     async def send_private_message(self, data):
         recipient_id = data.get('recipient_id')
         message = data.get('message')
@@ -327,12 +328,12 @@ class LobbyConsumer(AsyncWebsocketConsumer):
                 )
             else:
                 await self.send_info_to_client('error', 'Recipient not found')
-
+    # Working
     async def handle_private_message(self, event):
         command = event['command']
         data = event['data']
         await self.send_info_to_client(command, data)
-
+    # Working
     async def send_group_message(self, data):
         group_name = data.get('group_name')
         message = data.get('message')
@@ -344,6 +345,7 @@ class LobbyConsumer(AsyncWebsocketConsumer):
                     group_name,
                     'group_message',
                     {
+                        'command': 'group_message',
                         'data': {
                             'sender_id': self.client_id,
                             'message': message,
@@ -354,10 +356,7 @@ class LobbyConsumer(AsyncWebsocketConsumer):
                 await self.send_info_to_client('error', 'Group not found')
         else:
             await self.send_info_to_client('error', 'Invalid group message data')
-
-
-
-
+    # -------------------------------
 
     # Class Groups Object Methods
     # Working

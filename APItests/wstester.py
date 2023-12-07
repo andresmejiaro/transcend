@@ -3,6 +3,17 @@ import asyncio
 import websockets
 import json
 
+"""
+How to use:
+python3 wstester.py --client_id 1 --type command --command get_website_user_list --data '{}'
+
+python3 wstester.py --client_id 1 --type private_message --command private_message --data '{"recipient_id": "2", "message": "Hello, World!"}'
+
+python3 wstester.py --client_id 1 --type group_message --command group_message --data '{"group_name": "website_lobby", "message": "Hello, World!"}'
+
+"""
+
+
 async def websocket_client(client_id, message_type, command, data):
     uri = f"ws://localhost:8000/ws/lobby/?client_id={client_id}"
     async with websockets.connect(uri) as websocket:
@@ -37,4 +48,4 @@ if __name__ == "__main__":
             websocket_client(args.client_id, args.type, args.command, json.loads(args.data))
         )
     except KeyboardInterrupt:
-        pass  # Handle Ctrl+C manually to avoid traceback
+        print("Manually interrupted. Exiting...")
