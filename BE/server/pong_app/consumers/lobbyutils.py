@@ -10,6 +10,7 @@ class LobbyCommands(object):
         method = getattr(self, command, None)
         if callable(method):
             # Call the method with the provided data
+            print(f"Executing command: {command}")
             await method(data)
             print(f"Executed command: {command}")
             print(f"Data: {data}")
@@ -50,6 +51,10 @@ class LobbyCommands(object):
     async def get_group_user_list(self, data):
         group_name = data.get('group_name')
         await self.lobby_functions._send_group_member_list(group_name)
+    
+    async def remove_user_from_all_groups(self, data):
+        user_id = data.get('user_id')
+        await self.lobby_functions._remove_user_from_all_groups(user_id)
     # -------------------------------
 
     # Message commands
@@ -83,11 +88,11 @@ class LobbyCommands(object):
     # -------------------------------
 
     # User commands
-    async def get_user_list(self, data):
-        await self.lobby_functions._send_user_list()
-
     async def get_website_user_list(self, data):
         await self.lobby_functions._send_website_user_list()
+    
+    async def get_website_group_list(self, data):
+        await self.lobby_functions._send_website_group_list()
     # -------------------------------
 
 
@@ -96,13 +101,31 @@ class LobbyFunctions(object):
     def __init__(self, lobby_consumer):
         self.lobby_consumer = lobby_consumer
 
+    # Group Methods
     async def _create_a_group(self, room_name):
-        await self.lobby_consumer.channel_layer.group_add(
-            room_name,
-            self.lobby_consumer.channel_name
-        )
         self.lobby_consumer.create_a_group(room_name)
         await self.lobby_consumer.send_group_list()
 
-        
-        
+    async def _delete_group(self, room_name):
+        self.lobby_consumer.delete_a_group(room_name)
+        await self.lobby_consumer.send_group_list()
+
+    async def _change_room_name(self, old_room_name, new_room_name):
+        self.lobby_consumer.change_room_name(old_room_name, new_room_name)
+        await self.lobby_consumer.send_group_list()
+    
+    async def _send_group_member_list(self, group_name):
+        group = self.lobby_consumer.list_of_groups[group_name]
+        if group:
+            group_member_list = group.get_channel_all_member_names()
+            await self.lobby_consumer.send_info_to_client('information', group_member_list)
+    # -------------------------------
+
+    #  User Methods
+   
+
+    async def _send_website_user_list(self):
+        await self.lobby_consumer.send_website_user_list()
+
+    async def _send_website_group_list(self):
+        await self.lobby_consumer.send_webiste_group_list()
