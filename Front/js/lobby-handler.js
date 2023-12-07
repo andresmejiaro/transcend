@@ -13,7 +13,6 @@ const connectWebSocket = async () => {
 
         lobbySocket.addEventListener('message', (event) => {
             const data = JSON.parse(event.data);
-            console.log('WebSocket message received:', data);
 
             if (data.type === 'message') {
                 console.log(data.group_name, data.message);
@@ -35,20 +34,18 @@ const connectWebSocket = async () => {
 const getOnlineUsers = async () => {
     try {
         await connectWebSocket();
-        sendWebSocketMessage('command', { command: 'get_user_list', data: {} });
 
-        lobbySocket.addEventListener('message', (event) => {
+		lobbySocket.addEventListener('message', (event) => {
             const data = JSON.parse(event.data);
-
-            if (data.type === 'message') {
-                console.log(data.group_name, data.message);
-            }
+            console.log('WebSocket message received:', data);
         });
+
+        sendWebSocketMessage('command', { command: 'get_website_group_list', data: {} });
     } catch (error) {
         console.error('Error while connecting to WebSocket:', error.message);
-        // Handle error as needed (e.g., display an error message to the user)
     }
 };
+
 
 const sendWebSocketMessage = (messageType, payload) => {
     if (lobbySocket && lobbySocket.readyState === WebSocket.OPEN) {
