@@ -93,7 +93,7 @@ class Group(object):
     def get_channel_all_member_names(self):
         # Return a list of channel_names in the group
         print(f"self.users: {self.users}")
-        list_of_member_name = list(self.users.values())
+        list_of_member_name = list(self.users.keys())
         return list_of_member_name
         
     def get_group_name(self):
@@ -107,9 +107,9 @@ class Group(object):
         }
         return group_info
 
-    def is_user_in_group(self, user_id):
+    def is_user_in_group(self, client_id):
         # Return True if user_id is in the group, False otherwise
-        if user_id in self.users:
+        if client_id in self.users:
             return True
         else:
             return False
@@ -259,7 +259,6 @@ class LobbyConsumer(AsyncWebsocketConsumer):
             print("Invalid JSON")
             await self.send_info_to_client('error', 'Invalid JSON')
 
-
     # Send information to client or group
     async def handle_group_info(self, event):
         """
@@ -356,7 +355,32 @@ class LobbyConsumer(AsyncWebsocketConsumer):
             await self.send_info_to_client('group_name_changed', {'old_group_name': old_room_name, 'new_group_name': new_room_name})
         else:
             print(f"Group {old_room_name} does not exist")
+    # -------------------------------
 
     # Class Users Object Methods
+    # Working
+    async def create_a_user(self, client_id, channel_name):
+        try:
+            print(f"Creating user: {client_id}")
+            if client_id in LobbyConsumer.list_of_users:
+                await self.send_info_to_client('error', 'User already exists')
+            else:
+                # Check if the user model exists
+                user_model = await self.get_user(int(client_id))
 
+                if not user_model:
+                    await self.send_info_to_client('error', 'User model does not exist')
+                    print(f"User model does not exist for {client_id}")
+                else:
+                    new_user = User(client_id, channel_name, user_model, self)
+
+                    async with asyncio.Lock():
+                        LobbyConsumer.list_of_users.update({client_id: new_user})
+                    
+                    await self.send_info_to_client('user_created', {'user_id': client_id})
+                    print(f"User {client_id} created")
+
+        except ValueError:
+            print(f"Invalid client_id: {client_id}")
+            self.close(code=4004, reason='Invalid client_id')
 
