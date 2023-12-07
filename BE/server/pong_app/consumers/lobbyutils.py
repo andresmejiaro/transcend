@@ -17,7 +17,6 @@ class LobbyCommands(object):
         else:
             print(f"Invalid command: {command}")
 
-        
     # Group CRUD
     async def create_group(self, data):
         room_name = data.get('group_name')
@@ -87,7 +86,7 @@ class LobbyCommands(object):
         await self.lobby_functions._decline_challenge(group_name)
     # -------------------------------
 
-    # User commands
+    # User command
     async def get_website_user_list(self, data):
         await self.lobby_functions._send_website_user_list()
     
@@ -122,10 +121,12 @@ class LobbyFunctions(object):
     # -------------------------------
 
     #  User Methods
-   
-
     async def _send_website_user_list(self):
-        await self.lobby_consumer.send_website_user_list()
-
+        list_of_users = self.lobby_consumer.list_of_users
+        user_list = []
+        for user in list_of_users:
+            user_list.append(user.user_id)
+        await self.lobby_consumer.send_info_to_client('information', user_list)
+        
     async def _send_website_group_list(self):
         await self.lobby_consumer.send_webiste_group_list()

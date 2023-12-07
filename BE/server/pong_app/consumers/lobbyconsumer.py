@@ -3,7 +3,6 @@ from channels.generic.websocket import AsyncWebsocketConsumer
 from urllib.parse import parse_qs
 from channels.db import database_sync_to_async
 from .lobbyutils import LobbyCommands, LobbyFunctions
-from api.userauth.models import CustomUser as User
 import asyncio
 
 class Group(object):
@@ -72,11 +71,10 @@ class Group(object):
 
     def get_channel_all_member_names(self):
         # Return a list of channel_names in the group
-        print(self.users.values())
+        print(f"self.users: {self.users}")
         list_of_member_name = list(self.users.values())
         return list_of_member_name
         
-
     def get_group_name(self):
         return self.group_name
     
@@ -176,6 +174,13 @@ class LobbyConsumer(AsyncWebsocketConsumer):
 
                     LobbyConsumer.website_lobby.add_member(self.user.get_user_id(), self.user.get_channel_name())
                     await self.accept()
+                    self.send(text_data=json.dumps({
+                        'type': 'information',
+                        'command': 'connected',
+                        'data': {
+                            'user_id': self.client_id,
+                        }
+                    }))
                     print(f"User {self.client_id} added to website_lobby with channel_name: {self.channel_name} and user_model: {user_model} with type: {type(user_model)}")
 
         except ValueError:
