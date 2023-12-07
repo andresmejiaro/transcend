@@ -23,6 +23,17 @@ class Group(object):
                 self.group_name ,
                 channel_name,
             )
+            # Announce to everyone in the group that someone has joined
+            await object.channel_layer.group_send(
+                self.group_name,
+                {
+                    'type': 'information',
+                    'command': 'user_joined',
+                    'data': {
+                        'user_id': user_id,
+                    }
+                }
+            )
 
     async def remove_member(self, user_id, channel_name):
         if user_id in self.users:
@@ -32,6 +43,17 @@ class Group(object):
                 self.group_name,
                 channel_name,
             )
+            # Announce to everyone in the group that someone has left
+            await object.channel_layer.group_send(
+                self.group_name,
+                {
+                    'type': 'information',
+                    'command': 'user_left',
+                    'data': {
+                        'user_id': user_id,
+                    }
+                }
+            )   
         else:
             print(f"User {user_id} not found in group {self.group_name}")
 
@@ -39,7 +61,7 @@ class Group(object):
         # Return the number of users in the group
         return len(self.users)
 
-    def get_all_user_ids(self):
+    def get_all_member_ids(self):
         # Return a list of user_ids in the group
         return list(self.users.keys())
 
@@ -47,15 +69,28 @@ class Group(object):
         # Return the channel_name of the user_id
         return self.users.get(user_id)
 
-    def get_channel_all_names(self):
+    def get_channel_all_member_names(self):
         # Return a list of channel_names in the group
-        return list(self.users.values())
-
+        print(f"self.users: {self.users}")
+        list_of_member_name = list(self.users.values())
+        return list_of_member_name
+        
     def get_group_name(self):
         return self.group_name
     
-    def change_group_name(self, group_name):
+    async def change_group_name(self, group_name):
         self.group_name = group_name
+        # Announce the group name change to everyone in the group
+        await object.channel_layer.group_send(
+            self.group_name,
+            {
+                'type': 'information',
+                'command': 'group_name_changed',
+                'data': {
+                    'group_name': group_name,
+                }
+            }
+        )
 
 class User(object):
     def __init__(self, user_id, channel_name, user_model):
@@ -126,11 +161,8 @@ class LobbyConsumer(AsyncWebsocketConsumer):
                 if user_model:
                     print(f"User {self.client_id} connected")
                     self.user = User(self.client_id, self.channel_name, user_model)
-                    print(f"User {self.client_id} created")
                     self.user.add_group(LobbyConsumer.website_lobby)
-                    print(f"User {self.client_id} added to website_lobby")
                     # Make a channel layer group for the user
-                    print(f"Adding user {self.client_id} to channel_layer group {self.user.get_channel_name()}")
                     await self.channel_layer.group_add(
                         user_model.username,
                         self.user.get_channel_name(),
@@ -142,6 +174,13 @@ class LobbyConsumer(AsyncWebsocketConsumer):
 
                     LobbyConsumer.website_lobby.add_member(self.user.get_user_id(), self.user.get_channel_name())
                     await self.accept()
+                    self.send(text_data=json.dumps({
+                        'type': 'information',
+                        'command': 'connected',
+                        'data': {
+                            'user_id': self.client_id,
+                        }
+                    }))
                     print(f"User {self.client_id} added to website_lobby with channel_name: {self.channel_name} and user_model: {user_model} with type: {type(user_model)}")
 
         except ValueError:
@@ -155,13 +194,15 @@ class LobbyConsumer(AsyncWebsocketConsumer):
             print(type(groups))  # This should print <class 'list'>
 
             for group in groups:
-                await group.remove_member(self.client_id, self.channel_name)
-                await self._send_group_member_count(group.get_group_name(), group.get_member_count())
-
+                group.remove_member(self.client_id, self.channel_name)
+                group_member_count = group.get_member_count()
+                if group_member_count == 0 and group.get_group_name() != 'website_lobby':
+                    print(f"Group {group.get_group_name()} has no members, deleting group")
+                    self.delete_a_group(group.get_group_name())
+        
             async with asyncio.Lock():
                 LobbyConsumer.list_of_users.pop(self.client_id)
 
-            await self.lobbyfunctions._send_user_list()
             print(f"User {self.client_id} disconnected")
         else:
             print("User not connected")
@@ -190,14 +231,22 @@ class LobbyConsumer(AsyncWebsocketConsumer):
         else:
             new_group = Group(room_name)
             LobbyConsumer.list_of_groups.update({room_name: new_group})
-            print(f"Group {room_name} created")
+            await self.channel_layer.group_add(
+                room_name,
+                self.channel_name,
+            )
+            print(f"Group {room_name} created by {self.client_id}")
 
     async def delete_a_group(self, room_name):
         if room_name in LobbyConsumer.list_of_groups:
             group = LobbyConsumer.list_of_groups[room_name]
-            members = group.get_all_user_ids()
+            members = group.get_all_member_ids()
             for member in members:
                 await group.remove_member(member, LobbyConsumer.list_of_channels[member])
+            await self.channel_layer.group_discard(
+                room_name,
+                self.channel_name,
+            )
             LobbyConsumer.list_of_groups.pop(room_name)
             print(f"Group {room_name} deleted")
         else:
@@ -213,7 +262,23 @@ class LobbyConsumer(AsyncWebsocketConsumer):
         else:
             print(f"Group {old_room_name} does not exist")
 
-    # Group User Methods
+    async def remove_user_from_all_groups(self, user_id):
+        if user_id in LobbyConsumer.list_of_users:
+            user = LobbyConsumer.list_of_users[user_id]
+            groups = user.get_groups()
+            for group in groups:
+                await group.remove_member(user_id, LobbyConsumer.list_of_channels[user_id])
+                if group.get_member_count() == 0:
+                    await self.delete_a_group(group.get_group_name())
+                else:
+                    await self.send_user_count(group.get_group_name(), group.get_member_count())
+
+            print(f"User {user_id} removed from all groups")
+        else:
+            print(f"User {user_id} does not exist")
+
+
+    # User
     async def create_a_user(self, user_id, channel_name, user_model):
         if user_id not in LobbyConsumer.list_of_users:
             user = User(user_id, channel_name, user_model)
@@ -230,5 +295,20 @@ class LobbyConsumer(AsyncWebsocketConsumer):
             print(f"User {user_id} does not exist")
 
     # Information
-    async def send_user_list(self):
-        await self.lobbyfunctions._send_user_list()
+    async def send_info_to_client(self, command, data):
+        print(f'SENDING: information to client: {command}, {data}')
+        await self.send(text_data=json.dumps({
+            'type': 'information',
+            'command': command,
+            'data': data,
+        }))
+
+    async def send_info_to_group(self, group_name, command, data):
+        await self.channel_layer.group_send(
+            group_name,
+            {
+                'type': 'information',
+                'command': command,
+                'data': data,
+            }
+        )
