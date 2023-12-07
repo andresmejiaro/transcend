@@ -50,7 +50,7 @@ const urlRoutes = {
     template: "/templates/home-logged.html",
     title: "Home | " + urlPageTitle,
     description: "This is the home page",
-    js: ["./js/home-loggedin.js"],
+    js: ["./js/lobby-handler.js", "./js/home-loggedin.js"],
   },
   "/user": {
     template: "/templates/user.html",

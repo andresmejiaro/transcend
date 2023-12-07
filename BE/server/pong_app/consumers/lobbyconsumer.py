@@ -3,7 +3,6 @@ from channels.generic.websocket import AsyncWebsocketConsumer
 from urllib.parse import parse_qs
 from channels.db import database_sync_to_async
 from .lobbyutils import LobbyCommands, LobbyFunctions
-from api.userauth.models import CustomUser as User
 import asyncio
 
 class Group(object):
