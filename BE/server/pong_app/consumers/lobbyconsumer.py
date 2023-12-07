@@ -73,10 +73,8 @@ class Group(object):
     def get_channel_all_member_names(self):
         # Return a list of channel_names in the group
         print(self.users.values())
-        list_of_members = {}
-        for user_id, channel_name in self.users.items():
-            list_of_members.update({user_id: channel_name})
-        return list_of_members
+        list_of_member_name = list(self.users.values())
+        return list_of_member_name
         
 
     def get_group_name(self):
@@ -193,7 +191,8 @@ class LobbyConsumer(AsyncWebsocketConsumer):
             for group in groups:
                 group.remove_member(self.client_id, self.channel_name)
                 group_member_count = group.get_member_count()
-                if group_member_count == 0:
+                if group_member_count == 0 and group.get_group_name() != 'website_lobby':
+                    print(f"Group {group.get_group_name()} has no members, deleting group")
                     self.delete_a_group(group.get_group_name())
         
             async with asyncio.Lock():
