@@ -107,6 +107,9 @@ class LobbyFunctions:
                 await group.remove_member(self.lobby_consumer.client_id, self.lobby_consumer.channel_name)
                 self.lobby_consumer.user.remove_group(group)
                 await self.lobby_consumer.send_info_to_client(f'left {room_name}', group.get_group_info())
+                # If group is empty, delete it
+                if group.is_empty():
+                    await self.lobby_consumer.delete_a_group(room_name)
             else:
                 await self.lobby_consumer.send_info_to_client('error', 'User not in group')
         else:

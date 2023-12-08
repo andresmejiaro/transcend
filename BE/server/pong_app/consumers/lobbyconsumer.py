@@ -61,6 +61,9 @@ class Group(object):
                             'user_id': user_id,
                             'channel_name': channel_name,
                             'group_name': self.group_name,
+                            'group_member_count': self.get_member_count(),
+                            'group_members': self.get_channel_all_member_names(),
+                            'group_info': self.get_group_info(),
                         }
                 }
             ) 
@@ -79,6 +82,16 @@ class Group(object):
                     'group_name': self.group_name,
                 }
             }
+        )
+
+    async def broadcast(self, command, data):
+        """
+        Broadcast a message to all members of the group.
+        """
+        await self.lobby_consumer.send_info_to_group(
+            self.group_name,
+            command,
+            {'data': data}
         )
 
     def get_member_count(self):
@@ -113,6 +126,10 @@ class Group(object):
     def is_user_in_group(self, user_id):
         # Return True if user is in the group, False otherwise
         return user_id in self.users
+
+    def is_empty(self):
+        # Return True if group is empty, False otherwise
+        return len(self.users) == 0
 
 class User(object):
     def __init__(self, user_id, channel_name, user_model, lobby_consumer):
@@ -154,7 +171,10 @@ class LobbyConsumer(AsyncWebsocketConsumer):
         self.lobbycommands = LobbyCommands(self)
         self.lobbyfunctions = LobbyFunctions(self)
         website_lobby = Group('website_lobby', self)
-        LobbyConsumer.list_of_groups.update({'website_lobby': website_lobby})
+        if 'website_lobby' not in LobbyConsumer.list_of_groups:
+            website_lobby = Group('website_lobby', self)
+            LobbyConsumer.list_of_groups['website_lobby'] = website_lobby
+
 
     @database_sync_to_async
     def get_user(self, client_id):
@@ -307,6 +327,11 @@ class LobbyConsumer(AsyncWebsocketConsumer):
 
     # Send Messages to Client or Group 
     # Working
+    async def handle_private_message(self, event):
+        command = event['command']
+        data = event['data']
+        await self.send_info_to_client(command, data)
+    # Working
     async def send_private_message(self, data):
         recipient_id = data.get('recipient_id')
         message = data.get('message')
@@ -329,11 +354,6 @@ class LobbyConsumer(AsyncWebsocketConsumer):
             else:
                 await self.send_info_to_client('error', 'Recipient not found')
     # Working
-    async def handle_private_message(self, event):
-        command = event['command']
-        data = event['data']
-        await self.send_info_to_client(command, data)
-    # Working
     async def send_group_message(self, data):
         group_name = data.get('group_name')
         message = data.get('message')
@@ -341,17 +361,10 @@ class LobbyConsumer(AsyncWebsocketConsumer):
         if group_name and message:
             group = LobbyConsumer.list_of_groups.get(group_name)
             if group:
-                await group.lobby_consumer.send_info_to_group(
-                    group_name,
-                    'group_message',
-                    {
-                        'command': 'group_message',
-                        'data': {
-                            'sender_id': self.client_id,
-                            'message': message,
-                        }
-                    }
-                )
+                await group.broadcast('group_message', {
+                    'sender_id': self.client_id,
+                    'message': message,
+                })
             else:
                 await self.send_info_to_client('error', 'Group not found')
         else:

@@ -97,7 +97,7 @@
 
     function connect() {
         const clientId = clientIdInput.value;
-        ws = new WebSocket(`ws://localhost:8001/ws/lobby/?client_id=${clientId}`);
+        ws = new WebSocket(`ws://localhost:8000/ws/lobby/?client_id=${clientId}`);
 
         ws.onopen = () => {
             console.log('WebSocket connection opened');
