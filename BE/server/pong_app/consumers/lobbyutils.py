@@ -77,6 +77,7 @@ class LobbyFunctions:
 
     async def delete_a_group(self, room_name):
         if room_name in self.lobby_consumer.list_of_groups:
+            print(f'Function: Deleting group: {room_name}')
             await self.lobby_consumer.delete_a_group(room_name)
         else:
             await self.lobby_consumer.send_info_to_client('error', 'Group does not exist')

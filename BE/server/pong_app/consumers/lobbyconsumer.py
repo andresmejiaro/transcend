@@ -46,6 +46,7 @@ class Group(object):
             )
 
     async def remove_member(self, user_id, channel_name):
+        print(f"User {user_id} with channel_name: {channel_name} removed from group {self.group_name}")
         async with self.lock:
             if user_id in self.users:
                 # Assuming some asynchronous operation, use "await" if needed
@@ -102,13 +103,18 @@ class Group(object):
         # Return the number of users in the group
         return len(self.users)
 
+    def get_all_user_objects(self):
+        # Return a list of user objects in the group
+        return list(self.users.values())
+
     def get_all_member_ids(self):
         # Return a list of user_ids in the group
         return list(self.users.keys())
 
     def get_channel_name(self, user_id):
         # Return the channel_name of the user_id
-        return self.users.get(user_id)
+        user = self.users.get(user_id)
+        return user.channel_name
 
     def get_channel_all_member_names(self):
         # Return a list of channel_names in the group
@@ -409,23 +415,40 @@ class LobbyConsumer(AsyncWebsocketConsumer):
         await self.send_info_to_client('group_created', {'group_name': room_name})
         
         print(f"Group {room_name} created by {self.client_id}")
+    
     #  Working
     async def delete_a_group(self, room_name):
+        print(f'LobbyConsumer Deleting group {room_name}')
+
         if room_name in LobbyConsumer.list_of_groups and room_name != 'website_lobby':
             group = LobbyConsumer.list_of_groups[room_name]
-            members = group.get_all_member_ids()
-            for member in members:
-                await group.remove_member(member, LobbyConsumer.list_of_channels[member])
-            await self.channel_layer.group_discard(
-                room_name,
-                self.channel_name,
-            )
 
-            async with asyncio.Lock():
-                LobbyConsumer.list_of_groups.pop(room_name)
+            print(f'Group {room_name} members: {group.get_all_member_ids()}')
+            print(f'Group Type: {type(group)} and Group Name: {group.get_group_name()} ')
 
-            await self.send_info_to_client('group_deleted', {'group_name': room_name})
-            print(f"Group {room_name} deleted")
+            list_of_members = group.get_all_member_ids()
+
+            try:
+                for member in list_of_members:
+                    print(f'Removing member {member} from group {room_name}')
+                    await group.remove_member(member, LobbyConsumer.list_of_channels.get(str(member)))
+
+                print(f'Group {room_name} deleted')
+                await self.channel_layer.group_discard(
+                    room_name,
+                    self.channel_name,
+                )
+
+                async with asyncio.Lock():
+                    LobbyConsumer.list_of_groups.pop(room_name)
+
+                await self.send_info_to_client('group_deleted', {'group_name': room_name})
+                print(f"Group {room_name} deleted")
+
+            except Exception as e:
+                print(f"Error deleting group {room_name}: {e}")
+                await self.send_info_to_client('error', f"Error deleting group {room_name}: {e}")
+
         else:
             if room_name == 'website_lobby':
                 await self.send_info_to_client('error', f'Cannot delete group {room_name}')
@@ -433,6 +456,8 @@ class LobbyConsumer(AsyncWebsocketConsumer):
             else:
                 await self.send_info_to_client('error', f'Group {room_name} does not exist')
                 print(f"Group {room_name} does not exist")
+
+
     # Working
     async def change_group_name(self, old_room_name, new_room_name):
         if old_room_name in LobbyConsumer.list_of_groups:
