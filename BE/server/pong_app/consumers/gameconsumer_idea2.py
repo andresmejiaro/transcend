@@ -1,8 +1,6 @@
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 from urllib.parse import parse_qs
-from channels.db import database_sync_to_async
-from .lobbyutils import LobbyCommands, LobbyFunctions
 import asyncio
 
 # Constants for the game window dimensions
@@ -490,6 +488,7 @@ class MatchConsumer(AsyncWebsocketConsumer):
             await asyncio.sleep(0.01)
 
 
+
 # Example Usage:
 # paddle = Paddle(width=12, height=50)
 # print(paddle)  # Output: Paddle - Width: 12, Height: 50, Position: {'x': 0, 'y': 0}
@@ -504,7 +503,7 @@ class MatchConsumer(AsyncWebsocketConsumer):
 # player.paddle = 'Some Paddle'  # Using the property setter
 # player.keyboard_input = {'key': 'value'}  # Using the property setter
 
-# # Accessing properties
+# Accessing properties
 # print(player.player_score)  # Using the property getter
 # print(player.paddle)  # Using the property getter
 # print(player.keyboard_input)  # Using the property getter

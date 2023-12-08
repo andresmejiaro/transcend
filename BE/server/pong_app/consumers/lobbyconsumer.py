@@ -14,32 +14,35 @@ class Group(object):
         self.users = {}
 
     async def add_member(self, user_id, channel_name):
-        # Check if user_id is already in the group
         print(f"In class Group, adding user_id: {user_id} with channel_name: {channel_name}")
+
         if user_id in self.users:
             print(f"User {user_id} already in group {self.group_name}")
             return
         else:
             print(f"User {user_id} with channel_name: {channel_name} added to group {self.group_name}") 
+
             self.users[user_id] = channel_name
+            print(f'self.users: {self.users}')
+
             await self.lobby_consumer.channel_layer.group_add(
                 self.group_name,
                 channel_name,
             )
-            # Announce to everyone in the group that someone has joined
+
             await self.lobby_consumer.send_info_to_group(
                 self.group_name,
                 'user_joined',
                 {
-                        'data': {
-                            'message': 'User joined the group',
-                            'user_id': user_id,
-                            'channel_name': channel_name,
-                            'group_name': self.group_name,
-                        }
+                    'data': {
+                        'message': 'User joined the group',
+                        'user_id': user_id,
+                        'channel_name': channel_name,
+                        'group_name': self.group_name,
+                    }
                 }
             )
-            
+
     async def remove_member(self, user_id, channel_name):
         if user_id in self.users:
             # Assuming some asynchronous operation, use "await" if needed
@@ -107,9 +110,9 @@ class Group(object):
         }
         return group_info
 
-    def is_user_in_group(self, user):
+    def is_user_in_group(self, user_id):
         # Return True if user is in the group, False otherwise
-        return user in self.users
+        return user_id in self.users
 
 class User(object):
     def __init__(self, user_id, channel_name, user_model, lobby_consumer):

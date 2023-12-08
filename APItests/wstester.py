@@ -13,7 +13,6 @@ python3 wstester.py --client_id 1 --type group_message --command group_message -
 
 """
 
-
 async def websocket_client(client_id, message_type, command, data):
     uri = f"ws://localhost:8000/ws/lobby/?client_id={client_id}"
     async with websockets.connect(uri) as websocket:
