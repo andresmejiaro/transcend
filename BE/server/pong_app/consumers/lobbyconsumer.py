@@ -107,12 +107,9 @@ class Group(object):
         }
         return group_info
 
-    def is_user_in_group(self, client_id):
-        # Return True if user_id is in the group, False otherwise
-        if client_id in self.users:
-            return True
-        else:
-            return False
+    def is_user_in_group(self, user):
+        # Return True if user is in the group, False otherwise
+        return user in self.users
 
 class User(object):
     def __init__(self, user_id, channel_name, user_model, lobby_consumer):
@@ -305,7 +302,7 @@ class LobbyConsumer(AsyncWebsocketConsumer):
     )
     # -------------------------------
 
-    # Send Messages to Client or Group
+    # Send Messages to Client or Group 
     # Working
     async def send_private_message(self, data):
         recipient_id = data.get('recipient_id')
@@ -376,7 +373,6 @@ class LobbyConsumer(AsyncWebsocketConsumer):
         await self.send_info_to_client('group_created', {'group_name': room_name})
         
         print(f"Group {room_name} created by {self.client_id}")
-
     #  Working
     async def delete_a_group(self, room_name):
         if room_name in LobbyConsumer.list_of_groups and room_name != 'website_lobby':
@@ -401,7 +397,6 @@ class LobbyConsumer(AsyncWebsocketConsumer):
             else:
                 await self.send_info_to_client('error', f'Group {room_name} does not exist')
                 print(f"Group {room_name} does not exist")
-    
     # Working
     async def change_group_name(self, old_room_name, new_room_name):
         if old_room_name in LobbyConsumer.list_of_groups:

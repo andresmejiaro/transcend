@@ -2,68 +2,127 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pong Game Test</title>
+    <title>Pong Game</title>
 </head>
 <body>
     <h1>Pong Game</h1>
-    <label for="username">Enter Your Username:</label>
-    <input type="text" id="username" required>
-    <button onclick="connectToGame()">Connect to Game</button>
-    <button onclick="pressButton()">Press Button</button>
 
-    <div id="output"></div>
+    <label for="clientId">Client ID:</label>
+    <input type="text" id="clientId" placeholder="Enter Client ID"><br>
+
+    <label for="player1">Player 1:</label>
+    <input type="text" id="player1" placeholder="Enter Player 1 ID"><br>
+
+    <label for="player2">Player 2:</label>
+    <input type="text" id="player2" placeholder="Enter Player 2 ID"><br>
+
+    <label for="gameMode">Game Mode:</label>
+    <input type="text" id="gameMode" placeholder="Enter Game Mode"><br>
+
+    <label for="matchId">Match ID:</label>
+    <input type="text" id="matchId" placeholder="Enter Match ID"><br>
+
+    <button id="connectButton">Connect</button>
+    <button id="startMatchButton">Start Match</button>
+    <button id="pauseMatchButton">Pause Match</button>
+    <button id="endMatchButton">End Match</button>
+    <button id="startBallButton">Start Ball</button>
+    <button id="stopBallButton">Stop Ball</button>
+
+    <canvas id="pongCanvas" width="800" height="600" style="border:1px solid #000;"></canvas>
 
     <script>
-        let socket;
+        let socket = null;
+        const canvas = document.getElementById("pongCanvas");
+        const ctx = canvas.getContext("2d");
 
-        function connectToGame() {
-            const usernameInput = document.getElementById('username');
-            const username = usernameInput.value;
+        function connect() {
+            const clientId = document.getElementById("clientId").value;
+            const player1 = document.getElementById("player1").value;
+            const player2 = document.getElementById("player2").value;
+            const gameMode = document.getElementById("gameMode").value;
+            const matchId = document.getElementById("matchId").value;
 
-            // Close existing WebSocket connection, if any
-            if (socket && socket.readyState === WebSocket.OPEN) {
+            const socketURL = `ws://localhost:8000/ws/pong/${matchId}/?client_id=${clientId}&player_1=${player1}&player_2=${player2}&game_mode=${gameMode}`;
+
+            socket = new WebSocket(socketURL);
+
+            socket.addEventListener("open", function (event) {
+                console.log("WebSocket connection opened:", event);
+            });
+
+            socket.addEventListener("message", function (event) {
+                console.log("WebSocket message received:", event);
+                const data = JSON.parse(event.data);
+                if (data.command === "match_state") {
+                    drawPong(data.match_state);
+                }
+            });
+
+            socket.addEventListener("close", function (event) {
+                console.log("WebSocket connection closed:", event);
+            });
+        }
+
+        function drawPong(matchState) {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw paddles
+            matchState.list_of_players.forEach(player => {
+                const paddle = player.paddle;
+                ctx.fillRect(paddle.position.x, paddle.position.y, paddle.width, paddle.height);
+            });
+
+            // Draw ball
+            const ball = matchState.ball;
+            ctx.beginPath();
+            ctx.arc(ball.position.x, ball.position.y, ball.width / 2, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.closePath();
+        }
+
+        function sendCommand(command, info = null) {
+            const message = {
+                command: command,
+                info: info
+            };
+            socket.send(JSON.stringify(message));
+        }
+
+        window.addEventListener("beforeunload", function () {
+            if (socket !== null && socket.readyState === WebSocket.OPEN) {
                 socket.close();
             }
+        });
 
-            // Establish a new WebSocket connection
-            const roomName = 'some_room';  // Adjust the room name based on your setup
-            socket = new WebSocket(`ws://localhost:8000/ws/pong/${roomName}/?username=${username}`);
-
-            // Connection opened
-            socket.addEventListener('open', (event) => {
-                console.log('WebSocket Connection Opened:', event);
+        document.addEventListener("DOMContentLoaded", function () {
+            document.getElementById("connectButton").addEventListener("click", connect);
+            document.getElementById("startMatchButton").addEventListener("click", function () {
+                sendCommand("start_match");
+            });
+            document.getElementById("pauseMatchButton").addEventListener("click", function () {
+                sendCommand("pause_match");
+            });
+            document.getElementById("endMatchButton").addEventListener("click", function () {
+                sendCommand("end_match");
+            });
+            document.getElementById("startBallButton").addEventListener("click", function () {
+                sendCommand("start_ball");
+            });
+            document.getElementById("stopBallButton").addEventListener("click", function () {
+                sendCommand("stop_ball");
             });
 
-            // Listen for messages from the server
-            socket.addEventListener('message', (event) => {
-                console.log('WebSocket Message Received:', event.data);
-                displayMessage(event.data);
+            // Handle keyboard input for player movement
+            document.addEventListener("keydown", function (event) {
+                if (event.key === "ArrowUp") {
+                    sendCommand("move_paddle_up");
+                } else if (event.key === "ArrowDown") {
+                    sendCommand("move_paddle_down");
+                }
             });
-
-            // Listen for any errors that occur.
-            socket.addEventListener('error', (event) => {
-                console.error('WebSocket Error:', event);
-            });
-
-            // Connection closed
-            socket.addEventListener('close', (event) => {
-                console.log('WebSocket Connection Closed:', event);
-            });
-        }
-
-        function pressButton() {
-            // Send a button press message to the server
-            socket.send(JSON.stringify({
-                type: 'button.press'
-            }));
-        }
-
-        function displayMessage(message) {
-            const outputDiv = document.getElementById('output');
-            outputDiv.innerHTML += `<p>${message}</p>`;
-        }
+        });
     </script>
 </body>
 </html>
