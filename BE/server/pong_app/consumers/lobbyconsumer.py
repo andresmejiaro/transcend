@@ -199,7 +199,6 @@ class LobbyConsumer(AsyncWebsocketConsumer):
 
             if self.client_id not in LobbyConsumer.list_of_users:
                 user_model = await self.get_user(self.client_id)
-                LobbyConsumer.list_of_channels[self.client_id] = self.channel_name
 
                 if user_model:
                     print(f"User {self.client_id} connected")
@@ -217,7 +216,6 @@ class LobbyConsumer(AsyncWebsocketConsumer):
                     async with asyncio.Lock():
                         LobbyConsumer.list_of_users.update({self.client_id: self.user})
                         LobbyConsumer.list_of_channels[str(self.client_id)] = self.channel_name
-
 
                     # Add the user to the website_lobby group
                     await website_lobby.add_member(self.client_id, self.channel_name)
@@ -238,18 +236,18 @@ class LobbyConsumer(AsyncWebsocketConsumer):
     async def disconnect(self, close_code):
         try:
             if self.client_id in LobbyConsumer.list_of_users:
-                user = LobbyConsumer.list_of_users[self.client_id]
-                groups = user.get_groups()
-                print(type(groups))  # This should print <class 'list'>
 
-                for group in groups:
-                    await group.remove_member(self.client_id, self.channel_name)
-                    group_member_count = group.get_member_count()
-                    if group_member_count == 0 and group.get_group_name() != 'website_lobby':
-                        print(f"Group {group.get_group_name()} has no members, deleting group")
-                        self.delete_a_group(group.get_group_name())
-            
+                # Acquire a lock before accessing/modifying shared data
                 async with asyncio.Lock():
+                    user = LobbyConsumer.list_of_users[self.client_id]
+                    groups = user.get_groups()
+                    for group in groups:
+                        await group.remove_member(self.client_id, self.channel_name)
+                        group_member_count = group.get_member_count()
+                        if group_member_count == 0 and group.get_group_name() != 'website_lobby':
+                            print(f"Group {group.get_group_name()} has no members, deleting group")
+                            await self.delete_a_group(group.get_group_name())
+
                     LobbyConsumer.list_of_users.pop(self.client_id)
 
                 print(f"User {self.client_id} disconnected")
