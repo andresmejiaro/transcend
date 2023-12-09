@@ -9,6 +9,7 @@ class Game {
     #backgroundLoaded
     #remote
     #justpressed
+    #remoteCanvas
 
     constructor(leftPlayer, rightPlayer){
         this.#leftPlayer = leftPlayer;
@@ -20,6 +21,7 @@ class Game {
         this.#background.onload = () => {this.#backgroundLoaded = true ;};
         this.#remote = true;
         this.#justpressed = false;
+
     }
     
     startScreen(){
@@ -105,6 +107,12 @@ remoteGameLogic(){
     }
 }
 
+receiveRemoteCanvas(){
+    canvas = {...this.#remoteCanvas};
+    sendWebSocketGameMessage("message",keysPressed);
+    return canvas;
+}
+
 localGameLogic(){
     let ballState = this.#ball.updatePosition();
     if (ballState == 1){
@@ -171,16 +179,13 @@ gameSetup(){
     this.#leftPlayer.resetScore();
 
     this.#ball.addColider(this.#leftPaddle);
-    this.#ball.addColider(this.#rightPaddle);
-
-
-   
+    this.#ball.addColider(this.#rightPaddle);   
     requestAnimationFrame(() => this.pointLoop());        
-        
 }
 
-conexionSetup(){
-//
+conexionSetup(matchId){
+    this.#remoteCanvas = {}
+    connectGameWebSocket(matchId,this.#remoteCanvas)
 }
 
     start(){
