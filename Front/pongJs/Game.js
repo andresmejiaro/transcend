@@ -7,7 +7,9 @@ class Game {
     #rightPaddle
     #background
     #backgroundLoaded
-    
+    #remote
+    #justpressed
+
     constructor(leftPlayer, rightPlayer){
         this.#leftPlayer = leftPlayer;
         this.#rightPlayer = rightPlayer;
@@ -16,23 +18,44 @@ class Game {
         this.#background.src = './assets/game/table.png';
         this.#backgroundLoaded = false;
         this.#background.onload = () => {this.#backgroundLoaded = true ;};
+        this.#remote = true;
+        this.#justpressed = false;
     }
     
     startScreen(){
         
         ctx.clearRect(0,0, canvas.width, canvas.height);
-        if (this.#backgroundLoaded){
-            ctx.fillText(`Press Enter to Start`, 50, 30);
+        if (this.#backgroundLoaded){              
+            ctx.fillText("Current Mode is " + this.statusToText(), 50,20);
+            ctx.fillText(`Press Enter to Start`, 50, 40);
+            ctx.fillText(`Press w to Change Mode`, 50, 60);
             if (keysPressed["Enter"])
                 requestAnimationFrame(() => this.gameSetup());
+            else if(!(keysPressed["w"] || keysPressed["W"]) && this.#justpressed){
+                this.#justpressed = 0;
+                requestAnimationFrame(() => this.startScreen());
+            }
+            else if ((keysPressed["w"]  || keysPressed["W"]) && !this.#justpressed){
+                this.#remote = 1 - this.#remote;
+                this.#justpressed = 1;
+                requestAnimationFrame(() => this.startScreen());
+            }
             else
-               requestAnimationFrame(() => this.startScreen());
-        }
-        else {
-            ctx.fillText(`Loading ...`, 50, 30);
-            console.log(this.#backgroundLoaded);
-            requestAnimationFrame(() => this.startScreen());
-        }
+                requestAnimationFrame(() => this.startScreen());
+}
+else {
+    ctx.fillText(`Loading ...`, 50, 30);
+    console.log(this.#backgroundLoaded);
+    requestAnimationFrame(() => this.startScreen());
+}
+
+}
+
+    statusToText(){
+    if (this.#remote == 0)
+        return "local";
+    if (this.#remote == 1)
+        return "remote";
 
     }
 
@@ -53,10 +76,36 @@ class Game {
 // game loop
 
 pointLoop(){
-    ctx.clearRect(0,0, canvas.width, canvas.height);
-    ctx.drawImage(this.#background, 0, 0, canvas.width, canvas.height);
-    ctx.fillStyle = "white";
-    this.#ball.draw()
+    this.drawNonInteractive();
+    if (!this.#remote)
+        this.localGameLogic();
+    else 
+        this.remoteGameLogic();
+    this.drawInteractive();
+    this.drawScore();
+    if (this.#leftPlayer.score >= this.#scoreLimit 
+        || this.#rightPlayer.score >= this.#scoreLimit)
+        requestAnimationFrame(() => this.endScreen());
+        else 
+        requestAnimationFrame(() => this.pointLoop());
+}
+
+remoteGameLogic(){
+    this.sendKeyboardRemote(keysPressed);
+    let canvas = receiveRemoteCanvas();
+    this.#ball.setPosition(canvas["ball"]["position"]);
+    this.#ball.setSize(canvas["ball"]["size"]);
+    this.#leftPaddle.setPosition(canvas["leftPaddle"]["position"]);
+    this.#leftPaddle.setSize(canvas["leftPaddle"]["size"]);
+    this.#rightPaddle.setPosition(canvas["rightPaddle"]["position"]);
+    this.#rightPaddle.setSize(canvas["rightPaddle"]["size"]);
+    if (this.newScore()){
+        this.#leftPlayer.score = score["p1"];
+        this.#rightPlayer.score = score["p2"];
+    }
+}
+
+localGameLogic(){
     let ballState = this.#ball.updatePosition();
     if (ballState == 1){
         this.#leftPlayer.goal();
@@ -66,22 +115,31 @@ pointLoop(){
         this.#rightPlayer.goal();
         this.resetPosition();
     } else {
-        this.#leftPaddle.draw();
         this.#leftPaddle.updatePosition();
-	    this.#rightPaddle.draw();
-	    this.#rightPaddle.updatePosition();
+        this.#rightPaddle.updatePosition();
     }
+
+}
+
+drawNonInteractive(){
+    ctx.clearRect(0,0, canvas.width, canvas.height);
+    ctx.drawImage(this.#background, 0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = "white";
+}
+
+drawInteractive(){
+    this.#ball.draw();
+    this.#leftPaddle.draw();
+    this.#rightPaddle.draw();
+}
+
+drawScore(){
     const text1 = `${this.#leftPlayer.name}: ${this.#leftPlayer.score}`;
     const text2 = `${this.#rightPlayer.name}: ${this.#rightPlayer.score}`;
     const p1metrics = ctx.measureText(text1);
     const p2metrics = ctx.measureText(text2);
     ctx.fillText(text1, canvas.width/4 - p1metrics.width/2, 40);
     ctx.fillText(text2, canvas.width*3/4 - p2metrics.width/2, 40);
-    if (this.#leftPlayer.score >= this.#scoreLimit 
-        || this.#rightPlayer.score >= this.#scoreLimit)
-        requestAnimationFrame(() => this.endScreen());
-    else 
-        requestAnimationFrame(() => this.pointLoop());
 }
 
 resetPosition(){
@@ -114,9 +172,15 @@ gameSetup(){
 
     this.#ball.addColider(this.#leftPaddle);
     this.#ball.addColider(this.#rightPaddle);
+
+
    
     requestAnimationFrame(() => this.pointLoop());        
         
+}
+
+conexionSetup(){
+
 }
 
     start(){

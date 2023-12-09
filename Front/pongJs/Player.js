@@ -14,6 +14,10 @@ class Player {
     get score(){
         return this.#score;
     }
+
+    set score(value){
+        this.#score = value;
+    }
     
     get name(){
         return this.#name;
