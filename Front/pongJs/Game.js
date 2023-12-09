@@ -180,7 +180,7 @@ gameSetup(){
 }
 
 conexionSetup(){
-
+//
 }
 
     start(){
