@@ -27,26 +27,45 @@ SECRET_KEY = 'django-insecure-&4oc%z$0($u01^(*!a054ynxglps1op&k-fr29h(v)e!-s@nsg
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+DOCKERIZED = True
+
 ALLOWED_HOSTS = ['*']
 
-
 # Application definition
-
-INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-	'corsheaders',
-	'api',
-	'api.userauth',
-	'api.tournament',
-	'api.friends',
-    'channels',
-    'pong_app',
-]
+if DOCKERIZED:
+    INSTALLED_APPS = [
+        'django.contrib.admin',
+        'django.contrib.auth',
+        'django.contrib.contenttypes',
+        'django.contrib.sessions',
+        'django.contrib.messages',
+        'django.contrib.staticfiles',
+        'corsheaders',
+        'api',
+        'api.userauth',
+        'api.tournament',
+        'api.friends',
+        'channels',
+        'pong_app',
+    ]
+else:
+    INSTALLED_APPS = [
+        'daphne',
+        'django.contrib.admin',
+        'django.contrib.auth',
+        'django.contrib.contenttypes',
+        'django.contrib.sessions',
+        'django.contrib.sites',
+        'django.contrib.messages',
+        'django.contrib.staticfiles',
+        'corsheaders',
+        'api',
+        'api.userauth',
+        'api.tournament',
+        'api.friends',
+        'channels',
+        'pong_app',
+    ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -83,30 +102,45 @@ WSGI_APPLICATION = 'server.wsgi.application'
 ASGI_APPLICATION = "server.routing.application"
 
 # Configure channels layers to use Redis as the backend.
-CHANNEL_LAYERS = {
-    'default': {
-        'BACKEND': 'channels_redis.core.RedisChannelLayer',
-        'CONFIG': {
-            "hosts": [('redis', 6379)],
-            "capacity": 1500,
+if DOCKERIZED:
+    CHANNEL_LAYERS = {
+        'default': {
+            'BACKEND': 'channels_redis.core.RedisChannelLayer',
+            'CONFIG': {
+                "hosts": [('redis', 6379)],
+                "capacity": 1500,
+            },
         },
-    },
-}
-
+    }
+else:
+    CHANNEL_LAYERS = {
+        'default': {
+            'BACKEND': 'channels.layers.InMemoryChannelLayer',
+        },
+    }
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql', # PostgreSQL
-        'NAME': os.environ["POSTGRES_DB"], # Database Name
-        'USER': os.environ["POSTGRES_USER"], # Database User
-        'PASSWORD': os.environ["POSTGRES_PASSWORD"], # Database Password
-        'HOST': os.environ["POSTGRES_HOST"], # Database Host
-        'PORT': os.environ["POSTGRES_PORT"], # Database Port
+if DOCKERIZED:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql', # PostgreSQL
+            'NAME': os.environ["POSTGRES_DB"], # Database Name
+            'USER': os.environ["POSTGRES_USER"], # Database User
+            'PASSWORD': os.environ["POSTGRES_PASSWORD"], # Database Password
+            'HOST': os.environ["POSTGRES_HOST"], # Database Host
+            'PORT': os.environ["POSTGRES_PORT"], # Database Port
+        }
     }
-}
+# For testing django standalone (without docker) use sqlite3
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3', 
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        }
+    }
 
 
 # Password validation

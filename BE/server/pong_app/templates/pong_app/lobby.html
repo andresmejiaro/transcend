@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebSocket API Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        #sidebar {
+            width: 200px;
+            height: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: #f1f1f1;
+            padding-top: 20px;
+            padding-left: 10px;
+            overflow-x: hidden;
+        }
+
+        #content {
+            margin-left: 200px;
+            padding: 20px;
+        }
+
+        #userList {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .userItem {
+            margin-bottom: 10px;
+        }
+
+        #groupList {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .groupItem {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div id="sidebar">
+    <label for="clientIdInput">Client ID:</label>
+    <input type="text" id="clientIdInput">
+    <button onclick="connect()">Connect</button>
+
+    <h3>User List</h3>
+    <ul id="userList"></ul>
+    <button onclick="updateUserList()">Update User List</button>
+
+    <h3>Group List</h3>
+    <ul id="groupList"></ul>
+    <label for="newGroupNameInput">New Group Name:</label>
+    <input type="text" id="newGroupNameInput">
+    <button onclick="createGroup()">Create Group</button>
+    <label for="deleteGroupNameInput">Group Name to Delete:</label>
+    <input type="text" id="deleteGroupNameInput">
+    <button onclick="deleteGroup()">Delete Group</button>
+</div>
+
+<div id="content">
+    <h1>WebSocket API Test</h1>
+
+    <label for="messageInput">Message:</label>
+    <input type="text" id="messageInput">
+    <button onclick="sendPrivateMessage()">Send Private Message</button>
+
+    <label for="groupInput">Group Name:</label>
+    <input type="text" id="groupInput">
+    <button onclick="joinGroup()">Join Group</button>
+    <button onclick="leaveGroup()">Leave Group</button>
+
+    <h3>Group Chat</h3>
+    <ul id="groupChat"></ul>
+</div>
+
+<script>
+    let ws;
+    const clientIdInput = document.getElementById('clientIdInput');
+    const messageInput = document.getElementById('messageInput');
+    const groupInput = document.getElementById('groupInput');
+    const userList = document.getElementById('userList');
+    const groupList = document.getElementById('groupList');
+    const groupChat = document.getElementById('groupChat');
+    const newGroupNameInput = document.getElementById('newGroupNameInput');
+    const deleteGroupNameInput = document.getElementById('deleteGroupNameInput');
+
+    function connect() {
+        const clientId = clientIdInput.value;
+        ws = new WebSocket(`ws://localhost:8000/ws/lobby/?client_id=${clientId}`);
+
+        ws.onopen = () => {
+            console.log('WebSocket connection opened');
+        };
+
+        ws.onmessage = (event) => {
+            const data = JSON.parse(event.data);
+            handleWebSocketMessage(data);
+        };
+
+        ws.onclose = () => {
+            console.log('WebSocket connection closed');
+        };
+    }
+
+    function sendPrivateMessage() {
+        const recipientId = prompt('Enter recipient ID:');
+        const message = messageInput.value;
+
+        const data = {
+            type: 'private_message',
+            command: 'send_private_message',
+            data: {
+                recipient_id: recipientId,
+                message: message,
+            },
+        };
+
+        ws.send(JSON.stringify(data));
+    }
+
+    function joinGroup() {
+        const groupName = groupInput.value;
+
+        const data = {
+            type: 'command',
+            command: 'join_group',
+            data: {
+                group_name: groupName,
+            },
+        };
+
+        ws.send(JSON.stringify(data));
+    }
+
+    function leaveGroup() {
+        const groupName = groupInput.value;
+
+        const data = {
+            type: 'command',
+            command: 'leave_group',
+            data: {
+                group_name: groupName,
+            },
+        };
+
+        ws.send(JSON.stringify(data));
+    }
+
+    function updateUserList() {
+        const data = {
+            type: 'command',
+            command: 'get_website_user_list',
+            data: {},
+        };
+
+        ws.send(JSON.stringify(data));
+    }
+
+    function createGroup() {
+        const newGroupName = newGroupNameInput.value;
+
+        const data = {
+            type: 'command',
+            command: 'create_group',
+            data: {
+                group_name: newGroupName,
+            },
+        };
+
+        ws.send(JSON.stringify(data));
+    }
+
+    function deleteGroup() {
+        const deleteGroupName = deleteGroupNameInput.value;
+
+        const data = {
+            type: 'command',
+            command: 'delete_group',
+            data: {
+                group_name: deleteGroupName,
+            },
+        };
+
+        ws.send(JSON.stringify(data));
+    }
+
+    function handleWebSocketMessage(data) {
+        if (data.type === 'information' && data.command === 'get_website_user_list') {
+            updateUsers(data.data);
+        } else if (data.type === 'information' && data.command === 'get_website_group_list') {
+            updateGroups(data.data);
+        } else {
+            const messageList = document.createElement('li');
+            const messageItem = document.createElement('p');
+            messageItem.textContent = JSON.stringify(data);
+            messageList.appendChild(messageItem);
+            groupChat.appendChild(messageList);
+        }
+    }
+
+    function updateUsers(users) {
+        userList.innerHTML = '';
+        users.forEach((user) => {
+            const userItem = document.createElement('li');
+            userItem.className = 'userItem';
+            userItem.textContent = user;
+            userList.appendChild(userItem);
+        });
+    }
+
+    function updateGroups(groups) {
+        groupList.innerHTML = '';
+        groups.forEach((group) => {
+            const groupItem = document.createElement('li');
+            groupItem.className = 'groupItem';
+            groupItem.textContent = group;
+            groupList.appendChild(groupItem);
+        });
+    }
+</script>
+
+</body>
+</html>

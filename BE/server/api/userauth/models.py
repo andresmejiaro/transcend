@@ -47,5 +47,7 @@ class CustomUser(AbstractUser):
         related_query_name='user',
     )
 
+    ELO = models.IntegerField(default=0)
+
     def __str__(self):
         return f'{self.id} {self.username}'
