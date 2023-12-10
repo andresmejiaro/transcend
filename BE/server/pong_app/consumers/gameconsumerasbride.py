@@ -16,6 +16,7 @@ class GameConsumerAsBridge(AsyncWebsocketConsumer):
     list_of_keyboard_inputs = {}    # Holds the keyboard inputs for each match (eg. self.list_of_keyboard_inputs[self.match_id] = {"up.1": False, "down.1": False, "up.2": False, "down.2": False})
     list_of_games = {}              # Holds the Game objects for each match (eg. self.list_of_games[self.match_id] = Game(...))
 
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.client_object = None   # Holds the model object of the client
@@ -23,7 +24,6 @@ class GameConsumerAsBridge(AsyncWebsocketConsumer):
         self.left_player = None     # Holds the Player object for the left player for the game
         self.right_player = None    # Holds the Player object for the right player for the game
 
-        self.keyboard_lock = asyncio.Lock()
 
 
     @database_sync_to_async
@@ -55,7 +55,6 @@ class GameConsumerAsBridge(AsyncWebsocketConsumer):
             ic(f'The user object is {self.client_object}')
 
         except Exception as e:
-            ic(f'Error during match retrieval: {e}')
             # Send message to client via JSON and close the connection
             self.send(text_data=json.dumps({
                 'error': 'Player does not exist'
@@ -251,7 +250,6 @@ class GameConsumerAsBridge(AsyncWebsocketConsumer):
 
     # Receive message from WebSocket and process it
     async def receive(self, text_data):
-
         # Whenever a client sends a message to the server, the server will process the message and send a response back to the client. We recieve text_data in the
         # form of a JSON string. We parse the JSON string into a dictionary and extract the command and data from the dictionary.
         data = json.loads(text_data)
@@ -293,26 +291,39 @@ class GameConsumerAsBridge(AsyncWebsocketConsumer):
                         self.on_release(key)
 
         elif command == 'disconnect':
-            if self.client_id in self.list_of_players:
-                if self.list_of_games.get(self.match_id) and self.list_of_games[self.match_id].isAlive():
-                    # Update the Match model object to reflect that the match is over and add score to players ELO
-                    self.match_object.active = False
-                    self.match_object.player1_score = self.list_of_games[self.match_id]._leftPlayer.getScore()
-                    self.match_object.player2_score = self.list_of_games[self.match_id]._rightPlayer.getScore()
-                    self.match_object.winner = self.list_of_games[self.match_id]._leftPlayer if self.list_of_games[self.match_id]._leftPlayer.getScore() > self.list_of_games[self.match_id]._rightPlayer.getScore() else self.list_of_games[self.match_id]._rightPlayer
-                    self.match_object.date_played = timezone.now()
-                    self.match_object.save()
-                    self.list_of_games[self.match_id].stop()
+            try:
+                await self.get_match(self.match_id)  # Ensure self.match_object is set
+                ic(f'Disconnecting from match {self.match_id} with client {self.client_id}. Player 1: {self.player_1_id}. Player 2: {self.player_2_id} and the match model object is {self.match_object}')
+                if self.client_id in self.list_of_players:
+                    if self.list_of_games.get(self.match_id) and self.list_of_games[self.match_id].isAlive():
+                        # Update the Match model object to reflect that the match is over and add score to players ELO
+                        self.match_object.active = False
+                        self.match_object.player1_score = self.list_of_games[self.match_id]._leftPlayer.getScore()
+                        self.match_object.player2_score = self.list_of_games[self.match_id]._rightPlayer.getScore()
+                        self.match_object.winner = self.list_of_games[self.match_id]._leftPlayer if self.list_of_games[self.match_id]._leftPlayer.getScore() > self.list_of_games[self.match_id]._rightPlayer.getScore() else self.list_of_games[self.match_id]._rightPlayer
+                        self.match_object.date_played = timezone.now()
+                        if self.client_id == self.player_1_id:
+                            self.client_object.ELO += self.left_player.getScore()
+                        elif self.client_id == self.player_2_id:
+                            self.client_object.ELO += self.right_player.getScore()
+                        self.list_of_games[self.match_id].stop()
 
-                # Remove the player from the list of players
-                del self.list_of_players[self.client_id]
-                del self.list_of_keyboard_inputs[self.match_id]
-                del self.list_of_games[self.match_id]
+                        await self.client_object.save()
+                        await self.match_object.save()
 
-                # Send message to group
-                await self.broadcast_to_group(self.match_id, 'player_list', list(self.list_of_players.keys()))
+                    # Remove the player from the list of players
+                    del self.list_of_players[self.client_id]
+                    del self.list_of_keyboard_inputs[self.match_id]
+                    del self.list_of_games[self.match_id]
 
-            elif self.client_id in self.list_of_observers:
+                    # Send message to group
+                    await self.broadcast_to_group(self.match_id, 'player_list', list(self.list_of_players.keys()))
+                    await self.broadcast_to_group(self.match_id, 'final_score', {'player1_data': self.list_of_games[self.match_id]._leftPlayer.getScore(), 'player2_data': self.list_of_games[self.match_id]._rightPlayer.getScore()})
+
+            except Exception as e:
+                ic(f'Error during disconnect: {e}')
+
+            if self.client_id in self.list_of_observers:
                 # Remove the observer from the list of observers if it is in the list
                 del self.list_of_observers[self.client_id]
 
