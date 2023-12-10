@@ -56,7 +56,7 @@
             const clientId = clientIdInput.value;
             const scoreLimit = scoreLimitInput.value;
 
-            const uri = `ws://localhost:8000/ws/pong/${matchIdInput.value}/?player_1_id=${player1IdInput.value}&player_2_id=${player2IdInput.value}&client_id=${clientIdInput.value}&scorelimit=${scoreLimitInput.value}`;
+            const uri = `ws://localhost:8001/ws/pong/${matchIdInput.value}/?player_1_id=${player1IdInput.value}&player_2_id=${player2IdInput.value}&client_id=${clientIdInput.value}&scorelimit=${scoreLimitInput.value}`;
 
             ws = new WebSocket(uri);
 
