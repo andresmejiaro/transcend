@@ -8,7 +8,7 @@ import threading
 
 class Game:
 	def __init__(self, dictKeyboard: dict, 
-				 leftPlayer: Player, rightPlayer: Player, enclousure = None, scoreLimit = 11):
+				 leftPlayer: Player, rightPlayer: Player, enclousure = None, scoreLimit = 10):
 		self._leftPlayer = leftPlayer
 		self._rightPlayer = rightPlayer
 		self._scoreLimit = int(scoreLimit)

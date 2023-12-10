@@ -82,7 +82,8 @@ class GameConsumerAsBridge(AsyncWebsocketConsumer):
             game = Game(
                 dictKeyboard=self.keyboard_inputs,
                 leftPlayer=self.left_player,
-                rightPlayer=self.right_player
+                rightPlayer=self.right_player,
+                scoreLimit=self.scorelimit,
             )
             print(f'Trying to add game to index {self.match_id}')
             self.list_of_games[self.match_id] = game
@@ -163,6 +164,7 @@ class GameConsumerAsBridge(AsyncWebsocketConsumer):
             await self.close()
 
 
+    # Messaging helper function
     async def broadcast_to_group(self, group_name, command, data):
         print(f'Channel Broadcasting {command} to group {group_name}')
 
@@ -184,12 +186,12 @@ class GameConsumerAsBridge(AsyncWebsocketConsumer):
             'data': data
         }))
 
-
+    # Disconnect
     async def disconnect(self, close_code):
-        if self.player:
-            del self.list_of_players[self.client_id]
-            if self.list_of_games[self.match_id] and self.list_of_games[self.match_id].isAlive():
+        if self.client_id in self.list_of_players:
+            if self.list_of_games.get(self.match_id) and self.list_of_games[self.match_id].isAlive():
                 self.list_of_games[self.match_id].stop()
+            del self.list_of_players[self.client_id]
 
             # Remove the player from the match_players list
             self.match_players.remove(self.client_object)
@@ -200,6 +202,7 @@ class GameConsumerAsBridge(AsyncWebsocketConsumer):
         elif self.client_id in self.list_of_observers:
             del self.list_of_observers[self.client_id]
 
+    # Receive message from WebSocket and process it
     async def receive(self, text_data):
         data = json.loads(text_data)
         command = data.get('command')
@@ -240,9 +243,9 @@ class GameConsumerAsBridge(AsyncWebsocketConsumer):
 
         elif command == 'disconnect':
             if self.client_id in self.list_of_players:
-                del self.list_of_players[self.client_id]
                 if self.list_of_games.get(self.match_id) and self.list_of_games[self.match_id].isAlive():
                     self.list_of_games[self.match_id].stop()
+                del self.list_of_players[self.client_id]
 
                 # Remove the player from the match_players list
                 self.match_players.remove(self.client_object)
@@ -253,7 +256,7 @@ class GameConsumerAsBridge(AsyncWebsocketConsumer):
             elif self.client_id in self.list_of_observers:
                 del self.list_of_observers[self.client_id]
 
-
+    # Game update loop for sending game state to the group
     async def game_update(self):
         while self.list_of_games[self.match_id] and self.list_of_games[self.match_id].isAlive():
             print(f'Sending game update to group {self.match_id}')
@@ -267,20 +270,22 @@ class GameConsumerAsBridge(AsyncWebsocketConsumer):
 
             # Send updated game state to the group
             await self.broadcast_to_group(self.match_id, 'game_update', self.list_of_games[self.match_id].reportScreen())
+            await self.broadcast_to_group(self.match_id, 'score_update', {'left': self.list_of_games[self.match_id]._leftPlayer.getScore(), 'right': self.list_of_games[self.match_id]._rightPlayer.getScore()})
 
             try:
-                await asyncio.sleep(2)
+                await asyncio.sleep(.1)
             except asyncio.CancelledError:
                 print(f'Game update for match {self.match_id} cancelled')
                 break
             except Exception as e:
                 print(f'Error during game update for match {self.match_id}: {e}')
 
-
+    # Keyboard input processing and formatting
     def on_press(self, key):
         print(f'I am player {self.client_id}, my keyboard is {self.keyboard.get(str(self.client_id), {})} and the key is {key}')
 
-        formatted_key = f'{key}.{self.client_id}'  # Adjust the key format
+        # Format the key to match the format used in the game. Example: up.1 for client 1 pressing the up key
+        formatted_key = f'{key}.{self.client_id}'
         print(f'Trying to update key {formatted_key} for match {self.match_id}')
         
         asyncio.get_event_loop().call_soon_threadsafe(self.update_key, formatted_key, True)
@@ -288,13 +293,17 @@ class GameConsumerAsBridge(AsyncWebsocketConsumer):
     def on_release(self, key):
         print(f'I am player {self.client_id}, my keyboard is {self.keyboard.get(str(self.client_id), {})} and the key is {key}')
 
-        formatted_key = f'{key}.{self.client_id}'  # Adjust the key format
+        # Format the key to match the format used in the game. Example: up.342 for client 342 releasing the up key
+        formatted_key = f'{key}.{self.client_id}'
         print(f'Trying to update key {formatted_key} for match {self.match_id}')
         
         asyncio.get_event_loop().call_soon_threadsafe(self.update_key, formatted_key, False)
 
+    # Does the actual updating of the keyboard input for the game
     def update_key(self, formatted_key, is_pressed):
+        # Checks if the match_id has a keyboard input list and if the formatted key is in that list 
         if self.match_id in self.list_of_keyboard_inputs and formatted_key in self.list_of_keyboard_inputs[self.match_id]:
+            # If the keyboard for the match_id has the formatted key, update the value of the key to the new value (True or False)
             self.list_of_keyboard_inputs[self.match_id][formatted_key] = is_pressed
             print(f'Successfully updated key {formatted_key} for match {self.match_id}')
         else:
