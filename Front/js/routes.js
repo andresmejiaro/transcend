@@ -83,7 +83,8 @@ const urlRoutes = {
     template: "/templates/local-game.html",
     title: "Local Game | " + urlPageTitle,
     description: "This is the local pong page",
-    js: ["./pongJs/environment.js","./pongJs/MovingRectangle.js",
+    js: ["./pongJs/environment.js", "game-lobby-handler.js",
+    "./pongJs/MovingRectangle.js",
     "./pongJs/Ball.js","./pongJs/Paddle.js","./pongJs/Player.js", 
     "./pongJs/Game.js","./pongJs/main.js"],
     css: ["./css/local-game.css"]
