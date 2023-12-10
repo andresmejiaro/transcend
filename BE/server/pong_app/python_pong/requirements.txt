@@ -1,0 +1,12 @@
+certifi==2023.11.17
+charset-normalizer==3.3.2
+click==8.1.7
+idna==3.6
+pynput==1.7.6
+pyobjc-core==10.0
+pyobjc-framework-ApplicationServices==10.0
+pyobjc-framework-Cocoa==10.0
+pyobjc-framework-Quartz==10.0
+requests==2.31.0
+six==1.16.0
+urllib3==2.1.0
