@@ -21,6 +21,7 @@ pip install pyotp
 pip install qrcode
 pip install channels
 pip install channels-redis
+pip install icecream
 
 pip freeze > requirements.txt
 
