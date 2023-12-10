@@ -71,11 +71,14 @@ class GameConsumerAsBridge(AsyncWebsocketConsumer):
 
             self.list_of_games[self.match_id] = None
 
+            self.left_player = Player(name=self.player_1_id, binds=self.keyboard[self.client_id])
+            self.right_player = Player(name=self.player_2_id, binds=self.keyboard[self.client_id])
+
             # Create the game
             game = Game(
                 dictKeyboard=self.keyboard_inputs,
-                leftPlayer=Player(name=self.player_1_id, binds={"up" : "{self.player_1_id} + up", "down":"{self.player_1_id} + down", "left":"xx","right":"xx"}),
-                rightPlayer=Player(name=self.player_2_id, binds={"up" : "{self.player_2_id} + up", "down":"{self.player_2_id} + down", "left":"xx","right":"xx"}),
+                leftPlayer=self.left_player,
+                rightPlayer=self.right_player,
             )
             print(f'Trying to add game to index {self.match_id}')
             self.list_of_games[self.match_id] = game
