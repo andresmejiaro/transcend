@@ -5,7 +5,8 @@ from pong_app.python_pong.Player import Player
 from pong_app.python_pong.Game import Game
 from urllib.parse import parse_qs
 from channels.db import database_sync_to_async
-# from icecream import ic
+# Icecream is a library that allows us to ic variables in a more readable way its is only for debugging and can be removed
+from icecream import ic
 
 
 class GameConsumerAsBridge(AsyncWebsocketConsumer):
@@ -31,7 +32,7 @@ class GameConsumerAsBridge(AsyncWebsocketConsumer):
         from api.tournament.models import Match
 
         try:
-            print(f'Getting match {match_id}')
+            ic(f'Getting match {match_id}')
             self.match_object = Match.objects.get(id=match_id)
 
         except Match.DoesNotExist:
@@ -47,7 +48,7 @@ class GameConsumerAsBridge(AsyncWebsocketConsumer):
         from api.userauth.models import CustomUser as User
 
         try:
-            print(f'Getting user {player_id}')
+            ic(f'Getting user {player_id}')
             self.client_object = User.objects.get(id=player_id)
 
         except User.DoesNotExist:
@@ -60,7 +61,7 @@ class GameConsumerAsBridge(AsyncWebsocketConsumer):
     # Initialize the game and makes sure that both players are connected before starting the game
     async def initialize_game(self):
         try:
-            print(f'Initializing game {self.match_id}')
+            ic(f'Initializing game {self.match_id}')
             # self.keyboard_inputs: This is a dictionary that holds the keyboard inputs for each match (eg. self.keyboard_inputs = {"up.1": False, "down.1": False, "up.2": False, "down.2": False})
             # We pass this dictionary to the Game object so that it can update the keyboard inputs for each player
             self.keyboard_inputs = {
@@ -70,12 +71,12 @@ class GameConsumerAsBridge(AsyncWebsocketConsumer):
                 f'down.{self.player_2_id}' : False
             }
 
-            print(f'Adding keyboard inputs for match {self.match_id}')
+            ic(f'Adding keyboard inputs for match {self.match_id}')
             # Add the keyboard inputs for this match to the list of keyboard inputs
             self.list_of_keyboard_inputs[self.match_id] = self.keyboard_inputs
 
             # Create the game
-            print(f'Creating game for match {self.match_id}')
+            ic(f'Creating game for match {self.match_id}')
             game = Game(
                 dictKeyboard=self.keyboard_inputs,  # This is a dictionary that holds the keyboard inputs for each match (eg. self.keyboard_inputs = {"up.1": False, "down.1": False, "up.2": False, "down.2": False})
                 leftPlayer=self.left_player,        # This is the Player object for the left player for the game
@@ -83,27 +84,27 @@ class GameConsumerAsBridge(AsyncWebsocketConsumer):
                 scoreLimit=self.scorelimit,         # This is the score limit for the game
             )
 
-            print(f'Trying to add game to index {self.match_id}')
+            ic(f'Trying to add game to index {self.match_id}')
             # If the game was successfully created, add it to the list of games
             self.list_of_games[self.match_id] = game
 
-            print(f'Successfully added game to index {self.match_id}')
+            ic(f'Successfully added game to index {self.match_id}')
         except Exception as e:
-            print(f'Error during game initialization: {e}')
+            ic(f'Error during game initialization: {e}')
 
         try:
             # In case the game is created and both players are connected, start the game
-            print(f'Starting game {self.match_id}')
+            ic(f'Starting game {self.match_id}')
             if self.list_of_games[self.match_id] and not self.list_of_games[self.match_id].isAlive():
                 # Check if both players for this match are connected
                 if self.client_id in self.list_of_players and self.player_1_id in self.list_of_players and self.player_2_id in self.list_of_players:
-                    print(f'Sending start command to game {self.match_id}')
+                    ic(f'Sending start command to game {self.match_id}')
                     self.list_of_games[self.match_id].start()
                     asyncio.create_task(self.game_update())
                 else:
-                    print(f'Cannot start game. Both players for this match are not connected yet.')
+                    ic(f'Cannot start game. Both players for this match are not connected yet.')
         except Exception as e:
-            print(f'Error during game start: {e}')
+            ic(f'Error during game start: {e}')
 
     # Handles the initial connection
     async def connect(self):
@@ -116,12 +117,12 @@ class GameConsumerAsBridge(AsyncWebsocketConsumer):
             self.client_id = query_params.get('client_id', [None])[0]
             self.scorelimit = query_params.get('scorelimit', [None])[0]
 
-            print(f'Connecting to match {self.match_id} with client {self.client_id}. Player 1: {self.player_1_id}. Player 2: {self.player_2_id}')
+            ic(f'Connecting to match {self.match_id} with client {self.client_id}. Player 1: {self.player_1_id}. Player 2: {self.player_2_id}')
 
             await self.get_match(self.match_id)
             await self.get_user(self.client_id)
 
-            print(f'Connected to match {self.match_id} with client {self.client_id}. Player 1: {self.player_1_id}. Player 2: {self.player_2_id}')
+            ic(f'Connected to match {self.match_id} with client {self.client_id}. Player 1: {self.player_1_id}. Player 2: {self.player_2_id}')
 
             # Check if the client is already connected as a player or obeserver in another match
             if self.client_id in self.list_of_players or self.client_id in self.list_of_observers:
@@ -133,7 +134,7 @@ class GameConsumerAsBridge(AsyncWebsocketConsumer):
 
             await self.accept()
 
-            print(f'Accepted connection to match {self.match_id} with client {self.client_id}. Player 1: {self.player_1_id}. Player 2: {self.player_2_id}')
+            ic(f'Accepted connection to match {self.match_id} with client {self.client_id}. Player 1: {self.player_1_id}. Player 2: {self.player_2_id}')
 
             if self.client_id == self.player_1_id or self.client_id == self.player_2_id:
                 # Initialize the keyboard inputs for this match with the player ids so each client has its own digital keyboard
@@ -144,24 +145,24 @@ class GameConsumerAsBridge(AsyncWebsocketConsumer):
                 self.left_player = Player(name=self.player_1_id, binds=self.keyboard[self.player_1_id])
                 self.right_player = Player(name=self.player_2_id, binds=self.keyboard[self.player_2_id])
 
-                print(f'Adding game to index {self.match_id}')
+                ic(f'Adding game to index {self.match_id}')
                 # Initialize the index for this match in the list of games this allows us to check if a game for this match already exists
                 self.list_of_games[self.match_id] = None
 
             # Check if client is a player or observer
             if self.client_id == self.player_1_id:
-                print(f'Client {self.client_id} is player 1')
+                ic(f'Client {self.client_id} is player 1')
 
                 self.list_of_players[self.client_id] = self.client_object
                 self.match_players.append(self.client_object)
             elif self.client_id == self.player_2_id:
-                print(f'Client {self.client_id} is player 2')
+                ic(f'Client {self.client_id} is player 2')
 
                 self.list_of_players[self.client_id] = self.client_object
                 self.match_players.append(self.client_object)
             else:
                 # Add the observer to the list of observers
-                print(f'Client {self.client_id} is an observer')
+                ic(f'Client {self.client_id} is an observer')
                 self.list_of_observers[self.client_id] = self.client_object
 
             # Add client to the channel group for this match, this allows us to send messages to all clients in the group
@@ -174,14 +175,14 @@ class GameConsumerAsBridge(AsyncWebsocketConsumer):
             await self.broadcast_to_group(self.match_id, 'player_list', {'user': str(self.scope['user']), 'path': self.scope['path']})
 
         except Exception as e:
-            print(f'Error during connection: {e}')
+            ic(f'Error during connection: {e}')
             # Send message to client via JSON and close the connection if there is an error
             await self.close()
 
 
     # Messaging helper function
     async def broadcast_to_group(self, group_name, command, data):
-        print(f'Channel Broadcasting {command} to group {group_name}')
+        ic(f'Channel Broadcasting {command} to group {group_name}')
 
         # Send message to group, this utilizes channel_layer.group_send
         # channel_layer.group_send: This is a low-level function to send a message directly to a group of channels.
@@ -199,7 +200,7 @@ class GameConsumerAsBridge(AsyncWebsocketConsumer):
         # Its called for each member of the group sending the command and data found in the event
         command = event['command']
         data = event['data']
-        print(f'Sending message to client {self.client_id} with data: {data}')
+        ic(f'Sending message to client {self.client_id} with data: {data}')
         await self.send(text_data=json.dumps({
             'type': command,
             'data': data
@@ -234,7 +235,7 @@ class GameConsumerAsBridge(AsyncWebsocketConsumer):
         command = data.get('command')
         key_status = data.get('key_status')
         
-        print(f'Received command: {command} with data: {data}')
+        ic(f'Received command: {command} with data: {data}')
 
         if command == 'player_list':
             await self.send(text_data=json.dumps({
@@ -243,10 +244,10 @@ class GameConsumerAsBridge(AsyncWebsocketConsumer):
             }))
               
         elif command == 'start_game':
-            print(f'Starting game {self.match_id}')
-            print(f'Sending start command to game {self.match_id}')
+            ic(f'Starting game {self.match_id}')
+            ic(f'Sending start command to game {self.match_id}')
             if not self.list_of_games.get(self.match_id):
-                print(f'Initializing game {self.match_id}')
+                ic(f'Initializing game {self.match_id}')
                 await self.initialize_game()
             if self.list_of_games[self.match_id] and not self.list_of_games[self.match_id].isAlive():
                 # Check if both players for this match are connected
@@ -255,10 +256,10 @@ class GameConsumerAsBridge(AsyncWebsocketConsumer):
                     self.list_of_games[self.match_id].start()
                     asyncio.create_task(self.game_update())
                 else:
-                    print(f'Cannot start game. Both players for this match are not connected yet.')
+                    ic(f'Cannot start game. Both players for this match are not connected yet.')
 
         elif command == 'keyboard':
-            print(f'Updating keyboard for client {self.client_id} with data: {data}')
+            ic(f'Updating keyboard for client {self.client_id} with data: {data}')
             if self.list_of_games[self.match_id]:
                 if self.list_of_games[self.match_id] and self.list_of_games[self.match_id].isAlive() and self.left_player and self.right_player:
                     if key_status == 'on_press':
@@ -286,7 +287,7 @@ class GameConsumerAsBridge(AsyncWebsocketConsumer):
     # Game update loop for sending game state to the group
     async def game_update(self):
         while self.list_of_games[self.match_id] and self.list_of_games[self.match_id].isAlive():
-            print(f'Sending game update to group {self.match_id}')
+            ic(f'Sending game update to group {self.match_id}')
 
             # Update paddle positions based on keyboard inputs
             left_paddle = self.list_of_games[self.match_id]._leftPaddle
@@ -302,27 +303,27 @@ class GameConsumerAsBridge(AsyncWebsocketConsumer):
             try:
                 await asyncio.sleep(.1)
             except asyncio.CancelledError:
-                print(f'Game update for match {self.match_id} cancelled')
+                ic(f'Game update for match {self.match_id} cancelled')
                 break
             except Exception as e:
-                print(f'Error during game update for match {self.match_id}: {e}')
+                ic(f'Error during game update for match {self.match_id}: {e}')
 
     # Keyboard input processing and formatting
     def on_press(self, key):
-        print(f'I am player {self.client_id}, my keyboard is {self.keyboard.get(str(self.client_id), {})} and the key is {key}')
+        ic(f'I am player {self.client_id}, my keyboard is {self.keyboard.get(str(self.client_id), {})} and the key is {key}')
 
         # Format the key to match the format used in the game. Example: up.1 for client 1 pressing the up key
         formatted_key = f'{key}.{self.client_id}'
-        print(f'Trying to update key {formatted_key} for match {self.match_id}')
+        ic(f'Trying to update key {formatted_key} for match {self.match_id}')
         
         asyncio.get_event_loop().call_soon_threadsafe(self.update_key, formatted_key, True)
 
     def on_release(self, key):
-        print(f'I am player {self.client_id}, my keyboard is {self.keyboard.get(str(self.client_id), {})} and the key is {key}')
+        ic(f'I am player {self.client_id}, my keyboard is {self.keyboard.get(str(self.client_id), {})} and the key is {key}')
 
         # Format the key to match the format used in the game. Example: up.342 for client 342 releasing the up key
         formatted_key = f'{key}.{self.client_id}'
-        print(f'Trying to update key {formatted_key} for match {self.match_id}')
+        ic(f'Trying to update key {formatted_key} for match {self.match_id}')
         
         asyncio.get_event_loop().call_soon_threadsafe(self.update_key, formatted_key, False)
 
@@ -332,6 +333,6 @@ class GameConsumerAsBridge(AsyncWebsocketConsumer):
         if self.match_id in self.list_of_keyboard_inputs and formatted_key in self.list_of_keyboard_inputs[self.match_id]:
             # If the keyboard for the match_id has the formatted key, update the value of the key to the new value (True or False)
             self.list_of_keyboard_inputs[self.match_id][formatted_key] = is_pressed
-            print(f'Successfully updated key {formatted_key} for match {self.match_id}')
+            ic(f'Successfully updated key {formatted_key} for match {self.match_id}')
         else:
-            print(f'Invalid match_id {self.match_id} or key {formatted_key}')
+            ic(f'Invalid match_id {self.match_id} or key {formatted_key}')
