@@ -32,9 +32,9 @@
 
     <label for="jsonInput">JSON Input:</label>
     <textarea id="jsonInput" placeholder="Enter JSON"></textarea>
-    
-    <button onclick="sendJson()">Send JSON</button>
 
+    <button onclick="sendJson()">Send Message</button>
+    
     <canvas id="gameCanvas" width="858" height="525"></canvas>
 
     <script>
@@ -98,27 +98,40 @@
             handleArrowKeyRelease(event.key);
         });
 
-
         function updateGameCanvas(data) {
-            ctx.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
+        console.log('Updating game canvas with data:', data);
 
-            drawPongGame(data);
+        if (data.type === 'player_list') {
+            // Handle player list data if needed
+            console.log('Received player list:', data.data);
+        } else if (data.type === 'game_update') {
+            // Handle game update data
+            drawPongGame(data.data);
+        } else {
+            console.error('Invalid message type:', data.type);
         }
+    }
 
-        function sendKeyPress(key) {
-            const jsonMessage = JSON.stringify({
-                command: 'keyboard',
-                key_status: 'on_press',
-                key: key,
-            });
+        function drawPongGame(data) {
+        // Check if the required properties exist in the data object
+        if (data && data.canvas && data.canvas.ball && data.canvas.leftPaddle && data.canvas.rightPaddle) {
+            ctx.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
+            drawRect(data.canvas.ball.position, data.canvas.ball.size, 'blue');
+            drawRect(data.canvas.leftPaddle.position, data.canvas.leftPaddle.size, 'green');
+            drawRect(data.canvas.rightPaddle.position, data.canvas.rightPaddle.size, 'red');
 
-            // Send the JSON message to the server
-            if (ws && ws.readyState === WebSocket.OPEN) {
-                ws.send(jsonMessage);
-                console.log('Sent JSON message:', jsonMessage);
-            } else {
-                console.error('WebSocket connection not open.');
-            }
+            const scores = data.score;
+            ctx.fillStyle = 'black';
+            ctx.font = '20px Arial';
+            ctx.fillText(`${player1IdInput.value}: ${scores[player1IdInput.value]} - ${player2IdInput.value}: ${scores[player2IdInput.value]}`, 10, 20);
+        } else {
+            console.error('Invalid data format:', data);
+        }
+    }
+
+        function drawRect(position, size, color) {
+            ctx.fillStyle = color;
+            ctx.fillRect(position.x, position.y, size.x, size.y);
         }
 
         function handleArrowKeyPress(key) {
@@ -139,10 +152,10 @@
             }
         }
 
-        function sendRelease(key) {
+        function sendKeyPress(key) {
             const jsonMessage = JSON.stringify({
                 command: 'keyboard',
-                key_status: 'on_release',
+                key_status: 'on_press',
                 key: key,
             });
 
@@ -173,27 +186,21 @@
             }
         }
 
-        function drawPongGame(data) {
-            for (const timestamp in data) {
-                const gameData = data[timestamp];
+        function sendRelease(key) {
+            const jsonMessage = JSON.stringify({
+                command: 'keyboard',
+                key_status: 'on_release',
+                key: key,
+            });
 
-                drawRect(gameData.canvas.ball.position, gameData.canvas.ball.size, 'blue');
-                drawRect(gameData.canvas.leftPaddle.position, gameData.canvas.leftPaddle.size, 'green');
-                drawRect(gameData.canvas.rightPaddle.position, gameData.canvas.rightPaddle.size, 'red');
-
-                const scores = gameData.score;
-                ctx.fillStyle = 'black';
-                ctx.font = '20px Arial';
-                ctx.fillText(`${player1IdInput.value}: ${scores[player1IdInput.value]} - ${player2IdInput.value}: ${scores[player2IdInput.value]}`, 10, 20);
+            // Send the JSON message to the server
+            if (ws && ws.readyState === WebSocket.OPEN) {
+                ws.send(jsonMessage);
+                console.log('Sent JSON message:', jsonMessage);
+            } else {
+                console.error('WebSocket connection not open.');
             }
         }
-
-        function drawRect(position, size, color) {
-            ctx.fillStyle = color;
-            ctx.fillRect(position.x, position.y, size.x, size.y);
-        }
-
-        // ... (unchanged part for arrow key handling)
     </script>
 </body>
 </html>

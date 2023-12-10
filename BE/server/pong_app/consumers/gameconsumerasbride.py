@@ -5,7 +5,7 @@ from pong_app.python_pong.Player import Player
 from pong_app.python_pong.Game import Game
 from urllib.parse import parse_qs
 from channels.db import database_sync_to_async
-from icecream import ic
+# from icecream import ic
 
 
 class GameConsumerAsBridge(AsyncWebsocketConsumer):
@@ -19,11 +19,6 @@ class GameConsumerAsBridge(AsyncWebsocketConsumer):
         self.client_object = None
         self.player = None
         self.match_players = []
-        self.keyboard_inputs = {
-            "{self.player_1_id} + up" : False,
-            "{self.player_1_id} + down": False,
-            "{self.player_2_id} + up": False,
-            "{self.player_2_id} + down": False}
         self.keyboard = {}
         self.left_player = None
         self.right_player = None
@@ -67,14 +62,23 @@ class GameConsumerAsBridge(AsyncWebsocketConsumer):
 
     async def initialize_game(self):
         try:
+            print(f'Initializing game {self.match_id}')
+            self.keyboard_inputs = {
+                f'up.{self.player_1_id}' : False,
+                f'down.{self.player_1_id}' : False,
+                f'up.{self.player_2_id}' : False,
+                f'down.{self.player_2_id}' : False
+            }
+
+            print(f'Adding keyboard inputs for match {self.match_id}')
             self.list_of_keyboard_inputs[self.match_id] = self.keyboard_inputs
 
+            print(f'Adding game to index {self.match_id}')
             self.list_of_games[self.match_id] = None
 
-            self.left_player = Player(name=self.player_1_id, binds=self.keyboard[self.client_id])
-            self.right_player = Player(name=self.player_2_id, binds=self.keyboard[self.client_id])
 
             # Create the game
+            print(f'Creating game for match {self.match_id}')
             game = Game(
                 dictKeyboard=self.keyboard_inputs,
                 leftPlayer=self.left_player,
@@ -120,25 +124,22 @@ class GameConsumerAsBridge(AsyncWebsocketConsumer):
 
             print(f'Connected to match {self.match_id} with client {self.client_id}. Player 1: {self.player_1_id}. Player 2: {self.player_2_id}')
 
-            # Check if the game has been initialized
-            # if not self.list_of_games.get(self.match_id):
-            #     print(f'Initializing game {self.match_id}')
-            #     await self.initialize_game()
-
             await self.accept()
 
             print(f'Accepted connection to match {self.match_id} with client {self.client_id}. Player 1: {self.player_1_id}. Player 2: {self.player_2_id}')
 
+            self.keyboard[self.player_1_id] = {"up": f"up.{self.player_1_id}", "down": f"down.{self.player_1_id}", "left": "xx", "right": "xx"}
+            self.keyboard[self.player_2_id] = {"up": f"up.{self.player_2_id}", "down": f"down.{self.player_2_id}", "left": "xx", "right": "xx"}
+            self.left_player = Player(name=self.player_1_id, binds=self.keyboard[self.player_1_id])
+            self.right_player = Player(name=self.player_2_id, binds=self.keyboard[self.player_2_id])
             # Check if client is a player or observer
             if self.client_id == self.player_1_id:
                 print(f'Client {self.client_id} is player 1')
-                self.keyboard[self.client_id] = {"up": f"up.{self.player_1_id}", "down": f"down.{self.player_1_id}", "left": "xx", "right": "xx"}
 
                 self.list_of_players[self.client_id] = self.client_object
                 self.match_players.append(self.client_object)
             elif self.client_id == self.player_2_id:
                 print(f'Client {self.client_id} is player 2')
-                self.keyboard[self.client_id] = {"up": f"up.{self.player_2_id}", "down": f"down.{self.player_2_id}", "left": "xx", "right": "xx"}
 
                 self.list_of_players[self.client_id] = self.client_object
                 self.match_players.append(self.client_object)
@@ -222,27 +223,20 @@ class GameConsumerAsBridge(AsyncWebsocketConsumer):
                 # Check if both players for this match are connected
                 if self.client_id in self.list_of_players and self.player_1_id in self.list_of_players and self.player_2_id in self.list_of_players:
 
-                    if self.client_id == self.player_1_id:
-                        self.player = self.list_of_games[self.match_id]._leftPlayer
-
-                    elif self.client_id == self.player_2_id:
-                        self.player = self.list_of_games[self.match_id]._rightPlayer
-
                     self.list_of_games[self.match_id].start()
                     asyncio.create_task(self.game_update())
                 else:
                     print(f'Cannot start game. Both players for this match are not connected yet.')
 
         elif command == 'keyboard':
-            print(f'Updating keyboard for client {self.client_id} with data: {data} i am player {self.player}')
-            if self.list_of_games[self.match_id] and self.list_of_games[self.match_id].isAlive() and self.player:
+            print(f'Updating keyboard for client {self.client_id} with data: {data}')
+            if self.list_of_games[self.match_id] and self.list_of_games[self.match_id].isAlive() and self.left_player and self.right_player:
                 if key_status == 'on_press':
                     key = data.get('key')
                     self.on_press(key)
                 elif key_status == 'on_release':
                     key = data.get('key')
                     self.on_release(key)
-
 
         elif command == 'disconnect':
             if self.client_id in self.list_of_players:
@@ -275,32 +269,33 @@ class GameConsumerAsBridge(AsyncWebsocketConsumer):
             await self.broadcast_to_group(self.match_id, 'game_update', self.list_of_games[self.match_id].reportScreen())
 
             try:
-                await asyncio.sleep(5)
+                await asyncio.sleep(2)
             except asyncio.CancelledError:
-                logging.debug("Game update task canceled.")
+                print(f'Game update for match {self.match_id} cancelled')
                 break
             except Exception as e:
-                logging.error(f"Error in game_update: {e}")
+                print(f'Error during game update for match {self.match_id}: {e}')
+
 
     def on_press(self, key):
         print(f'I am player {self.client_id}, my keyboard is {self.keyboard.get(str(self.client_id), {})} and the key is {key}')
 
         formatted_key = f'{key}.{self.client_id}'  # Adjust the key format
         print(f'Trying to update key {formatted_key} for match {self.match_id}')
-        if self.match_id in self.list_of_keyboard_inputs and formatted_key in self.list_of_keyboard_inputs[self.match_id]:
-            self.list_of_keyboard_inputs[self.match_id][formatted_key] = True
-            print(f'Successfully updated key {formatted_key} for match {self.match_id}')
-        else:
-            print(f'Invalid match_id {self.match_id} or key {formatted_key}')
+        
+        asyncio.get_event_loop().call_soon_threadsafe(self.update_key, formatted_key, True)
 
     def on_release(self, key):
         print(f'I am player {self.client_id}, my keyboard is {self.keyboard.get(str(self.client_id), {})} and the key is {key}')
 
         formatted_key = f'{key}.{self.client_id}'  # Adjust the key format
         print(f'Trying to update key {formatted_key} for match {self.match_id}')
+        
+        asyncio.get_event_loop().call_soon_threadsafe(self.update_key, formatted_key, False)
+
+    def update_key(self, formatted_key, is_pressed):
         if self.match_id in self.list_of_keyboard_inputs and formatted_key in self.list_of_keyboard_inputs[self.match_id]:
-            self.list_of_keyboard_inputs[self.match_id][formatted_key] = False
+            self.list_of_keyboard_inputs[self.match_id][formatted_key] = is_pressed
             print(f'Successfully updated key {formatted_key} for match {self.match_id}')
         else:
             print(f'Invalid match_id {self.match_id} or key {formatted_key}')
-
