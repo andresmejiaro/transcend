@@ -134,19 +134,14 @@ class GameConsumerAsBridge(AsyncWebsocketConsumer):
                 print(f'Client {self.client_id} is player 1')
                 self.keyboard[self.client_id] = {"up": f"up.{self.player_1_id}", "down": f"down.{self.player_1_id}", "left": "xx", "right": "xx"}
 
-                self.player = self.list_of_games[self.match_id]._leftPlayer
                 self.list_of_players[self.client_id] = self.client_object
                 self.match_players.append(self.client_object)
-                print(f'Player 1: {self.player}')
             elif self.client_id == self.player_2_id:
                 print(f'Client {self.client_id} is player 2')
                 self.keyboard[self.client_id] = {"up": f"up.{self.player_2_id}", "down": f"down.{self.player_2_id}", "left": "xx", "right": "xx"}
 
-
-                self.player = self.list_of_games[self.match_id]._rightPlayer
                 self.list_of_players[self.client_id] = self.client_object
                 self.match_players.append(self.client_object)
-                print(f'Player 2: {self.player}')
             else:
                 # Add the observer to the list of observers
                 print(f'Client {self.client_id} is an observer')
@@ -219,13 +214,19 @@ class GameConsumerAsBridge(AsyncWebsocketConsumer):
               
         elif command == 'start_game':
             print(f'Starting game {self.match_id}')
+            print(f'Sending start command to game {self.match_id}')
+            if not self.list_of_games.get(self.match_id):
+                print(f'Initializing game {self.match_id}')
+                await self.initialize_game()
             if self.list_of_games[self.match_id] and not self.list_of_games[self.match_id].isAlive():
                 # Check if both players for this match are connected
                 if self.client_id in self.list_of_players and self.player_1_id in self.list_of_players and self.player_2_id in self.list_of_players:
-                    print(f'Sending start command to game {self.match_id}')
-                    if not self.list_of_games.get(self.match_id):
-                        print(f'Initializing game {self.match_id}')
-                        await self.initialize_game()
+
+                    if self.client_id == self.player_1_id:
+                        self.player = self.list_of_games[self.match_id]._leftPlayer
+
+                    elif self.client_id == self.player_2_id:
+                        self.player = self.list_of_games[self.match_id]._rightPlayer
 
                     self.list_of_games[self.match_id].start()
                     asyncio.create_task(self.game_update())
@@ -233,6 +234,7 @@ class GameConsumerAsBridge(AsyncWebsocketConsumer):
                     print(f'Cannot start game. Both players for this match are not connected yet.')
 
         elif command == 'keyboard':
+            print(f'Updating keyboard for client {self.client_id} with data: {data} i am player {self.player}')
             if self.list_of_games[self.match_id] and self.list_of_games[self.match_id].isAlive() and self.player:
                 if key_status == 'on_press':
                     key = data.get('key')
