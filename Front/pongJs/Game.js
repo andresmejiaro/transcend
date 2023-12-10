@@ -93,7 +93,6 @@ pointLoop(){
 }
 
 remoteGameLogic(){
-    this.sendKeyboardRemote(keysPressed);
     let canvas = receiveRemoteCanvas();
     this.#ball.setPosition(canvas["ball"]["position"]);
     this.#ball.setSize(canvas["ball"]["size"]);
@@ -101,16 +100,16 @@ remoteGameLogic(){
     this.#leftPaddle.setSize(canvas["leftPaddle"]["size"]);
     this.#rightPaddle.setPosition(canvas["rightPaddle"]["position"]);
     this.#rightPaddle.setSize(canvas["rightPaddle"]["size"]);
-    if (this.newScore()){
-        this.#leftPlayer.score = score["p1"];
-        this.#rightPlayer.score = score["p2"];
-    }
+    //if (this.newScore()){
+    //    this.#leftPlayer.score = score["p1"];
+    //    this.#rightPlayer.score = score["p2"];
+    //}
 }
 
 receiveRemoteCanvas(){
-    canvas = {...this.#remoteCanvas};
-    sendWebSocketGameMessage("message",keysPressed);
-    return canvas;
+    data = {... this.#remoteCanvas};
+    sendWebSocketGameMessage("keyboard_update",keysPressed);
+    return data["canvas"];
 }
 
 localGameLogic(){
@@ -185,8 +184,9 @@ gameSetup(){
 
 conexionSetup(matchId){
     this.#remoteCanvas = {}
-    connectGameWebSocket(matchId,this.#remoteCanvas)
+    connectGameWebSocket(matchId, player1, player2, this.#remoteCanvas)
 }
+
 
     start(){
         requestAnimationFrame(() => this.startScreen());

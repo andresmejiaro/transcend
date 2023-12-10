@@ -1,6 +1,6 @@
 let gameSocket;
 
-const connectGameWebSocket = async (matchId, canvasMsg) => {
+const connectGameWebSocket = async (matchId,player1, player2, canvasMsg) => {
     const userId = await getIdFromUsername(sessionStorage.getItem("username"));
 
     return new Promise((resolve, reject) => {
@@ -16,10 +16,10 @@ const connectGameWebSocket = async (matchId, canvasMsg) => {
             resolve(gameSocket);  // Resolve with the WebSocket object
         });
 
-        gameSocket.addEventListener('message', (event) => {
+        gameSocket.addEventListener('game_update', (event) => {
             const data = JSON.parse(event.data);
 
-            if (data.type === 'message') {
+            if (data.type === 'game_update') {
                 //procesar
                 canvasMsg = data;
             }
