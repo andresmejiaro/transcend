@@ -78,7 +78,7 @@ class GameConsumerAsBridge(AsyncWebsocketConsumer):
             game = Game(
                 dictKeyboard=self.keyboard_inputs,
                 leftPlayer=self.left_player,
-                rightPlayer=self.right_player,
+                rightPlayer=self.right_player
             )
             print(f'Trying to add game to index {self.match_id}')
             self.list_of_games[self.match_id] = game
@@ -121,9 +121,9 @@ class GameConsumerAsBridge(AsyncWebsocketConsumer):
             print(f'Connected to match {self.match_id} with client {self.client_id}. Player 1: {self.player_1_id}. Player 2: {self.player_2_id}')
 
             # Check if the game has been initialized
-            if not self.list_of_games.get(self.match_id):
-                print(f'Initializing game {self.match_id}')
-                await self.initialize_game()
+            # if not self.list_of_games.get(self.match_id):
+            #     print(f'Initializing game {self.match_id}')
+            #     await self.initialize_game()
 
             await self.accept()
 
@@ -132,7 +132,7 @@ class GameConsumerAsBridge(AsyncWebsocketConsumer):
             # Check if client is a player or observer
             if self.client_id == self.player_1_id:
                 print(f'Client {self.client_id} is player 1')
-                self.keyboard[self.client_id] = {"up": f"{self.client_id} + up", "down": f"{self.client_id} + down", "left": "xx", "right": "xx"}
+                self.keyboard[self.client_id] = {"up": f"up.{self.player_1_id}", "down": f"down.{self.player_1_id}", "left": "xx", "right": "xx"}
 
                 self.player = self.list_of_games[self.match_id]._leftPlayer
                 self.list_of_players[self.client_id] = self.client_object
@@ -140,7 +140,8 @@ class GameConsumerAsBridge(AsyncWebsocketConsumer):
                 print(f'Player 1: {self.player}')
             elif self.client_id == self.player_2_id:
                 print(f'Client {self.client_id} is player 2')
-                self.keyboard[self.client_id] = {"up": f"{self.client_id} + up", "down": f"{self.client_id} + down", "left": "xx", "right": "xx"}
+                self.keyboard[self.client_id] = {"up": f"up.{self.player_2_id}", "down": f"down.{self.player_2_id}", "left": "xx", "right": "xx"}
+
 
                 self.player = self.list_of_games[self.match_id]._rightPlayer
                 self.list_of_players[self.client_id] = self.client_object
@@ -222,6 +223,10 @@ class GameConsumerAsBridge(AsyncWebsocketConsumer):
                 # Check if both players for this match are connected
                 if self.client_id in self.list_of_players and self.player_1_id in self.list_of_players and self.player_2_id in self.list_of_players:
                     print(f'Sending start command to game {self.match_id}')
+                    if not self.list_of_games.get(self.match_id):
+                        print(f'Initializing game {self.match_id}')
+                        await self.initialize_game()
+
                     self.list_of_games[self.match_id].start()
                     asyncio.create_task(self.game_update())
                 else:
@@ -280,8 +285,8 @@ class GameConsumerAsBridge(AsyncWebsocketConsumer):
 
         formatted_key = f'{key}.{self.client_id}'  # Adjust the key format
         print(f'Trying to update key {formatted_key} for match {self.match_id}')
-        if self.match_id in self.keyboard_inputs and formatted_key in self.keyboard_inputs[self.match_id]:
-            self.keyboard_inputs[self.match_id][formatted_key] = True
+        if self.match_id in self.list_of_keyboard_inputs and formatted_key in self.list_of_keyboard_inputs[self.match_id]:
+            self.list_of_keyboard_inputs[self.match_id][formatted_key] = True
             print(f'Successfully updated key {formatted_key} for match {self.match_id}')
         else:
             print(f'Invalid match_id {self.match_id} or key {formatted_key}')
@@ -291,8 +296,9 @@ class GameConsumerAsBridge(AsyncWebsocketConsumer):
 
         formatted_key = f'{key}.{self.client_id}'  # Adjust the key format
         print(f'Trying to update key {formatted_key} for match {self.match_id}')
-        if self.match_id in self.keyboard_inputs and formatted_key in self.keyboard_inputs[self.match_id]:
-            self.keyboard_inputs[self.match_id][formatted_key] = False
+        if self.match_id in self.list_of_keyboard_inputs and formatted_key in self.list_of_keyboard_inputs[self.match_id]:
+            self.list_of_keyboard_inputs[self.match_id][formatted_key] = False
             print(f'Successfully updated key {formatted_key} for match {self.match_id}')
         else:
             print(f'Invalid match_id {self.match_id} or key {formatted_key}')
+
