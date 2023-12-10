@@ -4,125 +4,196 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pong Game</title>
+    <style>
+        canvas {
+            border: 1px solid black;
+            display: block;
+            margin: 20px auto;
+        }
+    </style>
 </head>
 <body>
-    <h1>Pong Game</h1>
+    <label for="matchId">Match ID:</label>
+    <input type="text" id="matchId" placeholder="Enter Match ID">
+
+    <label for="player1Id">Player 1 ID:</label>
+    <input type="text" id="player1Id" placeholder="Enter Player 1 ID">
+
+    <label for="player2Id">Player 2 ID:</label>
+    <input type="text" id="player2Id" placeholder="Enter Player 2 ID">
 
     <label for="clientId">Client ID:</label>
-    <input type="text" id="clientId" placeholder="Enter Client ID"><br>
+    <input type="text" id="clientId" placeholder="Enter Client ID">
 
-    <label for="player1">Player 1:</label>
-    <input type="text" id="player1" placeholder="Enter Player 1 ID"><br>
+    <label for="scoreLimit">Score Limit:</label>
+    <input type="number" id="scoreLimit" placeholder="Enter Score Limit">
 
-    <label for="player2">Player 2:</label>
-    <input type="text" id="player2" placeholder="Enter Player 2 ID"><br>
+    <button onclick="startGame()">Start Game</button>
 
-    <label for="gameMode">Game Mode:</label>
-    <input type="text" id="gameMode" placeholder="Enter Game Mode"><br>
+    <label for="jsonInput">JSON Input:</label>
+    <textarea id="jsonInput" placeholder="Enter JSON"></textarea>
+    
+    <button onclick="sendJson()">Send JSON</button>
 
-    <label for="matchId">Match ID:</label>
-    <input type="text" id="matchId" placeholder="Enter Match ID"><br>
-
-    <button id="connectButton">Connect</button>
-    <button id="startMatchButton">Start Match</button>
-    <button id="pauseMatchButton">Pause Match</button>
-    <button id="endMatchButton">End Match</button>
-    <button id="startBallButton">Start Ball</button>
-    <button id="stopBallButton">Stop Ball</button>
-
-    <canvas id="pongCanvas" width="800" height="600" style="border:1px solid #000;"></canvas>
+    <canvas id="gameCanvas" width="858" height="525"></canvas>
 
     <script>
-        let socket = null;
-        const canvas = document.getElementById("pongCanvas");
-        const ctx = canvas.getContext("2d");
+        const matchIdInput = document.getElementById('matchId');
+        const player1IdInput = document.getElementById('player1Id');
+        const player2IdInput = document.getElementById('player2Id');
+        const clientIdInput = document.getElementById('clientId');
+        const scoreLimitInput = document.getElementById('scoreLimit');
+        const jsonInput = document.getElementById('jsonInput');
+        const gameCanvas = document.getElementById('gameCanvas');
+        const ctx = gameCanvas.getContext('2d');
 
-        function connect() {
-            const clientId = document.getElementById("clientId").value;
-            const player1 = document.getElementById("player1").value;
-            const player2 = document.getElementById("player2").value;
-            const gameMode = document.getElementById("gameMode").value;
-            const matchId = document.getElementById("matchId").value;
+        let ws;
 
-            const socketURL = `ws://localhost:8000/ws/pong/${matchId}/?client_id=${clientId}&player_1=${player1}&player_2=${player2}&game_mode=${gameMode}`;
+        function startGame() {
+            const matchId = matchIdInput.value;
+            const player1Id = player1IdInput.value;
+            const player2Id = player2IdInput.value;
+            const clientId = clientIdInput.value;
+            const scoreLimit = scoreLimitInput.value;
 
-            socket = new WebSocket(socketURL);
+            const uri = `ws://localhost:8000/ws/pong/${matchIdInput.value}/?player_1_id=${player1IdInput.value}&player_2_id=${player2IdInput.value}&client_id=${clientIdInput.value}&scorelimit=${scoreLimitInput.value}`;
 
-            socket.addEventListener("open", function (event) {
-                console.log("WebSocket connection opened:", event);
+            ws = new WebSocket(uri);
+
+            ws.addEventListener('open', () => {
+                console.log('WebSocket connection opened.');
             });
 
-            socket.addEventListener("message", function (event) {
-                console.log("WebSocket message received:", event);
+            ws.addEventListener('close', () => {
+                console.log('WebSocket connection closed.');
+            });
+
+            ws.addEventListener('message', (event) => {
                 const data = JSON.parse(event.data);
-                if (data.command === "match_state") {
-                    drawPong(data.match_state);
-                }
-            });
+                console.log('Received message:', data);
 
-            socket.addEventListener("close", function (event) {
-                console.log("WebSocket connection closed:", event);
+                updateGameCanvas(data);
             });
         }
 
-        function drawPong(matchState) {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        function sendJson() {
+            const jsonMessage = jsonInput.value;
 
-            // Draw paddles
-            matchState.list_of_players.forEach(player => {
-                const paddle = player.paddle;
-                ctx.fillRect(paddle.position.x, paddle.position.y, paddle.width, paddle.height);
-            });
-
-            // Draw ball
-            const ball = matchState.ball;
-            ctx.beginPath();
-            ctx.arc(ball.position.x, ball.position.y, ball.width / 2, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.closePath();
-        }
-
-        function sendCommand(command, info = null) {
-            const message = {
-                command: command,
-                info: info
-            };
-            socket.send(JSON.stringify(message));
-        }
-
-        window.addEventListener("beforeunload", function () {
-            if (socket !== null && socket.readyState === WebSocket.OPEN) {
-                socket.close();
+            // Send the JSON message to the server
+            if (ws && ws.readyState === WebSocket.OPEN) {
+                ws.send(jsonMessage);
+                console.log('Sent JSON message:', jsonMessage);
+            } else {
+                console.error('WebSocket connection not open.');
             }
+        }
+
+        document.addEventListener('keydown', (event) => {
+            // Handle arrow key presses and send messages to the server
+            handleArrowKeyPress(event.key);
         });
 
-        document.addEventListener("DOMContentLoaded", function () {
-            document.getElementById("connectButton").addEventListener("click", connect);
-            document.getElementById("startMatchButton").addEventListener("click", function () {
-                sendCommand("start_match");
-            });
-            document.getElementById("pauseMatchButton").addEventListener("click", function () {
-                sendCommand("pause_match");
-            });
-            document.getElementById("endMatchButton").addEventListener("click", function () {
-                sendCommand("end_match");
-            });
-            document.getElementById("startBallButton").addEventListener("click", function () {
-                sendCommand("start_ball");
-            });
-            document.getElementById("stopBallButton").addEventListener("click", function () {
-                sendCommand("stop_ball");
+        document.addEventListener('keyup', (event) => {
+            // Handle arrow key releases and send messages to the server
+            handleArrowKeyRelease(event.key);
+        });
+
+
+        function updateGameCanvas(data) {
+            ctx.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
+
+            drawPongGame(data);
+        }
+
+        function sendKeyPress(key) {
+            const jsonMessage = JSON.stringify({
+                command: 'keyboard',
+                key_status: 'on_press',
+                key: key,
             });
 
-            // Handle keyboard input for player movement
-            document.addEventListener("keydown", function (event) {
-                if (event.key === "ArrowUp") {
-                    sendCommand("move_paddle_up");
-                } else if (event.key === "ArrowDown") {
-                    sendCommand("move_paddle_down");
-                }
+            // Send the JSON message to the server
+            if (ws && ws.readyState === WebSocket.OPEN) {
+                ws.send(jsonMessage);
+                console.log('Sent JSON message:', jsonMessage);
+            } else {
+                console.error('WebSocket connection not open.');
+            }
+        }
+
+        function handleArrowKeyPress(key) {
+            // Customize this based on your game's key bindings
+            switch (key) {
+                case 'ArrowUp':
+                    sendKeyPress('up');
+                    break;
+                case 'ArrowDown':
+                    sendKeyPress('down');
+                    break;
+                case 'ArrowLeft':
+                    sendKeyPress('left');
+                    break;
+                case 'ArrowRight':
+                    sendKeyPress('right');
+                    break;
+            }
+        }
+
+        function sendRelease(key) {
+            const jsonMessage = JSON.stringify({
+                command: 'keyboard',
+                key_status: 'on_release',
+                key: key,
             });
-        });
+
+            // Send the JSON message to the server
+            if (ws && ws.readyState === WebSocket.OPEN) {
+                ws.send(jsonMessage);
+                console.log('Sent JSON message:', jsonMessage);
+            } else {
+                console.error('WebSocket connection not open.');
+            }
+        }
+
+        function handleArrowKeyRelease(key) {
+            // Customize this based on your game's key bindings
+            switch (key) {
+                case 'ArrowUp':
+                    sendRelease('up');
+                    break;
+                case 'ArrowDown':
+                    sendRelease('down');
+                    break;
+                case 'ArrowLeft':
+                    sendRelease('left');
+                    break;
+                case 'ArrowRight':
+                    sendRelease('right');
+                    break;
+            }
+        }
+
+        function drawPongGame(data) {
+            for (const timestamp in data) {
+                const gameData = data[timestamp];
+
+                drawRect(gameData.canvas.ball.position, gameData.canvas.ball.size, 'blue');
+                drawRect(gameData.canvas.leftPaddle.position, gameData.canvas.leftPaddle.size, 'green');
+                drawRect(gameData.canvas.rightPaddle.position, gameData.canvas.rightPaddle.size, 'red');
+
+                const scores = gameData.score;
+                ctx.fillStyle = 'black';
+                ctx.font = '20px Arial';
+                ctx.fillText(`${player1IdInput.value}: ${scores[player1IdInput.value]} - ${player2IdInput.value}: ${scores[player2IdInput.value]}`, 10, 20);
+            }
+        }
+
+        function drawRect(position, size, color) {
+            ctx.fillStyle = color;
+            ctx.fillRect(position.x, position.y, size.x, size.y);
+        }
+
+        // ... (unchanged part for arrow key handling)
     </script>
 </body>
 </html>

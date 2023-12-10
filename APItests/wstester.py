@@ -1,25 +1,23 @@
-import argparse
 import asyncio
 import websockets
 import json
 
-"""
-How to use:
-python3 wstester.py --client_id 1 --type command --command get_website_user_list --data '{}'
+async def websocket_client():
+    match_id = input("Enter Match ID: ")
+    player_1_id = input("Enter Player 1 ID: ")
+    player_2_id = input("Enter Player 2 ID: ")
+    client_id = input("Enter Client ID: ")
+    message_type = input("Enter Message Type: ")
+    command = input("Enter Command: ")
+    data = input("Enter Data (JSON format): ")
 
-python3 wstester.py --client_id 1 --type private_message --command private_message --data '{"recipient_id": "2", "message": "Hello, World!"}'
-
-python3 wstester.py --client_id 1 --type group_message --command group_message --data '{"group_name": "website_lobby", "message": "Hello, World!"}'
-
-"""
-
-async def websocket_client(client_id, message_type, command, data):
-    uri = f"ws://localhost:8000/ws/lobby/?client_id={client_id}"
+    uri = f"ws://localhost:8000/ws/pong/{match_id}/?player_1_id={player_1_id}&player_2_id={player_2_id}&client_id={client_id}"
+    
     async with websockets.connect(uri) as websocket:
         message = {
             'type': message_type,
             'command': command,
-            'data': data
+            'data': json.loads(data)
         }
         await websocket.send(json.dumps(message))
         print(f"Sent message: {json.dumps(message)}")
@@ -28,23 +26,20 @@ async def websocket_client(client_id, message_type, command, data):
             while True:
                 response = await websocket.recv()
                 print(f"Received response: {response}")
+                try:
+                    response_data = json.loads(response)
+                    print(f"Response type: {response_data.get('type')}")
+                    print(f"Response command: {response_data.get('command')}")
+                    print(f"Response data: {response_data.get('data')}")
+                except json.JSONDecodeError:
+                    print("Received non-JSON response.")
         except websockets.exceptions.ConnectionClosed:
             print("WebSocket connection closed.")
         except KeyboardInterrupt:
             print("Manually interrupted. Exiting...")
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="WebSocket Client for LobbyConsumer testing")
-    parser.add_argument("--client_id", type=int, required=True, help="Client ID for testing LobbyConsumer")
-    parser.add_argument("--type", required=True, help="Message type")
-    parser.add_argument("--command", required=True, help="Command")
-    parser.add_argument("--data", default="{}", help="Data for the command")
-
-    args = parser.parse_args()
-
     try:
-        asyncio.get_event_loop().run_until_complete(
-            websocket_client(args.client_id, args.type, args.command, json.loads(args.data))
-        )
+        asyncio.get_event_loop().run_until_complete(websocket_client())
     except KeyboardInterrupt:
         print("Manually interrupted. Exiting...")
