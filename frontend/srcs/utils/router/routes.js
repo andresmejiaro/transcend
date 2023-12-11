@@ -30,8 +30,8 @@ const urlRoutes = {
     template: directory + "signin/signin.html",
     title: urlPageTitle + " - Sing in",
     description: "This is the signin page",
-    js: [directory + "sigin/sigin.js"],
-    css: [directory + "signin/signin.css"]
+    js: [directory + "signin/signin.js"],
+    css: [directory + "signin/signin.css", "./srcs/assets/css/auth-inputs.css"]
   },
 
   "/signup": {
@@ -39,14 +39,14 @@ const urlRoutes = {
     title: urlPageTitle + " - Sing up",
     description: "This is the signup page",
     js: [directory + "signup/signup-handler.js"],
-    css: [directory + "signup/signup.css"]
+    css: [directory + "signup/signup.css", "./srcs/assets/css/auth-inputs.css"]
   },
   
   "/otp": {
     template: directory + "otp/otp.html",
     title: urlPageTitle,
     description: "This is the 2FA page",
-    js: [directory + "opt/otp-handler.js"],
+    js: [directory + "otp/otp-handler.js", "./srcs/utils/google-auth-utils.js"],
   },
 
   "/callback": {
@@ -73,7 +73,7 @@ const urlRoutes = {
     template: directory + "profilesettings/user-settings.html",
     title: urlPageTitle + " - Profile",
     description: "This is the user page",
-    js: [directory + "profilesettings/user-settings.js"],
+    js: [directory + "profilesettings/user-settings.js", "./srcs/utils/google-auth-utils.js"],
   },
 
   "/tournaments": {

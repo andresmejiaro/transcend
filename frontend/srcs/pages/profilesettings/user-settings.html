@@ -1,14 +1,3 @@
-<!-- <h2>Update Avatar</h2> -->
-<!-- <form id="updateAvatarForm" enctype="multipart/form-data">
-    <div class="mb-3">
-        <label for="avatar" class="form-label">Choose Avatar</label>
-        <input type="file" class="form-control" id="avatar" name="avatar" accept="image/*" required>
-        <div id="avatarMsg"></div>
-    </div>
-    <button type="submit" class="btn btn-primary" id="updateAvatarBtn">Update Avatar</button>
-</form>
--->
-
 <div class="row" style="margin-top: 5rem; min-height: 70vh">
   <div class="col-md-4 text-center">
     <form id="updateAvatarForm" enctype="multipart/form-data">
@@ -18,7 +7,7 @@
       >
         <div>
           <img
-            src="./srcs/assets/imgs/default-avatar.jpeg"
+            src="../assets/imgs/default-avatar.jpeg"
             id="avatarImageUserSettings"
             alt="Avatar"
             class="img-fluid"
@@ -42,7 +31,7 @@
       </div>
     </form>
     <div class="mt-auto">
-      <a href="/profile" class="btn bg-white"> Back to Profile </a>
+      <a href="/user" class="btn bg-white"> Back to Profile </a>
     </div>
   </div>
   <div class="col-md-8 text-center">
@@ -88,5 +77,20 @@
       </div>
       <button class="btn bg-white">Edit</button>
     </form>
+    <div>
+      <h4 class="mt-5">Google Authenticator</h4>
+      <div class="d-flex justify-content-center">
+        <button class="btn btn-light" id="startGA">Add</button>
+        <button class="btn btn-light" id="removeGA" style="display: none">Remove</button>
+      </div>
+      <div class="mt-4 text-center" style="display: none" id="gaDiv">
+        <img src="" alt="QR Code" id="qrcodeImage" style="width: 200px" />
+        <p id="statusMessage"></p>
+        <form id="totpForm">
+          <input type="text" id="totpCode" placeholder="Enter TOTP code" />
+          <button type="button" onclick="verifyTOTP()">Verify</button>
+        </form>
+      </div>
+    </div>
   </div>
 </div>

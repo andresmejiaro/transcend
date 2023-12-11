@@ -18,6 +18,7 @@ class CustomUser(AbstractUser):
         self.save()
 
     is_2fa_enabled = models.BooleanField(default=False)
+    is_2fa_setup_complete = models.BooleanField(default=False)
     secret_key = models.CharField(max_length=255, null=True, blank=True)
     def enable_2fa(self, secret_key):
         self.is_2fa_enabled = True

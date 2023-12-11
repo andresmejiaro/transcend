@@ -1,0 +1,35 @@
+.input-signup {
+	border: 5px solid white !important;
+	background-color: #191A32 !important;
+}
+
+.input-signup:not(:focus),
+.input-signup:focus,
+.input-signup::placeholder {
+	color: white !important;
+}
+
+.input-signup::placeholder {
+	opacity: 0.7 !important;
+}
+
+
+.input-group-signup {
+	border: 5px solid white !important;
+	background-color: #191A32 !important;
+}
+
+.input-group-signup input {
+	background-color: #191A32 !important;
+	border: 0;
+}
+
+.input-group-signup input:not(:focus),
+.input-group-signup input:focus,
+.input-group-signup input::placeholder {
+	color: white !important;
+}
+
+.input-group-signup input::placeholder {
+	opacity: 0.7 !important;
+}

@@ -198,8 +198,8 @@ document
   });
 
 function togglePassword() {
-  let passwordInput = document.getElementById("passwordSignup");
-  let eyeIcon = document.getElementById("togglePassword");
+  var passwordInput = document.getElementById("passwordSignup");
+  var eyeIcon = document.getElementById("togglePassword");
 
   if (passwordInput.type === "password") {
     passwordInput.type = "text";
@@ -213,8 +213,8 @@ function togglePassword() {
 }
 
 function toggleRePassword() {
-  let passwordInput = document.getElementById("confirmPasswordSignup");
-  let eyeIcon = document.getElementById("toggleRePassword");
+  var passwordInput = document.getElementById("confirmPasswordSignup");
+  var eyeIcon = document.getElementById("toggleRePassword");
 
   if (passwordInput.type === "password") {
     passwordInput.type = "text";

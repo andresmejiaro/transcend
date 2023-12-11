@@ -95,9 +95,9 @@ const getListofTournaments = async () => {
                 </div>
                 <div class="d-flex align-items-center">
                     <p style="margin-bottom: 0 !important; margin-right: 8px;">${tournament.players.length}</p>
-                    <img src="../assets/imgs/adri.svg" style="margin-right: 8px;" />
+                    <img src="./srcs/assets/imgs/adri.svg" style="margin-right: 8px;" />
                     <button type="button" class="btn" data-tournament-id="${tournament.id}">
-                    <img src="../assets/buttons/join-tournament.svg" alt="" class="img-fluid">
+                    <img src="./srcs/assets/buttons/join-tournament.svg" alt="" class="img-fluid">
                     </button> 
                 </div>        
             </div>

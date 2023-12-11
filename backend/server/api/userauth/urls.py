@@ -4,7 +4,7 @@ from django.conf.urls.static import static
 from .views.auth import signup_view, login_view
 from .views.user import info_me_view, update_avatar_view, get_user_id, user_exists
 from .views.token import send_csrf_token_view, validate_jwt_token_view
-from .views.googleauth import enable_2fa, disable_2fa, display_qr_code, verify_totp_code
+from .views.googleauth import enable_2fa, disable_2fa, display_qr_code, verify_totp_code, user_2fa_setup_complete
 
 urlpatterns = [
     path('user/signup/', signup_view, name="signup"),
@@ -23,6 +23,7 @@ urlpatterns = [
     path('disable_2fa/<int:user_id>/', disable_2fa, name='disable_2fa'),
     path('display_qr_code/<int:user_id>/', display_qr_code, name='display_qr_code'),
     path('verify_totp_code/', verify_totp_code, name='verify_totp_code'),
+	path('is_2fa_setup_complete/', user_2fa_setup_complete, name="is_2fa_setup_complete")
 ] 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
