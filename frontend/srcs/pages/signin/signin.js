@@ -45,7 +45,7 @@ async function validateOTP(username, token) {
 }
 
 const handle2fA = async (username, token) => {
-  var loginModal = new bootstrap.Modal(document.getElementById("loginModal"));
+  let loginModal = new bootstrap.Modal(document.getElementById("loginModal"));
   loginModal.show();
   document.getElementById("checkOTP").addEventListener("click", function () {
 	validateOTP(username, token);
@@ -160,8 +160,8 @@ document
   });
 
 function togglePassword() {
-  var passwordInput = document.getElementById("password");
-  var eyeIcon = document.getElementById("togglePassword");
+  let passwordInput = document.getElementById("password");
+  let eyeIcon = document.getElementById("togglePassword");
 
   if (passwordInput.type === "password") {
 	passwordInput.type = "text";

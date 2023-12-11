@@ -345,7 +345,7 @@ getListofTournaments();
 form.addEventListener("submit", function (event) {
   event.preventDefault();
   console.log("From submitted!");
-  var closeButton = document.querySelector("#exampleModal .btn-close");
+  let closeButton = document.querySelector("#exampleModal .btn-close");
   closeButton.click();
   createRequest();
 });

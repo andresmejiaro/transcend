@@ -4,7 +4,7 @@ function showButtons() {
   }, 1000);
 }
 
-var button = document.getElementById("intra");
+let button = document.getElementById("intra");
 
 const handleButtonClick = async () => {
   const clientId =
