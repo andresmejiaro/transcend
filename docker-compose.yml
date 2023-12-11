@@ -4,11 +4,11 @@ services:
   # Django web container for the Django app
   django:
     build:
-      context: ./BE/
+      context: ./backend/
       dockerfile: Dockerfile
     container_name: 'django'
     volumes:
-      - ./BE:/app/
+      - ./backend:/app/
     ports:
       - "8000:8000"
     depends_on:
@@ -68,11 +68,11 @@ services:
   # Daphne container for the websockets
   daphne:
     build:
-      context: ./BE/
+      context: ./backend/
       dockerfile: Dockerfile.daphne
     container_name: 'daphne'
     volumes:
-      - ./BE:/app/
+      - ./backend:/app/
     depends_on:
       - db
     env_file:
