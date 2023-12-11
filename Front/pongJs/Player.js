@@ -5,7 +5,7 @@ class Player {
 
     constructor(name = "Player", binds = {up:"UNUSED_DEFAULT_KEY", 
     down:"UNUSED_DEFAULT_KEY", left:"UNUSED_DEFAULT_KEY", 
-    right:"UNUSED_DEFAULT_KEY"}, screenSide){
+    right:"UNUSED_DEFAULT_KEY"}){
         this.#name = name;
         this.#binds = binds;
         this.#score = 0;
