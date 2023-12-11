@@ -71,7 +71,7 @@ def login_view(request):
 			
             if user.check_password(password):
                 jwt_token = create_jwt_token(user.id, user.username)
-                if user.is_2fa_enabled:
+                if user.is_2fa_enabled and user.is_2fa_setup_complete:
                     response = JsonResponse({'status': '2FA', 'message': 'Login successful', 'token': jwt_token})
                 else:
                     response = JsonResponse({'status': 'ok', 'message': 'Login successful', 'token': jwt_token})

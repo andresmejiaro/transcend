@@ -1,0 +1,104 @@
+<div class="row min-vh-100">
+  <div class="col-md-8 form-container">
+    <div class="row justify-content-center text-center mt-5">
+      <h3>Sign up</h3>
+    </div>
+    <div class="col-md-6 mt-5 mx-auto text-white text-center">
+      <form id="signupForm">
+        <div class="form-group mb-3">
+          <label for="usernameSignupForm" class="form-label">Username</label>
+          <input
+            type="text"
+            class="form-control input-signup"
+            id="usernameSignupForm"
+            placeholder="Enter your username"
+            required
+          />
+          <div class="invalid-feedback" id="usernameHelp"></div>
+        </div>
+
+        <div class="form-group mb-3">
+          <label for="fullname" class="form-label">Fullname</label>
+          <input
+            type="text"
+            class="form-control input-signup"
+            id="fullname"
+            placeholder="Enter your fullname"
+            required
+          />
+          <div class="invalid-feedback" id="fullnameHelp"></div>
+        </div>
+
+        <div class="form-group mb-3">
+          <label for="email" class="form-label">Email</label>
+          <input
+            type="email"
+            class="form-control input-signup"
+            id="email"
+            placeholder="Enter your email"
+            required
+          />
+          <div class="invalid-feedback" id="emailHelp"></div>
+        </div>
+
+        <div class="mb-3">
+          <label for="passwordSignup" class="form-label">Password</label>
+          <div class="input-group input-group-signup">
+            <input
+              type="password"
+              class="form-control"
+              id="passwordSignup"
+              placeholder="Enter your password"
+              required
+            />
+            <span
+              class="input-group-text bg-transparent text-white border-0"
+              id="eyeIcon"
+            >
+              <i class="bi bi-eye" id="togglePassword" style="color: #D97E39;"></i>
+            </span>
+          </div>
+          <div class="invalid-feedback" id="passwordHelpSignup" style="display: block;"></div>
+        </div>
+
+        <div class="mb-3">
+          <label for="confirmPasswordSignup" class="form-label"
+            >Confirm Password</label
+          >
+          <div class="input-group input-group-signup">
+            <input
+              type="password"
+              class="form-control"
+              id="confirmPasswordSignup"
+              placeholder="Confirm your password"
+              required
+            />
+            <span
+              class="input-group-text bg-transparent text-white border-0"
+              id="eyeIcon"
+            >
+              <i class="bi bi-eye" id="toggleRePassword" style="color: #D97E39;"></i>
+            </span>
+          </div>
+          <div class="invalid-feedback" id="confirmPasswordHelpSignup" style="display: block;"></div>
+        </div>
+        <div
+          class="alert alert-danger"
+          id="errorAlert"
+          style="display: none"
+        ></div>
+        <div style="text-align: center;">
+          <button type="submit" class="btn mt-3">
+            <img src="./srcs/assets/buttons/signup.svg" alt="" class="img-fluid">
+          </button>
+        </div>
+      </form>
+
+      <h6 class="mt-5">Already have an account?</h6>
+      <h6>
+        <a style="color: #699AB3;" href="/signin">Sign In</a>
+      </h6>
+    </div>
+  </div>
+  <div class="col-md-4 image-container"></div>
+</div>

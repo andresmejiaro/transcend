@@ -54,10 +54,10 @@ services:
   nginx:
     container_name: 'nginx'
     build:
-      context: .
+      context: ./
       dockerfile: nginx/Dockerfile
     volumes:
-      - ./Front:/usr/share/nginx/html
+      - ./frontend:/usr/share/nginx/html
     ports:
       - "3000:3000"
     networks:

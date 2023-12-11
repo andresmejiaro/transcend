@@ -10,7 +10,7 @@ WORKDIR /usr/share/nginx/html
 # COPY Front /usr/share/nginx/html
 
 # Copy the custom Nginx configuration
-COPY nginx/default.conf /etc/nginx/conf.d/
+COPY nginx/conf/default.conf /etc/nginx/conf.d/
 
 # Expose port 3000
 EXPOSE 3000
