@@ -3,7 +3,6 @@ const directory = "./srcs/pages/"
 
 
 const urlRoutes = {
-
   404: {
     template: directory + "404/404.html",
     title: urlPageTitle + " - 404",
@@ -49,11 +48,11 @@ const urlRoutes = {
     js: [directory + "otp/otp-handler.js", "./srcs/utils/google-auth-utils.js"],
   },
 
-  "/callback": {
-    template: directory + "callback/callback.html",
+  "/intra": {
+    template: directory + "intra/intra.html",
     title: urlPageTitle,
-    description: "This is the callback page",
-    js: [directory + "callback/callback.js"],
+    description: "This is the intra handler page",
+    js: [directory + "intra/callback.js"],
   },
 
   "/play!": {
@@ -73,7 +72,8 @@ const urlRoutes = {
     template: directory + "profilesettings/user-settings.html",
     title: urlPageTitle + " - Profile",
     description: "This is the user page",
-    js: [directory + "profilesettings/user-settings.js", "./srcs/utils/google-auth-utils.js"],
+    js: [directory + "profilesettings/user-settings.js"],
+    // js: [directory + "profilesettings/user-settings.js", "./srcs/utils/google-auth-utils.js"],
   },
 
   "/tournaments": {
@@ -94,9 +94,12 @@ const urlRoutes = {
     template: directory + "2plygame/2plygame.html",
     title: urlPageTitle,
     description: "This is the local pong page",
-    js: ["./srcs/utils/pongJs/environment.js","./srcs/utils/pongJs/MovingRectangle.js",
-    "./srcs/utils/pongJs/Ball.js","./srcs/utils/pongJs/Paddle.js","./srcs/utils/pongJs/Player.js", 
-    "./srcs/utils/pongJs/Game.js","./srcs/utils/pongJs/main.js"],
+    // js: ["./srcs/utils/pongJs/environment.js","./srcs/utils/pongJs/MovingRectangle.js",
+    // "./srcs/utils/pongJs/Ball.js","./srcs/utils/pongJs/Paddle.js","./srcs/utils/pongJs/Player.js", 
+    // "./srcs/utils/pongJs/Game.js","./srcs/utils/pongJs/main.js"],
+    js: [directory + "2plygame/game.js"],
     css: [directory + "2plygame/2plygame.css"]
   }
 };
+
+const allowedLocations = ["/", "/home", "/login", "/signin", "/signup", "/intra", "/otp"];

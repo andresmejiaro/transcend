@@ -11,8 +11,10 @@ document.addEventListener("click", (e) => {
 
 const ifLoggedRedirect = (location) => {
   if (!isLogged()) {
-    if (location != "/signin" && location != "/signup" && location != "/home" && location != "/" && location != "/callback" && location != "/otp")
-      window.location.href = "/home";
+    if (!allowedLocations.includes(window.location.pathname)) {
+      console.log("router logout");
+      handleLogout();
+    }
   };
 };
 
@@ -75,7 +77,7 @@ const urlLocationHandler = async () => {
   const navRouter = document.getElementById("nav-router");
   if (navRouter) {
     const existingContent = navRouter.innerHTML.trim();
-    if (!existingContent.includes("nav-logged")) {
+    if (!existingContent) {
       if (isLogged()) {
         navRouter.innerHTML = await fetch(direc + "pages/navbar/nav-logged.html").then(
           (response) => response.text()

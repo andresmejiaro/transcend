@@ -27,5 +27,7 @@ django_venv/
 .vscode/
 *.pyc
 
+.DS_Store
+
 # Ignore secrets and sensitive information
 secret_key.txt  # file containing secret key

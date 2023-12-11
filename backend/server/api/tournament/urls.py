@@ -11,6 +11,7 @@ urlpatterns = [
     # Match
     path('match/create/', match_create, name='creatematch'),
     path('match/', match_list, name='listmatches'),
+    path('match/available/', match_available, name='available'),
     path('match/<int:pk>/', match_operations, name="team_detail"),
     # Round
     path('round/create/', round_create, name='round_create'),

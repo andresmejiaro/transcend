@@ -60,8 +60,8 @@ async function makeRequest(useCsrf, url, options, queries) {
   }
 
   const response = await fetch(url, options);
+
   if (!response.ok) {
-    const allowedLocations = ["/login", "/signup", "/home", "/", "/callback", "/otp"];
     if (!allowedLocations.includes(window.location.pathname)) {
       handleLogout();
     }

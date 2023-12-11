@@ -17,7 +17,7 @@ class Tournament(models.Model):
 
 class Match(models.Model):
     player1 = models.ForeignKey(User, on_delete=models.CASCADE, related_name='player1')
-    player2 = models.ForeignKey(User, on_delete=models.CASCADE, related_name='player2')
+    player2 = models.ForeignKey(User, on_delete=models.CASCADE, related_name='player2', null=True)
     player1_score = models.IntegerField()
     player2_score = models.IntegerField()
     winner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='winner', blank=True, null=True)

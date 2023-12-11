@@ -1,18 +1,18 @@
-DOCKER =  docker
-COMPOSE =  docker-compose -f docker-compose.yml
+DOCKER = docker
+COMPOSE = docker-compose -f docker-compose.yml
 
 all: up
 
-s: 
+s:
 	@echo "\033[1;33mStarting containers\033[0m"
-	docker-compose -f docker-compose.yml up -d --build
-	docker-compose up
+	@docker-compose -f docker-compose.yml up -d --build
+	@docker-compose up
 
 up:
 	@echo "\033[1;33mStarting containers\033[0m"
 	@$(COMPOSE) up -d --build
 	@$(DOCKER)-compose up
-	
+
 down:
 	@echo "\033[1;33mStopping containers\033[0m"
 	@$(DOCKER)-compose down
@@ -50,3 +50,5 @@ status:
 	@$(DOCKER) volume ls
 	@echo "\n\033[1;33mNetworks\033[0m"
 	@$(DOCKER) network ls
+
+
