@@ -196,14 +196,14 @@ def match_create(request):
             player1_score = data.get('player1_score', 0)
             player2_score = data.get('player2_score', 0)
             winner_id = data.get('winner', None)
-            active = data.get('active')
+            active = data.get('active', True)
 
             # Convert player1_id and player2_id to User instances
             player1 = User.objects.get(id=player1_id)
             player2 = User.objects.get(id=player2_id)
 
-            if not (player1 and player2):
-                return JsonResponse({"status": "error", "message": "Invalid players"}, status=400)
+            # if not (player1 and player2):
+            #     return JsonResponse({"status": "error", "message": "Invalid players"}, status=400)
             if winner_id is not None:
                 try:
                     winner_user = User.objects.get(id=winner_id)
