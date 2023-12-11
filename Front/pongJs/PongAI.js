@@ -54,7 +54,15 @@ class PongAI {
                 + this.#canvas["ball"]["position"]["x"];
             let collisionPoint = this.#canvas["ball"]["position"]["y"] +
                 this.#ballspeed["y"] * remainingX /this.#ballspeed["x"];
-            this.#collisionPoint = collisionPoint % canvas.height;
+            if (collisionPoint < 0){
+                collisionPoint = -collisionPoint;
+            }
+            let nScreens = Math.floor(collisionPoint/canvas.height);
+            collisionPoint = collisionPoint % canvas.height;
+            if (nScreens % 2 == 1)
+                this.#collisionPoint = canvas.height - collisionPoint % canvas.height;
+            else 
+                this.#collisionPoint = collisionPoint % canvas.height;
             return;
         }
         this.#collisionPoint = canvas.height / 2;        
