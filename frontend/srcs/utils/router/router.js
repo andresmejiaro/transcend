@@ -11,13 +11,8 @@ document.addEventListener("click", (e) => {
 
 const ifLoggedRedirect = (location) => {
   if (!isLogged()) {
-<<<<<<< HEAD:Front/js/url-router.js
-    if (location != "/login" && location != "/signup" && location != "/home" && location != "/" && location != "/callback")
-      window.location.href = "/home-logged";
-=======
     if (location != "/signin" && location != "/signup" && location != "/home" && location != "/" && location != "/callback" && location != "/otp")
       window.location.href = "/home";
->>>>>>> develop:frontend/srcs/utils/router/router.js
   };
 };
 
