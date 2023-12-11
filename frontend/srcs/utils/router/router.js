@@ -11,8 +11,10 @@ document.addEventListener("click", (e) => {
 
 const ifLoggedRedirect = (location) => {
   if (!isLogged()) {
-    if (location != "/signin" && location != "/signup" && location != "/home" && location != "/" && location != "/callback" && location != "/otp")
-      window.location.href = "/home";
+    if (!allowedLocations.includes(window.location.pathname)) {
+      console.log("router logout");
+      handleLogout();
+    }
   };
 };
 

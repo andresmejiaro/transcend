@@ -72,7 +72,7 @@ const tryFormPostIntra = async (data) => {
       }),
     });
 
-    if (response.status === "ok") {
+    if (response.status == "ok") {
       sessionStorage.setItem("username", username);
       sessionStorage.setItem("jwt", response.token);
     } else {
@@ -122,7 +122,6 @@ async function getUserInfo(accessToken) {
     }
 
     userData = await response.json();
-    document.getElementById("user").innerHTML = userData.displayname;
     intrahandler(userData);
   } catch (error) {
     console.error("Error fetching user information:", error.message);
@@ -130,19 +129,15 @@ async function getUserInfo(accessToken) {
 }
 
 async function handleCallback() {
-  // Extract the authorization code from the URL query parameters
   const urlParams = new URLSearchParams(window.location.search);
   const authorizationCode = urlParams.get("code");
 
   if (authorizationCode) {
-    // Replace with your actual client ID, client secret, and redirect URI
-    const clientId ="u-s4t2ud-ca3a07a81bac42c6b896a950e6bcce0a4072c14b72a8aea1e48f732b55dd58e2";
-    const clientSecret ="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"; // Replace with your actual client secret
-    const redirectUri = "http://localhost:3000/callback";
+    const clientId ="u-s4t2ud-8a3d7b6ac3c28259758ac83a1d842d4a448f4bc3d0afadbc90eb50f6c29083c7";
+    const clientSecret ="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";
+    const redirectUri = "http://localhost:3000/intra";
 
     const tokenUrl = "https://api.intra.42.fr/oauth/token";
-
-    console.log(`grant_type=authorization_code&client_id=${clientId}&client_secret=${clientSecret}&code=${authorizationCode}&redirect_uri=${encodeURIComponent(redirectUri)}`);
 	try {
 		const response = await fetch(tokenUrl, {
 		  method: "POST",
