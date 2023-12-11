@@ -13,7 +13,7 @@ class Game {
         this.#rightPlayer = rightPlayer;
         this.#scoreLimit  = 11;
         this.#background = new Image();
-        this.#background.src = './assets/game/table.svg';
+        this.#background.src = './srcs/assets/game/table.svg';
         this.#backgroundLoaded = false;
         this.#background.onload = () => {this.#backgroundLoaded = true ;};
     }

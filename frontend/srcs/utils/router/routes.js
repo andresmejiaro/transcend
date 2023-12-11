@@ -27,7 +27,7 @@ const urlRoutes = {
   },
 
   "/signin": {
-    template: directory + "/signin/signin.html",
+    template: directory + "signin/signin.html",
     title: urlPageTitle + " - Sing in",
     description: "This is the signin page",
     js: [directory + "sigin/sigin.js"],
@@ -94,9 +94,9 @@ const urlRoutes = {
     template: directory + "2plygame/2plygame.html",
     title: urlPageTitle,
     description: "This is the local pong page",
-    js: ["./srcs/utils/pongJs/environment.js","./pongJs/MovingRectangle.js",
-    "./pongJs/Ball.js","./pongJs/Paddle.js","./pongJs/Player.js", 
-    "./pongJs/Game.js","./pongJs/main.js"],
+    js: ["./srcs/utils/pongJs/environment.js","./srcs/utils/pongJs/MovingRectangle.js",
+    "./srcs/utils/pongJs/Ball.js","./srcs/utils/pongJs/Paddle.js","./srcs/utils/pongJs/Player.js", 
+    "./srcs/utils/pongJs/Game.js","./srcs/utils/pongJs/main.js"],
     css: [directory + "2plygame/2plygame.css"]
   }
 };
