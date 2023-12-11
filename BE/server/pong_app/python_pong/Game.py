@@ -107,7 +107,8 @@ class Game:
 
 	def stop(self):
 		print("Stopping game")
-		self._bgt.join()
+		self._bgt._scoreLimit = 0
+
 
 
 	def reportScreen(self):
