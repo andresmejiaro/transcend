@@ -94,9 +94,10 @@ const urlRoutes = {
     template: directory + "2plygame/2plygame.html",
     title: urlPageTitle,
     description: "This is the local pong page",
-    js: ["./srcs/utils/pongJs/environment.js","./srcs/utils/pongJs/MovingRectangle.js",
-    "./srcs/utils/pongJs/Ball.js","./srcs/utils/pongJs/Paddle.js","./srcs/utils/pongJs/Player.js", 
-    "./srcs/utils/pongJs/Game.js","./srcs/utils/pongJs/main.js"],
+    // js: ["./srcs/utils/pongJs/environment.js","./srcs/utils/pongJs/MovingRectangle.js",
+    // "./srcs/utils/pongJs/Ball.js","./srcs/utils/pongJs/Paddle.js","./srcs/utils/pongJs/Player.js", 
+    // "./srcs/utils/pongJs/Game.js","./srcs/utils/pongJs/main.js"],
+    js: [directory + "2plygame/game.js"],
     css: [directory + "2plygame/2plygame.css"]
   }
 };
