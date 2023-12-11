@@ -46,7 +46,7 @@ if DOCKERIZED:
         'api.tournament',
         'api.friends',
         'channels',
-        'pong_app',
+        'ws_api',
     ]
 else:
     INSTALLED_APPS = [
@@ -64,7 +64,7 @@ else:
         'api.tournament',
         'api.friends',
         'channels',
-        'pong_app',
+        'ws_api',
     ]
 
 MIDDLEWARE = [

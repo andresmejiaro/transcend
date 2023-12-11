@@ -1,3 +1,3 @@
-# pong_app/middleware.py
+# ws_api/middleware.py
 
 # To be used in the future

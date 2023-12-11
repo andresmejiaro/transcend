@@ -1,8 +1,8 @@
 import json
 import asyncio
 from channels.generic.websocket import AsyncWebsocketConsumer
-from pong_app.python_pong.Player import Player
-from pong_app.python_pong.Game import Game
+from ws_api.python_pong.Player import Player
+from ws_api.python_pong.Game import Game
 from urllib.parse import parse_qs
 from channels.db import database_sync_to_async
 from django.utils import timezone
@@ -226,7 +226,7 @@ class GameConsumerAsBridge(AsyncWebsocketConsumer):
 
         # Send message to group announcing player left
         await self.broadcast_to_group(self.match_id, 'player_list', self.list_of_players)
-        await self.close(code=1000)
+        await self.close(code=close_code)
 
 
     # Receive message from WebSocket and process it
