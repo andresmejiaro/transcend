@@ -102,4 +102,4 @@ const urlRoutes = {
   }
 };
 
-const allowedLocations = ["/", "/home", "/login", "/signup", "/intra", "/otp"];
+const allowedLocations = ["/", "/home", "/login", "/signin", "/signup", "/intra", "/otp"];

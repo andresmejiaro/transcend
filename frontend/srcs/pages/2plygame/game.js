@@ -1,22 +1,10 @@
-const matchIdInput = document.getElementById("matchId");
-const player1IdInput = document.getElementById("player1Id");
-const player2IdInput = document.getElementById("player2Id");
-const clientIdInput = document.getElementById("clientId");
-const scoreLimitInput = document.getElementById("scoreLimit");
-const jsonInput = document.getElementById("jsonInput");
 const gameCanvas = document.getElementById("gameCanvas");
 const ctx = gameCanvas.getContext("2d");
 
 let ws;
 
-function startGame() {
-  const matchId = matchIdInput.value;
-  const player1Id = player1IdInput.value;
-  const player2Id = player2IdInput.value;
-  const clientId = clientIdInput.value;
-  const scoreLimit = scoreLimitInput.value;
-
-  const uri = `ws://localhost:8001/ws/pong/${matchIdInput.value}/?player_1_id=${player1IdInput.value}&player_2_id=${player2IdInput.value}&client_id=${clientIdInput.value}&scorelimit=${scoreLimitInput.value}`;
+function startGame(matchId, player1Id, player2Id, clientId, scoreLimit) {
+  const uri = `ws://localhost:8001/ws/pong/${matchId}/?player_1_id=${player1Id}&player_2_id=${player2Id}&client_id=${clientId}&scorelimit=${scoreLimit}`;
 
   ws = new WebSocket(uri);
 
@@ -36,8 +24,7 @@ function startGame() {
   });
 }
 
-function sendJson() {
-  const jsonMessage = jsonInput.value;
+function sendJson(jsonMessage) {
 
   // Send the JSON message to the server
   if (ws && ws.readyState === WebSocket.OPEN) {
@@ -186,7 +173,8 @@ function sendRelease(key) {
 
 const canJoinAGame = async () => {
 	try {
-        const url = `${window.DJANGO_API_BASE_URL}/api/user/${userId}/friendlist/`;
+        const url = `${window.DJANGO_API_BASE_URL}/api/match/available`;
+		
         const options = {
             method: "GET",
             mode: "cors",
@@ -199,8 +187,63 @@ const canJoinAGame = async () => {
 		const data = await makeRequest(true, url, options);
         
         if (data.status == "ok") {
-
+			return data.id;
 		}
+
+		return null;
+
+    } catch (error) {
+        console.error("Error:", error.message);
+    }
+}
+
+const getMatchInfo = async (matchId) => {
+	try {
+		const url = `${window.DJANGO_API_BASE_URL}/api/match/${matchId}/`;		
+        const options = {
+            method: "GET",
+            mode: "cors",
+            credentials: "include",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        };
+
+		const data = await makeRequest(true, url, options);
+        console.log(data);
+        if (data.status == "ok") {
+			return data;
+		}
+
+		return null;
+
+    } catch (error) {
+        console.error("Error:", error.message);
+    }
+}
+
+const updateMatchInDb = async (matchId, player2Id) => {
+	try {
+		const url = `${window.DJANGO_API_BASE_URL}/api/match/${matchId}/`;		
+        const options = {
+			method: "PUT",
+			mode: "cors",
+			credentials: "include",
+			headers: {
+			  "Content-Type": "application/json",
+			},
+			body: JSON.stringify({
+			  player2: player2Id
+			}),
+        };
+
+		const data = await makeRequest(true, url, options);
+        console.log(data);
+        if (data.status == "ok") {
+			return data;
+		}
+
+		return null;
 
     } catch (error) {
         console.error("Error:", error.message);
@@ -208,10 +251,47 @@ const canJoinAGame = async () => {
 }
 
 
-const handleMatchmaking = async () => {
-	const hasToJoinMatch = canJoinAGame();
-	if (hasToJoinMatch)
+const joinMatch = async (matchId) => {
+	const playerId = await getUserId();
+	const matchData = await getMatchInfo(matchId);
+	await updateMatchInDb(matchId, playerId);
+	startGame(matchId, matchData.data.player1, playerId, playerId, 11);
+}
 
+const activateGame = async () => {
+	const param = '{"command":"start_game"}'
+	sendJson(param)
+}
+
+const createAndJoinMatch = async () => {
+	const userId = await getUserId();
+
+    const url = `${window.DJANGO_API_BASE_URL}/api/match/create/`;
+	const response = await makeRequest(true, url, {
+		method: "POST",
+		mode: "cors",
+		credentials: "include",
+		headers: {
+		  "Content-Type": "application/json",
+		},
+		body: JSON.stringify({
+		  player1: userId
+		}),
+	});
+
+	console.log(response);
+
+	startGame(response.id, userId, "", userId, 11);
+}
+
+const handleMatchmaking = async () => {
+	const hasToJoinMatch = await canJoinAGame();
+	if (hasToJoinMatch) {
+		await joinMatch(hasToJoinMatch);
+		activateGame();
+	} else {
+		createAndJoinMatch();
+	}
 }
 
 handleMatchmaking();
