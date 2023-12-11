@@ -296,7 +296,7 @@ class GameConsumerAsBridge(AsyncWebsocketConsumer):
 
                 try:
                     # await asyncio.sleep(update_interval) # For use with FPS
-                    await asyncio.sleep(10) # For manual control of FPS
+                    await asyncio.sleep(0) # For manual control of FPS
 
                 except asyncio.CancelledError:
                     ic(f'Game update for match {self.match_id} cancelled')

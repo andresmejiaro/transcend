@@ -192,7 +192,7 @@ def match_create(request):
         try:
             data = json.loads(request.body)
             player1_id = data.get('player1')
-            player2_id = data.get('player2')
+            player2_id = data.get('player2', None)
             player1_score = data.get('player1_score', 0)
             player2_score = data.get('player2_score', 0)
             winner_id = data.get('winner', None)
