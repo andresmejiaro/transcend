@@ -3,7 +3,6 @@ const directory = "./srcs/pages/"
 
 
 const urlRoutes = {
-
   404: {
     template: directory + "404/404.html",
     title: urlPageTitle + " - 404",
@@ -49,11 +48,11 @@ const urlRoutes = {
     js: [directory + "otp/otp-handler.js", "./srcs/utils/google-auth-utils.js"],
   },
 
-  "/callback": {
-    template: directory + "callback/callback.html",
+  "/intra": {
+    template: directory + "intra/intra.html",
     title: urlPageTitle,
-    description: "This is the callback page",
-    js: [directory + "callback/callback.js"],
+    description: "This is the intra handler page",
+    js: [directory + "intra/callback.js"],
   },
 
   "/play!": {
@@ -100,3 +99,5 @@ const urlRoutes = {
     css: [directory + "2plygame/2plygame.css"]
   }
 };
+
+const allowedLocations = ["/", "/home", "/login", "/signup", "/intra", "/otp"];
