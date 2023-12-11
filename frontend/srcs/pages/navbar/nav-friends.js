@@ -90,8 +90,8 @@ const listFriends = async () => {
         };
 
         const data = await makeRequest(true, url, options);
-
-        if (data.status === "ok") {
+        
+        if (data.status == "ok") {
             const friendsListContainer = document.getElementById("friends-list");
 
             friendsListContainer.innerHTML = '';

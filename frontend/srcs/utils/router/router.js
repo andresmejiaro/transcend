@@ -77,7 +77,7 @@ const urlLocationHandler = async () => {
   const navRouter = document.getElementById("nav-router");
   if (navRouter) {
     const existingContent = navRouter.innerHTML.trim();
-    if (!existingContent.includes("nav-logged")) {
+    if (!existingContent) {
       if (isLogged()) {
         navRouter.innerHTML = await fetch(direc + "pages/navbar/nav-logged.html").then(
           (response) => response.text()

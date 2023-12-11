@@ -183,10 +183,7 @@ def user_unblock_user(request, pk):
 def user_friends_list(request, pk):
     if request.method == 'GET':
         try:
-            if not Friendship.objects.filter(user_id=pk).exists():
-                Friendship.objects.create(user_id=pk)
-            else:
-                user = Friendship.objects.get(user_id=pk)
+            user = Friendship.objects.get(user_id=pk)
 
             friends = user.friends.all()
             friend_list = []
@@ -195,13 +192,18 @@ def user_friends_list(request, pk):
                     'id': friend.id,
                     'username': friend.username,
                 })
+
+            # Return an empty list if there are no friends
             return JsonResponse({'status': 'ok', 'data': friend_list})
 
-        except User.DoesNotExist:
-            return JsonResponse({'status': 'error', 'message': 'User does not exist'}, status=399)
+        except Friendship.DoesNotExist:
+            return JsonResponse({'status': 'error', 'message': 'User not found or has no friends'})
         except Exception as e:
-            return JsonResponse({'status': 'error', 'message': str(e)}, status=399)
-    return JsonResponse({'status': 'error', 'message': 'Only GET requests are allowed'}, status=399)
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
+    
+    return JsonResponse({'status': 'error', 'message': 'Only GET requests are allowed'}, status=400)
+
+
 
 def user_blocked_list(request, pk):
     if request.method == 'GET':

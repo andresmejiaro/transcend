@@ -72,7 +72,8 @@ const urlRoutes = {
     template: directory + "profilesettings/user-settings.html",
     title: urlPageTitle + " - Profile",
     description: "This is the user page",
-    js: [directory + "profilesettings/user-settings.js", "./srcs/utils/google-auth-utils.js"],
+    js: [directory + "profilesettings/user-settings.js"],
+    // js: [directory + "profilesettings/user-settings.js", "./srcs/utils/google-auth-utils.js"],
   },
 
   "/tournaments": {
