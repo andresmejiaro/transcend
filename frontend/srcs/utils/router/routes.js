@@ -80,8 +80,16 @@ const urlRoutes = {
     template: directory + "tournaments/create-tournament.html",
     title: urlPageTitle + " - Tournaments",
     description: "This is the create tournament page",
-    js: [directory + "tournaments/create-tor.js"],
+    js: [directory + "tournaments/create-tor.js", directory + "tournaments/join-tor.js"],
     css: [directory + "tournaments/tournaments.css"]
+  },
+
+  "/tournament": {
+    template: directory + "tournament/tournament.html",
+    title: urlPageTitle + " - Tournament",
+    description: "This is the tournament page",
+    js: [directory + "tournament/tournament.js", directory + "tournament/tournament-admin.js"],
+    css: [directory + "tournament/tournament.css"]
   },
 
   "/leaderboards": {

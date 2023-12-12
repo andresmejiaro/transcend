@@ -23,6 +23,8 @@ class GameConsumerAsBridge(AsyncWebsocketConsumer):
         self.keyboard = {}          # Holds the keyboard inputs for each player (eg. self.keyboard[self.player_1_id] = {"up": f"up.{self.player_1_id}", "down": f"down.{self.player_1_id}", "left": "xx", "right": "xx"})
         self.left_player = None     # Holds the Player object for the left player for the game
         self.right_player = None    # Holds the Player object for the right player for the game
+        self.player_1_score = 0
+        self.player_2_score = 0
 
 
 
@@ -197,6 +199,11 @@ class GameConsumerAsBridge(AsyncWebsocketConsumer):
     # Disconnect
     async def disconnect(self, close_code):
         try:
+            match_object = self.get_match(self.match_id)
+            match_object.active = False
+            # match_object.player1_score = self.player_1_score
+            # match_object.player2_score = self.player_2_score
+            match_object.save()
             # await self.get_match(self.match_id)
             ic(f'Disconnecting from match {self.match_id} with client {self.client_id}. Player 1: {self.player_1_id}. Player 2: {self.player_2_id}')
             if self.client_id in self.list_of_players:
@@ -227,7 +234,6 @@ class GameConsumerAsBridge(AsyncWebsocketConsumer):
         # Send message to group announcing player left
         await self.broadcast_to_group(self.match_id, 'player_list', self.list_of_players)
         await self.close(code=close_code)
-
 
     # Receive message from WebSocket and process it
     async def receive(self, text_data):
@@ -286,6 +292,9 @@ class GameConsumerAsBridge(AsyncWebsocketConsumer):
                 # Update paddle positions based on keyboard inputs
                 left_paddle = self.list_of_games[self.match_id]._leftPaddle
                 right_paddle = self.list_of_games[self.match_id]._rightPaddle
+
+                self.player_1_score = self.list_of_games[self.match_id]._leftPlayer.getScore()
+                self.player_2_score = self.list_of_games[self.match_id]._rightPlayer.getScore()
 
                 left_paddle.updatePosition()
                 right_paddle.updatePosition()

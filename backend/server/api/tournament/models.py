@@ -9,6 +9,7 @@ class Tournament(models.Model):
     end_date = models.DateField(blank=True, null=True)
     round = models.IntegerField(default=0)
     winner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='winner_tournament', blank=True, null=True)
+    tournament_admin = models.ForeignKey(User, on_delete=models.CASCADE, related_name='tournament_admin', blank=True, null=True)
     players = models.ManyToManyField(User, blank=True)
     observers = models.ManyToManyField(User, blank=True, related_name='observers')
 
