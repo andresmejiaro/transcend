@@ -5,6 +5,7 @@ from api.userauth.models import CustomUser as User
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
+from django.db.models import Q
 import json
 import math
 import random
@@ -692,14 +693,20 @@ def calculate_rounds(num_players):
     return math.ceil(math.log2(num_players))
 
 def calculate_player_score(player, tournament=None):
-    matches = Match.objects.filter(player1=player) | Match.objects.filter(player2=player)
-    player_score = 0
-    for match in matches:
-        if match.winner == player:
-            player_score += 1
-    if tournament:
-        player_score += tournament.round
+    if not tournament:
+        return 0
+
+    latest_round = tournament.rounds.last()  # Get the latest round
+
+    if latest_round:
+        matches = latest_round.matches.filter(Q(player1=player) | Q(player2=player))
+        player_score = sum(1 for match in matches if match.winner == player)
+    else:
+        player_score = 0
+
     return player_score
+
+
 # Actual matchmaking view
 def game_matchmaking(request, pk):
     if request.method == 'GET':
@@ -748,7 +755,12 @@ def game_matchmaking(request, pk):
             # Prepare the response with match details
             match_list = [{'match_id': match.id, 'total_rounds': num_rounds, 'player1_id': match.player1.id, 'player2_id': match.player2.id} for match in matches]
 
-            return JsonResponse({'status': 'ok', 'message': 'Matchmaking successful', 'sit_out_player': sit_out_player.id if sit_out_player else None, 'matches': match_list})
+            return JsonResponse({
+                'status': 'ok', 'message': 'Matchmaking successful',
+                'sit_out_player': sit_out_player.id if sit_out_player else None,
+                'matches': match_list,
+                'total_rounds': num_rounds,
+                })
 
         except Tournament.DoesNotExist:
             return JsonResponse({'status': 'error', 'message': 'Tournament does not exist'}, status=377)

@@ -298,7 +298,6 @@ const handleMatchmaking = async () => {
 };
 
 
-
 // FUNCIONA PERO NO MUESTRA NADA EN PANTALLA
 // MEJORAR / TERMINAR function updateGameCanvas(data) 53
-// handleMatchmaking();
+handleMatchmaking();
