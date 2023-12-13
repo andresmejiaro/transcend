@@ -174,15 +174,17 @@ class TournamentConsumer(AsyncWebsocketConsumer):
             players = await database_sync_to_async(list)(tournament.players.all())
             print(f'Found players with info {players}')
 
-            if players.count() % 2 != 0:
+            if len(players) % 2 != 0:
                 sit_out_player = random.choice(players)
             else:
                 sit_out_player = None
-
             print(f'Sit out player is {sit_out_player}')
 
-            self.tournament_rounds_to_complete = math.ceil(math.log2(players.count()))
+            self.tournament_rounds_to_complete = math.ceil(math.log2(len(players)))
+            print(f'Tournament rounds to complete is {self.tournament_rounds_to_complete}')
+
             if tournament.round >= self.tournament_rounds_to_complete:
+                print('Tournament has ended')
                 winner = max(players, key=lambda player: self.calculate_player_score(player, tournament=tournament))
                 tournament.winner = winner
                 tournament.end_date = timezone.now()
@@ -202,39 +204,36 @@ class TournamentConsumer(AsyncWebsocketConsumer):
                 return
 
             if tournament.round == 0:
+                print('First round of tournament')
                 sorted_players = sorted(players, key=lambda player: player.ELO, reverse=True)
             else:
+                print('Not first round of tournament')
                 sorted_players = sorted(players, key=lambda player: self.calculate_player_score(player, tournament=tournament), reverse=True)
-            
-            matches = self.create_matches(sorted_players)
+            print(f'Sorted players are {sorted_players}')
+
+            matches = await self.create_matches(sorted_players)
+            print(f'Created matches {matches}')
+
             self.list_of_matches = {match.id: match for match in matches}
-            self.create_round(tournament, matches)
+            print(f'List of matches is {self.list_of_matches}')
 
-            tournament.save()
+            rounds = await self.create_round(tournament, matches)
+            print(f'Created round {tournament.round}')
 
-            # Prepare the response with match details
-            match_data = []
-            for match in matches:
-                # Use a helper function to determine player role
-                role = self.get_player_role(match)
-                if role:
-                    match_info = {
-                        'match_id': match.id,
-                        'current_round': tournament.round,
-                        'total_rounds': self.tournament_rounds_to_complete,
-                        'player1_id': match.player1.id,
-                        'player2_id': match.player2.id,
-                        'your_role': role,
-                    }
-                    match_data.append(match_info)
+            self.list_of_rounds[tournament.round] = rounds
+
+            await database_sync_to_async(tournament.save)()
+            print(f'Saved tournament {tournament}')
+
 
             # Broadcast the modified match_data
-            self.broadcast_to_group(
+            await self.broadcast_to_group(
                 str(self.tournament_id),
                 'matchmaking_info',
                 {
                     'sit_out_player': sit_out_player,
-                    'matches': match_data,
+                    'matches': list(self.list_of_matches.keys()),
+                    'rounds': list(self.list_of_rounds.keys()),
                 }
             )
 
@@ -244,6 +243,7 @@ class TournamentConsumer(AsyncWebsocketConsumer):
 # ---------------------------------------
 
 # Creation methods
+    @database_sync_to_async
     def create_matches(self, sorted_players):
         from api.tournament.models import Match
         matches = []
@@ -273,6 +273,7 @@ class TournamentConsumer(AsyncWebsocketConsumer):
 
         return matches
 
+    @database_sync_to_async
     def create_round(self, tournament, matches):
         from api.tournament.models import Round
         new_round = Round(tournament=tournament, round_number=tournament.round + 1)
