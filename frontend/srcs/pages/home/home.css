@@ -29,7 +29,7 @@ body {
 	z-index: 2;
 }
 .button img {
-	width: 10vw; /* Cambiar según sea necesario */
+	width: 13vw; /* Cambiar según sea necesario */
 	padding-bottom: 80%;
 	height: auto; /* Mantiene la proporción del botón */
 }
