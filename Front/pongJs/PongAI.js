@@ -6,6 +6,8 @@ class PongAI {
     #game
     #ballspeed
     #collisionPoint
+    #internalClock
+    #sticky
 
     constructor(player, game, side = 1){
         this.#side = side;
@@ -14,6 +16,8 @@ class PongAI {
         this.#game = game;
         this.#ballspeed = {x: 3, y: 1}  
         this.#collisionPoint = canvas.height / 2;  
+        this.#internalClock = 0
+        this.#sticky = 10;
     }
 
     keyboardUpdate(){
@@ -27,18 +31,32 @@ class PongAI {
         this.#canvas = game.getCanvas();
         this.updateBallSpeed();
         this.calculateCollisionPoint()
-        this.internalKeyUpdate();       
+        this.deadCenterMethod();
+        this.#internalClock += 1;
     }
     
-    internalKeyUpdate(){
+
+    keyUpdater(target){
         let ycenter = this.#canvas['rightPaddle']['position']['y'] + 
             this.#canvas['rightPaddle']['size']['y'] /2 ; 
-        if (this.#collisionPoint > ycenter){
+        if (target > ycenter + this.#canvas['rightPaddle']['size']['y'] / 5){
             this.pressDown();             
-        } else
+        } else if (target < ycenter - this.#canvas['rightPaddle']['size']['y'] / 5)
             this.pressUp();
+        else
+            this.pressNone();
     }
 
+    deadCenterMethod(){
+        this.keyUpdater(this.#collisionPoint);
+    }
+
+    sineMethod(){
+        let offset = canvas.height/2 * Math.sin(this.#internalClock /60);
+        this.keyUpdater(this.#collisionPoint + offset);
+    }
+
+ 
     updateBallSpeed(){
         if (this.#canvas !== undefined && this.#lastCanvas !== undefined){
             this.#ballspeed["x"] = this.#canvas["ball"]["position"]["x"] - 
@@ -67,14 +85,20 @@ class PongAI {
         }
         this.#collisionPoint = canvas.height / 2;        
     }
-
+    
+    
     pressUp(){
         keysPressed[this.#binds["up"]] = true;           
         keysPressed[this.#binds["down"]] = false;     
     }
     
-    pressDown(){
+    pressDown(){    
         keysPressed[this.#binds["up"]] = false;           
         keysPressed[this.#binds["down"]] = true;     
+    }
+    
+    pressNone(){
+        keysPressed[this.#binds["up"]] = false;           
+        keysPressed[this.#binds["down"]] = false;     
     }
 }
