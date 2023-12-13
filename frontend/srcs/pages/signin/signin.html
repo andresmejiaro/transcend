@@ -1,88 +1,71 @@
 <div class="row min-vh-100">
+  <!-- Background image container on the left -->
+  <div class="col-md-4 image-container" onclick="window.location.href='/home'"></div>
+
+  <!-- Form container -->
   <div class="col-md-8 form-container">
-    <div class="row justify-content-center text-center mt-5">
-      <h3>Sign in</h3>
-    </div>
-    <div class="col-md-6 mt-5 mx-auto text-white text-center">
-      <form id="loginForm">
-        <div class="form-group">
-          <label for="usernameLoginForm" class="form-label">Username</label>
-          <input
-            type="text"
-            class="form-control input-signup"
-            name="usernameLoginForm"
-            id="usernameLoginForm"
-            placeholder="Enter your username"
-            autocomplete="off"
-          />
-          <div class="invalid-feedback" id="usernameHelp"></div>
-        </div>
+      <div class="row justify-content-center text-center mt-5">
+          <h3>Sign in</h3>
+      </div>
 
-        <div class="mb-3">
-          <label for="password" class="form-label">Password</label>
-          <div class="input-group input-group-signup">
-            <input
-              type="password"
-              class="form-control"
-              id="password"
-              placeholder="Enter your password"
-              required
-            />
-            <span
-              class="input-group-text bg-transparent text-white border-0"
-              id="eyeIcon"
-            >
-              <i class="bi bi-eye" id="togglePassword" style="color: #D97E39;"></i>
-            </span>
-          </div>
-          <div class="invalid-feedback" id="passwordHelp"></div>
-        </div>
+      <div class="col-md-6 mt-5 mx-auto text-white text-center">
+          <form id="loginForm">
+              <!-- Username Input -->
+              <div class="form-group">
+                  <label for="usernameLoginForm" class="form-label">Username</label>
+                  <input type="text" class="form-control input-signup" name="usernameLoginForm" id="usernameLoginForm" placeholder="Enter your username" autocomplete="off"/>
+                  <div class="invalid-feedback" id="usernameHelp"></div>
+              </div>
 
-        <div
-          class="alert alert-danger"
-          id="errorAlert"
-          style="display: none"
-        ></div>
+              <!-- Password Input -->
+              <div class="mb-3">
+                  <label for="password" class="form-label">Password</label>
+                  <div class="input-group input-group-signup">
+                      <input type="password" class="form-control" id="password" placeholder="Enter your password" required/>
+                      <span class="input-group-text bg-transparent text-white border-0" id="eyeIcon">
+                          <i class="bi bi-eye" id="togglePassword" style="color: #D97E39;"></i>
+                      </span>
+                  </div>
+                  <div class="invalid-feedback" id="passwordHelp"></div>
+              </div>
 
-        <button type="submit" class="btn mt-10r">
-          <img src="./srcs/assets/buttons/signin.svg" alt="" class="img-fluid">
-        </button>
-      </form>
+              <!-- Error Alert -->
+              <div class="alert alert-danger" id="errorAlert" style="display: none"></div>
 
-      <h6 class="mt-5">Dont have an account?</h6>
-      <h6>
-        <a style="color: #699AB3;" href="/signup">Sign up</a>
-      </h6>
-    </div>
+              <!-- Submit Button -->
+              <button type="submit" class="btn mt-10r">
+                  <img src="./srcs/assets/buttons/signin.svg" alt="" class="img-fluid">
+              </button>
+          </form>
+
+          <!-- Sign Up Link -->
+          <h6 class="mt-5">Dont have an account?</h6>
+          <h6>
+              <a style="color: #699AB3;" href="/signup">Sign up</a>
+          </h6>
+      </div>
   </div>
-  <div class="col-md-4 image-container"></div>
 </div>
 
+<!-- Modal for Google Authentication -->
 <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
   <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="loginModalLabel">Google Auth</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title" id="loginModalLabel">Google Auth</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+              <div class="form-group">
+                  <label for="otpLoginForm" class="form-label">2FA Code</label>
+                  <input type="text" class="form-control input-signup" name="otpLoginForm" id="otpLoginForm" placeholder="Enter your OTP code" autocomplete="off"/>
+                  <div class="invalid-feedback" id="otpHelp"></div>
+              </div>
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary" id="checkOTP">Save changes</button>
+          </div>
       </div>
-      <div class="modal-body">
-        <div class="form-group">
-          <label for="otpLoginForm" class="form-label">2FA Code</label>
-          <input
-            type="text"
-            class="form-control input-signup"
-            name="otpLoginForm"
-            id="otpLoginForm"
-            placeholder="Enter your OTP code"
-            autocomplete="off"
-          />
-          <div class="invalid-feedback" id="otpHelp"></div>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" id="checkOTP">Save changes</button>
-      </div>
-    </div>
   </div>
 </div>

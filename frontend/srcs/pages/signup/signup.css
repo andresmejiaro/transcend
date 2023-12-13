@@ -1,6 +1,6 @@
 .image-container {
 	background: url('../../assets/imgs/signup.png') center center/cover;
-	height: "100%";
+	height: 100vh;
 	width: "100%";
 }
 
