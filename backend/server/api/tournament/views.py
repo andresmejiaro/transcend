@@ -105,7 +105,6 @@ def tournament_operations(request, pk):
                 'players': [player.id for player in tournament_instance.players.all()],
                 'observers': [observer.id for observer in tournament_instance.observers.all()],
                 'tournament_admin': tournament_instance.tournament_admin_id
-                'matches': tournament_instance.matches if tournament_instance.matches else None, # 'None' if 'winner' is 'None
             }
             return JsonResponse({'status': 'ok', 'data': tournament_detail})
         except Tournament.DoesNotExist:
@@ -211,7 +210,6 @@ def tournament_rounds(request, pk):
 # -----------------------------
 
 # Match CRUD views
-@csrf_exempt
 def match_create(request):
     if request.method == 'POST':
         try:
@@ -315,7 +313,6 @@ def match_available(request):
     
     return JsonResponse({'status': 'error', 'message': 'Only GET requests are allowed'}, status=400)
 
-@csrf_exempt
 def match_operations(request, pk):
     match_instance = get_object_or_404(Match, pk=pk)
 
