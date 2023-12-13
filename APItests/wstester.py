@@ -22,14 +22,12 @@ async def websocket_client():
             try:
                 while True:
                     response = await websocket.recv()
-                    print(f"Received response: {response}")
-
+                    print("Received response:")
                     try:
                         response_data = json.loads(response)
-                        # print(f"Response type: {response_data.get('type')}")
-                        # print(f"Response command: {response_data.get('command')}")
-                        # print(f"Response data: {response_data.get('data')}")
-
+                        formatted_response = json.dumps(response_data, indent=2)
+                        print(formatted_response)
+                        
                         # Handle different response commands here
                         if response_data.get('command') == 'tournament_started':
                             print("Tournament has started!")
