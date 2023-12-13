@@ -9,7 +9,7 @@ async def websocket_client():
         command = input("Enter Command: ")
         data = input("Enter Data (JSON format): ")
 
-        uri = f"ws://localhost:8000/ws/tournament/{tournament_id}/?client_id={client_id}"
+        uri = f"ws://localhost:8001/ws/tournament/{tournament_id}/?client_id={client_id}"
 
         async with websockets.connect(uri) as websocket:
             message = {
@@ -26,9 +26,9 @@ async def websocket_client():
 
                     try:
                         response_data = json.loads(response)
-                        print(f"Response type: {response_data.get('type')}")
-                        print(f"Response command: {response_data.get('command')}")
-                        print(f"Response data: {response_data.get('data')}")
+                        # print(f"Response type: {response_data.get('type')}")
+                        # print(f"Response command: {response_data.get('command')}")
+                        # print(f"Response data: {response_data.get('data')}")
 
                         # Handle different response commands here
                         if response_data.get('command') == 'tournament_started':
