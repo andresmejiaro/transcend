@@ -133,7 +133,8 @@ class TournamentConsumer(AsyncWebsocketConsumer):
 
             # Get commands
             elif command == self.LIST_PLAYERS:
-                await self.send_info_to_client(self.LIST_PLAYERS, self.list_of_player_channels)
+                list_of_current_players = list(self.list_of_player_channels.keys())
+                await self.send_info_to_client(self.LIST_PLAYERS, list_of_current_players)
             else:
                 await self.send_info_to_client(self.CMD_NOT_FOUND, text_data)
 
@@ -183,12 +184,13 @@ class TournamentConsumer(AsyncWebsocketConsumer):
 # Tournament Initialization
     async def start_tournament(self):
         try:
-            await self.init_tour_obj(self.tournament_id)
+            list_of_registered_players = await self.init_tour_obj(self.tournament_id)
             await self.broadcast_to_group(
                 str(self.tournament_id),
                 'tournament_started',
                 {
                     'tournament_id': self.tournament_id,
+                    'registered_players': list_of_registered_players,
                 }
             )
         except Exception as e:
@@ -393,7 +395,7 @@ class TournamentConsumer(AsyncWebsocketConsumer):
                 return None
             print(f'Found user with info {user}')
             self.player_object = user
-            self.list_of_player_objects[self.client_id] = self.player_object
+            # self.list_of_player_objects[self.client_id] = self.player_object
             self.list_of_player_channels[self.client_id] = self.channel_name
             return user
         except Exception as e:
@@ -410,7 +412,10 @@ class TournamentConsumer(AsyncWebsocketConsumer):
                 print(f'Could not find tournament with id {pk}')
                 return None
             
-            print(f'Found tournament with info {tournament}')
+            # Extracting relevant information from CustomUser objects
+            players = list(tournament.players.values('id', 'username'))
+            tournament_admin_id = tournament.tournament_admin.id if tournament.tournament_admin else None
+
             tournament.players.add(self.player_object)
             tournament.tournament_admin = self.player_object
             tournament.save()
@@ -418,7 +423,13 @@ class TournamentConsumer(AsyncWebsocketConsumer):
             self.tournament_object = tournament
             self.tournament_admin_id = self.client_id
 
-            self.list_of_player_objects = {player.id: player for player in tournament.players.all()}
+            return {
+                'players': players,
+                'tournament_admin_id': tournament_admin_id,
+            }
+
+            # Broadcast the list of players assigned to this tournament object
+                
 
         except Exception as e:
             print(e)
@@ -431,13 +442,12 @@ class TournamentConsumer(AsyncWebsocketConsumer):
             Tournament = import_string('api.tournament.models.Tournament')
             tournament = get_object_or_404(Tournament, pk=self.tournament_id)
 
+            players = tournament.players.all()
+
             for match in self.list_of_matches.values():
                 match.save()
 
-            for round in self.list_of_rounds.values():
-                round.save()
-
-            for player in self.list_of_player_objects.values():
+            for player in players:
                 player.ELO = self.player_score
                 player.save()
 
