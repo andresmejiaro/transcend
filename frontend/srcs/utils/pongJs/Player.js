@@ -26,6 +26,10 @@ class Player {
     get binds(){
         return this.#binds;
     }
+
+    set name(value){
+        this.#name = value;
+    }
     
     goal(){
         this.#score += 1;

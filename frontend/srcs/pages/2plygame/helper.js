@@ -1,9 +1,7 @@
-const gameCanvas = document.getElementById("gameCanvas");
-const ctx = gameCanvas.getContext("2d");
 
-let ws;
 
-function startGame(matchId, player1Id, player2Id, clientId, scoreLimit) {
+function SetUpListeners(matchId, player1Id, player2Id, clientId, scoreLimit,
+    game) {
   return new Promise((resolve, reject) => {
     const uri = `ws://localhost:8001/ws/pong/${matchId}/?player_1_id=${player1Id}&player_2_id=${player2Id}&client_id=${clientId}&scorelimit=${scoreLimit}`;
 
@@ -24,8 +22,18 @@ function startGame(matchId, player1Id, player2Id, clientId, scoreLimit) {
 
       console.log("Received message:", data);
 
-      updateGameCanvas(data);
+      updateGameCanvas(data, game);
     });
+   
+    //ws.addEventListener("player_list", (event) => {
+    //  const data = JSON.parse(event.data);
+
+    //  console.log("Received message:", data);
+      //manejar de manera sensible
+    //  game.updatePlayerNames(data);
+    //});
+    
+    // add event listener for game_update
   });
 }
 
@@ -40,88 +48,28 @@ function sendJson(jsonMessage) {
   }
 }
 
-document.addEventListener("keydown", (event) => {
-  // Handle arrow key presses and send messages to the server
-  handleArrowKeyPress(event.key);
-});
-
-document.addEventListener("keyup", (event) => {
-  // Handle arrow key releases and send messages to the server
-  handleArrowKeyRelease(event.key);
-});
-
-function updateGameCanvas(data) {
-  console.log("Updating game canvas with data:", data);
-
+function updateGameCanvas(data, game) {
+  //console.log("Updating game canvas with data:", data);
+  //console.log(data)
   if (data.type === "player_list") {
-    // Handle player list data if needed
-    console.log("Received player list:", data.data);
+    //console.log("Received player list:", data.data);
+    game.updatePlayerNames(data);
+    
   } else if (data.type === "game_update") {
     // Handle game update data
-    drawPongGame(data.data);
+    //console.log("game data:", data.data);
+    drawPongGame(data, game);
+  } else if (data.type === "score_update") {
+    // Handle game update data
+    //console.log("game data:", data.data);
+    game.scoreUpdate(data.data);
   } else {
-    console.error("Invalid message type:", data.type);
+    //console.error("Invalid message type:", data.type);
   }
 }
 
-function drawPongGame(data) {
-  // Check if the required properties exist in the data object
-  if (
-    data &&
-    data.canvas &&
-    data.canvas.ball &&
-    data.canvas.leftPaddle &&
-    data.canvas.rightPaddle
-  ) {
-    ctx.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
-    drawRect(data.canvas.ball.position, data.canvas.ball.size, "blue");
-    drawRect(
-      data.canvas.leftPaddle.position,
-      data.canvas.leftPaddle.size,
-      "green"
-    );
-    drawRect(
-      data.canvas.rightPaddle.position,
-      data.canvas.rightPaddle.size,
-      "red"
-    );
-
-    const scores = data.score;
-    ctx.fillStyle = "black";
-    ctx.font = "20px Arial";
-    ctx.fillText(
-      `${player1IdInput.value}: ${scores[player1IdInput.value]} - ${
-        player2IdInput.value
-      }: ${scores[player2IdInput.value]}`,
-      10,
-      20
-    );
-  } else {
-    console.error("Invalid data format:", data);
-  }
-}
-
-function drawRect(position, size, color) {
-  ctx.fillStyle = color;
-  ctx.fillRect(position.x, position.y, size.x, size.y);
-}
-
-function handleArrowKeyPress(key) {
-  // Customize this based on your game's key bindings
-  switch (key) {
-    case "ArrowUp":
-      sendKeyPress("up");
-      break;
-    case "ArrowDown":
-      sendKeyPress("down");
-      break;
-    case "ArrowLeft":
-      sendKeyPress("left");
-      break;
-    case "ArrowRight":
-      sendKeyPress("right");
-      break;
-  }
+function drawPongGame(data,game) {
+  game.receiveRemoteCanvas(data.data);
 }
 
 function sendKeyPress(key) {
@@ -252,13 +200,12 @@ const updateMatchInDb = async (matchId, player2Id) => {
   }
 };
 
-const joinMatch = async (matchId) => {
+const joinMatch = async (matchId, game) => {
   const playerId = await getUserId();
   const matchData = await getMatchInfo(matchId);
   await updateMatchInDb(matchId, playerId);
-  await startGame(matchId, matchData.data.player1, playerId, playerId, 11);
+  await SetUpListeners(matchId, matchData.data.player1, playerId, playerId, 11, game);
 
-  activateGame();
 };
 
 const activateGame = async () => {
@@ -266,7 +213,7 @@ const activateGame = async () => {
   sendJson(param);
 };
 
-const createAndJoinMatch = async () => {
+const createAndJoinMatch = async (game) => {
   const userId = await getUserId();
 
   const url = `${window.DJANGO_API_BASE_URL}/api/match/create/`;
@@ -284,16 +231,16 @@ const createAndJoinMatch = async () => {
 
   console.log(response);
 
-  startGame(response.match_id, userId, "", userId, 11);
+  SetUpListeners(response.match_id, userId, "", userId, 11, game);
 };
 
-const handleMatchmaking = async () => {
+const handleMatchmaking = async (game) => {
   const hasToJoinMatch = await canJoinAGame();
   if (hasToJoinMatch) {
-    await joinMatch(hasToJoinMatch);
-    activateGame();
+    await joinMatch(hasToJoinMatch, game);
+    //activateGame();
   } else {
-    createAndJoinMatch();
+    createAndJoinMatch(game);
   }
 };
 
@@ -301,4 +248,3 @@ const handleMatchmaking = async () => {
 
 // FUNCIONA PERO NO MUESTRA NADA EN PANTALLA
 // MEJORAR / TERMINAR function updateGameCanvas(data) 53
-// handleMatchmaking();
