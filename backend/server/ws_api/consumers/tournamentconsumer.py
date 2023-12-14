@@ -16,20 +16,22 @@ from django.utils.module_loading import import_string
 
 
 class TournamentConsumer(AsyncWebsocketConsumer):
+
+    list_of_player_channels = {}
+    list_of_player_objects = {}
+    list_of_matches = {}
+    list_of_rounds = {}
+    tournament_admin_id = None
+    tournament_object = None
+    tournament_rounds_to_complete = 0
+    current_round = 0
+    tournament_id = None
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.client_id = None
         self.player_object = None
-        self.tournament_id = None
-        self.list_of_player_channels = {}
-        self.list_of_player_objects = {}
-        self.list_of_matches = {}
-        self.list_of_rounds = {}
-        self.tournament_admin_id = None
-        self.tournament_object = None
         self.tournament_ended = False
-        self.tournament_rounds_to_complete = 0
-        self.current_round = 0
         self.player_score = 0
 
 # Define constants for commands
@@ -63,11 +65,11 @@ class TournamentConsumer(AsyncWebsocketConsumer):
         # Add client to the group channel
         print(f'Adding {self.client_id} to group {self.tournament_id}')
         await self.channel_layer.group_add(
-            str(self.tournament_id),
+            self.tournament_id,
             self.channel_name
         )
         await self.channel_layer.group_add(
-            str(self.client_id),
+            self.client_id,
             self.channel_name
         )
 
@@ -119,7 +121,6 @@ class TournamentConsumer(AsyncWebsocketConsumer):
             )
             self.tournament_ended = True
 
-
     async def receive(self, text_data):
         try:
             data = json.loads(text_data)
@@ -142,7 +143,6 @@ class TournamentConsumer(AsyncWebsocketConsumer):
         except Exception as e:
             print(f"Error in receive method: {e}")
 # ---------------------------------------
-
 
 # Messaging methods
     async def broadcast(self, event):
@@ -168,7 +168,7 @@ class TournamentConsumer(AsyncWebsocketConsumer):
     async def message_another_player(self, player_id, command, data):
         print(f'Messaging player {player_id} with data: {data}')
         await self.channel_layer.group_send(
-            str(player_id),
+            player_id,
             {
                 'type': 'broadcast',
                 'command': command,
@@ -224,7 +224,7 @@ class TournamentConsumer(AsyncWebsocketConsumer):
                 print(f'Tournament {tournament} saved successfully')
 
                 await self.broadcast_to_group(
-                    str(self.tournament_id),
+                    self.tournament_id,
                     'tournament_info',
                     {
                         'tournament_id': self.tournament_id,
@@ -262,7 +262,7 @@ class TournamentConsumer(AsyncWebsocketConsumer):
 
             # Broadcast the modified match_data
             await self.broadcast_to_group(
-                str(self.tournament_id),
+                self.tournament_id,
                 'matchmaking_info',
                 {
                     'sit_out_player': sit_out_player.id if sit_out_player else None,
@@ -342,7 +342,6 @@ class TournamentConsumer(AsyncWebsocketConsumer):
         except Exception as e:
             print(f'Error calculating player score: {e}')
             return 0
-
 
 # ---------------------------------------
 
