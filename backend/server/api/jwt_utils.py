@@ -2,18 +2,28 @@ from .userauth.models import CustomUser
 from .userauth.jwt.sign import sign
 from .userauth.jwt.verify import verify
 from .userauth.jwt.decode import decode
+
+from datetime import datetime, timedelta
     
     
 secret_key = 'hola'
 
-def create_jwt_token(user_id, username):
-    jwt_payload = {'user_id': user_id, 'username': username}
+def create_jwt_token(user_id, username, expiration_time_minutes=30):
+    now = datetime.utcnow()
+    expiration_time = now + timedelta(minutes=expiration_time_minutes)
 
+    jwt_payload = {'user_id': user_id, 'username': username, 'exp': expiration_time.isoformat()}
     return sign(jwt_payload, secret_key)
 
 def validate_and_get_user_from_token(token):
     try:
         payload = verify(token, secret_key)
+        
+        expiration_time_str = payload.get('exp')
+        expiration_time = datetime.fromisoformat(expiration_time_str)
+        
+        if expiration_time < datetime.utcnow():
+            raise Exception('Token has expired')
 
         user_id = payload.get('user_id')
         username = payload.get('username')

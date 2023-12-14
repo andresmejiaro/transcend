@@ -18,8 +18,9 @@ function getCSRFCookie() {
 
 const isLogged = () => {
   username = sessionStorage.getItem("username");
+  jwt = sessionStorage.getItem("jwt");
   	
-  if (!username) return false;
+  if (!username || !jwt) return false;
   else return true;
 };
 
