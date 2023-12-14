@@ -34,6 +34,24 @@ def info_me_view(request, username):
 
     return JsonResponse({'error': 'Only GET requests are allowed'}, status=400)
 
+@requires_csrf_token
+def info_me_id_view(request, user_id):
+    if request.method == 'GET':
+        try:
+            user = CustomUser.objects.get(pk=user_id)
+            user_data_response = {
+                'username': user.username,
+                'fullname': user.fullname,
+                'avatar_url': user.avatar.url if user.avatar else None
+            }
+            return JsonResponse({'status': 'ok', 'user': user_data_response})
+
+        except Exception as e:
+            # Handle token validation failure
+            return JsonResponse({'error': str(e)}, status=401)
+
+    return JsonResponse({'error': 'Only GET requests are allowed'}, status=400)
+
 
 @requires_csrf_token
 def update_avatar_view(request, username):
