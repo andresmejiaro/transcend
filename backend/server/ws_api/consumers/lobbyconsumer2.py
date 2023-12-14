@@ -19,23 +19,23 @@ class LobbyConsumer(AsyncWebsocketConsumer):
     lobby_name = 'lobby'
 
 # Define constants for commands
-    LIST_OF_USERS = 'list_of_users'
-    SEND_PRV_MSG = 'send_prv_msg'
-    SEND_NOTIFICATION = 'send_notification'
-    CMD_NOT_FOUND = 'command_not_found'
-    CLOSE_CONNECTION = 'close_connection'
-    CREATE_USER = 'create_user'
-    MODIFY_USER = 'modify_user'
-    SERVER_TIME = 'server_time'
-    INVITE_TO_MATCH = 'invite_to_match'
-    ACCEPT_MATCH = 'accept_match'
-    REJECT_MATCH = 'reject_match'
-    CANCEL_MATCH = 'cancel_match'
-    SEND_FRIEND_REQUEST = 'send_friend_request'
-    ACCEPT_FRIEND_REQUEST = 'accept_friend_request'
-    REJECT_FRIEND_REQUEST = 'reject_friend_request'
-    CANCEL_FRIEND_REQUEST = 'cancel_friend_request'
-    GET_USER_INFO = 'get_user_info'
+    LIST_OF_USERS = 'list_of_users'                     # Command to send the list of online users
+    SEND_PRV_MSG = 'send_prv_msg'                       # Command to send a private message
+    SEND_NOTIFICATION = 'send_notification'             # Command to send a notification
+    CMD_NOT_FOUND = 'command_not_found'                 # Command to send when a command is not found
+    CLOSE_CONNECTION = 'close_connection'               # Command to close the connection
+    CREATE_USER = 'create_user'                         # Command to create a user arguments: pass the values as of 'user_data'
+    MODIFY_USER = 'modify_user'                         # Command to modify a user arguments: pass the values as of 'changes'
+    SERVER_TIME = 'server_time'                         # Command to send the server time
+    INVITE_TO_MATCH = 'invite_to_match'                 # Command to invite a user to a match arguments: pass the values as of 'client_id' and 'match_id'
+    ACCEPT_MATCH = 'accept_match'                       # Command to accept a match arguments: pass the values as of 'client_id' and 'match_id'
+    REJECT_MATCH = 'reject_match'                       # Command to reject a match arguments: pass the values as of 'client_id' and 'match_id'
+    CANCEL_MATCH = 'cancel_match'                       # Command to cancel a match arguments: pass the values as of 'client_id' and 'match_id'
+    SEND_FRIEND_REQUEST = 'send_friend_request'         # Command to send a friend request arguments: pass the values as of 'client_id'
+    ACCEPT_FRIEND_REQUEST = 'accept_friend_request'     # Command to accept a friend request arguments: pass the values as of 'client_id'   
+    REJECT_FRIEND_REQUEST = 'reject_friend_request'     # Command to reject a friend request arguments: pass the values as of 'client_id'
+    CANCEL_FRIEND_REQUEST = 'cancel_friend_request'     # Command to cancel a friend request arguments: pass the values as of 'client_id'
+    GET_USER_INFO = 'get_user_info'                     # Command to get user info arguments: pass the values as of 'client_id'
 
 
     def __init__(self, *args, **kwargs):
@@ -341,7 +341,6 @@ class LobbyConsumer(AsyncWebsocketConsumer):
 
 # ---------------------------------------
 
-
 # Database methods
     @database_sync_to_async
     def does_not_exist(self, pk):
@@ -429,9 +428,6 @@ class LobbyConsumer(AsyncWebsocketConsumer):
         except Exception as e:
             print(e)    
         
-
-            
-
     @database_sync_to_async
     def create_user(self, user_data):
         try:
