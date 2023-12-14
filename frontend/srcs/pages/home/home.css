@@ -30,7 +30,7 @@ body {
 }
 .button img {
 	width: 13vw; /* Cambiar según sea necesario */
-	padding-bottom: 80%;
+	padding-bottom: 140%;
 	height: auto; /* Mantiene la proporción del botón */
 }
   

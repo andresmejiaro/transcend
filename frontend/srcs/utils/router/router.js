@@ -15,6 +15,11 @@ const ifLoggedRedirect = (location) => {
       console.log("router logout");
       handleLogout();
     }
+  }
+  else {
+    if (allowedLocations.includes(location)) {
+    window.location.pathname = '/play!';
+    }
   };
 };
 
