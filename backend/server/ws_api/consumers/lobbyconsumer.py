@@ -264,6 +264,18 @@ class LobbyConsumer(AsyncWebsocketConsumer):
     async def disconnect(self, close_code):
         try:
             if self.client_id in LobbyConsumer.list_of_users:
+                await self.send_info_to_group(
+                    'website_lobby',
+                    'user_disconnected',
+                    {
+                        'data': {
+                            'message': 'User disconnected',
+                            'user_id': self.client_id,
+                            'channel_name': self.channel_name,
+                            'group_name': 'website_lobby',
+                        }
+                    }
+                )
 
                 # Acquire a lock before accessing/modifying shared data
                 async with asyncio.Lock():

@@ -35,6 +35,9 @@ const urlLocationHandler = async () => {
 
   ifLoggedRedirect(location);
 
+  if (location == "/play!")
+    await joinLobby();
+
   console.log("location: ", location);
   const route = urlRoutes[location] || urlRoutes["404"];
   const html = await fetch(route.template).then((response) => response.text());

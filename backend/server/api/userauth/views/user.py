@@ -113,7 +113,7 @@ def get_user_id(request, username):
                 if user:
                     return JsonResponse({'user_id': user.id, 'username': user.username})
                 else:
-                    return JsonResponse({'message': 'User not found'}, status=404)
+                    return JsonResponse({'message': 'User not found'})
             else:
                 return JsonResponse({'message': 'Username missing in the request body'}, status=400)
 
