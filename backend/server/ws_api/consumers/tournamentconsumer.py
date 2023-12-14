@@ -127,7 +127,6 @@ class TournamentConsumer(AsyncWebsocketConsumer):
         except Exception as e:
             print(f"Error in disconnect method: {e}")
 
-
     async def receive(self, text_data):
         try:
             data = json.loads(text_data)
@@ -208,7 +207,7 @@ class TournamentConsumer(AsyncWebsocketConsumer):
             print(f'Exception in start_tournament {e}')
 # ---------------------------------------
 
-# Game methods
+# Round Generator
     async def matchmaking_logic(self):
         try:
             tournament = await self.get_tournament_object()
@@ -292,6 +291,8 @@ class TournamentConsumer(AsyncWebsocketConsumer):
             print(f"Error in matchmaking_logic: {e}")
             # Log the error using the logger module
             logging.error(f"Error in matchmaking_logic: {e}")
+# ---------------------------------------
+
 
 # Object Getters
     async def get_tournament_object(self):
@@ -351,7 +352,6 @@ class TournamentConsumer(AsyncWebsocketConsumer):
         except Exception as e:
             print(f'Error calculating player score: {e}')
             return 0
-
 # ---------------------------------------
 
 # Object initialization/save methods
