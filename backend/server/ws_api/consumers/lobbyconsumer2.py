@@ -220,6 +220,7 @@ class LobbyConsumer(AsyncWebsocketConsumer):
         except Exception as e:
             print(f'Exception in announce_departure {e}')
             await self.disconnect(1000)
+# ---------------------------------------
 
 # Predefined Matchmaking methods
     async def invite_to_match(self, user_id, match_id):
@@ -293,7 +294,6 @@ class LobbyConsumer(AsyncWebsocketConsumer):
             print(f'Exception in send_friend_request {e}')
             await self.disconnect(1000)
 
-    # Predefined Friend methods
     async def accept_friend_request(self, user_id):
         try:
             # Add the current user as a friend for the other person
@@ -338,7 +338,6 @@ class LobbyConsumer(AsyncWebsocketConsumer):
         except Exception as e:
             print(f'Exception in cancel_friend_request {e}')
             await self.disconnect(1000)
-
 # ---------------------------------------
 
 # Database methods
