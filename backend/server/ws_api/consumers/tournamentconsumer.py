@@ -10,6 +10,7 @@ from django.db.models import Q
 import math
 import random
 import logging
+import asyncio
 
 from django.utils.module_loading import import_string
 
@@ -38,6 +39,8 @@ class TournamentConsumer(AsyncWebsocketConsumer):
     START_ROUND = 'start_round'
     LIST_PLAYERS = 'list_players'
     CMD_NOT_FOUND = 'command_not_found'
+    CLOSE_CONNECTION = 'close_connection'
+
 
 
 # Channel methods (Connect, Disconnect, Receive)
@@ -115,6 +118,8 @@ class TournamentConsumer(AsyncWebsocketConsumer):
                 )
                 self.tournament_ended = True
 
+            self.close()
+
         except Exception as e:
             print(f"Error in disconnect method: {e}")
 
@@ -122,16 +127,13 @@ class TournamentConsumer(AsyncWebsocketConsumer):
         try:
             data = json.loads(text_data)
             command = data.get('command')
-            print(f'Received message from client {self.client_id} with command: {command}')
 
-            if command == self.START_ROUND: # Gnerates the matches and rounds for the tournament and sends the info to the clients
-                print(f'Received start round command from client {self.client_id}')
+            if command == self.START_ROUND:
                 await self.matchmaking_logic()
-            elif command == self.START_TOURNAMENT: # Initializes the Tournament Object and extracts the list of players
-                print(f'Received start tournament command from client {self.client_id}')
+            elif command == self.START_TOURNAMENT:
                 await self.start_tournament()
-
-            # Get commands
+            elif command == self.CLOSE_CONNECTION:
+                await self.disconnect(1000)
             elif command == self.LIST_PLAYERS:
                 list_of_current_players = list(self.list_of_player_channels.keys())
                 await self.send_info_to_client(self.LIST_PLAYERS, list_of_current_players)
@@ -142,12 +144,14 @@ class TournamentConsumer(AsyncWebsocketConsumer):
             print(f"Error decoding JSON data: {e}")
         except Exception as e:
             print(f"Error in receive method: {e}")
+
 # ---------------------------------------
 
 # Messaging methods
     async def broadcast(self, event):
         command = event['command']
         data = event['data']
+        
         await self.send(text_data=json.dumps({
             'type': command,
             'data': data
@@ -181,6 +185,7 @@ class TournamentConsumer(AsyncWebsocketConsumer):
         }))
 # ---------------------------------------
 
+
 # Tournament Initialization
     async def start_tournament(self):
         try:
@@ -195,6 +200,7 @@ class TournamentConsumer(AsyncWebsocketConsumer):
             )
         except Exception as e:
             print(f'Exception in start_tournament {e}')
+            await self.disconnect(1000)
 # ---------------------------------------
 
 # Round Generator
@@ -271,10 +277,12 @@ class TournamentConsumer(AsyncWebsocketConsumer):
             print(f"ValueError in matchmaking_logic: {ve}")
             # Log the error using the logger module
             logging.error(f"ValueError in matchmaking_logic: {ve}")
+            await self.disconnect()
         except Exception as e:
             print(f"Error in matchmaking_logic: {e}")
             # Log the error using the logger module
             logging.error(f"Error in matchmaking_logic: {e}")
+            await self.disconnect()
 # ---------------------------------------
 
 
