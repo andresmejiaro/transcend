@@ -66,8 +66,7 @@ class TournamentConsumer(AsyncWebsocketConsumer):
             self.channel_name
         )
 
-        # if not self.list_of_player_channels:
-        #     self.start_tournament()
+        list_of_current_players = list(self.list_of_player_channels.keys())
 
         await self.broadcast_to_group(
             self.tournament_id,
@@ -75,7 +74,7 @@ class TournamentConsumer(AsyncWebsocketConsumer):
             {
                 'player_id': self.client_id,
                 'tournament_id': self.tournament_id,
-                'players': self.list_of_player_channels,
+                'players': list_of_current_players,
             }
         )
 
@@ -185,7 +184,6 @@ class TournamentConsumer(AsyncWebsocketConsumer):
     async def start_tournament(self):
         try:
             await self.init_tour_obj(self.tournament_id)
-            await self.send_info_to_client('tournament_initialized', {})
             await self.broadcast_to_group(
                 str(self.tournament_id),
                 'tournament_started',
@@ -220,12 +218,17 @@ class TournamentConsumer(AsyncWebsocketConsumer):
                 await self.save_tournament_results()
                 print(f'Tournament {tournament} saved successfully')
 
+                # Create a list with all the matches played this tournament
+                matches_played = []
+                for round in self.list_of_rounds.values():
+                    matches_played.extend(list(round.matches.all()))
+
                 await self.broadcast_to_group(
                     self.tournament_id,
                     'tournament_ended',
                     {
                         'tournament_id': self.tournament_id,
-                        'matches': list(self.list_of_matches.keys()),
+                        'matches': matches_played,
                         'rounds': list(self.list_of_rounds.keys()),
                         'total_rounds': self.tournament_rounds_to_complete,
                         'current_round': self.current_round,
@@ -248,10 +251,6 @@ class TournamentConsumer(AsyncWebsocketConsumer):
                 str(match.id): {
                     'player1': match.player1.id,
                     'player2': match.player2.id,
-                    'player1_score': match.player1_score,
-                    'player2_score': match.player2_score,
-                    'winner': match.winner.id if match.winner else None,
-                    'date_played': match.date_played.isoformat() if match.date_played else None,
                     'active': match.active,
                 }
                 for match in matches
