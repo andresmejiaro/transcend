@@ -70,12 +70,25 @@ p {
 
 /* Navbar */
 .navbar-logged-pong {
-	background: linear-gradient(180deg, #1699CE -396.32%, #17638C -182.35%, #191A32 108.95%);
-	color: #FEFEE9;
-	border: 4px solid white;
-	background-clip: padding-box;
-	transition: border-color 0.2s ease-in-out;
+	display: flex;
+    justify-content: space-between; /* Aligns items to the far ends */
+	position: fixed; /* Keeps the navbar fixed at the top */
+    top: 0; /* Aligns the navbar to the top of the viewport */
+    left: 0; /* Aligns the navbar to the left of the viewport */
+    right: 0; /* Ensures the navbar extends to the right edge of the viewport */
+    z-index: 1000; /* Ensures the navbar stays on top of other elements */
+    width: 97% !important;
+    height: 60px !important;
+    border-radius: 68px !important;
+    background: #15142E !important; /* Solid background color */
+    color: #FEFEE9 !important;
+    border: none !important;
+    background-clip: padding-box !important;
+    transition: border-color 0.2s ease-in-out !important;
+    margin: auto !important;
+    margin-top: 15px !important; /* Adjust this value to increase or decrease the top space */
 }
+
 
 .nav-link-logged-pong {
 	color: #FEFEE9;
@@ -92,4 +105,16 @@ p {
 
 .mt-10r {
 	margin-top: 10rem;
+}
+
+.nav-item {
+    margin-right: 80px; /* Adjust the space between navigation items */
+}
+
+.nav-link {
+    padding: 5px 10px; /* Add padding to make each link larger and more clickable */
+}
+
+.nav-link-logged-pong {
+    padding: 5px 10px; /* Similar to .nav-link, adjust as needed */
 }
