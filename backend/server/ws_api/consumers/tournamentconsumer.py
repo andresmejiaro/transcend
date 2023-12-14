@@ -13,8 +13,6 @@ import logging
 
 from django.utils.module_loading import import_string
 
-
-
 class TournamentConsumer(AsyncWebsocketConsumer):
 
     list_of_player_channels = {}
@@ -37,14 +35,8 @@ class TournamentConsumer(AsyncWebsocketConsumer):
 # Define constants for commands
 
     START_TOURNAMENT = 'start_tournament'
-    END_MATCH = 'end_match'
     START_ROUND = 'start_round'
-    END_ROUND = 'end_round'
-    ADD_PLAYER = 'add_player'
-    REMOVE_PLAYER = 'remove_player'
     LIST_PLAYERS = 'list_players'
-    LIST_MATCHES = 'list_matches'
-    LIST_ROUNDS = 'list_rounds'
     CMD_NOT_FOUND = 'command_not_found'
 
 
@@ -133,18 +125,16 @@ class TournamentConsumer(AsyncWebsocketConsumer):
             command = data.get('command')
             print(f'Received message from client {self.client_id} with command: {command}')
 
-            if command == self.START_ROUND:
+            if command == self.START_ROUND: # Gnerates the matches and rounds for the tournament and sends the info to the clients
                 print(f'Received start round command from client {self.client_id}')
                 await self.matchmaking_logic()
-            elif command == self.START_TOURNAMENT:
+            elif command == self.START_TOURNAMENT: # Initializes the Tournament Object and extracts the list of players
                 print(f'Received start tournament command from client {self.client_id}')
                 await self.start_tournament()
+
+            # Get commands
             elif command == self.LIST_PLAYERS:
                 await self.send_info_to_client(self.LIST_PLAYERS, self.list_of_player_channels)
-            elif command == self.LIST_MATCHES:
-                await self.send_info_to_client(self.LIST_MATCHES, self.list_of_matches)
-            elif command == self.LIST_ROUNDS:
-                await self.send_info_to_client(self.LIST_ROUNDS, self.list_of_rounds)
             else:
                 await self.send_info_to_client(self.CMD_NOT_FOUND, text_data)
 
@@ -194,11 +184,11 @@ class TournamentConsumer(AsyncWebsocketConsumer):
 # Tournament Initialization
     async def start_tournament(self):
         try:
-            await self.init_tour_object(self.tournament_id)
+            await self.init_tour_obj(self.tournament_id)
             await self.send_info_to_client('tournament_initialized', {})
             await self.broadcast_to_group(
                 str(self.tournament_id),
-                'tournament_initialized',
+                'tournament_started',
                 {
                     'tournament_id': self.tournament_id,
                 }
@@ -232,7 +222,7 @@ class TournamentConsumer(AsyncWebsocketConsumer):
 
                 await self.broadcast_to_group(
                     self.tournament_id,
-                    'tournament_info',
+                    'tournament_ended',
                     {
                         'tournament_id': self.tournament_id,
                         'matches': list(self.list_of_matches.keys()),
@@ -419,7 +409,7 @@ class TournamentConsumer(AsyncWebsocketConsumer):
             return None
 
     @database_sync_to_async
-    def init_tour_object(self, pk):
+    def init_tour_obj(self, pk):
         try:
             Tournament = import_string('api.tournament.models.Tournament')
             tournament = get_object_or_404(Tournament, pk=pk)
