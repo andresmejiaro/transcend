@@ -218,18 +218,11 @@ class TournamentConsumer(AsyncWebsocketConsumer):
                 await self.save_tournament_results()
                 print(f'Tournament {tournament} saved successfully')
 
-                # Create a list with all the matches played this tournament
-                matches_played = []
-                for round in self.list_of_rounds.values():
-                    matches_played.extend(list(round.matches.all()))
-
                 await self.broadcast_to_group(
                     self.tournament_id,
                     'tournament_ended',
                     {
                         'tournament_id': self.tournament_id,
-                        'matches': matches_played,
-                        'rounds': list(self.list_of_rounds.keys()),
                         'total_rounds': self.tournament_rounds_to_complete,
                         'current_round': self.current_round,
                         'info': 'Tournament has ended.',
