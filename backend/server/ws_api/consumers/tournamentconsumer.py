@@ -26,17 +26,17 @@ class TournamentConsumer(AsyncWebsocketConsumer):
     tournament_rounds_to_complete = 0
     current_round = 0
     tournament_id = None
+    tournament_ended = False
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.client_id = None
         self.player_object = None
-        self.tournament_ended = False
         self.player_score = 0
 
 # Define constants for commands
 
-    START_MATCH = 'start_match'
+    START_TOURNAMENT = 'start_tournament'
     END_MATCH = 'end_match'
     START_ROUND = 'start_round'
     END_ROUND = 'end_round'
@@ -45,6 +45,7 @@ class TournamentConsumer(AsyncWebsocketConsumer):
     LIST_PLAYERS = 'list_players'
     LIST_MATCHES = 'list_matches'
     LIST_ROUNDS = 'list_rounds'
+    CMD_NOT_FOUND = 'command_not_found'
 
 
 # Channel methods (Connect, Disconnect, Receive)
@@ -73,8 +74,8 @@ class TournamentConsumer(AsyncWebsocketConsumer):
             self.channel_name
         )
 
-        if not self.list_of_player_channels:
-            self.start_tournament()
+        # if not self.list_of_player_channels:
+        #     self.start_tournament()
 
         await self.broadcast_to_group(
             self.tournament_id,
@@ -87,39 +88,45 @@ class TournamentConsumer(AsyncWebsocketConsumer):
         )
 
     async def disconnect(self, close_code):
-        # Remove client from the group channel
-        await self.channel_layer.group_discard(
-            str(self.tournament_id),
-            self.channel_name
-        )
-        await self.channel_layer.group_discard(
-            str(self.client_id),
-            self.channel_name
-        )
-        # Remove client from the list of players or observers
-        if self.client_id in self.list_of_player_channels:
-            del self.list_of_player_channels[self.client_id]
+        try:
+            print(f'Client {self.client_id} disconnected with code {close_code}')
+            # Remove client from the group channel
+            await self.channel_layer.group_discard(
+                str(self.tournament_id),
+                self.channel_name
+            )
+            await self.channel_layer.group_discard(
+                str(self.client_id),
+                self.channel_name
+            )
+            # Remove client from the list of players or observers
+            if self.client_id in self.list_of_player_channels:
+                del self.list_of_player_channels[self.client_id]
 
-        # Send info of group status every time a client leaves
-        await self.broadcast_to_group(
-            str(self.tournament_id),
-            'player_left',
-            {
-                'player_id': self.client_id,
-            }
-        )
-
-        # If the tournament admin leaves, end the tournament and kick everyone out save current state
-        if self.client_id == self.tournament_admin_id:
+            # Send info of group status every time a client leaves
             await self.broadcast_to_group(
                 str(self.tournament_id),
-                'tournament_ended',
+                'player_left',
                 {
-                    'tournament_id': self.tournament_id,
-                    'info': 'Tournament admin left the tournament. The tournament has ended.',
+                    'player_id': self.client_id,
                 }
             )
-            self.tournament_ended = True
+
+            # If the tournament admin leaves, end the tournament and kick everyone out save current state
+            if self.client_id == self.tournament_admin_id:
+                await self.broadcast_to_group(
+                    str(self.tournament_id),
+                    'tournament_ended',
+                    {
+                        'tournament_id': self.tournament_id,
+                        'info': 'Tournament admin left the tournament. The tournament has ended.',
+                    }
+                )
+                self.tournament_ended = True
+
+        except Exception as e:
+            print(f"Error in disconnect method: {e}")
+
 
     async def receive(self, text_data):
         try:
@@ -128,8 +135,11 @@ class TournamentConsumer(AsyncWebsocketConsumer):
             print(f'Received message from client {self.client_id} with command: {command}')
 
             if command == self.START_ROUND:
+                print(f'Received start round command from client {self.client_id}')
                 await self.matchmaking_logic()
-
+            elif command == self.START_TOURNAMENT:
+                print(f'Received start tournament command from client {self.client_id}')
+                await self.start_tournament()
             elif command == self.LIST_PLAYERS:
                 await self.send_info_to_client(self.LIST_PLAYERS, self.list_of_player_channels)
             elif command == self.LIST_MATCHES:
@@ -137,7 +147,8 @@ class TournamentConsumer(AsyncWebsocketConsumer):
             elif command == self.LIST_ROUNDS:
                 await self.send_info_to_client(self.LIST_ROUNDS, self.list_of_rounds)
             else:
-                print(f"Unknown command: {command}")
+                await self.send_info_to_client(self.CMD_NOT_FOUND, text_data)
+
         except json.JSONDecodeError as e:
             print(f"Error decoding JSON data: {e}")
         except Exception as e:
@@ -148,14 +159,12 @@ class TournamentConsumer(AsyncWebsocketConsumer):
     async def broadcast(self, event):
         command = event['command']
         data = event['data']
-        print(f'Sending message to client {self.client_id} with data: {data}')
         await self.send(text_data=json.dumps({
             'type': command,
             'data': data
         }))
 
     async def broadcast_to_group(self, group_name, command, data):
-        print(f'Channel Broadcasting {command} to group {group_name}')
         await self.channel_layer.group_send(
             group_name,
             {
@@ -166,7 +175,6 @@ class TournamentConsumer(AsyncWebsocketConsumer):
         )
 
     async def message_another_player(self, player_id, command, data):
-        print(f'Messaging player {player_id} with data: {data}')
         await self.channel_layer.group_send(
             player_id,
             {
@@ -186,19 +194,18 @@ class TournamentConsumer(AsyncWebsocketConsumer):
 
 # Tournament Initialization
     async def start_tournament(self):
-        await self.init_tour_object(self.tournament_id)
-        await self.send_info_to_client('tournament_initialized', {})
-        await self.broadcast_to_group(
-            str(self.tournament_id),
-            'tournament_info',
-            {
-                'tournament_id': self.tournament_id,
-                'players_in_websocket': self.list_of_player_channels,
-                'matches': self.list_of_matches,
-                'rounds': self.list_of_rounds,
-                'tournament_admin_id': self.tournament_admin_id,
-            }
-        )
+        try:
+            await self.init_tour_object(self.tournament_id)
+            await self.send_info_to_client('tournament_initialized', {})
+            await self.broadcast_to_group(
+                str(self.tournament_id),
+                'tournament_initialized',
+                {
+                    'tournament_id': self.tournament_id,
+                }
+            )
+        except Exception as e:
+            print(f'Exception in start_tournament {e}')
 # ---------------------------------------
 
 # Game methods
@@ -218,8 +225,9 @@ class TournamentConsumer(AsyncWebsocketConsumer):
 
             self.tournament_rounds_to_complete = max(1, math.ceil(math.log2(len(players))))
 
-            if self.current_round >= self.tournament_rounds_to_complete and not self.tournament_ended:
+            if self.current_round >= self.tournament_rounds_to_complete:
                 print('Tournament has ended')
+                self.tournament_ended = True
                 await self.save_tournament_results()
                 print(f'Tournament {tournament} saved successfully')
 
@@ -231,7 +239,7 @@ class TournamentConsumer(AsyncWebsocketConsumer):
                         'matches': list(self.list_of_matches.keys()),
                         'rounds': list(self.list_of_rounds.keys()),
                         'total_rounds': self.tournament_rounds_to_complete,
-                        'current_round': self.current_round + 1,
+                        'current_round': self.current_round,
                         'info': 'Tournament has ended.',
                     }
                 )
@@ -262,7 +270,7 @@ class TournamentConsumer(AsyncWebsocketConsumer):
 
             # Broadcast the modified match_data
             await self.broadcast_to_group(
-                self.tournament_id,
+                str(self.tournament_id),
                 'matchmaking_info',
                 {
                     'sit_out_player': sit_out_player.id if sit_out_player else None,
@@ -272,7 +280,9 @@ class TournamentConsumer(AsyncWebsocketConsumer):
                     'current_round': self.current_round + 1,
                 }
             )
+            
             self.current_round += 1
+            print(f'Round launched next round is: {self.current_round}')
 
         except ValueError as ve:
             print(f"ValueError in matchmaking_logic: {ve}")
@@ -282,7 +292,6 @@ class TournamentConsumer(AsyncWebsocketConsumer):
             print(f"Error in matchmaking_logic: {e}")
             # Log the error using the logger module
             logging.error(f"Error in matchmaking_logic: {e}")
-
 
 # Object Getters
     async def get_tournament_object(self):
@@ -383,8 +392,10 @@ class TournamentConsumer(AsyncWebsocketConsumer):
         print(f'Creating round for tournament {tournament}')
         new_round = Round(tournament=tournament, round_number=current_round)
         new_round.save()
+
         new_round.matches.set(matches)
         new_round.save()
+
         print(f'Round {new_round} saved successfully')
         self.list_of_rounds[new_round.id] = new_round
 
@@ -408,7 +419,7 @@ class TournamentConsumer(AsyncWebsocketConsumer):
             return None
 
     @database_sync_to_async
-    def init_tour_obj(self, pk):
+    def init_tour_object(self, pk):
         try:
             Tournament = import_string('api.tournament.models.Tournament')
             tournament = get_object_or_404(Tournament, pk=pk)
