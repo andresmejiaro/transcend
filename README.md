@@ -22,7 +22,7 @@ Welcome to The Ultimate Pong Tournament!!!
 
 A thrilling web application that brings the classic Pong game to life in an interactive and engaging multiplayer environment.
 
-![Pong Game GIF](https://potduggans.com/wp-content/uploads/2019/02/PING-PONG-GIF-300x173.gif)
+![Pong Game GIF](https://potduggans.com/wp-content/uploads/2019/02/PING-PONG-GIF.gif)
 
 Ft_trascendence is an ambitious project that endeavors to create an immersive web-based gaming platform. Our mission is to enable users to experience the joy of playing Pong in real-time against other players or alone against the IA while offering a seamless and visually appealing user interface.
 
