@@ -26,6 +26,7 @@ class GameConsumerAsBridge(AsyncWebsocketConsumer):
         self.player_1_score = 0
         self.player_2_score = 0
         self.update_buffer = []
+        self.run_game = True
 
     @database_sync_to_async
     def get_match(self, match_id):
@@ -65,6 +66,7 @@ class GameConsumerAsBridge(AsyncWebsocketConsumer):
     @database_sync_to_async
     def finalize_match(self):
         from api.tournament.models import Match
+        self.run_game = False
 
         try:
             ic(f'Finalizing match {self.match_id}')
@@ -214,7 +216,6 @@ class GameConsumerAsBridge(AsyncWebsocketConsumer):
     # Disconnect
     async def disconnect(self, close_code):
         try:
-   
             await asyncio.wait_for(self.finalize_match(), timeout=5.0) 
             # await self.get_match(self.match_id)
             ic(f'Disconnecting from match {self.match_id} with client {self.client_id}. Player 1: {self.player_1_id}. Player 2: {self.player_2_id}')
@@ -303,7 +304,7 @@ class GameConsumerAsBridge(AsyncWebsocketConsumer):
             target_fps = 60
             update_interval = 1 / target_fps
 
-            while self.match_id in self.list_of_games and self.list_of_games[self.match_id] and self.list_of_games[self.match_id].isAlive():
+            while self.match_id in self.list_of_games and self.list_of_games[self.match_id] and self.list_of_games[self.match_id].isAlive() and self.run_game:
                 # Update paddle positions based on keyboard inputs
                 left_paddle = self.list_of_games[self.match_id]._leftPaddle
                 right_paddle = self.list_of_games[self.match_id]._rightPaddle

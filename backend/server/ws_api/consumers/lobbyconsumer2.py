@@ -36,8 +36,8 @@ class LobbyConsumer(AsyncWebsocketConsumer):
     REJECT_FRIEND_REQUEST = 'reject_friend_request'     # Command to reject a friend request arguments: pass the values as of 'client_id'
     CANCEL_FRIEND_REQUEST = 'cancel_friend_request'     # Command to cancel a friend request arguments: pass the values as of 'client_id'
     GET_USER_INFO = 'get_user_info'                     # Command to get user info arguments: pass the values as of 'client_id'
-
-
+# ---------------------------------------
+    
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.client_id = None
