@@ -3,18 +3,14 @@ let initialContent; // Variable to store the initial content
 const handleInvite = async () => {
   const modalBody = document.getElementById("modal-body-friends");
 
-  // Check if the initial content is already stored
   if (!initialContent) {
-    initialContent = modalBody.innerHTML; // Store the initial content
+    initialContent = modalBody.innerHTML;
   }
 
-  // Check if the input field is already present
   const isInputVisible = modalBody.querySelector("#invitationInput") !== null;
   if (isInputVisible) {
-    // If input is visible, switch back to the initial content
     modalBody.innerHTML = initialContent;
   } else {
-    // If input is not visible, show the input and button
     modalBody.innerHTML = `
             <input type="text" id="invitationInput" placeholder="Enter friend's name">
             <button id="sendInvitationBtn" class="btn btn-success">Send Invitation</button>
@@ -78,6 +74,8 @@ const inviteFriend = async (inviteId) => {
 const listFriends = async () => {
   if (nowOnlineFriends)
     toggleFriendNav(nowOnlineFriends);
+  else
+    removeToggleFriendNav();
 
   const friendsListContainer = document.getElementById("friends-list");
   friendsListContainer.innerHTML = "";
@@ -110,7 +108,10 @@ const listFriends = async () => {
   document.getElementById("friendsModalLabel").innerHTML = "Online: " + nowOnlineFriends;
 };
 
+const friendsIconNav = document.getElementById("nav-friends-icon");
 const toggleFriendNav = async (nbrFriendsOnline) => {
-  const friendsIconNav = document.getElementById("nav-friends-icon");
   friendsIconNav.src = "./srcs/assets/imgs/friends-online-icon.svg";
+}
+const removeToggleFriendNav = () => {
+  friendsIconNav.src = "./srcs/assets/imgs/friends-icon.svg";
 }

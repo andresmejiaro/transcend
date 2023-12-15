@@ -11,21 +11,15 @@ const connectWebSocket = async () => {
 
   return new Promise((resolve, reject) => {
     lobbySocket = new WebSocket(
-      `ws://localhost:8001/ws/lobby/?client_id=${userId}`
+      `ws://localhost:8001/ws/lobby2/?client_id=${userId}`
     );
 
     lobbySocket.addEventListener("open", (event) => {
-      console.log("WebSocket connection opened:", event);
-      sendWebSocketMessage('command', {
-        command: "get_user_info",
-        data: {},
-      });
       resolve(lobbySocket); // Resolve with the WebSocket object
     });
 
     lobbySocket.addEventListener("message", (event) => {
       const data = JSON.parse(event.data);
-
       if (data.type === "message") {
         console.log(data.group_name, data.message);
       }
@@ -54,7 +48,7 @@ const getOnlineUsers = async () => {
     lobbySocket.addEventListener("user_left", (event) => {
       console.log(event)
       console.log(event.data)
-      // parseAndHandleMessage(event.data);
+      parseAndHandleMessage(event.data);
     });
 
     lobbySocket.onmessage = (event) => {
@@ -73,9 +67,10 @@ const getOnlineUsers = async () => {
 
 const parseAndHandleMessage = async (message) => {
     const data = JSON.parse(message);
-    console.log("ws", data)
-    if (data.data)
-        updateFriendStatus(data.data);
+    if (data.type == "user_joined")
+        updateFriendStatus(data);
+    else if (data.type == "user_left")
+        updateFriendStatus(data);
 }
 
 const sendWebSocketMessage = (messageType, payload) => {

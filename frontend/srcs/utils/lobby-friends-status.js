@@ -41,11 +41,13 @@ const getMyFriends = async () => {
 
 const updateFriendStatus = async (data) => {
   const updatedFriendList = await getMyFriends();
+  data = data.data;
   if (!updatedFriendList) return null;
   nowOnlineFriends = 0;
   updatedFriendList.forEach((friend) => {
-    if (data.includes(friend.userId)) {
-	    nowOnlineFriends++;
+    const friendUserId = friend.userId;
+    if (friendUserId in data.online_users) {
+      nowOnlineFriends++;
       friend.online = true;
     }
   });
