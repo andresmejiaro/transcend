@@ -61,11 +61,12 @@ async function makeRequest(useCsrf, url, options, queries) {
 
   const response = await fetch(url, options);
 
-  if (!response.ok) {
-    if (!allowedLocations.includes(window.location.pathname)) {
-      handleLogout();
-    }
-  }
+  // COMMENT IN PRODUCTION ONLY "!!!!!!!!!!!!!"
+  // if (!response.ok) {
+  //   if (!allowedLocations.includes(window.location.pathname)) {
+  //     handleLogout();
+  //   }
+  // }
   
   
   const contentType = response.headers.get("content-type");

@@ -59,6 +59,12 @@ function updateGameCanvas(data) {
   } else if (data.type === "game_update") {
     // Handle game update data
     drawPongGame(data.data);
+  } else if (data.type === "update_buffer") {
+    // Handle buffered game updates
+    data.data.forEach((update) => {
+      console.log("Buffered game update:", update);
+      drawPongGame(update.game_update);
+    });
   } else {
     console.error("Invalid message type:", data.type);
   }
@@ -68,21 +74,22 @@ function drawPongGame(data) {
   // Check if the required properties exist in the data object
   if (
     data &&
-    data.canvas &&
-    data.canvas.ball &&
-    data.canvas.leftPaddle &&
-    data.canvas.rightPaddle
+    data.ball &&
+    data.leftPaddle &&
+    data.rightPaddle
   ) {
     ctx.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
-    drawRect(data.canvas.ball.position, data.canvas.ball.size, "blue");
+
+    // Draw only if the ball, leftPaddle, and rightPaddle properties are present
+    drawRect(data.ball.position, data.ball.size, "blue");
     drawRect(
-      data.canvas.leftPaddle.position,
-      data.canvas.leftPaddle.size,
+      data.leftPaddle.position,
+      data.leftPaddle.size,
       "green"
     );
     drawRect(
-      data.canvas.rightPaddle.position,
-      data.canvas.rightPaddle.size,
+      data.rightPaddle.position,
+      data.rightPaddle.size,
       "red"
     );
 
@@ -100,6 +107,7 @@ function drawPongGame(data) {
     console.error("Invalid data format:", data);
   }
 }
+
 
 function drawRect(position, size, color) {
   ctx.fillStyle = color;
@@ -298,7 +306,6 @@ const handleMatchmaking = async () => {
 };
 
 
-
 // FUNCIONA PERO NO MUESTRA NADA EN PANTALLA
 // MEJORAR / TERMINAR function updateGameCanvas(data) 53
-// handleMatchmaking();
+handleMatchmaking();

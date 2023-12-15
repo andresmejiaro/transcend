@@ -23,8 +23,9 @@ class GameConsumerAsBridge(AsyncWebsocketConsumer):
         self.keyboard = {}          # Holds the keyboard inputs for each player (eg. self.keyboard[self.player_1_id] = {"up": f"up.{self.player_1_id}", "down": f"down.{self.player_1_id}", "left": "xx", "right": "xx"})
         self.left_player = None     # Holds the Player object for the left player for the game
         self.right_player = None    # Holds the Player object for the right player for the game
-
-
+        self.player_1_score = 0
+        self.player_2_score = 0
+        self.update_buffer = []
 
     @database_sync_to_async
     def get_match(self, match_id):
@@ -60,6 +61,22 @@ class GameConsumerAsBridge(AsyncWebsocketConsumer):
                 'error': 'Player does not exist'
             }))
             self.close()
+
+    @database_sync_to_async
+    def finalize_match(self):
+        from api.tournament.models import Match
+
+        try:
+            ic(f'Finalizing match {self.match_id}')
+            match_object = Match.objects.get(pk=self.match_id)
+            match_object.active = False
+            match_object.player1_score = self.player_1_score
+            match_object.player2_score = self.player_2_score
+            match_object.save()
+            ic(f'Match {self.match_id} finalized')
+
+        except Exception as e:
+            ic(f'Error during match finalization: {e}')
 
     # Initialize the game and makes sure that both players are connected before starting the game
     async def initialize_game(self):
@@ -197,6 +214,8 @@ class GameConsumerAsBridge(AsyncWebsocketConsumer):
     # Disconnect
     async def disconnect(self, close_code):
         try:
+   
+            await asyncio.wait_for(self.finalize_match(), timeout=5.0) 
             # await self.get_match(self.match_id)
             ic(f'Disconnecting from match {self.match_id} with client {self.client_id}. Player 1: {self.player_1_id}. Player 2: {self.player_2_id}')
             if self.client_id in self.list_of_players:
@@ -211,8 +230,11 @@ class GameConsumerAsBridge(AsyncWebsocketConsumer):
                 del self.list_of_keyboard_inputs[self.match_id]
 
 
+        except asyncio.TimeoutError:
+            ic("Disconnect operation timed out. Closing the connection.")
         except Exception as e:
             ic(f'Error during disconnect: {e}')
+
 
         if self.client_id in self.list_of_observers:
             # Remove the observer from the list of observers if it is in the list
@@ -227,7 +249,6 @@ class GameConsumerAsBridge(AsyncWebsocketConsumer):
         # Send message to group announcing player left
         await self.broadcast_to_group(self.match_id, 'player_list', self.list_of_players)
         await self.close(code=close_code)
-
 
     # Receive message from WebSocket and process it
     async def receive(self, text_data):
@@ -287,16 +308,31 @@ class GameConsumerAsBridge(AsyncWebsocketConsumer):
                 left_paddle = self.list_of_games[self.match_id]._leftPaddle
                 right_paddle = self.list_of_games[self.match_id]._rightPaddle
 
+                self.player_1_score = self.list_of_games[self.match_id]._leftPlayer.getScore()
+                self.player_2_score = self.list_of_games[self.match_id]._rightPlayer.getScore()
+
                 left_paddle.updatePosition()
                 right_paddle.updatePosition()
 
+                update_data = {
+                    'timestamp': timezone.now().isoformat(),
+                    'game_update': self.list_of_games[self.match_id].reportScreen(),
+                    'score_update': {'left': self.list_of_games[self.match_id]._leftPlayer.getScore(), 'right': self.list_of_games[self.match_id]._rightPlayer.getScore()},
+                }
+
+                self.update_buffer.append(update_data)
+                
                 # Send updated game state to the group
-                await self.broadcast_to_group(self.match_id, 'game_update', self.list_of_games[self.match_id].reportScreen())
-                await self.broadcast_to_group(self.match_id, 'score_update', {'left': self.list_of_games[self.match_id]._leftPlayer.getScore(), 'right': self.list_of_games[self.match_id]._rightPlayer.getScore()})
+                # await self.broadcast_to_group(self.match_id, 'game_update', self.list_of_games[self.match_id].reportScreen())
+                # await self.broadcast_to_group(self.match_id, 'score_update', {'left': self.list_of_games[self.match_id]._leftPlayer.getScore(), 'right': self.list_of_games[self.match_id]._rightPlayer.getScore()})
 
                 try:
                     # await asyncio.sleep(update_interval) # For use with FPS
                     await asyncio.sleep(0) # For manual control of FPS
+
+                    if len(self.update_buffer) >= 10:
+                        await self.broadcast_to_group(self.match_id, 'update_buffer', self.update_buffer)
+                        self.update_buffer = []
 
                 except asyncio.CancelledError:
                     ic(f'Game update for match {self.match_id} cancelled')
@@ -304,14 +340,15 @@ class GameConsumerAsBridge(AsyncWebsocketConsumer):
                 except Exception as e:
                     ic(f'Error during game update for match {self.match_id}: {e}')
 
-        except KeyError:
-            ic(f'Match {self.match_id} not found in list_of_games. Stopping game update.')
+        except asyncio.CancelledError:
+            ic(f'Game update for match {self.match_id} cancelled')
+        except Exception as e:
+            ic(f'Error during game update for match {self.match_id}: {e}')
         finally:
             self.list_of_games[self.match_id] = None
             ic(f'Game update for match {self.match_id} stopped')
 
         await self.disconnect(1000)
-
 
 
     # Keyboard input processing and formatting

@@ -5,6 +5,7 @@ from api.userauth.models import CustomUser as User
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
+from django.db.models import Q
 import json
 import math
 import random
@@ -20,6 +21,9 @@ def tournament_create(request):
             type = data.get('type', '1v1')
             end_date = data.get('end_date', None)
             round = data.get('round', 0)
+            tournament_admin_id = data.get('tournament_admin')
+
+            tournament_admin = get_object_or_404(User, pk=tournament_admin_id)
 
             if not name:
                 return JsonResponse({"status": "error", "message": "The 'name' field is required"}, status=422)
@@ -34,7 +38,9 @@ def tournament_create(request):
             if not valid_observers[0]:
                 return valid_observers[1]
 
-            tournament = Tournament(name=name, type=type, end_date=end_date, round=round)
+
+
+            tournament = Tournament(name=name, type=type, end_date=end_date, round=round, tournament_admin=tournament_admin)
             tournament.save()
             tournament.players.set(valid_players[1])
             tournament.observers.set(valid_observers[1])
@@ -98,6 +104,7 @@ def tournament_operations(request, pk):
                 'winner': tournament_instance.winner.id if tournament_instance.winner else None, # 'None' if 'winner' is 'None
                 'players': [player.id for player in tournament_instance.players.all()],
                 'observers': [observer.id for observer in tournament_instance.observers.all()],
+                'tournament_admin': tournament_instance.tournament_admin_id
             }
             return JsonResponse({'status': 'ok', 'data': tournament_detail})
         except Tournament.DoesNotExist:
@@ -106,20 +113,41 @@ def tournament_operations(request, pk):
             return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
 
     elif request.method == 'DELETE':
-        # Delete tournament
         try:
-            tournament_instance.delete()
-            return JsonResponse({'status': 'ok', 'message': 'Tournament deleted successfully'})
+            data = json.loads(request.body)
+            action = data.get('action', None)
+
+            if action == 'delete_tournament':
+                tournament_instance.delete()
+                return JsonResponse({'status': 'ok', 'message': 'Tournament deleted successfully'})
+            elif action == 'remove_player':
+                player_to_remove_id = data.get('player_to_remove', None)
+
+                if player_to_remove_id is not None:
+                    player_to_remove = User.objects.get(id=player_to_remove_id)
+                    tournament_instance.players.remove(player_to_remove)
+                    tournament_instance.save()
+                    return JsonResponse({'status': 'ok', 'message': 'Player removed from the tournament successfully'})
+                else:
+                    return JsonResponse({'status': 'error', 'message': 'Player ID to remove is missing from the request'}, status=400)
+            else:
+                return JsonResponse({'status': 'error', 'message': 'Invalid action in the request'}, status=400)
+
         except Tournament.DoesNotExist:
             return JsonResponse({'status': 'error', 'message': 'Tournament does not exist'}, status=400)
+        except User.DoesNotExist:
+            return JsonResponse({'status': 'error', 'message': 'Player to remove does not exist'}, status=400)
+        except json.JSONDecodeError:
+            return JsonResponse({'status': 'error', 'message': 'Invalid JSON in the request body'}, status=400)
         except Exception as e:
             return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
 
+
     elif request.method == 'PUT':
-        # Update tournament
+    # Update tournament
         try:
             data = json.loads(request.body)
-            new_name = data.get('name')
+            new_name = data.get('name', None)
             new_type = data.get('type', None)
             new_start_date = data.get('start_date', None)
             new_end_date = data.get('end_date', None)
@@ -135,24 +163,19 @@ def tournament_operations(request, pk):
             if new_end_date:
                 tournament_instance.end_date = new_end_date
 
-            new_players = []
-            if new_players_ids:
-                for player_id in new_players_ids:
-                    if not User.objects.filter(id=player_id).exists():
-                        return JsonResponse({"status": "error", "message": "Invalid player ID"}, status=400)
-                    new_players.append(User.objects.get(id=player_id))
+            # Update Players
+            existing_players_ids = [player.id for player in tournament_instance.players.all()]
+            updated_players_ids = list(set(existing_players_ids + new_players_ids))
+            tournament_instance.players.set(updated_players_ids)
 
-            new_observers = []
-            if new_observers_ids:
-                for observer_id in new_observers_ids:
-                    if not User.objects.filter(id=observer_id).exists():
-                        return JsonResponse({"status": "error", "message": "Invalid observer ID"}, status=400)
-                    new_observers.append(User.objects.get(id=observer_id))
+            # Update Observers
+            existing_observers_ids = [observer.id for observer in tournament_instance.observers.all()]
+            updated_observers_ids = list(set(existing_observers_ids + new_observers_ids))
+            tournament_instance.observers.set(updated_observers_ids)
 
             tournament_instance.save()
-            tournament_instance.players.set(new_players_ids)
-            tournament_instance.observers.set(new_observers_ids)
             return JsonResponse({'status': 'ok', 'message': 'Tournament updated successfully'})
+
         
         except Tournament.DoesNotExist:
             return JsonResponse({'status': 'error', 'message': 'Tournament does not exist'}, status=400)
@@ -187,7 +210,6 @@ def tournament_rounds(request, pk):
 # -----------------------------
 
 # Match CRUD views
-@csrf_exempt
 def match_create(request):
     if request.method == 'POST':
         try:
@@ -291,7 +313,6 @@ def match_available(request):
     
     return JsonResponse({'status': 'error', 'message': 'Only GET requests are allowed'}, status=400)
 
-@csrf_exempt
 def match_operations(request, pk):
     match_instance = get_object_or_404(Match, pk=pk)
 
@@ -692,14 +713,20 @@ def calculate_rounds(num_players):
     return math.ceil(math.log2(num_players))
 
 def calculate_player_score(player, tournament=None):
-    matches = Match.objects.filter(player1=player) | Match.objects.filter(player2=player)
-    player_score = 0
-    for match in matches:
-        if match.winner == player:
-            player_score += 1
-    if tournament:
-        player_score += tournament.round
+    if not tournament:
+        return 0
+
+    latest_round = tournament.rounds.last()  # Get the latest round
+
+    if latest_round:
+        matches = latest_round.matches.filter(Q(player1=player) | Q(player2=player))
+        player_score = sum(1 for match in matches if match.winner == player)
+    else:
+        player_score = 0
+
     return player_score
+
+
 # Actual matchmaking view
 def game_matchmaking(request, pk):
     if request.method == 'GET':
@@ -748,7 +775,12 @@ def game_matchmaking(request, pk):
             # Prepare the response with match details
             match_list = [{'match_id': match.id, 'total_rounds': num_rounds, 'player1_id': match.player1.id, 'player2_id': match.player2.id} for match in matches]
 
-            return JsonResponse({'status': 'ok', 'message': 'Matchmaking successful', 'sit_out_player': sit_out_player.id if sit_out_player else None, 'matches': match_list})
+            return JsonResponse({
+                'status': 'ok', 'message': 'Matchmaking successful',
+                'sit_out_player': sit_out_player.id if sit_out_player else None,
+                'matches': match_list,
+                'total_rounds': num_rounds,
+                })
 
         except Tournament.DoesNotExist:
             return JsonResponse({'status': 'error', 'message': 'Tournament does not exist'}, status=377)
