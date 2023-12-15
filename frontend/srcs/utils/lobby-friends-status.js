@@ -40,12 +40,12 @@ const getMyFriends = async () => {
 };
 
 const updateFriendStatus = async (data) => {
-  nowOnlineFriends = 0;
   const updatedFriendList = await getMyFriends();
   if (!updatedFriendList) return null;
+  nowOnlineFriends = 0;
   updatedFriendList.forEach((friend) => {
     if (data.includes(friend.userId)) {
-	  nowOnlineFriends++;
+	    nowOnlineFriends++;
       friend.online = true;
     }
   });

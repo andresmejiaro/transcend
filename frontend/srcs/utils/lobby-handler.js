@@ -16,6 +16,10 @@ const connectWebSocket = async () => {
 
     lobbySocket.addEventListener("open", (event) => {
       console.log("WebSocket connection opened:", event);
+      sendWebSocketMessage('command', {
+        command: "get_user_info",
+        data: {},
+      });
       resolve(lobbySocket); // Resolve with the WebSocket object
     });
 
@@ -41,18 +45,23 @@ const connectWebSocket = async () => {
 
 const getOnlineUsers = async () => {
   try {
-    console.log("helo")
     await connectWebSocket();
 
     lobbySocket.addEventListener("message", (event) => {
       parseAndHandleMessage(event.data);
     });
 
+    lobbySocket.addEventListener("user_left", (event) => {
+      console.log(event)
+      console.log(event.data)
+      // parseAndHandleMessage(event.data);
+    });
+
     lobbySocket.onmessage = (event) => {
       parseAndHandleMessage(event.data);
     };
 
-
+    
     sendWebSocketMessage("command", {
       command: "get_website_user_list",
       data: {},

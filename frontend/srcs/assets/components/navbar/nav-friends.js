@@ -76,6 +76,9 @@ const inviteFriend = async (inviteId) => {
 
 
 const listFriends = async () => {
+  if (nowOnlineFriends)
+    toggleFriendNav(nowOnlineFriends);
+
   const friendsListContainer = document.getElementById("friends-list");
   friendsListContainer.innerHTML = "";
   
@@ -106,3 +109,8 @@ const listFriends = async () => {
 
   document.getElementById("friendsModalLabel").innerHTML = "Online: " + nowOnlineFriends;
 };
+
+const toggleFriendNav = async (nbrFriendsOnline) => {
+  const friendsIconNav = document.getElementById("nav-friends-icon");
+  friendsIconNav.src = "./srcs/assets/imgs/friends-online-icon.svg";
+}

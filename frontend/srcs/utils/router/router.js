@@ -82,7 +82,7 @@ const urlLocationHandler = async () => {
     const existingContent = navRouter.innerHTML.trim();
     if (!existingContent) {
       if (isLogged()) {
-        navRouter.innerHTML = await fetch(direc + "pages/navbar/nav-logged.html").then(
+        navRouter.innerHTML = await fetch(direc + "assets/components/navbar/nav-logged.html").then(
           (response) => response.text()
         );
       }
@@ -93,23 +93,23 @@ const urlLocationHandler = async () => {
 
 
 
-  if (isLogged() && !document.querySelector(`script[src="${direc}pages/navbar/nav.js"]`)) {
+  if (isLogged() && !document.querySelector(`script[src="${direc}assets/components/navbar/nav.js"]`)) {
     const body = document.body;
     const script = document.createElement("script");
 
     script.type = "text/javascript";
-    script.src = direc + "pages/navbar/nav.js";
+    script.src = direc + "assets/components/navbar/nav.js";
     script.async = false;
 
     body.appendChild(script);
   }
 
-  if (isLogged() && !document.querySelector(`script[src="${direc}pages/navbar/nav-friends.js"]`)) {
+  if (isLogged() && !document.querySelector(`script[src="${direc}assets/components/navbar/nav-friends.js"]`)) {
     const body = document.body;
     const script = document.createElement("script");
 
     script.type = "text/javascript";
-    script.src = direc + "pages/navbar/nav-friends.js";
+    script.src = direc + "assets/components/navbar/nav-friends.js";
     script.async = false;
 
     body.appendChild(script);
