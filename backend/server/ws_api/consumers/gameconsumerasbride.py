@@ -327,8 +327,8 @@ class GameConsumerAsBridge(AsyncWebsocketConsumer):
                 # await self.broadcast_to_group(self.match_id, 'score_update', {'left': self.list_of_games[self.match_id]._leftPlayer.getScore(), 'right': self.list_of_games[self.match_id]._rightPlayer.getScore()})
 
                 try:
-                    await asyncio.sleep(update_interval) # For use with FPS
-                    # await asyncio.sleep(0) # For manual control of FPS
+                    # await asyncio.sleep(update_interval) # For use with FPS
+                    await asyncio.sleep(0) # For manual control of FPS
 
                     if len(self.update_buffer) >= 10:
                         await self.broadcast_to_group(self.match_id, 'update_buffer', self.update_buffer)
