@@ -46,7 +46,6 @@ const urlLocationHandler = async () => {
   document.getElementById("content").innerHTML = html;
   document.title = route.title;
 
-
   // set the description of the document to the description of the route
   document.querySelector('meta[name="description"]').setAttribute("content", route.description);
 
@@ -63,6 +62,7 @@ const urlLocationHandler = async () => {
       head.appendChild(link);
     });
   }
+
   if (route.js) {
     route.js.forEach((jsFile) => {
       if (jsFile && !document.querySelector(`script[src="${jsFile}"]`)) {
@@ -78,7 +78,6 @@ const urlLocationHandler = async () => {
     });
   }
 
-
   const navRouter = document.getElementById("nav-router");
   if (navRouter) {
     const existingContent = navRouter.innerHTML.trim();
@@ -92,8 +91,6 @@ const urlLocationHandler = async () => {
   } else {
     console.error("Element with id 'nav-router' not found in the DOM");
   }
-
-
 
   if (isLogged() && !document.querySelector(`script[src="${direc}pages/navbar/nav.js"]`)) {
     const body = document.body;
@@ -116,7 +113,6 @@ const urlLocationHandler = async () => {
 
     body.appendChild(script);
   }
-
 };
 
 // add an event listener to the window that watches for url changes
