@@ -19,29 +19,29 @@ class LobbyConsumer(AsyncWebsocketConsumer):
     lobby_name = 'lobby'
 
 # Define constants for commands
-    LIST_OF_USERS = 'list_of_users'                     # Command to send the list of online users
+    LIST_OF_USERS = 'list_of_users'                     # Command to send the list of online users (Connected to the socket)
     LIST_SENT_INVITES = 'list_sent_invites'             # Command to send the list of invites sent
     LIST_RECEIVED_INVITES = 'list_received_invites'     # Command to send the list of invites received
-    SEND_PRV_MSG = 'send_prv_msg'                       # Command to send a private message
-    SEND_NOTIFICATION = 'send_notification'             # Command to send a notification
+    SEND_PRV_MSG = 'send_prv_msg'                       # Command to send a private message arguments: pass the values as of 'client_id' and 'message' eg: {'command': 'send_prv_msg', 'data': {'client_id': '1', 'message': 'Hello'}}
+    SEND_NOTIFICATION = 'send_notification'             # Command to send a group wide notification arguments: pass the values as of 'message' eg: {'command': 'send_notification', 'data': {'message': 'Hello'}}
     CMD_NOT_FOUND = 'command_not_found'                 # Command to send when a command is not found
     CLOSE_CONNECTION = 'close_connection'               # Command to close the connection
     CREATE_USER = 'create_user'                         # Command to create a user arguments: pass the values as of 'user_data'
     MODIFY_USER = 'modify_user'                         # Command to modify a user arguments: pass the values as of 'changes'
     SERVER_TIME = 'server_time'                         # Command to send the server time
-    INVITE_TO_MATCH = 'invite_to_match'                 # Command to invite a user to a match arguments: pass the values as of 'client_id' and 'match_id'
-    ACCEPT_MATCH = 'accept_match'                       # Command to accept a match arguments: pass the values as of 'client_id' and 'match_id'
-    REJECT_MATCH = 'reject_match'                       # Command to reject a match arguments: pass the values as of 'client_id' and 'match_id'
-    CANCEL_MATCH = 'cancel_match'                       # Command to cancel a match arguments: pass the values as of 'client_id' and 'match_id'
-    SEND_FRIEND_REQUEST = 'send_friend_request'         # Command to send a friend request arguments: pass the values as of 'client_id'
-    ACCEPT_FRIEND_REQUEST = 'accept_friend_request'     # Command to accept a friend request arguments: pass the values as of 'client_id'
-    REJECT_FRIEND_REQUEST = 'reject_friend_request'     # Command to reject a friend request arguments: pass the values as of 'client_id'
-    CANCEL_FRIEND_REQUEST = 'cancel_friend_request'     # Command to cancel a friend request arguments: pass the values as of 'client_id'
-    GET_USER_INFO = 'get_user_info'                     # Command to get user info arguments: pass the values as of 'client_id'
-    INVITE_TO_TOURNAMENT = 'invite_to_tournament'       # Command to invite a user to a tournament arguments: pass the values as of 'client_id' and 'tournament_id'
-    ACCEPT_TOURNAMENT = 'accept_tournament'             # Command to accept a tournament arguments: pass the values as of 'client_id' and 'tournament_id'
-    REJECT_TOURNAMENT = 'reject_tournament'             # Command to reject a tournament arguments: pass the values as of 'client_id' and 'tournament_id'
-    CANCEL_TOURNAMENT = 'cancel_tournament'             # Command to cancel a tournament arguments: pass the values as of 'client_id' and 'tournament_id'
+    INVITE_TO_MATCH = 'invite_to_match'                 # Command to invite a user to a match arguments: pass the values as of 'client_id' and 'match_id' eg: {'command': 'invite_to_match', 'data': {'client_id': '1', 'match_id': '1'}}
+    ACCEPT_MATCH = 'accept_match'                       # Command to accept a match arguments: pass the values as of 'client_id' and 'match_id' eg: {'command': 'accept_match', 'data': {'client_id': '1', 'match_id': '1'}}
+    REJECT_MATCH = 'reject_match'                       # Command to reject a match arguments: pass the values as of 'client_id' and 'match_id' eg: {'command': 'reject_match', 'data': {'client_id': '1', 'match_id': '1'}}
+    CANCEL_MATCH = 'cancel_match'                       # Command to cancel a match arguments: pass the values as of 'client_id' and 'match_id' eg: {'command': 'cancel_match', 'data': {'client_id': '1', 'match_id': '1'}}
+    SEND_FRIEND_REQUEST = 'send_friend_request'         # Command to send a friend request arguments: pass the values as of 'client_id' eg: {'command': 'send_friend_request', 'data': {'client_id': '1'}}
+    ACCEPT_FRIEND_REQUEST = 'accept_friend_request'     # Command to accept a friend request arguments: pass the values as of 'client_id' eg: {'command': 'accept_friend_request', 'data': {'client_id': '1'}}
+    REJECT_FRIEND_REQUEST = 'reject_friend_request'     # Command to reject a friend request arguments: pass the values as of 'client_id' eg: {'command': 'reject_friend_request', 'data': {'client_id': '1'}}
+    CANCEL_FRIEND_REQUEST = 'cancel_friend_request'     # Command to cancel a friend request arguments: pass the values as of 'client_id' eg: {'command': 'cancel_friend_request', 'data': {'client_id': '1'}}
+    GET_USER_INFO = 'get_user_info'                     # Command to get user info arguments: pass the values as of 'client_id' eg: {'command': 'get_user_info', 'data': {'client_id': '35'}}
+    INVITE_TO_TOURNAMENT = 'invite_to_tournament'       # Command to invite a user to a tournament arguments: pass the values as of 'client_id' and 'tournament_id' eg: {'command': 'invite_to_tournament', 'data': {'client_id': '1', 'tournament_id': '1'}}
+    ACCEPT_TOURNAMENT = 'accept_tournament'             # Command to accept a tournament arguments: pass the values as of 'client_id' and 'tournament_id' eg: {'command': 'accept_tournament', 'data': {'client_id': '1', 'tournament_id': '1'}}
+    REJECT_TOURNAMENT = 'reject_tournament'             # Command to reject a tournament arguments: pass the values as of 'client_id' and 'tournament_id' eg: {'command': 'reject_tournament', 'data': {'client_id': '1', 'tournament_id': '1'}}
+    CANCEL_TOURNAMENT = 'cancel_tournament'             # Command to cancel a tournament arguments: pass the values as of 'client_id' and 'tournament_id' eg: {'command': 'cancel_tournament', 'data': {'client_id': '1', 'tournament_id': '1'}}
 # ---------------------------------------
 
     def __init__(self, *args, **kwargs):
@@ -592,7 +592,7 @@ class LobbyConsumer(AsyncWebsocketConsumer):
             await self.disconnect(1000)
 # ---------------------------------------
 
-# Database methods
+# Check if user exists
     @database_sync_to_async
     def does_not_exist(self, pk):
         try:
@@ -609,7 +609,9 @@ class LobbyConsumer(AsyncWebsocketConsumer):
         except Exception as e:
             print(e)
             self.disconnect(1000)
+# ---------------------------------------
 
+# Client modification methods
     @database_sync_to_async
     def modify_user(self, pk, changes):
         try:
@@ -666,7 +668,7 @@ class LobbyConsumer(AsyncWebsocketConsumer):
             return None
 # ---------------------------------------
 
-# Invites methods
+# Invites list methods
     def add_received_invites(self, user, change):
         try:
             invite_id = change['add_received_invites']
