@@ -73,6 +73,7 @@ const urlRoutes = {
     title: urlPageTitle + " - Profile",
     description: "This is the user page",
     js: [directory + "profilesettings/user-settings.js"],
+    css: [directory + "profilesettings/user-settings.css"]
     // js: [directory + "profilesettings/user-settings.js", "./srcs/utils/google-auth-utils.js"],
   },
 
