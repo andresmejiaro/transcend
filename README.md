@@ -17,7 +17,7 @@
 This project is about creating a website where users will play Pong with others. It has to provide a nice
 user interface and real-time multiplayer online games!
 
-![Pong Game GIF](https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/96a9bdf4-ea12-4270-b08e-62d943536d44/d86mdcw-b2a59f69-2072-46b3-80b9-99d376d399f4.gif?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzk2YTliZGY0LWVhMTItNDI3MC1iMDhlLTYyZDk0MzUzNmQ0NFwvZDg2bWRjdy1iMmE1OWY2OS0yMDcyLTQ2YjMtODBiOS05OWQzNzZkMzk5ZjQuZ2lmIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.uBi9dNh41lffQFySfc9jBUDBiedPz-Zh56vzN1VYB5g)
+![Pong Game GIF](https://media.giphy.com/media/l46CAEUwLewax0LTy/giphy.gif)
 
 ## Table of Contents
 
