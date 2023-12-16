@@ -64,10 +64,12 @@ class CustomUser(AbstractUser):
 
     def remove_pending_invite(self, invite_id, invite_type):
         self.list_of_pending_invites = [
-            invite for invite in self.list_of_pending_invites
-            if invite['invite_id'] != invite_id or invite['invite_type'] != invite_type
+            invite for invite in self.list_of_pending_invites if not (
+                invite.get('invite_id') == invite_id and invite.get('invite_type') == invite_type
+            )
         ]
         self.save()
+
 
     def get_pending_invites(self):
         return self.list_of_pending_invites

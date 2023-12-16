@@ -41,7 +41,6 @@ class LobbyConsumer(AsyncWebsocketConsumer):
     ACCEPT_TOURNAMENT = 'accept_tournament'             # Command to accept a tournament arguments: pass the values as of 'client_id' and 'tournament_id'
     REJECT_TOURNAMENT = 'reject_tournament'             # Command to reject a tournament arguments: pass the values as of 'client_id' and 'tournament_id'
     CANCEL_TOURNAMENT = 'cancel_tournament'             # Command to cancel a tournament arguments: pass the values as of 'client_id' and 'tournament_id'
-
 # ---------------------------------------
 
     def __init__(self, *args, **kwargs):
@@ -248,6 +247,7 @@ class LobbyConsumer(AsyncWebsocketConsumer):
                 user_id,
                 'recieved_match_invite',
                 {
+                    'time': timezone.now().isoformat(),
                     'client_id': self.client_id,
                     'match_id': match_id,
                     'message': message_for_invited,
@@ -256,6 +256,7 @@ class LobbyConsumer(AsyncWebsocketConsumer):
             await self.send_info_to_client(
                 'sent_match_invite',
                 {
+                    'time': timezone.now().isoformat(),
                     'client_id': user_id,
                     'message': message_for_client,
                     
@@ -267,19 +268,27 @@ class LobbyConsumer(AsyncWebsocketConsumer):
 
     async def accept_match(self, user_id, match_id):
         try:
+
+            message_for_client = await self.modify_user(self.client_id, {'remove_pending_invite': user_id, 'invite_type': 'match'})
+            message_for_invited = await self.modify_user(user_id, {'remove_pending_invite': self.client_id, 'invite_type': 'match'})
+
             await self.message_another_player(
                 user_id,
                 'match_accepted',
                 {
+                    'time': timezone.now().isoformat(),
                     'client_id': self.client_id,
                     'match_id': match_id,
+                    'message': message_for_invited,
                 }
             )
             await self.send_info_to_client(
                 'accept_match',
                 {
+                    'time': timezone.now().isoformat(),
                     'client_id': user_id,
-                    'message': 'Match invitation accepted',
+                    'match_id': match_id,
+                    'message': message_for_client,
                 }
             )
         except Exception as e:
@@ -288,19 +297,26 @@ class LobbyConsumer(AsyncWebsocketConsumer):
 
     async def reject_match(self, user_id, match_id):
         try:
+            message_for_client = await self.modify_user(self.client_id, {'remove_pending_invite': user_id, 'invite_type': 'match'})
+            message_for_invited = await self.modify_user(user_id, {'remove_pending_invite': self.client_id, 'invite_type': 'match'})
+
             await self.message_another_player(
                 user_id,
                 'match_rejected',
                 {
+                    'time': timezone.now().isoformat(),
                     'client_id': self.client_id,
                     'match_id': match_id,
+                    'message': message_for_invited,
                 }
             )
             await self.send_info_to_client(
                 'reject_match',
                 {
+                    'time': timezone.now().isoformat(),
                     'client_id': user_id,
-                    'message': 'Match invitation rejected',
+                    'match_id': match_id,
+                    'message': message_for_client,
                 }
             )
         except Exception as e:
@@ -309,19 +325,26 @@ class LobbyConsumer(AsyncWebsocketConsumer):
 
     async def cancel_match(self, user_id, match_id):
         try:
+            message_for_client = await self.modify_user(self.client_id, {'remove_pending_invite': user_id, 'invite_type': 'match'})
+            message_for_invited = await self.modify_user(user_id, {'remove_pending_invite': self.client_id, 'invite_type': 'match'})
+
             await self.message_another_player(
                 user_id,
                 'match_cancelled',
                 {
+                    'time': timezone.now().isoformat(),
                     'client_id': self.client_id,
                     'match_id': match_id,
+                    'message': message_for_invited,
                 }
             )
             await self.send_info_to_client(
                 'cancel_match',
                 {
-                    'client_id': user_id,   
-                    'message': 'Match invitation cancelled',
+                    'time': timezone.now().isoformat(),
+                    'client_id': user_id,
+                    'match_id': match_id,
+                    'message': message_for_client,
                 }
             )
         except Exception as e:
@@ -332,9 +355,6 @@ class LobbyConsumer(AsyncWebsocketConsumer):
 # Predefined Friend methods
     async def send_friend_request(self, user_id):
         try:
-            print(f'Sending friend request to user {user_id} that is type {type(user_id)}')
-            print(f'Sending friend request to user {self.client_id} that is type {type(self.client_id)}')
-
             message_for_client = await self.modify_user(self.client_id, {'add_pending_invite': user_id, 'invite_type': 'friend_request'})
             message_for_invited = await self.modify_user(user_id, {'add_pending_invite': self.client_id, 'invite_type': 'friend_request'})
 
@@ -365,22 +385,29 @@ class LobbyConsumer(AsyncWebsocketConsumer):
         try:
             # Add the current user as a friend for the other person
             message = await self.add_friendship(pk=user_id)
+            print(message)
+
+            # Remove the friend request from both users lists
+            message_to_client = await self.modify_user(self.client_id, {'remove_pending_invite': user_id, 'invite_type': 'friend_request'})
+            message_for_invited = await self.modify_user(user_id, {'remove_pending_invite': self.client_id, 'invite_type': 'friend_request'})
 
             # Send a message to the other person
             await self.message_another_player(
                 user_id,
                 'friend_request_accepted',
                 {
+                    'time': timezone.now().isoformat(),
                     'client_id': self.client_id,
-                    'message': message,
+                    'message': message_for_invited,
                 }
             )
             # Send a message to the current user
             await self.send_info_to_client(
                 'accept_friend_request',
                 {
+                    'time': timezone.now().isoformat(),
                     'client_id': user_id,
-                    'message': message,
+                    'message': message_to_client,
                 }
             )
 
@@ -390,18 +417,25 @@ class LobbyConsumer(AsyncWebsocketConsumer):
 
     async def reject_friend_request(self, user_id):
         try:
+
+            message_to_client = await self.modify_user(self.client_id, {'remove_pending_invite': user_id, 'invite_type': 'friend_request'})
+            message_for_invited = await self.modify_user(user_id, {'remove_pending_invite': self.client_id, 'invite_type': 'friend_request'})
+
             await self.message_another_player(
                 user_id,
                 'friend_request_rejected',
                 {
+                    'time': timezone.now().isoformat(),
                     'client_id': self.client_id,
+                    'message': message_for_invited,
                 }
             )
             await self.send_info_to_client(
                 'reject_friend_request',
                 {
+                    'time': timezone.now().isoformat(),
                     'client_id': user_id,
-                    'message': 'Friend request rejected',
+                    'message': message_to_client,
                 }
             )
         except Exception as e:
@@ -417,6 +451,7 @@ class LobbyConsumer(AsyncWebsocketConsumer):
                 user_id,
                 'friend_request_cancelled',
                 {
+                    'time': timezone.now().isoformat(),
                     'client_id': self.client_id,
                     'message': message_for_invited,
                 }
@@ -424,6 +459,7 @@ class LobbyConsumer(AsyncWebsocketConsumer):
             await self.send_info_to_client(
                 'cancel_friend_request',
                 {
+                    'time': timezone.now().isoformat(),
                     'client_id': user_id,
                     'message': message_for_client,
                 }
@@ -436,6 +472,7 @@ class LobbyConsumer(AsyncWebsocketConsumer):
 # Predefined Tournament methods
     async def invite_to_tournament(self, user_id, tournament_id):
         try:
+
             message_for_client = await self.modify_user(self.client_id, {'add_pending_invite': user_id, 'invite_type': 'tournament'})
             message_for_invited = await self.modify_user(user_id, {'add_pending_invite': self.client_id, 'invite_type': 'tournament'})
 
@@ -443,6 +480,7 @@ class LobbyConsumer(AsyncWebsocketConsumer):
                 user_id,
                 'recieved_tournament_invite',
                 {
+                    'time': timezone.now().isoformat(),
                     'client_id': self.client_id,
                     'tournament_id': tournament_id,
                     'message': message_for_invited,
@@ -451,7 +489,9 @@ class LobbyConsumer(AsyncWebsocketConsumer):
             await self.send_info_to_client(
                 'sent_tournament_invite',
                 {
+                    'time': timezone.now().isoformat(),
                     'client_id': user_id,
+                    'tournament_id': tournament_id,
                     'message': message_for_client,
                 }
             )
@@ -461,19 +501,28 @@ class LobbyConsumer(AsyncWebsocketConsumer):
 
     async def accept_tournament(self, user_id, tournament_id):
         try:
+
+            message_for_client = await self.modify_user(self.client_id, {'remove_pending_invite': user_id, 'invite_type': 'tournament'})
+            message_for_invited = await self.modify_user(user_id, {'remove_pending_invite': self.client_id, 'invite_type': 'tournament'})
+
             await self.message_another_player(
                 user_id,
                 'tournament_accepted',
                 {
+                    'time': timezone.now().isoformat(),
                     'client_id': self.client_id,
                     'tournament_id': tournament_id,
+                    'message': message_for_invited,
                 }
             )
             await self.send_info_to_client(
                 'accept_tournament',
                 {
+                    'time': timezone.now().isoformat(),
                     'client_id': user_id,
-                    'message': 'Tournament invitation accepted',
+                    'tournament_id': tournament_id,
+                    'message': message_for_client,
+
                 }
             )
 
@@ -483,19 +532,27 @@ class LobbyConsumer(AsyncWebsocketConsumer):
 
     async def reject_tournament(self, user_id, tournament_id):
         try:
+
+            message_for_client = await self.modify_user(self.client_id, {'remove_pending_invite': user_id, 'invite_type': 'tournament'})
+            message_for_invited = await self.modify_user(user_id, {'remove_pending_invite': self.client_id, 'invite_type': 'tournament'})
+
             await self.message_another_player(
                 user_id,
                 'tournament_rejected',
                 {
+                    'time': timezone.now().isoformat(),
                     'client_id': self.client_id,
                     'tournament_id': tournament_id,
+                    'message': message_for_invited,
                 }
             )
             await self.send_info_to_client(
                 'reject_tournament',
                 {
+                    'time': timezone.now().isoformat(),
                     'client_id': user_id,
-                    'message': 'Tournament invitation rejected',
+                    'tournament_id': tournament_id,
+                    'message': message_for_client,
                 }
             )
         except Exception as e:
@@ -504,19 +561,27 @@ class LobbyConsumer(AsyncWebsocketConsumer):
 
     async def cancel_tournament(self, user_id, tournament_id):
         try:
+
+            message_for_client = await self.modify_user(self.client_id, {'remove_pending_invite': user_id, 'invite_type': 'tournament'})
+            message_for_invited = await self.modify_user(user_id, {'remove_pending_invite': self.client_id, 'invite_type': 'tournament'})
+
             await self.message_another_player(
                 user_id,
                 'tournament_cancelled',
                 {
+                    'time': timezone.now().isoformat(),
                     'client_id': self.client_id,
                     'tournament_id': tournament_id,
+                    'message': message_for_invited,
                 }
             )
             await self.send_info_to_client(
                 'cancel_tournament',
                 {
+                    'time': timezone.now().isoformat(),
                     'client_id': user_id,
-                    'message': 'Tournament invitation cancelled',
+                    'tournament_id': tournament_id,
+                    'message': message_for_client,
                 }
             )
         except Exception as e:
@@ -741,5 +806,4 @@ class LobbyConsumer(AsyncWebsocketConsumer):
             print(e)
             print(f'Could not find user with id {pk}')
             return None
-
 # ---------------------------------------
