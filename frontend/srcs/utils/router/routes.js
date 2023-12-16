@@ -30,7 +30,7 @@ const urlRoutes = {
     title: urlPageTitle + " - Sing in",
     description: "This is the signin page",
     js: [directory + "signin/signin.js"],
-    css: [directory + "signin/signin.css", "./srcs/assets/css/auth-inputs.css"]
+    css: [directory + "signin/signin.css"]
   },
 
   "/signup": {
@@ -38,7 +38,7 @@ const urlRoutes = {
     title: urlPageTitle + " - Sing up",
     description: "This is the signup page",
     js: [directory + "signup/signup-handler.js"],
-    css: [directory + "signup/signup.css", "./srcs/assets/css/auth-inputs.css"]
+    css: [directory + "signup/signup.css"]
   },
   
   "/otp": {
@@ -82,20 +82,6 @@ const urlRoutes = {
     description: "This is the create tournament page",
     js: [directory + "tournaments/create-tor.js", directory + "tournaments/join-tor.js"],
     css: [directory + "tournaments/tournaments.css"]
-  },
-
-  "/tournament": {
-    template: directory + "tournament/tournament.html",
-    title: urlPageTitle + " - Tournament",
-    description: "This is the tournament page",
-    js: [directory + "tournament/tournament-lobby.js", directory + "tournament/utils.js", directory + "tournament/tournament.js", directory + "tournament/tournament-admin.js"],
-    css: [directory + "tournament/tournament.css"]
-  },
-
-  "/leaderboards": {
-    template: directory +  "leaderboard/leaderboards.html",
-    title: urlPageTitle + " - Leaderboard",
-    description: "This is the leaderboards tournament page"
   },
 
   "/2plygame": {
