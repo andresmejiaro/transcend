@@ -45,9 +45,17 @@ const handleSendInvitationClick = async (event) => {
   const clientUsername = document.getElementById("invitationInput").value;
   const inviteId = await getIdFromUsername(clientUsername);
   if (!inviteId) alert("User not found");
-  else inviteFriend(inviteId);
+  else {
+    inviteFriend(inviteId);
+    handleCloseModal();
+  }
 };
 
+const handleCloseModal = () => {
+  const closeModalBtn = document.querySelector(".btn-close.btn-close-white");
+  closeModalBtn.click();
+  showToast("Invite send succesfully")
+}
 
 document
   .getElementById("friendsModal")
