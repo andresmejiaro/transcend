@@ -155,7 +155,6 @@ class LobbyConsumer(AsyncWebsocketConsumer):
                 await self.reject_tournament(data['client_id'], data['tournament_id'])
             elif command == self.CANCEL_TOURNAMENT:
                 await self.cancel_tournament(data['client_id'], data['tournament_id'])
-
             else:
                 await self.send_info_to_client(self.CMD_NOT_FOUND, text_data)
 
@@ -615,7 +614,7 @@ class LobbyConsumer(AsyncWebsocketConsumer):
             await self.disconnect(1000)
 # ---------------------------------------
 
-# Check if user exists
+# Object existence methods
     @database_sync_to_async
     def does_not_exist(self, pk):
         try:
@@ -691,7 +690,7 @@ class LobbyConsumer(AsyncWebsocketConsumer):
             return None
 # ---------------------------------------
 
-# Invites list methods
+# Invites list methods (Sent and Received)
     def add_received_invites(self, user, change):
         try:
             invite_id = change['add_received_invites']
@@ -729,7 +728,7 @@ class LobbyConsumer(AsyncWebsocketConsumer):
             print(e)
 # ---------------------------------------
 
-# Database methods
+# Database methods synchronised with the channel layer
     @database_sync_to_async
     @transaction.atomic
     def add_friendship(self, pk):
