@@ -26,7 +26,7 @@ user interface and real-time multiplayer online games!
 - [Arquitecture](#arquitecture)
 - [Installation](#installation)
 - [Usage](#usage)
-- [Aditional links](#aditional links)
+- [Links](#links)
 - [Contribution](#contribution)
 - [License](#license)
 
