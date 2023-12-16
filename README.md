@@ -26,6 +26,7 @@ user interface and real-time multiplayer online games!
 - [Arquitecture](#arquitecture)
 - [Installation](#installation)
 - [Usage](#usage)
+- [Aditional links](#aditional links)
 - [Contribution](#contribution)
 - [License](#license)
 
@@ -66,6 +67,9 @@ Una descripción general de la estructura del proyecto, componentes clave, patro
 2. Sign up or log in securely.
 3. Choose the Pong game option to start playing.
 4. Interact with friends, other users or the evil IA in real-time gameplay.
+
+## Aditional links
+Enlaces a la documentación más detallada, sitios web, demos en vivo, blogs o cualquier recurso externo relevante.
 
 ## Contribution
 
