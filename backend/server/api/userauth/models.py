@@ -66,14 +66,13 @@ class CustomUser(AbstractUser):
 
     def remove_received_invites(self, invite_id, invite_type):
         self.list_of_received_invites = [
-            invite for invite in self.list_of_received_invites if not (
-                invite.get('invite_id') == invite_id and invite.get('invite_type') == invite_type
-            )
+            invite for invite in self.list_of_received_invites
+            if not (invite['invite_id'] == invite_id and invite['invite_type'] == invite_type)
         ]
         self.save()
 
     def add_sent_invites(self, invite_id, invite_type):
-        self.list_of_pending_invites.append({
+        self.list_of_sent_invites.append({
             'invite_id': invite_id,
             'invite_type': invite_type,
             'time': timezone.now().isoformat(),
@@ -81,10 +80,9 @@ class CustomUser(AbstractUser):
         self.save()
 
     def remove_sent_invites(self, invite_id, invite_type):
-        self.list_of_pending_invites = [
-            invite for invite in self.list_of_pending_invites if not (
-                invite.get('invite_id') == invite_id and invite.get('invite_type') == invite_type
-            )
+        self.list_of_sent_invites = [
+            invite for invite in self.list_of_sent_invites
+            if not (invite['invite_id'] == invite_id and invite['invite_type'] == invite_type)
         ]
         self.save()
 
