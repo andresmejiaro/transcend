@@ -1,9 +1,6 @@
-const handleModalForNotifications = async () => {
-	const notificationData = [
-    { description: 'Notification 1' },
-    { description: 'Notification 2' }
-  ];
+let notificationInfo = [];
 
+const handleModalForNotifications = async () => {
   // Function to create a notification element
   function createNotificationElement(data) {
     const notificationContainer = document.getElementById('notifications-list');
@@ -39,7 +36,7 @@ const handleModalForNotifications = async () => {
   }
 
   // Iterate over the sample data and create notification elements
-  notificationData.forEach(createNotificationElement);
+  notificationInfo.forEach(createNotificationElement);
 }
 
 // const btn = document.getElementById("notificationsModalInvite");

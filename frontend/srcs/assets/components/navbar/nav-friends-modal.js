@@ -35,13 +35,11 @@ const handleModalForInvite = async () => {
   }
 };
 
-document
-  .getElementById("friendsModal")
-  .addEventListener("shown.bs.modal", function (event) {
+document.getElementById("friendsModal").addEventListener("shown.bs.modal", function (event) {
+  event.preventDefault();
+  const btn = document.getElementById("friendsModalInvite");
+  btn.addEventListener("click", function (event) {
     event.preventDefault();
-    const btn = document.getElementById("friendsModalInvite");
-    btn.addEventListener("click", function (event) {
-      event.preventDefault();
-      handleModalForInvite();
-    });
+    handleModalForInvite();
   });
+});

@@ -65,6 +65,7 @@ const updateSendFriendRequests = async (data) => {
 
 const updateReceiveFriendRequests = async (data) => {
   console.log("Received an invite", data.client_id)
-  console.log(data);
   updateNavNotification(1);
+  console.log(data);
+  notificationInfo = data;
 }

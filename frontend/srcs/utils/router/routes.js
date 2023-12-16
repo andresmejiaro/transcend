@@ -92,7 +92,6 @@ const urlRoutes = {
     css: [directory + "tournament/tournament.css"]
   },
 
-
   "/2plygame": {
     template: directory + "2plygame/2plygame.html",
     title: urlPageTitle,

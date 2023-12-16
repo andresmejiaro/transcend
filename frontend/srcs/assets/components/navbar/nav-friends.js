@@ -1,25 +1,27 @@
 const getListOfInvites = async () => {
-  const userId = await getUserId();
-  try {
-    const url = `${window.DJANGO_API_BASE_URL}/api/user/${userId}/friendlist/`;
+  // const userId = await getUserId();
+  // try {
+  //   const url = `${window.DJANGO_API_BASE_URL}/api/user/${userId}/friendlist/`;
 
-    const options = {
-      method: "GET",
-      mode: "cors",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
+  //   const options = {
+  //     method: "GET",
+  //     mode: "cors",
+  //     credentials: "include",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //   };
 
-    const data = await makeRequest(true, url, options);
+  //   const data = await makeRequest(true, url, options);
 
-    if (data.status == "ok") {
-      return data.data;
-    }
-  } catch (error) {
-    console.error("Error:", error.message);
-  }
+  //   if (data.status == "ok") {
+  //     return data.data;
+  //   }
+  // } catch (error) {
+  //   console.error("Error:", error.message);
+  // }
+  return [{ username: 'xxx 1' },
+  { username: 'xxx 2' },]
 }
 
 const listInvitationFriends = async () => {
@@ -34,6 +36,7 @@ const listInvitationFriends = async () => {
   // console.log(invitationListContainer)
 
   const invitationListFriends = await getListOfInvites();
+  console.log(invitationListFriends)
   await Promise.all(invitationListFriends.map( async (friend) => {
     const friendElement = document.createElement("div");
     friendElement.classList.add("d-flex", "align-items-center");
