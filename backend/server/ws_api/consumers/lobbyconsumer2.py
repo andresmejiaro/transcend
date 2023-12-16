@@ -20,7 +20,8 @@ class LobbyConsumer(AsyncWebsocketConsumer):
 
 # Define constants for commands
     LIST_OF_USERS = 'list_of_users'                     # Command to send the list of online users
-    LIST_OF_INVITES = 'list_invites'                    # Command to send the list of invites sent
+    LIST_SENT_INVITES = 'list_sent_invites'             # Command to send the list of invites sent
+    LIST_RECEIVED_INVITES = 'list_received_invites'     # Command to send the list of invites received
     SEND_PRV_MSG = 'send_prv_msg'                       # Command to send a private message
     SEND_NOTIFICATION = 'send_notification'             # Command to send a notification
     CMD_NOT_FOUND = 'command_not_found'                 # Command to send when a command is not found
@@ -96,8 +97,10 @@ class LobbyConsumer(AsyncWebsocketConsumer):
 
             if command == self.LIST_OF_USERS:
                 await self.send_info_to_client(self.LIST_OF_USERS, self.list_of_online_users)
-            elif command == self.LIST_OF_INVITES:
-                await self.send_info_to_client(self.LIST_OF_INVITES, await self.get_list_of_invites(self.client_id))
+            elif command == self.LIST_SENT_INVITES:
+                await self.send_info_to_client(self.LIST_SENT_INVITES, await self.get_sent_invites(self.client_id))
+            elif command == self.LIST_RECEIVED_INVITES:
+                await self.send_info_to_client(self.LIST_RECEIVED_INVITES, await self.get_recieved_invites(self.client_id))
             elif command == self.CLOSE_CONNECTION:
                 await self.disconnect(1000)
             elif command == self.SEND_PRV_MSG:
@@ -355,8 +358,8 @@ class LobbyConsumer(AsyncWebsocketConsumer):
 # Predefined Friend methods
     async def send_friend_request(self, user_id):
         try:
-            message_for_client = await self.modify_user(self.client_id, {'add_pending_invite': user_id, 'invite_type': 'friend_request'})
-            message_for_invited = await self.modify_user(user_id, {'add_pending_invite': self.client_id, 'invite_type': 'friend_request'})
+            message_for_client = await self.modify_user(self.client_id, {'add_sent_invites': user_id, 'invite_type': 'friend_request'})
+            message_for_invited = await self.modify_user(user_id, {'add_received_invites': self.client_id, 'invite_type': 'friend_request'})
 
             await self.message_another_player(
                 user_id,
@@ -388,8 +391,8 @@ class LobbyConsumer(AsyncWebsocketConsumer):
             print(message)
 
             # Remove the friend request from both users lists
-            message_to_client = await self.modify_user(self.client_id, {'remove_pending_invite': user_id, 'invite_type': 'friend_request'})
-            message_for_invited = await self.modify_user(user_id, {'remove_pending_invite': self.client_id, 'invite_type': 'friend_request'})
+            message_to_client = await self.modify_user(self.client_id, {'remove_recieved_invites': user_id, 'invite_type': 'friend_request'})
+            message_for_invited = await self.modify_user(user_id, {'remove_sent_invites': self.client_id, 'invite_type': 'friend_request'})
 
             # Send a message to the other person
             await self.message_another_player(
@@ -418,8 +421,8 @@ class LobbyConsumer(AsyncWebsocketConsumer):
     async def reject_friend_request(self, user_id):
         try:
 
-            message_to_client = await self.modify_user(self.client_id, {'remove_pending_invite': user_id, 'invite_type': 'friend_request'})
-            message_for_invited = await self.modify_user(user_id, {'remove_pending_invite': self.client_id, 'invite_type': 'friend_request'})
+            message_to_client = await self.modify_user(self.client_id, {'remove_recieved_invites': user_id, 'invite_type': 'friend_request'})
+            message_for_invited = await self.modify_user(user_id, {'remove_sent_invites': self.client_id, 'invite_type': 'friend_request'})
 
             await self.message_another_player(
                 user_id,
@@ -444,8 +447,8 @@ class LobbyConsumer(AsyncWebsocketConsumer):
 
     async def cancel_friend_request(self, user_id):
         try:
-            message_for_client = await self.modify_user(self.client_id, {'remove_pending_invite': user_id, 'invite_type': 'friend_request'})
-            message_for_invited = await self.modify_user(user_id, {'remove_pending_invite': self.client_id, 'invite_type': 'friend_request'})
+            message_for_client = await self.modify_user(self.client_id, {'remove_recieved_invites': user_id, 'invite_type': 'friend_request'})
+            message_for_invited = await self.modify_user(user_id, {'remove_sent_invites': self.client_id, 'invite_type': 'friend_request'})
 
             await self.message_another_player(
                 user_id,
@@ -619,15 +622,29 @@ class LobbyConsumer(AsyncWebsocketConsumer):
                     'message': 'User not found',
                 }
 
-            if changes.get('add_pending_invite'):
-                self.add_pending_invite(user, changes)
+            if changes.get('add_sent_invites'):
+                self.add_sent_invites(user, changes)
                 return {
                     'status': 'ok',
                     'message': 'Sent invite added successfully',
                 }
             
-            if changes.get('remove_pending_invite'):
-                self.remove_pending_invite(user, changes)
+            if changes.get('remove_sent_invites'):
+                self.remove_sent_invites(user, changes)
+                return {
+                    'status': 'ok',
+                    'message': 'Sent invite removed successfully',
+                }
+            
+            if changes.get('add_received_invites'):
+                self.add_received_invites(user, changes)
+                return {
+                    'status': 'ok',
+                    'message': 'Sent invite removed successfully',
+                }
+
+            if changes.get('remove_received_invites'):
+                self.remove_received_invites(user, changes)
                 return {
                     'status': 'ok',
                     'message': 'Sent invite removed successfully',
@@ -647,24 +664,47 @@ class LobbyConsumer(AsyncWebsocketConsumer):
             print(e)
             print(f'Could not find user with id {pk}')
             return None
+# ---------------------------------------
 
-    def add_pending_invite(self, user, change):
+
+# Invites methods
+    def add_received_invites(self, user, change):
         try:
-            invite_id = change['add_pending_invite']
+            invite_id = change['add_received_invites']
             invite_type = change['invite_type']
-            user.add_pending_invite(invite_id, invite_type)
+            user.add_received_invites(invite_id, invite_type)
 
         except Exception as e:
             print(e)
 
-    def remove_pending_invite(self, user, change):
+    def remove_received_invites(self, user, change):
         try:
-            invite_id = change['remove_pending_invite']
+            invite_id = change['remove_received_invites']
             invite_type = change['invite_type']
-            user.remove_pending_invite(invite_id, invite_type)
+            user.remove_received_invites(invite_id, invite_type)
 
         except Exception as e:
             print(e)
+
+    def add_sent_invites(self, user, change):
+        try:
+            invite_id = change['add_sent_invites']
+            invite_type = change['invite_type']
+            user.add_sent_invites(invite_id, invite_type)
+
+        except Exception as e:
+            print(e)
+
+    def remove_sent_invites(self, user, change):
+        try:
+            invite_id = change['remove_sent_invites']
+            invite_type = change['invite_type']
+            user.remove_sent_invites(invite_id, invite_type)
+
+        except Exception as e:
+            print(e)
+# ---------------------------------------
+
 
 # Database methods
     @database_sync_to_async
@@ -796,11 +836,23 @@ class LobbyConsumer(AsyncWebsocketConsumer):
             return None
 
     @database_sync_to_async
-    def get_list_of_invites(self, pk):
+    def get_sent_invites(self, pk):
         try:
             User = import_string('api.userauth.models.CustomUser')
             user = get_object_or_404(User, pk=pk)
-            return user.get_pending_invites()
+            return user.get_sent_invites()
+
+        except Exception as e:
+            print(e)
+            print(f'Could not find user with id {pk}')
+            return None
+        
+    @database_sync_to_async 
+    def get_recieved_invites(self, pk):
+        try:
+            User = import_string('api.userauth.models.CustomUser')
+            user = get_object_or_404(User, pk=pk)
+            return user.get_received_invites()
 
         except Exception as e:
             print(e)
