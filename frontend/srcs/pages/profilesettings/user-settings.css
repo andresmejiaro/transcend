@@ -1,31 +1,7 @@
-#main-row {
-  margin-top: 5rem;
-  min-height: 70vh;
-}
-
-#avatar-col {
-  max-width: 50%;
-}
-
-.avatar-form {
-  margin-bottom: 3rem;
-}
-
-.back-to-profile {
-  margin-top: auto;
-}
-
-#settings-col {
-  /* Add any specific styling for the settings column */
-}
-
 .white-text {
-    color: white;
+  color: #FFFEEE;
 }
 
-.container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
+.red-text {
+  color: crimson;
 }
