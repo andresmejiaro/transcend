@@ -1,24 +1,23 @@
-import json
 from channels.generic.websocket import AsyncWebsocketConsumer
-from ws_api.python_pong.Player import Player
-from ws_api.python_pong.Game import Game
-from urllib.parse import parse_qs
-from channels.db import database_sync_to_async
-from django.shortcuts import get_object_or_404
-from django.http import Http404
-from django.utils import timezone
-from django.db import transaction
+import json                                                 # Used to encode and decode JSON data
+from urllib.parse import parse_qs                           # Used to parse the query string
+from channels.db import database_sync_to_async              # Used to make database calls asynchronously
+from django.shortcuts import get_object_or_404              # Used to get an object from the database
+from django.http import Http404                             # Used to return a 404 error if an object is not found
+from django.utils import timezone                           # Used to get the current time
+from django.db import transaction                           # Used to make database transactions used for friendship model
+from django.utils.module_loading import import_string       # Used to import models from other apps to avoid circular imports
+import logging                                              # Used to log errors
 
-
-from django.utils.module_loading import import_string
 
 class LobbyConsumer(AsyncWebsocketConsumer):
 
+# Class variables shared by all instances
     list_of_admins = {}
     list_of_online_users = {}
     lobby_name = 'lobby'
 
-# Define constants for commands
+# Endpoints and commands (Client -> Server)
     LIST_OF_USERS = 'list_of_users'                     # Command to send the list of online users (Connected to the socket)
     LIST_SENT_INVITES = 'list_sent_invites'             # Command to send the list of invites sent
     LIST_RECEIVED_INVITES = 'list_received_invites'     # Command to send the list of invites received
@@ -52,25 +51,30 @@ class LobbyConsumer(AsyncWebsocketConsumer):
 # Channel methods (Connect, Disconnect, Receive)
     async def connect(self):
         try:
+            # Get the client id from the query string
             query_string = self.scope['query_string'].decode('utf-8')
             query_params = parse_qs(query_string)
             self.client_id = query_params['client_id'][0]
 
-            # Get the user and see if they exist before accepting the connection
+            # Check if the user exists and add it to the list of online users/admins
             if await self.does_not_exist(self.client_id):
                 await self.close()
                 return
 
             await self.accept()
 
+            # Channel layer groups
             await self.channel_layer.group_add(self.lobby_name, self.channel_name)
             await self.channel_layer.group_add(self.client_id, self.channel_name)
 
+            # Predifined arrival method
             await self.announce_arrival()
 
 
         except Exception as e:
-            print(f"Error in connect method: {e}")
+            error_message = f"Error in connect method: {e}"
+            print(error_message)
+            logging.error(error_message)
             await self.close()
 
     async def disconnect(self, close_code):
@@ -87,7 +91,10 @@ class LobbyConsumer(AsyncWebsocketConsumer):
             self.close()
 
         except Exception as e:
-            print(f"Error in disconnect method: {e}")
+            error_message = f"Error in disconnect method: {e}"
+            print(error_message)
+            logging.error(error_message)
+            await self.close()
 
     async def receive(self, text_data):
         try:
@@ -153,9 +160,13 @@ class LobbyConsumer(AsyncWebsocketConsumer):
                 await self.send_info_to_client(self.CMD_NOT_FOUND, text_data)
 
         except json.JSONDecodeError as e:
-            print(f"Error decoding JSON data: {e}")
+            error_message = f"Error in receive method: {e}"
+            print(error_message)
+            logging.error(error_message)
         except Exception as e:
-            print(f"Error in receive method: {e}")
+            error_message = f"Error in receive method: {e}"
+            print(error_message)
+            logging.error(error_message)
 # ---------------------------------------
 
 # Messaging methods
@@ -169,7 +180,9 @@ class LobbyConsumer(AsyncWebsocketConsumer):
                 'data': data
             }))
         except Exception as e:
-            print(f'Error in broadcast method: {e}')
+            error_message = f"Error in broadcast method: {e}"
+            print(error_message)
+            logging.error(error_message)
 
     async def broadcast_to_group(self, group_name, command, data):
         try:
@@ -182,7 +195,9 @@ class LobbyConsumer(AsyncWebsocketConsumer):
                 }
             )
         except Exception as e:
-            print(f'Error in broadcast_to_group method: {e}')
+            error_message = f"Error in broadcast_to_group method: {e}"
+            print(error_message)
+            logging.error(error_message)
 
     async def message_another_player(self, user_id, command, data):
         try:
@@ -195,7 +210,9 @@ class LobbyConsumer(AsyncWebsocketConsumer):
                 }
             )
         except Exception as e:
-            print(f'Error in message_another_player method: {e}')
+            error_message = f"Error in message_another_player method: {e}"
+            print(error_message)
+            logging.error(error_message)
 
     async def send_info_to_client(self, command, data):
         try:
@@ -205,7 +222,9 @@ class LobbyConsumer(AsyncWebsocketConsumer):
                 'data': data
             }))
         except Exception as e:
-            print(f'Error in send_info_to_client method: {e}')
+            error_message = f"Error in send_info_to_client method: {e}"
+            print(error_message)
+            logging.error(error_message)
 # ---------------------------------------
 
 # Predefined Arrival Departure methods
@@ -221,7 +240,9 @@ class LobbyConsumer(AsyncWebsocketConsumer):
                 }
             )
         except Exception as e:
-            print(f'Exception in announce_arrival {e}')
+            error_message = f"Error in announce_arrival method: {e}"
+            print(error_message)
+            logging.error(error_message)
             await self.disconnect(1000)
 
     async def announce_departure(self):
@@ -236,7 +257,9 @@ class LobbyConsumer(AsyncWebsocketConsumer):
                 }
             )
         except Exception as e:
-            print(f'Exception in announce_departure {e}')
+            error_message = f"Error in announce_departure method: {e}"
+            print(error_message)
+            logging.error(error_message)
             await self.disconnect(1000)
 # ---------------------------------------
 
@@ -859,3 +882,30 @@ class LobbyConsumer(AsyncWebsocketConsumer):
             print(f'Could not find user with id {pk}')
             return None
 # ---------------------------------------
+
+
+# WebSocket close codes
+
+# | Close code (uint16) | Codename               | Internal | Customizable | Description |
+# |---------------------|------------------------|----------|--------------|-------------|
+# | 0 - 999             |                        | Yes      | No           | Unused |
+# | 1000                | `CLOSE_NORMAL`         | No       | No           | Successful operation / regular socket shutdown |
+# | 1001                | `CLOSE_GOING_AWAY`     | No       | No           | Client is leaving (browser tab closing) |
+# | 1002                | `CLOSE_PROTOCOL_ERROR` | Yes      | No           | Endpoint received a malformed frame |
+# | 1003                | `CLOSE_UNSUPPORTED`    | Yes      | No           | Endpoint received an unsupported frame (e.g. binary-only endpoint received text frame) |
+# | 1004                |                        | Yes      | No           | Reserved |
+# | 1005                | `CLOSED_NO_STATUS`     | Yes      | No           | Expected close status, received none |
+# | 1006                | `CLOSE_ABNORMAL`       | Yes      | No           | No close code frame has been receieved |
+# | 1007                | *Unsupported payload*  | Yes      | No           | Endpoint received inconsistent message (e.g. malformed UTF-8) |
+# | 1008                | *Policy violation*     | No       | No           | Generic code used for situations other than 1003 and 1009 |
+# | 1009                | `CLOSE_TOO_LARGE`      | No       | No           | Endpoint won't process large frame |
+# | 1010                | *Mandatory extension*  | No       | No           | Client wanted an extension which server did not negotiate |
+# | 1011                | *Server error*         | No       | No           | Internal server error while operating |
+# | 1012                | *Service restart*      | No       | No           | Server/service is restarting |
+# | 1013                | *Try again later*      | No       | No           | Temporary server condition forced blocking client's request |
+# | 1014                | *Bad gateway*          | No       | No           | Server acting as gateway received an invalid response |
+# | 1015                | *TLS handshake fail*   | Yes      | No           | Transport Layer Security handshake failure |
+# | 1016 - 1999         |                        | Yes      | No           | Reserved for later |
+# | 2000 - 2999         |                        | Yes      | Yes          | Reserved for websocket extensions |
+# | 3000 - 3999         |                        | No       | Yes          | Registered first come first serve at IANA |
+# | 4000 - 4999         |                        | No       | Yes          | Available for applications |
