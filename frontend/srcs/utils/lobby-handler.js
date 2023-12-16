@@ -67,8 +67,10 @@ const parseAndHandleMessage = async (message) => {
         updateFriendStatus(data);
     else if (data.type == "send_friend_request")
         await updateSendFriendRequests(data);
-    else if (data.type == "friend_request")
+    else if (data.type == "recieved_friend_request")
         await updateReceiveFriendRequests(data);
+    else if (data.type == "list_invites")
+        await updateNotifications(data);
 }
 
 const sendWebSocketMessage = (messageType, payload) => {
@@ -85,11 +87,24 @@ const sendWebSocketMessage = (messageType, payload) => {
   }
 };
 
+const getPendingNotifications = async () => {
+  const userId = await getUserId();
+  sendWebSocketMessage("command", {
+    command: "list_invites",
+    data: {
+      "client_id": userId
+    },
+  });
+};
+
 const joinLobby = async () => {
   try {
     await getOnlineUsers();
+    await getPendingNotifications();
   } catch (error) {
     console.error("Error while connecting to WebSocket:", error.message);
     // Handle error as needed (e.g., display an error message to the user)
   }
 };
+
+joinLobby();

@@ -39,8 +39,6 @@ const urlLocationHandler = async () => {
 
   ifLoggedRedirect(location);
 
-  if (location == "/play!") await joinLobby();
-
   console.log("location: ", location);
   const route = urlRoutes[location] || urlRoutes["404"];
   const html = await fetch(route.template).then((response) => response.text());
@@ -95,6 +93,7 @@ const urlLocationHandler = async () => {
     console.error("Element with id 'nav-router' not found in the DOM");
   }
 
+  loadLobbyScripts();
   loadNavScripts();
 };
 
@@ -124,6 +123,28 @@ const loadNavScripts = () => {
     }
   });
 };
+
+const loadLobbyScripts = () => {
+  const utilsDirec = `${direc}utils/`;
+  const scriptPaths = [
+    `${utilsDirec}lobby-handler.js`,
+    `${utilsDirec}lobby-friends-status.js`,
+  ];
+  const body = document.body;
+
+  scriptPaths.forEach((path) => {
+    const scriptSrc = `${path}`;
+
+    if (isLogged() && !document.querySelector(`script[src="${scriptSrc}"]`)) {
+      const script = document.createElement("script");
+      script.type = "text/javascript";
+      script.src = scriptSrc;
+      script.async = false;
+
+      body.appendChild(script);
+    }
+  });
+}
 
 // add an event listener to the window that watches for url changes
 window.onpopstate = urlLocationHandler;

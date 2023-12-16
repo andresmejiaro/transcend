@@ -1,6 +1,14 @@
 let friendList = [];
 let pendingFriendInvitationList = [];
 let nowOnlineFriends;
+let notificationInfo = [];
+
+const updateNotifications = async (data) => {
+	notificationInfo = data.data;
+	const bellSpan = document.getElementById("nav-notification-bell-span");
+  if (notificationInfo.length)
+    bellSpan.innerHTML = notificationInfo.length;
+};
 
 const getListFriends = async () => {
   const userId = await getUserId();
@@ -64,8 +72,6 @@ const updateSendFriendRequests = async (data) => {
 }
 
 const updateReceiveFriendRequests = async (data) => {
-  console.log("Received an invite", data.client_id)
-  updateNavNotification(1);
-  console.log(data);
-  notificationInfo = data;
+  showToast(data.type)
+  await getPendingNotifications();
 }

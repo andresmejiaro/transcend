@@ -21,8 +21,6 @@
     
     <!-- JS -->
     <script src="./srcs/utils/utils.js"></script>
-    <script src="./srcs/utils/lobby-handler.js"></script>
-    <script src="./srcs/utils/lobby-friends-status.js"></script>
     <script src="./srcs/utils/router/routes.js"></script>
     <script src="./srcs/utils/router/router.js"></script>
     
@@ -33,6 +31,19 @@
     <div id="nav-router"></div>
     <div class="container-fluid">
       <div id="content"></div>
+
+      <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+        <div id="liveToast" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true">
+          <div class="toast-header">
+            <img src="./srcs/assets/imgs/default-avatar.jpeg" class="rounded me-2" alt="..." style="width: 25px; height: 25px;">
+            <strong class="me-auto">Notification</strong>
+            <small>11 mins ago</small>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+          </div>
+          <div class="toast-body" id="toast-body-index">
+          </div>
+        </div>
+      </div>
     </div>
   </body>
 </html>

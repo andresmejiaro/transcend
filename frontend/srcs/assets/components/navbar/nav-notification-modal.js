@@ -1,7 +1,4 @@
-let notificationInfo = [];
-
 const handleModalForNotifications = async () => {
-  // Function to create a notification element
   function createNotificationElement(data) {
     const notificationContainer = document.getElementById('notifications-list');
 
@@ -11,7 +8,7 @@ const handleModalForNotifications = async () => {
 
     const descriptionDiv = document.createElement('div');
     const descriptionParagraph = document.createElement('p');
-    descriptionParagraph.textContent = data.description;
+    descriptionParagraph.textContent = `${data.invite_type}: ${data.invite_id}`;
     descriptionDiv.appendChild(descriptionParagraph);
 
     const actionsDiv = document.createElement('div');
@@ -44,3 +41,6 @@ document.getElementById("notificationsModal").addEventListener("shown.bs.modal",
     event.preventDefault();
 	handleModalForNotifications();
 });
+
+if (notificationInfo.length)
+	updateNavNotification(notificationInfo.length)
