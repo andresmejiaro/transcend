@@ -41,8 +41,6 @@ class TournamentConsumer(AsyncWebsocketConsumer):
     CMD_NOT_FOUND = 'command_not_found'
     CLOSE_CONNECTION = 'close_connection'
 
-
-
 # Channel methods (Connect, Disconnect, Receive)
     async def connect(self):
         query_string = self.scope['query_string'].decode('utf-8')
@@ -144,7 +142,6 @@ class TournamentConsumer(AsyncWebsocketConsumer):
             print(f"Error decoding JSON data: {e}")
         except Exception as e:
             print(f"Error in receive method: {e}")
-
 # ---------------------------------------
 
 # Messaging methods
@@ -184,7 +181,6 @@ class TournamentConsumer(AsyncWebsocketConsumer):
             'data': data
         }))
 # ---------------------------------------
-
 
 # Tournament Initialization
     async def start_tournament(self):
@@ -284,7 +280,6 @@ class TournamentConsumer(AsyncWebsocketConsumer):
             logging.error(f"Error in matchmaking_logic: {e}")
             await self.disconnect()
 # ---------------------------------------
-
 
 # Object Getters
     async def get_tournament_object(self):
