@@ -20,6 +20,7 @@ class LobbyConsumer(AsyncWebsocketConsumer):
 
 # Define constants for commands
     LIST_OF_USERS = 'list_of_users'                     # Command to send the list of online users
+    LIST_OF_INVITES = 'list_invites'                    # Command to send the list of invites sent
     SEND_PRV_MSG = 'send_prv_msg'                       # Command to send a private message
     SEND_NOTIFICATION = 'send_notification'             # Command to send a notification
     CMD_NOT_FOUND = 'command_not_found'                 # Command to send when a command is not found
@@ -32,7 +33,7 @@ class LobbyConsumer(AsyncWebsocketConsumer):
     REJECT_MATCH = 'reject_match'                       # Command to reject a match arguments: pass the values as of 'client_id' and 'match_id'
     CANCEL_MATCH = 'cancel_match'                       # Command to cancel a match arguments: pass the values as of 'client_id' and 'match_id'
     SEND_FRIEND_REQUEST = 'send_friend_request'         # Command to send a friend request arguments: pass the values as of 'client_id'
-    ACCEPT_FRIEND_REQUEST = 'accept_friend_request'     # Command to accept a friend request arguments: pass the values as of 'client_id'   
+    ACCEPT_FRIEND_REQUEST = 'accept_friend_request'     # Command to accept a friend request arguments: pass the values as of 'client_id'
     REJECT_FRIEND_REQUEST = 'reject_friend_request'     # Command to reject a friend request arguments: pass the values as of 'client_id'
     CANCEL_FRIEND_REQUEST = 'cancel_friend_request'     # Command to cancel a friend request arguments: pass the values as of 'client_id'
     GET_USER_INFO = 'get_user_info'                     # Command to get user info arguments: pass the values as of 'client_id'
@@ -42,7 +43,6 @@ class LobbyConsumer(AsyncWebsocketConsumer):
     CANCEL_TOURNAMENT = 'cancel_tournament'             # Command to cancel a tournament arguments: pass the values as of 'client_id' and 'tournament_id'
 
 # ---------------------------------------
-
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -97,6 +97,8 @@ class LobbyConsumer(AsyncWebsocketConsumer):
 
             if command == self.LIST_OF_USERS:
                 await self.send_info_to_client(self.LIST_OF_USERS, self.list_of_online_users)
+            elif command == self.LIST_OF_INVITES:
+                await self.send_info_to_client(self.LIST_OF_INVITES, await self.get_list_of_invites(self.client_id))
             elif command == self.CLOSE_CONNECTION:
                 await self.disconnect(1000)
             elif command == self.SEND_PRV_MSG:
@@ -135,7 +137,15 @@ class LobbyConsumer(AsyncWebsocketConsumer):
             elif command == self.CANCEL_FRIEND_REQUEST:
                 await self.cancel_friend_request(data['client_id'])
             elif command == self.GET_USER_INFO:
-                await self.send_info_to_client(self.GET_USER_INFO, await self.get_user_info())
+                await self.send_info_to_client(self.GET_USER_INFO, await self.get_user_info(data['client_id']))
+            elif command == self.INVITE_TO_TOURNAMENT:
+                await self.invite_to_tournament(data['client_id'], data['tournament_id'])
+            elif command == self.ACCEPT_TOURNAMENT:
+                await self.accept_tournament(data['client_id'], data['tournament_id'])
+            elif command == self.REJECT_TOURNAMENT:
+                await self.reject_tournament(data['client_id'], data['tournament_id'])
+            elif command == self.CANCEL_TOURNAMENT:
+                await self.cancel_tournament(data['client_id'], data['tournament_id'])
 
             else:
                 await self.send_info_to_client(self.CMD_NOT_FOUND, text_data)
@@ -231,12 +241,24 @@ class LobbyConsumer(AsyncWebsocketConsumer):
 # Predefined Matchmaking methods
     async def invite_to_match(self, user_id, match_id):
         try:
+            message_for_client = await self.modify_user(self.client_id, {'add_pending_invite': user_id, 'invite_type': 'match'})
+            message_for_invited = await self.modify_user(user_id, {'add_pending_invite': self.client_id, 'invite_type': 'match'})
+
             await self.message_another_player(
                 user_id,
                 'invite_to_match',
                 {
                     'client_id': self.client_id,
                     'match_id': match_id,
+                    'message': message_for_invited,
+                }
+            )
+            await self.send_info_to_client(
+                'invite_to_match',
+                {
+                    'client_id': user_id,
+                    'message': message_for_client,
+                    
                 }
             )
         except Exception as e:
@@ -253,6 +275,13 @@ class LobbyConsumer(AsyncWebsocketConsumer):
                     'match_id': match_id,
                 }
             )
+            await self.send_info_to_client(
+                'accept_match',
+                {
+                    'client_id': user_id,
+                    'message': 'Match invitation accepted',
+                }
+            )
         except Exception as e:
             print(f'Exception in accept_match {e}')
             await self.disconnect(1000)
@@ -265,6 +294,13 @@ class LobbyConsumer(AsyncWebsocketConsumer):
                 {
                     'client_id': self.client_id,
                     'match_id': match_id,
+                }
+            )
+            await self.send_info_to_client(
+                'reject_match',
+                {
+                    'client_id': user_id,
+                    'message': 'Match invitation rejected',
                 }
             )
         except Exception as e:
@@ -281,6 +317,13 @@ class LobbyConsumer(AsyncWebsocketConsumer):
                     'match_id': match_id,
                 }
             )
+            await self.send_info_to_client(
+                'cancel_match',
+                {
+                    'client_id': user_id,   
+                    'message': 'Match invitation cancelled',
+                }
+            )
         except Exception as e:
             print(f'Exception in cancel_match {e}')
             await self.disconnect(1000)
@@ -289,21 +332,31 @@ class LobbyConsumer(AsyncWebsocketConsumer):
 # Predefined Friend methods
     async def send_friend_request(self, user_id):
         try:
+            print(f'Sending friend request to user {user_id} that is type {type(user_id)}')
+            print(f'Sending friend request to user {self.client_id} that is type {type(self.client_id)}')
+
+            message_for_client = await self.modify_user(self.client_id, {'add_pending_invite': user_id, 'invite_type': 'friend_request'})
+            message_for_invited = await self.modify_user(user_id, {'add_pending_invite': self.client_id, 'invite_type': 'friend_request'})
+
             await self.message_another_player(
                 user_id,
                 'friend_request',
                 {
+                    'time': timezone.now().isoformat(),
                     'client_id': self.client_id,
+                    'message': message_for_invited,
                 }
             )
             # Advice the user that the friend request was sent
             await self.send_info_to_client(
                 'send_friend_request',
                 {
+                    'time': timezone.now().isoformat(),
                     'client_id': user_id,
-                    'message': 'Friend request sent',
+                    'message': message_for_client,
                 }
             )
+
         except Exception as e:
             print(f'Exception in send_friend_request {e}')
             await self.disconnect(1000)
@@ -357,18 +410,22 @@ class LobbyConsumer(AsyncWebsocketConsumer):
 
     async def cancel_friend_request(self, user_id):
         try:
+            message_for_client = await self.modify_user(self.client_id, {'remove_pending_invite': user_id, 'invite_type': 'friend_request'})
+            message_for_invited = await self.modify_user(user_id, {'remove_pending_invite': self.client_id, 'invite_type': 'friend_request'})
+
             await self.message_another_player(
                 user_id,
                 'cancel_friend_request',
                 {
                     'client_id': self.client_id,
+                    'message': message_for_invited,
                 }
             )
             await self.send_info_to_client(
                 'cancel_friend_request',
                 {
                     'client_id': user_id,
-                    'message': 'Friend request cancelled',
+                    'message': message_for_client,
                 }
             )
         except Exception as e:
@@ -379,12 +436,23 @@ class LobbyConsumer(AsyncWebsocketConsumer):
 # Predefined Tournament methods
     async def invite_to_tournament(self, user_id, tournament_id):
         try:
+            message_for_client = await self.modify_user(self.client_id, {'add_pending_invite': user_id, 'invite_type': 'tournament'})
+            message_for_invited = await self.modify_user(user_id, {'add_pending_invite': self.client_id, 'invite_type': 'tournament'})
+
             await self.message_another_player(
                 user_id,
                 'invite_to_tournament',
                 {
                     'client_id': self.client_id,
                     'tournament_id': tournament_id,
+                    'message': message_for_invited,
+                }
+            )
+            await self.send_info_to_client(
+                'invite_to_tournament',
+                {
+                    'client_id': user_id,
+                    'message': message_for_client,
                 }
             )
         except Exception as e:
@@ -401,6 +469,14 @@ class LobbyConsumer(AsyncWebsocketConsumer):
                     'tournament_id': tournament_id,
                 }
             )
+            await self.send_info_to_client(
+                'accept_tournament',
+                {
+                    'client_id': user_id,
+                    'message': 'Tournament invitation accepted',
+                }
+            )
+
         except Exception as e:
             print(f'Exception in accept_tournament {e}')
             await self.disconnect(1000)
@@ -415,6 +491,13 @@ class LobbyConsumer(AsyncWebsocketConsumer):
                     'tournament_id': tournament_id,
                 }
             )
+            await self.send_info_to_client(
+                'reject_tournament',
+                {
+                    'client_id': user_id,
+                    'message': 'Tournament invitation rejected',
+                }
+            )
         except Exception as e:
             print(f'Exception in reject_tournament {e}')
             await self.disconnect(1000)
@@ -427,6 +510,13 @@ class LobbyConsumer(AsyncWebsocketConsumer):
                 {
                     'client_id': self.client_id,
                     'tournament_id': tournament_id,
+                }
+            )
+            await self.send_info_to_client(
+                'cancel_tournament',
+                {
+                    'client_id': user_id,
+                    'message': 'Tournament invitation cancelled',
                 }
             )
         except Exception as e:
@@ -459,11 +549,27 @@ class LobbyConsumer(AsyncWebsocketConsumer):
             user = get_object_or_404(User, pk=pk)
 
             if user is None:
-                print(f'Could not find user with id {pk}')
-                return None
+                return {
+                    'status': 'error',
+                    'message': 'User not found',
+                }
+
+            if changes.get('add_pending_invite'):
+                self.add_pending_invite(user, changes)
+                return {
+                    'status': 'ok',
+                    'message': 'Sent invite added successfully',
+                }
+            
+            if changes.get('remove_pending_invite'):
+                self.remove_pending_invite(user, changes)
+                return {
+                    'status': 'ok',
+                    'message': 'Sent invite removed successfully',
+                }
 
             for key, value in changes.items():
-                    setattr(user, key, value)
+                setattr(user, key, value)
 
             user.save()
 
@@ -477,6 +583,25 @@ class LobbyConsumer(AsyncWebsocketConsumer):
             print(f'Could not find user with id {pk}')
             return None
 
+    def add_pending_invite(self, user, change):
+        try:
+            invite_id = change['add_pending_invite']
+            invite_type = change['invite_type']
+            user.add_pending_invite(invite_id, invite_type)
+
+        except Exception as e:
+            print(e)
+
+    def remove_pending_invite(self, user, change):
+        try:
+            invite_id = change['remove_pending_invite']
+            invite_type = change['invite_type']
+            user.remove_pending_invite(invite_id, invite_type)
+
+        except Exception as e:
+            print(e)
+
+# Database methods
     @database_sync_to_async
     @transaction.atomic
     def add_friendship(self, pk):
@@ -562,16 +687,18 @@ class LobbyConsumer(AsyncWebsocketConsumer):
             return None
 
     @database_sync_to_async
-    def get_user_info(self):
+    def get_user_info(self, pk):
         try:
             User = import_string('api.userauth.models.CustomUser')
-            user = get_object_or_404(User, pk=self.client_id)
+            print(f'Getting info for user {pk} type {type(pk)}')
+            print(f'The requesting user is {self.client_id} type {type(self.client_id)}')
+            
+            user = get_object_or_404(User, pk=pk)
             self_user = get_object_or_404(User, pk=self.client_id)
 
-            if user or self_user is None:
-                print(f'Could not find user with id {self.client_id}')
-                return None
-            
+            print(f'Getting info for user {user.username} with its pk {pk} with type {type(pk)}')
+            print(f'The requesting user is {self_user.username} with its pk {self.client_id} with type {type(self.client_id)}')
+         
             if self_user.is_superuser:
                 return {
                     'status': 'ok',
@@ -584,6 +711,7 @@ class LobbyConsumer(AsyncWebsocketConsumer):
                         'is_active': user.is_active,
                         'is_staff': user.is_staff,
                         'is_superuser': user.is_superuser,
+                        'pending_invites': user.get_pending_invites(),
                     }
                 }
 
@@ -593,6 +721,7 @@ class LobbyConsumer(AsyncWebsocketConsumer):
                 'data': {
                     'username': user.username,
                     'is_active': user.is_active,
+                    'pending_invites': user.get_pending_invites(),
                 }
             }
 
@@ -600,4 +729,17 @@ class LobbyConsumer(AsyncWebsocketConsumer):
             print(e)
             print(f'Could not find user with id {self.client_id}')
             return None
+
+    @database_sync_to_async
+    def get_list_of_invites(self, pk):
+        try:
+            User = import_string('api.userauth.models.CustomUser')
+            user = get_object_or_404(User, pk=pk)
+            return user.get_pending_invites()
+
+        except Exception as e:
+            print(e)
+            print(f'Could not find user with id {pk}')
+            return None
+
 # ---------------------------------------
