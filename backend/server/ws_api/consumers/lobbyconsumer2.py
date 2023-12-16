@@ -246,7 +246,7 @@ class LobbyConsumer(AsyncWebsocketConsumer):
 
             await self.message_another_player(
                 user_id,
-                'invite_to_match',
+                'recieved_match_invite',
                 {
                     'client_id': self.client_id,
                     'match_id': match_id,
@@ -254,7 +254,7 @@ class LobbyConsumer(AsyncWebsocketConsumer):
                 }
             )
             await self.send_info_to_client(
-                'invite_to_match',
+                'sent_match_invite',
                 {
                     'client_id': user_id,
                     'message': message_for_client,
@@ -269,7 +269,7 @@ class LobbyConsumer(AsyncWebsocketConsumer):
         try:
             await self.message_another_player(
                 user_id,
-                'accept_match',
+                'match_accepted',
                 {
                     'client_id': self.client_id,
                     'match_id': match_id,
@@ -290,7 +290,7 @@ class LobbyConsumer(AsyncWebsocketConsumer):
         try:
             await self.message_another_player(
                 user_id,
-                'reject_match',
+                'match_rejected',
                 {
                     'client_id': self.client_id,
                     'match_id': match_id,
@@ -311,7 +311,7 @@ class LobbyConsumer(AsyncWebsocketConsumer):
         try:
             await self.message_another_player(
                 user_id,
-                'cancel_match',
+                'match_cancelled',
                 {
                     'client_id': self.client_id,
                     'match_id': match_id,
@@ -340,7 +340,7 @@ class LobbyConsumer(AsyncWebsocketConsumer):
 
             await self.message_another_player(
                 user_id,
-                'friend_request',
+                'recieved_friend_request',
                 {
                     'time': timezone.now().isoformat(),
                     'client_id': self.client_id,
@@ -349,7 +349,7 @@ class LobbyConsumer(AsyncWebsocketConsumer):
             )
             # Advice the user that the friend request was sent
             await self.send_info_to_client(
-                'send_friend_request',
+                'sent_friend_request',
                 {
                     'time': timezone.now().isoformat(),
                     'client_id': user_id,
@@ -369,7 +369,7 @@ class LobbyConsumer(AsyncWebsocketConsumer):
             # Send a message to the other person
             await self.message_another_player(
                 user_id,
-                'accept_friend_request',
+                'friend_request_accepted',
                 {
                     'client_id': self.client_id,
                     'message': message,
@@ -392,7 +392,7 @@ class LobbyConsumer(AsyncWebsocketConsumer):
         try:
             await self.message_another_player(
                 user_id,
-                'reject_friend_request',
+                'friend_request_rejected',
                 {
                     'client_id': self.client_id,
                 }
@@ -415,7 +415,7 @@ class LobbyConsumer(AsyncWebsocketConsumer):
 
             await self.message_another_player(
                 user_id,
-                'cancel_friend_request',
+                'friend_request_cancelled',
                 {
                     'client_id': self.client_id,
                     'message': message_for_invited,
@@ -441,7 +441,7 @@ class LobbyConsumer(AsyncWebsocketConsumer):
 
             await self.message_another_player(
                 user_id,
-                'invite_to_tournament',
+                'recieved_tournament_invite',
                 {
                     'client_id': self.client_id,
                     'tournament_id': tournament_id,
@@ -449,7 +449,7 @@ class LobbyConsumer(AsyncWebsocketConsumer):
                 }
             )
             await self.send_info_to_client(
-                'invite_to_tournament',
+                'sent_tournament_invite',
                 {
                     'client_id': user_id,
                     'message': message_for_client,
@@ -463,7 +463,7 @@ class LobbyConsumer(AsyncWebsocketConsumer):
         try:
             await self.message_another_player(
                 user_id,
-                'accept_tournament',
+                'tournament_accepted',
                 {
                     'client_id': self.client_id,
                     'tournament_id': tournament_id,
@@ -485,7 +485,7 @@ class LobbyConsumer(AsyncWebsocketConsumer):
         try:
             await self.message_another_player(
                 user_id,
-                'reject_tournament',
+                'tournament_rejected',
                 {
                     'client_id': self.client_id,
                     'tournament_id': tournament_id,
@@ -506,7 +506,7 @@ class LobbyConsumer(AsyncWebsocketConsumer):
         try:
             await self.message_another_player(
                 user_id,
-                'cancel_tournament',
+                'tournament_cancelled',
                 {
                     'client_id': self.client_id,
                     'tournament_id': tournament_id,
