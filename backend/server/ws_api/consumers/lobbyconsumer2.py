@@ -704,7 +704,6 @@ class LobbyConsumer(AsyncWebsocketConsumer):
             print(e)
 # ---------------------------------------
 
-
 # Database methods
     @database_sync_to_async
     @transaction.atomic
