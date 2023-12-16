@@ -1,3 +1,19 @@
+<div align="center">
+
+## PIXEL PONG
+
+
+[![GitHub last commit](https://img.shields.io/github/last-commit/andresmejiaro/transcend?color=blue&label=Last%20commit&logo=git&maxAge=3600)](https://github.com/andresmejiaro/transcend/commits)
+[![GitHub issues](https://img.shields.io/github/issues/andresmejiaro/transcend?label=Issues&color=blue&maxAge=3600)](https://github.com/andresmejiaro/transcend/issues)
+[![GitHub forks](https://img.shields.io/github/forks/andresmejiaro/transcend?label=Forks&color=blue&maxAge=3600)](https://github.com/andresmejiaro/transcend/network)
+
+[![Test](https://github.com/dalexhd/ft_irc/workflows/Test/badge.svg)](https://github.com/andresmejiaro/transcend/actions?query=workflow:Test)
+[![codecov](https://codecov.io/gh/andresmejiaro/transcend/branch/main/graph/badge.svg?token=D8A1FV32VL)](https://codecov.io/gh/andresmejiaro/transcend)
+[![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/andresmejiaro/transcend?label=Code%20size&maxAge=3600)](https://github.com/andresmejiaro/transcend)
+
+</div>
+
+
 # Ft_trascendence
 
 This project is about creating a website where users will play Pong with others. It has to provide a nice
