@@ -95,7 +95,7 @@ const urlLocationHandler = async () => {
     console.error("Element with id 'nav-router' not found in the DOM");
   }
 
-  if (isLogged() && !document.querySelector(`script[src="${direc}pages/navbar/nav.js"]`)) {
+  if (isLogged() && !document.querySelector(`script[src="${direc}assets/components/navbar/nav.js"]`)) {
     const body = document.body;
     const script = document.createElement("script");
 

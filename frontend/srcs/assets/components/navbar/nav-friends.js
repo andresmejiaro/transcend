@@ -33,7 +33,9 @@ const handleInvite = async () => {
   }
 };
 
-document.getElementById("friendsModal").addEventListener("shown.bs.modal", function (event) {
+document
+  .getElementById("friendsModal")
+  .addEventListener("shown.bs.modal", function (event) {
     event.preventDefault();
     const btn = document.getElementById("friendsModalInvite");
     btn.addEventListener("click", function (event) {
@@ -42,44 +44,56 @@ document.getElementById("friendsModal").addEventListener("shown.bs.modal", funct
     });
   });
 
-const inviteFriend = async (inviteId) => {
-  const userId = await getUserId();
+const listInvitationFriends = () => {
+  const invitationListContainer = document.getElementById("friends-invitation-list");
+  invitationListContainer.innerHTML = "";
+  let invitationListFriends = []
+  invitationListFriends.forEach((friend) => {
+    const friendElement = document.createElement("div");
+    friendElement.classList.add("d-flex", "align-items-center");
 
-  try {
-    const url = `${window.DJANGO_API_BASE_URL}/api/user/${userId}/addfriend/`;
+    const mxElement = document.createElement("div");
+    mxElement.classList.add("mx-1");
 
-    const options = {
-      method: "POST",
-      mode: "cors",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        friend_id: inviteId,
-      }),
-    };
+    const pElement = document.createElement("p");
+    pElement.classList.add("pm0");
+    pElement.textContent = friend.username;
 
-    const data = await makeRequest(true, url, options);
+    friendElement.appendChild(circleElement);
+    friendElement.appendChild(mxElement);
+    friendElement.appendChild(pElement);
 
-    if (data.status === "ok") {
-      window.location.href = "/play!";
-    }
-  } catch (error) {
-    console.error("Error:", error.message);
+    friendsListContainer.appendChild(friendElement);
+  });
+}
+
+const handleInviteSent = () => {
+  const modalBody = document.getElementById("modal-body-friends");
+  const isInputVisible = modalBody.querySelector("#invitationInput") !== null;
+  if (isInputVisible) {
+    modalBody.innerHTML = initialContent;
   }
+  listInvitationFriends();
 };
 
+const inviteFriend = async (inviteId) => {
+  console.log("inviting: ", inviteId);
+  sendWebSocketMessage("command", {
+    command: "send_friend_request",
+    data: {
+      client_id: inviteId,
+    },
+  });
+  handleInviteSent();
+};
 
 const listFriends = async () => {
-  if (nowOnlineFriends)
-    toggleFriendNav(nowOnlineFriends);
-  else
-    removeToggleFriendNav();
+  if (nowOnlineFriends) toggleFriendNav(nowOnlineFriends);
+  else removeToggleFriendNav();
 
   const friendsListContainer = document.getElementById("friends-list");
   friendsListContainer.innerHTML = "";
-  
+
   const sortedFriendList = friendList.sort((a, b) => (b.online ? 1 : -1));
   sortedFriendList.forEach((friend) => {
     const friendElement = document.createElement("div");
@@ -105,13 +119,14 @@ const listFriends = async () => {
     friendsListContainer.appendChild(friendElement);
   });
 
-  document.getElementById("friendsModalLabel").innerHTML = "Online: " + nowOnlineFriends;
+  document.getElementById("friendsModalLabel").innerHTML =
+    "Online: " + nowOnlineFriends;
 };
 
 const friendsIconNav = document.getElementById("nav-friends-icon");
 const toggleFriendNav = async (nbrFriendsOnline) => {
   friendsIconNav.src = "./srcs/assets/imgs/friends-online-icon.svg";
-}
+};
 const removeToggleFriendNav = () => {
   friendsIconNav.src = "./srcs/assets/imgs/friends-icon.svg";
-}
+};

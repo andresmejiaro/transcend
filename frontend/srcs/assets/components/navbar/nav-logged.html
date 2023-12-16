@@ -1,6 +1,11 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light navbar-logged-pong">
   <div class="container">
-    <img src="./srcs/assets/imgs/logo-web.png" alt="" width="40" height= auto />
+    <img
+      src="./srcs/assets/imgs/logo-web.png"
+      alt=""
+      width="40"
+      height="auto"
+    />
     <div class="mx-auto d-flex align-items-center">
       <ul class="navbar-nav" style="font-size: 1.75rem">
         <li class="nav-item">
@@ -24,6 +29,17 @@
               style="width: 20px; cursor: pointer"
               id="nav-friends-icon"
             />
+          </a>
+        </li>
+        <li class="nav-item position-relative">
+          <a href="" class="nav-link nav-link-logged-pong">
+            <i class="bi bi-bell position-relative">
+              <span
+                class="position-absolute bottom-0 translate-middle badge rounded-pill bg-danger"
+                style="font-size: 0.8rem"
+                id="nav-notification-bell-span"
+              ></span>
+            </i>
           </a>
         </li>
         <li class="nav-item">
@@ -61,7 +77,7 @@
       <div class="modal-header justify-content-center">
         <div class="col">
           <div class="row text-center">
-            <h5 class="modal-title" id="friendsModalLabel"></h5>
+            <h5 class="modal-title" id="friendsModalLabel">Online: x</h5>
           </div>
           <div class="row text-center">
             <div>
@@ -78,7 +94,10 @@
       </div>
       <div class="modal-body" id="modal-body-friends">
         <p>List of friends...</p>
-        <div id="friends-list"></div>
+        <div id="friends-list">
+        <p>Pendind invitations...</p>
+        <div id="friends-invitation-list">
+      </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
           Close

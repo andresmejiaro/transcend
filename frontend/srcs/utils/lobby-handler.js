@@ -45,19 +45,13 @@ const getOnlineUsers = async () => {
       parseAndHandleMessage(event.data);
     });
 
-    lobbySocket.addEventListener("user_left", (event) => {
-      console.log(event)
-      console.log(event.data)
-      parseAndHandleMessage(event.data);
-    });
-
     lobbySocket.onmessage = (event) => {
       parseAndHandleMessage(event.data);
     };
 
     
     sendWebSocketMessage("command", {
-      command: "get_website_user_list",
+      command: "list_of_users",
       data: {},
     });
   } catch (error) {
@@ -67,6 +61,7 @@ const getOnlineUsers = async () => {
 
 const parseAndHandleMessage = async (message) => {
     const data = JSON.parse(message);
+    console.log(data)
     if (data.type == "user_joined")
         updateFriendStatus(data);
     else if (data.type == "user_left")
