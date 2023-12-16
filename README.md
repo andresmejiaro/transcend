@@ -7,8 +7,6 @@
 [![GitHub issues](https://img.shields.io/github/issues/andresmejiaro/transcend?label=Issues&color=blue&maxAge=3600)](https://github.com/andresmejiaro/transcend/issues)
 [![GitHub forks](https://img.shields.io/github/forks/andresmejiaro/transcend?label=Forks&color=blue&maxAge=3600)](https://github.com/andresmejiaro/transcend/network)
 
-[![Test](https://github.com/dalexhd/ft_irc/workflows/Test/badge.svg)](https://github.com/andresmejiaro/transcend/actions?query=workflow:Test)
-[![codecov](https://codecov.io/gh/andresmejiaro/transcend/branch/main/graph/badge.svg?token=D8A1FV32VL)](https://codecov.io/gh/andresmejiaro/transcend)
 [![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/andresmejiaro/transcend?label=Code%20size&maxAge=3600)](https://github.com/andresmejiaro/transcend)
 
 </div>
@@ -25,6 +23,7 @@ user interface and real-time multiplayer online games!
 
 - [Description](#description)
 - [Features](#features)
+- [Arquitecture](#arquitecture)
 - [Installation](#installation)
 - [Usage](#usage)
 - [Contribution](#contribution)
@@ -49,6 +48,9 @@ Ft_trascendence is an ambitious project that endeavors to create an immersive we
 - **Secure User Management:** Robust user authentication and management system ensuring secure access to the gaming platform.
 
 - **Alone against the machine:** A working IA to  give you the oportunity to improve your gaming to impress your friends.
+
+### Arquitecture
+Una descripción general de la estructura del proyecto, componentes clave, patrones de diseño utilizados, etc.
 
 ## Installation and Usage
 
