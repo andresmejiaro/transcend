@@ -36,7 +36,6 @@ class LobbyConsumer(AsyncWebsocketConsumer):
     REJECT_FRIEND_REQUEST = 'reject_friend_request'     # Command to reject a friend request arguments: pass the values as of 'client_id'
     CANCEL_FRIEND_REQUEST = 'cancel_friend_request'     # Command to cancel a friend request arguments: pass the values as of 'client_id'
     GET_USER_INFO = 'get_user_info'                     # Command to get user info arguments: pass the values as of 'client_id'
-<<<<<<< HEAD
     INVITE_TO_TOURNAMENT = 'invite_to_tournament'       # Command to invite a user to a tournament arguments: pass the values as of 'client_id' and 'tournament_id'
     ACCEPT_TOURNAMENT = 'accept_tournament'             # Command to accept a tournament arguments: pass the values as of 'client_id' and 'tournament_id'
     REJECT_TOURNAMENT = 'reject_tournament'             # Command to reject a tournament arguments: pass the values as of 'client_id' and 'tournament_id'
@@ -45,10 +44,6 @@ class LobbyConsumer(AsyncWebsocketConsumer):
 # ---------------------------------------
 
 
-=======
-# ---------------------------------------
-    
->>>>>>> 56b789bb8ed321027d20c9fb9912914bf47ad24b
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.client_id = None
