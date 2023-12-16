@@ -36,6 +36,12 @@ class LobbyConsumer(AsyncWebsocketConsumer):
     REJECT_FRIEND_REQUEST = 'reject_friend_request'     # Command to reject a friend request arguments: pass the values as of 'client_id'
     CANCEL_FRIEND_REQUEST = 'cancel_friend_request'     # Command to cancel a friend request arguments: pass the values as of 'client_id'
     GET_USER_INFO = 'get_user_info'                     # Command to get user info arguments: pass the values as of 'client_id'
+    INVITE_TO_TOURNAMENT = 'invite_to_tournament'       # Command to invite a user to a tournament arguments: pass the values as of 'client_id' and 'tournament_id'
+    ACCEPT_TOURNAMENT = 'accept_tournament'             # Command to accept a tournament arguments: pass the values as of 'client_id' and 'tournament_id'
+    REJECT_TOURNAMENT = 'reject_tournament'             # Command to reject a tournament arguments: pass the values as of 'client_id' and 'tournament_id'
+    CANCEL_TOURNAMENT = 'cancel_tournament'             # Command to cancel a tournament arguments: pass the values as of 'client_id' and 'tournament_id'
+
+# ---------------------------------------
 
 
     def __init__(self, *args, **kwargs):
@@ -337,6 +343,64 @@ class LobbyConsumer(AsyncWebsocketConsumer):
             )
         except Exception as e:
             print(f'Exception in cancel_friend_request {e}')
+            await self.disconnect(1000)
+# ---------------------------------------
+
+# Predefined Tournament methods
+    async def invite_to_tournament(self, user_id, tournament_id):
+        try:
+            await self.message_another_player(
+                user_id,
+                'invite_to_tournament',
+                {
+                    'client_id': self.client_id,
+                    'tournament_id': tournament_id,
+                }
+            )
+        except Exception as e:
+            print(f'Exception in invite_to_tournament {e}')
+            await self.disconnect(1000)
+
+    async def accept_tournament(self, user_id, tournament_id):
+        try:
+            await self.message_another_player(
+                user_id,
+                'accept_tournament',
+                {
+                    'client_id': self.client_id,
+                    'tournament_id': tournament_id,
+                }
+            )
+        except Exception as e:
+            print(f'Exception in accept_tournament {e}')
+            await self.disconnect(1000)
+
+    async def reject_tournament(self, user_id, tournament_id):
+        try:
+            await self.message_another_player(
+                user_id,
+                'reject_tournament',
+                {
+                    'client_id': self.client_id,
+                    'tournament_id': tournament_id,
+                }
+            )
+        except Exception as e:
+            print(f'Exception in reject_tournament {e}')
+            await self.disconnect(1000)
+
+    async def cancel_tournament(self, user_id, tournament_id):
+        try:
+            await self.message_another_player(
+                user_id,
+                'cancel_tournament',
+                {
+                    'client_id': self.client_id,
+                    'tournament_id': tournament_id,
+                }
+            )
+        except Exception as e:
+            print(f'Exception in cancel_tournament {e}')
             await self.disconnect(1000)
 # ---------------------------------------
 
