@@ -296,6 +296,14 @@ class LobbyConsumer(AsyncWebsocketConsumer):
                     'client_id': self.client_id,
                 }
             )
+            # Advice the user that the friend request was sent
+            await self.send_info_to_client(
+                'send_friend_request',
+                {
+                    'client_id': user_id,
+                    'message': 'Friend request sent',
+                }
+            )
         except Exception as e:
             print(f'Exception in send_friend_request {e}')
             await self.disconnect(1000)
@@ -314,6 +322,14 @@ class LobbyConsumer(AsyncWebsocketConsumer):
                     'message': message,
                 }
             )
+            # Send a message to the current user
+            await self.send_info_to_client(
+                'accept_friend_request',
+                {
+                    'client_id': user_id,
+                    'message': message,
+                }
+            )
 
         except Exception as e:
             print(f'Exception in accept_friend_request: {e}')
@@ -328,6 +344,13 @@ class LobbyConsumer(AsyncWebsocketConsumer):
                     'client_id': self.client_id,
                 }
             )
+            await self.send_info_to_client(
+                'reject_friend_request',
+                {
+                    'client_id': user_id,
+                    'message': 'Friend request rejected',
+                }
+            )
         except Exception as e:
             print(f'Exception in reject_friend_request {e}')
             await self.disconnect(1000)
@@ -339,6 +362,13 @@ class LobbyConsumer(AsyncWebsocketConsumer):
                 'cancel_friend_request',
                 {
                     'client_id': self.client_id,
+                }
+            )
+            await self.send_info_to_client(
+                'cancel_friend_request',
+                {
+                    'client_id': user_id,
+                    'message': 'Friend request cancelled',
                 }
             )
         except Exception as e:
