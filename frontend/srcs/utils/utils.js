@@ -131,3 +131,14 @@ const getIdFromUsername = async (clientUsername) => {
     return null;
   }
 };
+
+
+const showToast = (data) => {
+  const toastElement = document.getElementById('liveToast');
+  
+  const toastBody = document.getElementById('toast-body-index');
+  toastBody.textContent = data;
+
+  const bsToast = new bootstrap.Toast(toastElement);
+  bsToast.show();
+};

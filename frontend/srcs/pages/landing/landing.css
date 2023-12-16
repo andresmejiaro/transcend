@@ -1,5 +1,5 @@
 .landing-div {
-	cursor: none;
+	cursor:none;
 	margin: 0;
 	position: fixed;
 	top: 0;
@@ -17,7 +17,7 @@
 	max-height: 100%;
 	object-fit: contain;
 	/* This maintains aspect ratio and fits the container */
-	border: 20px solid #000000;
+	/* border: 20px solid #000000;
 	/* Adjust the frame thickness and color as needed */
 }
 

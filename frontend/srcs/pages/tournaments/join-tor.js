@@ -1,6 +1,6 @@
 let torSocket;
 
-const connectWebSocket = async (tournamentId) => {
+const connectWebSocketTor = async (tournamentId) => {
     return new Promise((resolve, reject) => {
         torSocket = new WebSocket(`ws://localhost:8001/ws/touurnament/?id=${tournamentId}`);
 
@@ -27,34 +27,6 @@ const connectWebSocket = async (tournamentId) => {
             reject(new Error('WebSocket connection error.'));
         });
     });
-};
-
-const getOnlineUsers = async () => {
-    try {
-        await connectWebSocket();
-
-		torSocket.addEventListener('message', (event) => {
-            const data = JSON.parse(event.data);
-            console.log('WebSocket message received:', data);
-        });
-
-        sendWebSocketMessage('command', { command: 'get_website_group_list', data: {} });
-    } catch (error) {
-        console.error('Error while connecting to WebSocket:', error.message);
-    }
-};
-
-
-const sendWebSocketMessage = (messageType, payload) => {
-    if (torSocket && torSocket.readyState === WebSocket.OPEN) {
-        torSocket.send(JSON.stringify({
-            type: messageType,
-            ...payload,
-        }));
-    } else {
-        console.error('WebSocket is not in the OPEN state.');
-        // Handle the case where WebSocket is not open (e.g., display a user-friendly message)
-    }
 };
 
 const handleJoinTorSocket = async (tournamentId) => {
