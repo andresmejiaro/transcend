@@ -68,7 +68,7 @@ Una descripción general de la estructura del proyecto, componentes clave, patro
 3. Choose the Pong game option to start playing.
 4. Interact with friends, other users or the evil IA in real-time gameplay.
 
-## Aditional links
+## Links
 Enlaces a la documentación más detallada, sitios web, demos en vivo, blogs o cualquier recurso externo relevante.
 
 ## Contribution
