@@ -1,4 +1,5 @@
 let friendList = [];
+let pendingFriendInvitationList = [];
 let nowOnlineFriends;
 
 const getListFriends = async () => {
@@ -53,4 +54,17 @@ const updateFriendStatus = async (data) => {
   });
   friendList = updatedFriendList;
   listFriends();
+  listInvitationFriends();
 };
+
+
+const updateSendFriendRequests = async (data) => {
+  if (data.data.message == "Friend request sent")
+    await handleInviteSent();
+}
+
+const updateReceiveFriendRequests = async (data) => {
+  console.log("Received an invite", data.client_id)
+  console.log(data);
+  updateNavNotification(1);
+}

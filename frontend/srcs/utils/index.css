@@ -118,3 +118,20 @@ p {
 .nav-link-logged-pong {
     padding: 5px 10px; /* Similar to .nav-link, adjust as needed */
 }
+
+.accept-btn {
+    color: #28a745; /* Green color for the accept button */
+    background-color: transparent; /* Remove background */
+    border: none; /* Remove border */
+  }
+
+.reject-btn {
+    color: #dc3545; /* Red color for the reject button */
+    background-color: transparent; /* Remove background */
+    border: none; /* Remove border */
+}
+
+.accept-btn i,
+.reject-btn i {
+    margin-right: 5px; /* Adjust as needed */
+}

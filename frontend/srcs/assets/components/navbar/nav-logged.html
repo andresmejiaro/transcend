@@ -26,17 +26,19 @@
               src="./srcs/assets/imgs/friends-icon.svg"
               alt="Friends"
               class="img-fluid"
-              style="width: 20px; cursor: pointer"
+              style="max-width: 20px; cursor: pointer"
               id="nav-friends-icon"
             />
           </a>
         </li>
         <li class="nav-item position-relative">
-          <a href="" class="nav-link nav-link-logged-pong">
+          <a href="" class="nav-link nav-link-logged-pong"
+          data-bs-toggle="modal"
+          data-bs-target="#notificationsModal">
             <i class="bi bi-bell position-relative">
               <span
                 class="position-absolute bottom-0 translate-middle badge rounded-pill bg-danger"
-                style="font-size: 0.8rem"
+                style="font-size: 0.8rem; color: white !important;"
                 id="nav-notification-bell-span"
               ></span>
             </i>
@@ -65,6 +67,7 @@
   </div>
 </nav>
 
+<!-- Friends Modal -->
 <div
   class="modal fade"
   id="friendsModal"
@@ -73,35 +76,53 @@
   aria-hidden="true"
 >
   <div class="modal-dialog">
-    <div class="modal-content" style="background: #191f38">
+    <div class="modal-content" style="background: #191f38; border: 5px solid #FFFEEE;">
       <div class="modal-header justify-content-center">
         <div class="col">
-          <div class="row text-center">
-            <h5 class="modal-title" id="friendsModalLabel">Online: x</h5>
-          </div>
-          <div class="row text-center">
-            <div>
-              <button
-                class="btn"
-                style="background: #fffeee; color: #94ba85"
-                id="friendsModalInvite"
-              >
-                Add a friend
-              </button>
-            </div>
+          <div class="row">
+            <h5 class="modal-title" id="friendsModalLabel" style="color: #F5A853;">Online: x</h5>
           </div>
         </div>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body" id="modal-body-friends">
-        <p>List of friends...</p>
-        <div id="friends-list">
-        <p>Pendind invitations...</p>
-        <div id="friends-invitation-list">
+        <div class="text-center my-2">
+          <div>
+            <button
+              class="btn"
+              style="background: #fffeee; color: #4CA2BB"
+              id="friendsModalInvite"
+            >
+              Invite
+            </button>
+          </div>
+        </div>
+        <p class="text-decoration-underline">List of friends...</p>
+        <div id="friends-list"></div>
+        <p class="text-decoration-underline mt-5">Pendind invitations...</p>
+        <div id="friends-invitation-list"></div>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-          Close
-        </button>
+    </div>
+  </div>
+</div>
+
+<!-- Notifications Modal -->
+<div
+  class="modal fade"
+  id="notificationsModal"
+  tabindex="-1"
+  aria-labelledby="notificationsModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content" style="background: #191f38; border: 5px solid #FFFEEE;">
+      <div class="modal-header justify-content-center">
+            <h5 class="modal-title">Notifications</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" id="modal-body-notifications">
+        <p>List...</p>
+        <div id="notifications-list"></div>
       </div>
     </div>
   </div>

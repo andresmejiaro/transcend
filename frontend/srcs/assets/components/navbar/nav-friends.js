@@ -1,54 +1,40 @@
-let initialContent; // Variable to store the initial content
+const getListOfInvites = async () => {
+  const userId = await getUserId();
+  try {
+    const url = `${window.DJANGO_API_BASE_URL}/api/user/${userId}/friendlist/`;
 
-const handleInvite = async () => {
-  const modalBody = document.getElementById("modal-body-friends");
+    const options = {
+      method: "GET",
+      mode: "cors",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
 
-  if (!initialContent) {
-    initialContent = modalBody.innerHTML;
+    const data = await makeRequest(true, url, options);
+
+    if (data.status == "ok") {
+      return data.data;
+    }
+  } catch (error) {
+    console.error("Error:", error.message);
   }
+}
 
-  const isInputVisible = modalBody.querySelector("#invitationInput") !== null;
-  if (isInputVisible) {
-    modalBody.innerHTML = initialContent;
-  } else {
-    modalBody.innerHTML = `
-            <input type="text" id="invitationInput" placeholder="Enter friend's name">
-            <button id="sendInvitationBtn" class="btn btn-success">Send Invitation</button>
-        `;
-
-    const sendInvitationBtn = document.getElementById("sendInvitationBtn");
-    sendInvitationBtn.addEventListener(
-      "click",
-      (function () {
-        return async function (event) {
-          event.preventDefault();
-          const clientUsername =
-            document.getElementById("invitationInput").value;
-          const inviteId = await getIdFromUsername(clientUsername);
-          if (!inviteId) alert("User not found");
-          else inviteFriend(inviteId);
-        };
-      })()
-    );
-  }
-};
-
-document
-  .getElementById("friendsModal")
-  .addEventListener("shown.bs.modal", function (event) {
-    event.preventDefault();
-    const btn = document.getElementById("friendsModalInvite");
-    btn.addEventListener("click", function (event) {
-      event.preventDefault();
-      handleInvite();
-    });
-  });
-
-const listInvitationFriends = () => {
+const listInvitationFriends = async () => {
   const invitationListContainer = document.getElementById("friends-invitation-list");
+  
   invitationListContainer.innerHTML = "";
-  let invitationListFriends = []
-  invitationListFriends.forEach((friend) => {
+  // if (invitationListContainer) {
+  //   while (invitationListContainer.firstChild) {
+  //     invitationListContainer.removeChild(invitationListContainer.firstChild);
+  //   }
+  // }
+  // console.log(invitationListContainer)
+
+  const invitationListFriends = await getListOfInvites();
+  await Promise.all(invitationListFriends.map( async (friend) => {
     const friendElement = document.createElement("div");
     friendElement.classList.add("d-flex", "align-items-center");
 
@@ -59,33 +45,24 @@ const listInvitationFriends = () => {
     pElement.classList.add("pm0");
     pElement.textContent = friend.username;
 
-    friendElement.appendChild(circleElement);
+    const removeButton = document.createElement("button");
+    removeButton.classList.add("btn", "btn-danger", "ms-2");
+    removeButton.innerHTML = '<i class="bi bi-x"></i> Remove Invitation';
+    removeButton.addEventListener("click", async () => {
+      (async () => {
+        await removeFriendRequest(friend);
+      })();
+    });
+
     friendElement.appendChild(mxElement);
     friendElement.appendChild(pElement);
+    friendElement.appendChild(removeButton);
 
-    friendsListContainer.appendChild(friendElement);
-  });
-}
-
-const handleInviteSent = () => {
-  const modalBody = document.getElementById("modal-body-friends");
-  const isInputVisible = modalBody.querySelector("#invitationInput") !== null;
-  if (isInputVisible) {
-    modalBody.innerHTML = initialContent;
-  }
-  listInvitationFriends();
+    invitationListContainer.appendChild(friendElement);
+  }));
 };
 
-const inviteFriend = async (inviteId) => {
-  console.log("inviting: ", inviteId);
-  sendWebSocketMessage("command", {
-    command: "send_friend_request",
-    data: {
-      client_id: inviteId,
-    },
-  });
-  handleInviteSent();
-};
+
 
 const listFriends = async () => {
   if (nowOnlineFriends) toggleFriendNav(nowOnlineFriends);

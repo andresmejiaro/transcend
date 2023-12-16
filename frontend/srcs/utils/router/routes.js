@@ -84,6 +84,15 @@ const urlRoutes = {
     css: [directory + "tournaments/tournaments.css"]
   },
 
+  "/tournament": {
+    template: directory + "tournament/tournament.html",
+    title: urlPageTitle + " - Tournament",
+    description: "This is the tournament page",
+    js: [directory + "tournament/tournament-lobby.js", directory + "tournament/utils.js", directory + "tournament/tournament.js", directory + "tournament/tournament-admin.js"],
+    css: [directory + "tournament/tournament.css"]
+  },
+
+
   "/2plygame": {
     template: directory + "2plygame/2plygame.html",
     title: urlPageTitle,

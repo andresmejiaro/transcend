@@ -1,4 +1,4 @@
-const direc = "./srcs/"
+const direc = "./srcs/";
 
 document.addEventListener("click", (e) => {
   const { target } = e;
@@ -15,12 +15,11 @@ const ifLoggedRedirect = (location) => {
       console.log("router logout");
       handleLogout();
     }
-  }
-  else {
+  } else {
     if (allowedLocations.includes(location)) {
-    window.location.pathname = '/play!';
+      window.location.pathname = "/play!";
     }
-  };
+  }
 };
 
 const urlRoute = (event) => {
@@ -40,8 +39,7 @@ const urlLocationHandler = async () => {
 
   ifLoggedRedirect(location);
 
-  if (location == "/play!")
-    await joinLobby();
+  if (location == "/play!") await joinLobby();
 
   console.log("location: ", location);
   const route = urlRoutes[location] || urlRoutes["404"];
@@ -50,7 +48,9 @@ const urlLocationHandler = async () => {
   document.title = route.title;
 
   // set the description of the document to the description of the route
-  document.querySelector('meta[name="description"]').setAttribute("content", route.description);
+  document
+    .querySelector('meta[name="description"]')
+    .setAttribute("content", route.description);
 
   if (route.css) {
     const head = document.head;
@@ -86,36 +86,43 @@ const urlLocationHandler = async () => {
     const existingContent = navRouter.innerHTML.trim();
     if (!existingContent) {
       if (isLogged()) {
-        navRouter.innerHTML = await fetch(direc + "assets/components/navbar/nav-logged.html").then(
-          (response) => response.text()
-        );
+        navRouter.innerHTML = await fetch(
+          direc + "assets/components/navbar/nav-logged.html"
+        ).then((response) => response.text());
       }
     }
   } else {
     console.error("Element with id 'nav-router' not found in the DOM");
   }
 
-  if (isLogged() && !document.querySelector(`script[src="${direc}assets/components/navbar/nav.js"]`)) {
-    const body = document.body;
-    const script = document.createElement("script");
+  loadNavScripts();
+};
 
-    script.type = "text/javascript";
-    script.src = direc + "assets/components/navbar/nav.js";
-    script.async = false;
+const loadNavScripts = () => {
+  const navDirec = `${direc}assets/components/navbar`;
+  const scriptPaths = [
+    `${navDirec}/nav.js`,
+    `${navDirec}/nav-friend-invite-handler.js`,
+    `${navDirec}/nav-friend-remove-handler.js`,
+    `${navDirec}/nav-friends-modal.js`,
+    `${navDirec}/nav-friends.js`,
+    `${navDirec}/nav-notification-handler.js`,
+    `${navDirec}/nav-notification-modal.js`,
+  ];
+  const body = document.body;
 
-    body.appendChild(script);
-  }
+  scriptPaths.forEach((path) => {
+    const scriptSrc = `${path}`;
 
-  if (isLogged() && !document.querySelector(`script[src="${direc}assets/components/navbar/nav-friends.js"]`)) {
-    const body = document.body;
-    const script = document.createElement("script");
+    if (isLogged() && !document.querySelector(`script[src="${scriptSrc}"]`)) {
+      const script = document.createElement("script");
+      script.type = "text/javascript";
+      script.src = scriptSrc;
+      script.async = false;
 
-    script.type = "text/javascript";
-    script.src = direc + "assets/components/navbar/nav-friends.js";
-    script.async = false;
-
-    body.appendChild(script);
-  }
+      body.appendChild(script);
+    }
+  });
 };
 
 // add an event listener to the window that watches for url changes

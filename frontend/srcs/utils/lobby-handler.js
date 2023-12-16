@@ -49,7 +49,6 @@ const getOnlineUsers = async () => {
       parseAndHandleMessage(event.data);
     };
 
-    
     sendWebSocketMessage("command", {
       command: "list_of_users",
       data: {},
@@ -66,6 +65,10 @@ const parseAndHandleMessage = async (message) => {
         updateFriendStatus(data);
     else if (data.type == "user_left")
         updateFriendStatus(data);
+    else if (data.type == "send_friend_request")
+        await updateSendFriendRequests(data);
+    else if (data.type == "friend_request")
+        await updateReceiveFriendRequests(data);
 }
 
 const sendWebSocketMessage = (messageType, payload) => {
