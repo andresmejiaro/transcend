@@ -41,7 +41,6 @@ class LobbyConsumer(AsyncWebsocketConsumer):
     ACCEPT_TOURNAMENT = 'accept_tournament'             # Command to accept a tournament arguments: pass the values as of 'client_id' and 'tournament_id'
     REJECT_TOURNAMENT = 'reject_tournament'             # Command to reject a tournament arguments: pass the values as of 'client_id' and 'tournament_id'
     CANCEL_TOURNAMENT = 'cancel_tournament'             # Command to cancel a tournament arguments: pass the values as of 'client_id' and 'tournament_id'
-
 # ---------------------------------------
 
     def __init__(self, *args, **kwargs):
