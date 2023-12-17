@@ -44,8 +44,7 @@ const updateFriendStatus = async (data) => {
   data = data.data;
   if (!updatedFriendList) return null;
   nowOnlineFriends = 0;
-  if (data.online_users)
-    data = data.online_users
+  if (data.online_users) data = data.online_users;
   updatedFriendList.forEach((friend) => {
     const friendUserId = friend.userId;
     if (friendUserId in data) {
@@ -54,34 +53,63 @@ const updateFriendStatus = async (data) => {
     }
   });
   friendList = updatedFriendList;
-  listFriendsNav();
-  listInvitationFriendsNav();
+  await listFriendsNav();
+  await listInvitationFriendsNav();
 };
 
-
 const handleSendFriendRequest = async (data) => {
-    await handleInviteSent(data.data.invite_id);
-}
+  await handleInviteSent(data.data.invite_id);
+};
 
 const handleReceivedFriendRequest = async (data) => {
-  showToast(data.type)
+  showToast(data.type);
   await getPendingNotifications();
-}
+};
+
+const updateFriendStatusNow = async (data) => {
+  const updatedFriendList = await getMyFriends();
+  if (!updatedFriendList) return null;
+  const targetId = data.data.client_id;
+  nowOnlineFriends = 0;
+  if (data) {
+    updatedFriendList.forEach((friend) => {
+      const friendUserId = friend.userId;
+      if (friendUserId == targetId) {
+        nowOnlineFriends++;
+        friend.online = true;
+      }
+    });
+  }
+  friendList = updatedFriendList;
+  await listFriendsNav();
+  await listInvitationFriendsNav();
+};
 
 const handleMeAcceptedFriendRequest = async (data) => {
-
-}
+  showToast(data.type);
+  await updateFriendStatusNow(data);
+  handleCloseNotificationModal();
+  receivedFriendsNotifications = receivedFriendsNotifications.filter(user => user.id !== data.data.client_id);
+  handleModalForNotifications()
+};
 
 const handleAcceptedFriendRequest = async (data) => {
-  showToast(data.type)
-}
+  showToast(data.type);
+  await updateFriendStatusNow(data);
+};
 
 const handleMeRejectedFriendRequest = async (data) => {
-
-}
+  showToast(data.type);
+  await updateFriendStatusNow(data);
+  handleCloseNotificationModal();
+  receivedFriendsNotifications = receivedFriendsNotifications.filter(user => user.id !== data.data.client_id);
+  handleModalForNotifications();
+};
 
 const handleRejectedFriendRequest = async (data) => {
-  const user = await getPlayerInfo(data.data.client_id);
-  const toastMessage = `${user.username} rejected the friend request`;
-  showToast(toastMessage)
-}
+  const userObj = await getPlayerInfo(data.data.client_id);
+  const toastMessage = `${userObj.username} rejected the friend request`;
+  showToast(toastMessage);
+  invitationListFriendsData = invitationListFriendsData.filter(user => user.id !== data.data.client_id);
+  listInvitationFriendsNav();
+};

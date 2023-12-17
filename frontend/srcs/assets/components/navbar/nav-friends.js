@@ -75,3 +75,15 @@ const toggleFriendNav = async (nbrFriendsOnline) => {
 const removeToggleFriendNav = () => {
   friendsIconNav.src = "./srcs/assets/imgs/friends-icon.svg";
 };
+
+
+const handleCloseFriendsModalMsg = (msg) => {
+  const closeModalBtn = document.querySelector(".btn-close.btn-close-white.btn-friends-close");
+  closeModalBtn.click();
+  showToast(msg)
+}
+
+const handleCloseFriendsModal = () => {
+  const closeModalBtn = document.querySelector(".btn-close.btn-close-white.btn-friends-close");
+  closeModalBtn.click();
+}

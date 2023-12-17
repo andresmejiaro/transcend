@@ -42,16 +42,30 @@ const handleModalForNotifications = async () => {
     notificationContainer.appendChild(notificationDiv);
   }
 
-  // Iterate over the sample data and create notification elements
+  const notificationContainer = document.getElementById('notifications-list');
+  notificationContainer.innerHTML = "";
   receivedFriendsNotifications.forEach(createNotificationElement);
+  updateNavNotification(receivedFriendsNotifications.length)
 }
 
 // const btn = document.getElementById("notificationsModalInvite");
 document.getElementById("notificationsModal").addEventListener("shown.bs.modal", function (event) {
     event.preventDefault();
-	handleModalForNotifications();
+    console.log("HASHDHASHHD")
+	  handleModalForNotifications();
 });
 
 // if (notificationInfo.length) {
 //   updateNavNotification(notificationInfo.length)
 // }
+
+const handleCloseNotificationModal = () => {
+  const closeModalBtn = document.querySelector(".btn-close.btn-close-white.btn-notifications-close");
+  closeModalBtn.click();
+}
+
+const handleCloseNotificationModalMsg = (msg) => {
+  const closeModalBtn = document.querySelector(".btn-close.btn-close-white.btn-notifications-close");
+  closeModalBtn.click();
+  showToast(msg)
+}

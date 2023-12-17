@@ -49,11 +49,7 @@ const handleBackButtonClick = async () => {
 const handleSendInvitationClick = async (event) => {
   event.preventDefault();
   const clientUsername = document.getElementById("invitationInput").value;
-  const inviteId = await getIdFromUsername(clientUsername);
-  if (!inviteId) alert("User not found");
-  else {
-    await inviteFriend(inviteId);
-  }
+  await inviteFriend(clientUsername);
 };
 
 document

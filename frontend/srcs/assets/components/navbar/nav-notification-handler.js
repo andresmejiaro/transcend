@@ -1,6 +1,10 @@
 const updateNavNotification = (nbr) => {
   const bellSpan = document.getElementById("nav-notification-bell-span");
-  bellSpan.innerHTML = nbr;
+  if (!nbr || nbr == 0)
+    bellSpan.innerHTML = "";
+  else
+    bellSpan.innerHTML = nbr;
+
 };
 
 const acceptFriendRequest = async (friend) => {
@@ -12,7 +16,7 @@ const acceptFriendRequest = async (friend) => {
       client_id: `${friend.id}`,
     },
   });
-  handleCloseModalMsg("Invitation Accepted Succesfully");
+  handleCloseNotificationModalMsg("Invitation Accepted Succesfully");
 };
 
 const rejectFriendRequest = async (friend) => {
@@ -24,5 +28,5 @@ const rejectFriendRequest = async (friend) => {
       client_id: `${friend.id}`,
     },
   });
-  handleCloseModalMsg("Invitation Rejected Succesfully");
+  handleCloseNotificationModalMsg("Invitation Rejected Succesfully");
 };
