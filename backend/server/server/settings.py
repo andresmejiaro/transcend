@@ -9,6 +9,33 @@ https://docs.djangoproject.com/en/4.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
+import logging.config
+
+# Logging configuration placed on top of settings.py to be able to log errors during start. Please do not move it.
+# Right now its commented out cause it produces a lot of logs, for debugging purposes uncomment it. Turn on for production.
+
+# LOGGING = {
+#     'version': 1,
+#     'disable_existing_loggers': False,
+#     'handlers': {
+#         'file': {
+#             'level': 'DEBUG',
+#             'class': 'logging.FileHandler',
+#             'filename': 'debug.log',
+#         },
+#     },
+#     'loggers': {
+#         'django': {
+#             'handlers': ['file'],
+#             'level': 'DEBUG',
+#             'propagate': True,
+#         },
+#     },
+# }
+
+# # Configure logging
+# logging.config.dictConfig(LOGGING)
+
 import os
 from pathlib import Path
 

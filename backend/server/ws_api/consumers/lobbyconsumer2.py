@@ -1,47 +1,46 @@
-import json
 from channels.generic.websocket import AsyncWebsocketConsumer
-from ws_api.python_pong.Player import Player
-from ws_api.python_pong.Game import Game
-from urllib.parse import parse_qs
-from channels.db import database_sync_to_async
-from django.shortcuts import get_object_or_404
-from django.http import Http404
-from django.utils import timezone
-from django.db import transaction
+import json                                                 # Used to encode and decode JSON data
+from urllib.parse import parse_qs                           # Used to parse the query string
+from channels.db import database_sync_to_async              # Used to make database calls asynchronously
+from django.shortcuts import get_object_or_404              # Used to get an object from the database
+from django.http import Http404                             # Used to return a 404 error if an object is not found
+from django.utils import timezone                           # Used to get the current time
+from django.db import transaction                           # Used to make database transactions used for friendship model
+from django.utils.module_loading import import_string       # Used to import models from other apps to avoid circular imports
+import logging                                              # Used to log errors
 
-
-from django.utils.module_loading import import_string
 
 class LobbyConsumer(AsyncWebsocketConsumer):
 
+# Class variables shared by all instances
     list_of_admins = {}
     list_of_online_users = {}
     lobby_name = 'lobby'
 
-# Define constants for commands
-    LIST_OF_USERS = 'list_of_users'                     # Command to send the list of online users
+# Endpoints and commands (Client -> Server)
+    LIST_OF_USERS = 'list_of_users'                     # Command to send the list of online users (Connected to the socket)
     LIST_SENT_INVITES = 'list_sent_invites'             # Command to send the list of invites sent
     LIST_RECEIVED_INVITES = 'list_received_invites'     # Command to send the list of invites received
-    SEND_PRV_MSG = 'send_prv_msg'                       # Command to send a private message
-    SEND_NOTIFICATION = 'send_notification'             # Command to send a notification
+    SEND_PRV_MSG = 'send_prv_msg'                       # Command to send a private message arguments: pass the values as of 'client_id' and 'message' eg: {'command': 'send_prv_msg', 'data': {'client_id': '1', 'message': 'Hello'}}
+    SEND_NOTIFICATION = 'send_notification'             # Command to send a group wide notification arguments: pass the values as of 'message' eg: {'command': 'send_notification', 'data': {'message': 'Hello'}}
     CMD_NOT_FOUND = 'command_not_found'                 # Command to send when a command is not found
     CLOSE_CONNECTION = 'close_connection'               # Command to close the connection
     CREATE_USER = 'create_user'                         # Command to create a user arguments: pass the values as of 'user_data'
     MODIFY_USER = 'modify_user'                         # Command to modify a user arguments: pass the values as of 'changes'
     SERVER_TIME = 'server_time'                         # Command to send the server time
-    INVITE_TO_MATCH = 'invite_to_match'                 # Command to invite a user to a match arguments: pass the values as of 'client_id' and 'match_id'
-    ACCEPT_MATCH = 'accept_match'                       # Command to accept a match arguments: pass the values as of 'client_id' and 'match_id'
-    REJECT_MATCH = 'reject_match'                       # Command to reject a match arguments: pass the values as of 'client_id' and 'match_id'
-    CANCEL_MATCH = 'cancel_match'                       # Command to cancel a match arguments: pass the values as of 'client_id' and 'match_id'
-    SEND_FRIEND_REQUEST = 'send_friend_request'         # Command to send a friend request arguments: pass the values as of 'client_id'
-    ACCEPT_FRIEND_REQUEST = 'accept_friend_request'     # Command to accept a friend request arguments: pass the values as of 'client_id'
-    REJECT_FRIEND_REQUEST = 'reject_friend_request'     # Command to reject a friend request arguments: pass the values as of 'client_id'
-    CANCEL_FRIEND_REQUEST = 'cancel_friend_request'     # Command to cancel a friend request arguments: pass the values as of 'client_id'
-    GET_USER_INFO = 'get_user_info'                     # Command to get user info arguments: pass the values as of 'client_id'
-    INVITE_TO_TOURNAMENT = 'invite_to_tournament'       # Command to invite a user to a tournament arguments: pass the values as of 'client_id' and 'tournament_id'
-    ACCEPT_TOURNAMENT = 'accept_tournament'             # Command to accept a tournament arguments: pass the values as of 'client_id' and 'tournament_id'
-    REJECT_TOURNAMENT = 'reject_tournament'             # Command to reject a tournament arguments: pass the values as of 'client_id' and 'tournament_id'
-    CANCEL_TOURNAMENT = 'cancel_tournament'             # Command to cancel a tournament arguments: pass the values as of 'client_id' and 'tournament_id'
+    INVITE_TO_MATCH = 'invite_to_match'                 # Command to invite a user to a match arguments: pass the values as of 'client_id' and 'match_id' eg: {'command': 'invite_to_match', 'data': {'client_id': '1', 'match_id': '1'}}
+    ACCEPT_MATCH = 'accept_match'                       # Command to accept a match arguments: pass the values as of 'client_id' and 'match_id' eg: {'command': 'accept_match', 'data': {'client_id': '1', 'match_id': '1'}}
+    REJECT_MATCH = 'reject_match'                       # Command to reject a match arguments: pass the values as of 'client_id' and 'match_id' eg: {'command': 'reject_match', 'data': {'client_id': '1', 'match_id': '1'}}
+    CANCEL_MATCH = 'cancel_match'                       # Command to cancel a match arguments: pass the values as of 'client_id' and 'match_id' eg: {'command': 'cancel_match', 'data': {'client_id': '1', 'match_id': '1'}}
+    SEND_FRIEND_REQUEST = 'send_friend_request'         # Command to send a friend request arguments: pass the values as of 'client_id' eg: {'command': 'send_friend_request', 'data': {'client_id': '1'}}
+    ACCEPT_FRIEND_REQUEST = 'accept_friend_request'     # Command to accept a friend request arguments: pass the values as of 'client_id' eg: {'command': 'accept_friend_request', 'data': {'client_id': '1'}}
+    REJECT_FRIEND_REQUEST = 'reject_friend_request'     # Command to reject a friend request arguments: pass the values as of 'client_id' eg: {'command': 'reject_friend_request', 'data': {'client_id': '1'}}
+    CANCEL_FRIEND_REQUEST = 'cancel_friend_request'     # Command to cancel a friend request arguments: pass the values as of 'client_id' eg: {'command': 'cancel_friend_request', 'data': {'client_id': '1'}}
+    GET_USER_INFO = 'get_user_info'                     # Command to get user info arguments: pass the values as of 'client_id' eg: {'command': 'get_user_info', 'data': {'client_id': '35'}}
+    INVITE_TO_TOURNAMENT = 'invite_to_tournament'       # Command to invite a user to a tournament arguments: pass the values as of 'client_id' and 'tournament_id' eg: {'command': 'invite_to_tournament', 'data': {'client_id': '1', 'tournament_id': '1'}}
+    ACCEPT_TOURNAMENT = 'accept_tournament'             # Command to accept a tournament arguments: pass the values as of 'client_id' and 'tournament_id' eg: {'command': 'accept_tournament', 'data': {'client_id': '1', 'tournament_id': '1'}}
+    REJECT_TOURNAMENT = 'reject_tournament'             # Command to reject a tournament arguments: pass the values as of 'client_id' and 'tournament_id' eg: {'command': 'reject_tournament', 'data': {'client_id': '1', 'tournament_id': '1'}}
+    CANCEL_TOURNAMENT = 'cancel_tournament'             # Command to cancel a tournament arguments: pass the values as of 'client_id' and 'tournament_id' eg: {'command': 'cancel_tournament', 'data': {'client_id': '1', 'tournament_id': '1'}}
 # ---------------------------------------
 
     def __init__(self, *args, **kwargs):
@@ -52,25 +51,30 @@ class LobbyConsumer(AsyncWebsocketConsumer):
 # Channel methods (Connect, Disconnect, Receive)
     async def connect(self):
         try:
+            # Get the client id from the query string
             query_string = self.scope['query_string'].decode('utf-8')
             query_params = parse_qs(query_string)
             self.client_id = query_params['client_id'][0]
 
-            # Get the user and see if they exist before accepting the connection
+            # Check if the user exists and add it to the list of online users/admins
             if await self.does_not_exist(self.client_id):
                 await self.close()
                 return
 
             await self.accept()
 
+            # Channel layer groups
             await self.channel_layer.group_add(self.lobby_name, self.channel_name)
             await self.channel_layer.group_add(self.client_id, self.channel_name)
 
+            # Predifined arrival method
             await self.announce_arrival()
 
 
         except Exception as e:
-            print(f"Error in connect method: {e}")
+            error_message = f"Error in connect method: {e}"
+            print(error_message)
+            logging.error(error_message)
             await self.close()
 
     async def disconnect(self, close_code):
@@ -87,7 +91,10 @@ class LobbyConsumer(AsyncWebsocketConsumer):
             self.close()
 
         except Exception as e:
-            print(f"Error in disconnect method: {e}")
+            error_message = f"Error in disconnect method: {e}"
+            print(error_message)
+            logging.error(error_message)
+            await self.close()
 
     async def receive(self, text_data):
         try:
@@ -148,14 +155,17 @@ class LobbyConsumer(AsyncWebsocketConsumer):
                 await self.reject_tournament(data['client_id'], data['tournament_id'])
             elif command == self.CANCEL_TOURNAMENT:
                 await self.cancel_tournament(data['client_id'], data['tournament_id'])
-
             else:
                 await self.send_info_to_client(self.CMD_NOT_FOUND, text_data)
 
         except json.JSONDecodeError as e:
-            print(f"Error decoding JSON data: {e}")
+            error_message = f"Error in receive method: {e}"
+            print(error_message)
+            logging.error(error_message)
         except Exception as e:
-            print(f"Error in receive method: {e}")
+            error_message = f"Error in receive method: {e}"
+            print(error_message)
+            logging.error(error_message)
 # ---------------------------------------
 
 # Messaging methods
@@ -169,7 +179,9 @@ class LobbyConsumer(AsyncWebsocketConsumer):
                 'data': data
             }))
         except Exception as e:
-            print(f'Error in broadcast method: {e}')
+            error_message = f"Error in broadcast method: {e}"
+            print(error_message)
+            logging.error(error_message)
 
     async def broadcast_to_group(self, group_name, command, data):
         try:
@@ -182,7 +194,9 @@ class LobbyConsumer(AsyncWebsocketConsumer):
                 }
             )
         except Exception as e:
-            print(f'Error in broadcast_to_group method: {e}')
+            error_message = f"Error in broadcast_to_group method: {e}"
+            print(error_message)
+            logging.error(error_message)
 
     async def message_another_player(self, user_id, command, data):
         try:
@@ -195,7 +209,9 @@ class LobbyConsumer(AsyncWebsocketConsumer):
                 }
             )
         except Exception as e:
-            print(f'Error in message_another_player method: {e}')
+            error_message = f"Error in message_another_player method: {e}"
+            print(error_message)
+            logging.error(error_message)
 
     async def send_info_to_client(self, command, data):
         try:
@@ -205,7 +221,9 @@ class LobbyConsumer(AsyncWebsocketConsumer):
                 'data': data
             }))
         except Exception as e:
-            print(f'Error in send_info_to_client method: {e}')
+            error_message = f"Error in send_info_to_client method: {e}"
+            print(error_message)
+            logging.error(error_message)
 # ---------------------------------------
 
 # Predefined Arrival Departure methods
@@ -221,7 +239,9 @@ class LobbyConsumer(AsyncWebsocketConsumer):
                 }
             )
         except Exception as e:
-            print(f'Exception in announce_arrival {e}')
+            error_message = f"Error in announce_arrival method: {e}"
+            print(error_message)
+            logging.error(error_message)
             await self.disconnect(1000)
 
     async def announce_departure(self):
@@ -236,15 +256,17 @@ class LobbyConsumer(AsyncWebsocketConsumer):
                 }
             )
         except Exception as e:
-            print(f'Exception in announce_departure {e}')
+            error_message = f"Error in announce_departure method: {e}"
+            print(error_message)
+            logging.error(error_message)
             await self.disconnect(1000)
 # ---------------------------------------
 
 # Predefined Matchmaking methods
     async def invite_to_match(self, user_id, match_id):
         try:
-            message_for_client = await self.modify_user(self.client_id, {'add_pending_invite': user_id, 'invite_type': 'match'})
-            message_for_invited = await self.modify_user(user_id, {'add_pending_invite': self.client_id, 'invite_type': 'match'})
+            message_for_client = await self.modify_user(self.client_id, {'add_sent_invites': user_id, 'invite_type': 'match'})
+            message_other_client = await self.modify_user(user_id, {'add_received_invites': self.client_id, 'invite_type': 'match'})
 
             await self.message_another_player(
                 user_id,
@@ -253,7 +275,7 @@ class LobbyConsumer(AsyncWebsocketConsumer):
                     'time': timezone.now().isoformat(),
                     'client_id': self.client_id,
                     'match_id': match_id,
-                    'message': message_for_invited,
+                    'message': message_other_client,
                 }
             )
             await self.send_info_to_client(
@@ -272,8 +294,8 @@ class LobbyConsumer(AsyncWebsocketConsumer):
     async def accept_match(self, user_id, match_id):
         try:
 
-            message_for_client = await self.modify_user(self.client_id, {'remove_pending_invite': user_id, 'invite_type': 'match'})
-            message_for_invited = await self.modify_user(user_id, {'remove_pending_invite': self.client_id, 'invite_type': 'match'})
+            message_for_client = await self.modify_user(self.client_id, {'remove_recieved_invites': user_id, 'invite_type': 'match'})
+            message_other_client = await self.modify_user(user_id, {'remove_sent_invites': self.client_id, 'invite_type': 'match'})
 
             await self.message_another_player(
                 user_id,
@@ -282,7 +304,7 @@ class LobbyConsumer(AsyncWebsocketConsumer):
                     'time': timezone.now().isoformat(),
                     'client_id': self.client_id,
                     'match_id': match_id,
-                    'message': message_for_invited,
+                    'message': message_other_client,
                 }
             )
             await self.send_info_to_client(
@@ -300,8 +322,8 @@ class LobbyConsumer(AsyncWebsocketConsumer):
 
     async def reject_match(self, user_id, match_id):
         try:
-            message_for_client = await self.modify_user(self.client_id, {'remove_pending_invite': user_id, 'invite_type': 'match'})
-            message_for_invited = await self.modify_user(user_id, {'remove_pending_invite': self.client_id, 'invite_type': 'match'})
+            message_for_client = await self.modify_user(self.client_id, {'remove_recieved_invites': user_id, 'invite_type': 'match'})
+            message_other_client = await self.modify_user(user_id, {'remove_sent_invites': self.client_id, 'invite_type': 'match'})
 
             await self.message_another_player(
                 user_id,
@@ -310,7 +332,7 @@ class LobbyConsumer(AsyncWebsocketConsumer):
                     'time': timezone.now().isoformat(),
                     'client_id': self.client_id,
                     'match_id': match_id,
-                    'message': message_for_invited,
+                    'message': message_other_client,
                 }
             )
             await self.send_info_to_client(
@@ -328,8 +350,8 @@ class LobbyConsumer(AsyncWebsocketConsumer):
 
     async def cancel_match(self, user_id, match_id):
         try:
-            message_for_client = await self.modify_user(self.client_id, {'remove_pending_invite': user_id, 'invite_type': 'match'})
-            message_for_invited = await self.modify_user(user_id, {'remove_pending_invite': self.client_id, 'invite_type': 'match'})
+            message_for_client = await self.modify_user(self.client_id, {'remove_sent_invites': user_id, 'invite_type': 'match'})
+            message_other_client = await self.modify_user(user_id, {'remove_recieved_invites': self.client_id, 'invite_type': 'match'})
 
             await self.message_another_player(
                 user_id,
@@ -338,7 +360,7 @@ class LobbyConsumer(AsyncWebsocketConsumer):
                     'time': timezone.now().isoformat(),
                     'client_id': self.client_id,
                     'match_id': match_id,
-                    'message': message_for_invited,
+                    'message': message_other_client,
                 }
             )
             await self.send_info_to_client(
@@ -359,7 +381,7 @@ class LobbyConsumer(AsyncWebsocketConsumer):
     async def send_friend_request(self, user_id):
         try:
             message_for_client = await self.modify_user(self.client_id, {'add_sent_invites': user_id, 'invite_type': 'friend_request'})
-            message_for_invited = await self.modify_user(user_id, {'add_received_invites': self.client_id, 'invite_type': 'friend_request'})
+            message_other_client = await self.modify_user(user_id, {'add_received_invites': self.client_id, 'invite_type': 'friend_request'})
 
             await self.message_another_player(
                 user_id,
@@ -367,7 +389,7 @@ class LobbyConsumer(AsyncWebsocketConsumer):
                 {
                     'time': timezone.now().isoformat(),
                     'client_id': self.client_id,
-                    'message': message_for_invited,
+                    'message': message_other_client,
                 }
             )
             # Advice the user that the friend request was sent
@@ -392,7 +414,7 @@ class LobbyConsumer(AsyncWebsocketConsumer):
 
             # Remove the friend request from both users lists
             message_to_client = await self.modify_user(self.client_id, {'remove_recieved_invites': user_id, 'invite_type': 'friend_request'})
-            message_for_invited = await self.modify_user(user_id, {'remove_sent_invites': self.client_id, 'invite_type': 'friend_request'})
+            message_other_client = await self.modify_user(user_id, {'remove_sent_invites': self.client_id, 'invite_type': 'friend_request'})
 
             # Send a message to the other person
             await self.message_another_player(
@@ -401,7 +423,7 @@ class LobbyConsumer(AsyncWebsocketConsumer):
                 {
                     'time': timezone.now().isoformat(),
                     'client_id': self.client_id,
-                    'message': message_for_invited,
+                    'message': message_other_client,
                 }
             )
             # Send a message to the current user
@@ -422,7 +444,7 @@ class LobbyConsumer(AsyncWebsocketConsumer):
         try:
 
             message_to_client = await self.modify_user(self.client_id, {'remove_recieved_invites': user_id, 'invite_type': 'friend_request'})
-            message_for_invited = await self.modify_user(user_id, {'remove_sent_invites': self.client_id, 'invite_type': 'friend_request'})
+            message_other_client = await self.modify_user(user_id, {'remove_sent_invites': self.client_id, 'invite_type': 'friend_request'})
 
             await self.message_another_player(
                 user_id,
@@ -430,7 +452,7 @@ class LobbyConsumer(AsyncWebsocketConsumer):
                 {
                     'time': timezone.now().isoformat(),
                     'client_id': self.client_id,
-                    'message': message_for_invited,
+                    'message': message_other_client,
                 }
             )
             await self.send_info_to_client(
@@ -447,8 +469,8 @@ class LobbyConsumer(AsyncWebsocketConsumer):
 
     async def cancel_friend_request(self, user_id):
         try:
-            message_for_client = await self.modify_user(self.client_id, {'remove_recieved_invites': user_id, 'invite_type': 'friend_request'})
-            message_for_invited = await self.modify_user(user_id, {'remove_sent_invites': self.client_id, 'invite_type': 'friend_request'})
+            message_for_client = await self.modify_user(self.client_id, {'remove_sent_invites': user_id, 'invite_type': 'friend_request'})
+            message_other_client = await self.modify_user(user_id, {'remove_recieved_invites': self.client_id, 'invite_type': 'friend_request'})
 
             await self.message_another_player(
                 user_id,
@@ -456,7 +478,7 @@ class LobbyConsumer(AsyncWebsocketConsumer):
                 {
                     'time': timezone.now().isoformat(),
                     'client_id': self.client_id,
-                    'message': message_for_invited,
+                    'message': message_other_client,
                 }
             )
             await self.send_info_to_client(
@@ -476,8 +498,8 @@ class LobbyConsumer(AsyncWebsocketConsumer):
     async def invite_to_tournament(self, user_id, tournament_id):
         try:
 
-            message_for_client = await self.modify_user(self.client_id, {'add_pending_invite': user_id, 'invite_type': 'tournament'})
-            message_for_invited = await self.modify_user(user_id, {'add_pending_invite': self.client_id, 'invite_type': 'tournament'})
+            message_for_client = await self.modify_user(self.client_id, {'add_sent_invites': user_id, 'invite_type': 'tournament'})
+            message_other_client = await self.modify_user(user_id, {'add_received_invites': self.client_id, 'invite_type': 'tournament'})
 
             await self.message_another_player(
                 user_id,
@@ -486,7 +508,7 @@ class LobbyConsumer(AsyncWebsocketConsumer):
                     'time': timezone.now().isoformat(),
                     'client_id': self.client_id,
                     'tournament_id': tournament_id,
-                    'message': message_for_invited,
+                    'message': message_other_client,
                 }
             )
             await self.send_info_to_client(
@@ -505,8 +527,8 @@ class LobbyConsumer(AsyncWebsocketConsumer):
     async def accept_tournament(self, user_id, tournament_id):
         try:
 
-            message_for_client = await self.modify_user(self.client_id, {'remove_pending_invite': user_id, 'invite_type': 'tournament'})
-            message_for_invited = await self.modify_user(user_id, {'remove_pending_invite': self.client_id, 'invite_type': 'tournament'})
+            message_for_client = await self.modify_user(self.client_id, {'remove_recieved_invites': user_id, 'invite_type': 'tournament'})
+            message_other_client = await self.modify_user(user_id, {'remove_sent_invites': self.client_id, 'invite_type': 'tournament'})
 
             await self.message_another_player(
                 user_id,
@@ -515,7 +537,7 @@ class LobbyConsumer(AsyncWebsocketConsumer):
                     'time': timezone.now().isoformat(),
                     'client_id': self.client_id,
                     'tournament_id': tournament_id,
-                    'message': message_for_invited,
+                    'message': message_other_client,
                 }
             )
             await self.send_info_to_client(
@@ -536,8 +558,8 @@ class LobbyConsumer(AsyncWebsocketConsumer):
     async def reject_tournament(self, user_id, tournament_id):
         try:
 
-            message_for_client = await self.modify_user(self.client_id, {'remove_pending_invite': user_id, 'invite_type': 'tournament'})
-            message_for_invited = await self.modify_user(user_id, {'remove_pending_invite': self.client_id, 'invite_type': 'tournament'})
+            message_for_client = await self.modify_user(self.client_id, {'remove_recieved_invites': user_id, 'invite_type': 'tournament'})
+            message_other_client = await self.modify_user(user_id, {'remove_sent_invites': self.client_id, 'invite_type': 'tournament'})
 
             await self.message_another_player(
                 user_id,
@@ -546,7 +568,7 @@ class LobbyConsumer(AsyncWebsocketConsumer):
                     'time': timezone.now().isoformat(),
                     'client_id': self.client_id,
                     'tournament_id': tournament_id,
-                    'message': message_for_invited,
+                    'message': message_other_client,
                 }
             )
             await self.send_info_to_client(
@@ -565,8 +587,8 @@ class LobbyConsumer(AsyncWebsocketConsumer):
     async def cancel_tournament(self, user_id, tournament_id):
         try:
 
-            message_for_client = await self.modify_user(self.client_id, {'remove_pending_invite': user_id, 'invite_type': 'tournament'})
-            message_for_invited = await self.modify_user(user_id, {'remove_pending_invite': self.client_id, 'invite_type': 'tournament'})
+            message_for_client = await self.modify_user(self.client_id, {'remove_sent_invites': user_id, 'invite_type': 'tournament'})
+            message_other_client = await self.modify_user(user_id, {'remove_recieved_invites': self.client_id, 'invite_type': 'tournament'})
 
             await self.message_another_player(
                 user_id,
@@ -575,7 +597,7 @@ class LobbyConsumer(AsyncWebsocketConsumer):
                     'time': timezone.now().isoformat(),
                     'client_id': self.client_id,
                     'tournament_id': tournament_id,
-                    'message': message_for_invited,
+                    'message': message_other_client,
                 }
             )
             await self.send_info_to_client(
@@ -592,7 +614,7 @@ class LobbyConsumer(AsyncWebsocketConsumer):
             await self.disconnect(1000)
 # ---------------------------------------
 
-# Database methods
+# Object existence methods
     @database_sync_to_async
     def does_not_exist(self, pk):
         try:
@@ -609,7 +631,9 @@ class LobbyConsumer(AsyncWebsocketConsumer):
         except Exception as e:
             print(e)
             self.disconnect(1000)
+# ---------------------------------------
 
+# Client modification methods
     @database_sync_to_async
     def modify_user(self, pk, changes):
         try:
@@ -640,14 +664,14 @@ class LobbyConsumer(AsyncWebsocketConsumer):
                 self.add_received_invites(user, changes)
                 return {
                     'status': 'ok',
-                    'message': 'Sent invite removed successfully',
+                    'message': 'Recieved invite added successfully',
                 }
 
-            if changes.get('remove_received_invites'):
+            if changes.get('remove_recieved_invites'):
                 self.remove_received_invites(user, changes)
                 return {
                     'status': 'ok',
-                    'message': 'Sent invite removed successfully',
+                    'message': 'Recieved invite removed successfully',
                 }
 
             for key, value in changes.items():
@@ -666,8 +690,7 @@ class LobbyConsumer(AsyncWebsocketConsumer):
             return None
 # ---------------------------------------
 
-
-# Invites methods
+# Invites list methods (Sent and Received)
     def add_received_invites(self, user, change):
         try:
             invite_id = change['add_received_invites']
@@ -679,7 +702,7 @@ class LobbyConsumer(AsyncWebsocketConsumer):
 
     def remove_received_invites(self, user, change):
         try:
-            invite_id = change['remove_received_invites']
+            invite_id = change['remove_recieved_invites']
             invite_type = change['invite_type']
             user.remove_received_invites(invite_id, invite_type)
 
@@ -705,8 +728,7 @@ class LobbyConsumer(AsyncWebsocketConsumer):
             print(e)
 # ---------------------------------------
 
-
-# Database methods
+# Database methods synchronised with the channel layer
     @database_sync_to_async
     @transaction.atomic
     def add_friendship(self, pk):
@@ -859,3 +881,30 @@ class LobbyConsumer(AsyncWebsocketConsumer):
             print(f'Could not find user with id {pk}')
             return None
 # ---------------------------------------
+
+
+# WebSocket close codes
+
+# | Close code (uint16) | Codename               | Internal | Customizable | Description |
+# |---------------------|------------------------|----------|--------------|-------------|
+# | 0 - 999             |                        | Yes      | No           | Unused |
+# | 1000                | `CLOSE_NORMAL`         | No       | No           | Successful operation / regular socket shutdown |
+# | 1001                | `CLOSE_GOING_AWAY`     | No       | No           | Client is leaving (browser tab closing) |
+# | 1002                | `CLOSE_PROTOCOL_ERROR` | Yes      | No           | Endpoint received a malformed frame |
+# | 1003                | `CLOSE_UNSUPPORTED`    | Yes      | No           | Endpoint received an unsupported frame (e.g. binary-only endpoint received text frame) |
+# | 1004                |                        | Yes      | No           | Reserved |
+# | 1005                | `CLOSED_NO_STATUS`     | Yes      | No           | Expected close status, received none |
+# | 1006                | `CLOSE_ABNORMAL`       | Yes      | No           | No close code frame has been receieved |
+# | 1007                | *Unsupported payload*  | Yes      | No           | Endpoint received inconsistent message (e.g. malformed UTF-8) |
+# | 1008                | *Policy violation*     | No       | No           | Generic code used for situations other than 1003 and 1009 |
+# | 1009                | `CLOSE_TOO_LARGE`      | No       | No           | Endpoint won't process large frame |
+# | 1010                | *Mandatory extension*  | No       | No           | Client wanted an extension which server did not negotiate |
+# | 1011                | *Server error*         | No       | No           | Internal server error while operating |
+# | 1012                | *Service restart*      | No       | No           | Server/service is restarting |
+# | 1013                | *Try again later*      | No       | No           | Temporary server condition forced blocking client's request |
+# | 1014                | *Bad gateway*          | No       | No           | Server acting as gateway received an invalid response |
+# | 1015                | *TLS handshake fail*   | Yes      | No           | Transport Layer Security handshake failure |
+# | 1016 - 1999         |                        | Yes      | No           | Reserved for later |
+# | 2000 - 2999         |                        | Yes      | Yes          | Reserved for websocket extensions |
+# | 3000 - 3999         |                        | No       | Yes          | Registered first come first serve at IANA |
+# | 4000 - 4999         |                        | No       | Yes          | Available for applications |
