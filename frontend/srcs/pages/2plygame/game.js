@@ -2,12 +2,6 @@
 const gameCanvas = document.getElementById("gameCanvas");
 const ctx = gameCanvas.getContext("2d");
 
-
-// Handle keydown event
-document.addEventListener("keydown", (event) => {
-  throttledKeyPress(event.key);
-});
-
 // WebSocket instance
 let ws;
 
