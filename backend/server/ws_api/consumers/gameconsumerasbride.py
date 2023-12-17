@@ -316,22 +316,18 @@ class GameConsumerAsBridge(AsyncWebsocketConsumer):
                 right_paddle.updatePosition()
 
                 update_data = {
-                    'timestamp': timezone.now().isoformat(),
+                    # 'timestamp': timezone.now().isoformat(),
                     'game_update': self.list_of_games[self.match_id].reportScreen(),
                     'score_update': {'left': self.list_of_games[self.match_id]._leftPlayer.getScore(), 'right': self.list_of_games[self.match_id]._rightPlayer.getScore()},
                 }
 
                 self.update_buffer.append(update_data)
                 
-                # Send updated game state to the group
-                # await self.broadcast_to_group(self.match_id, 'game_update', self.list_of_games[self.match_id].reportScreen())
-                # await self.broadcast_to_group(self.match_id, 'score_update', {'left': self.list_of_games[self.match_id]._leftPlayer.getScore(), 'right': self.list_of_games[self.match_id]._rightPlayer.getScore()})
-
                 try:
-                    # await asyncio.sleep(update_interval) # For use with FPS
-                    await asyncio.sleep(0) # For manual control of FPS
+                    await asyncio.sleep(update_interval) # For use with FPS
+                    # await asyncio.sleep(0) # For manual control of FPS
 
-                    if len(self.update_buffer) >= 10:
+                    if len(self.update_buffer) >= 4:
                         await self.broadcast_to_group(self.match_id, 'update_buffer', self.update_buffer)
                         self.update_buffer = []
 

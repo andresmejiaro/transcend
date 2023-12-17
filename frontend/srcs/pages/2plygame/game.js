@@ -1,8 +1,25 @@
+// Import lodash
+import _ from "lodash";
+
+// Get your canvas and context
 const gameCanvas = document.getElementById("gameCanvas");
 const ctx = gameCanvas.getContext("2d");
 
+// Throttle keyboard events
+const throttledKeyPress = _.throttle(sendKeyPress, 100);
+
+// Buffer for key presses
+const keyPressBuffer = [];
+
+// Handle keydown event
+document.addEventListener("keydown", (event) => {
+  throttledKeyPress(event.key);
+});
+
+// WebSocket instance
 let ws;
 
+// Function to start the game
 function startGame(matchId, player1Id, player2Id, clientId, scoreLimit) {
   return new Promise((resolve, reject) => {
     const uri = `ws://localhost:8001/ws/pong/${matchId}/?player_1_id=${player1Id}&player_2_id=${player2Id}&client_id=${clientId}&scorelimit=${scoreLimit}`;
@@ -11,24 +28,23 @@ function startGame(matchId, player1Id, player2Id, clientId, scoreLimit) {
 
     ws.addEventListener("open", () => {
       console.log("WebSocket connection opened.");
-      resolve(ws); // Resolve the promise with the WebSocket instance
+      resolve(ws);
     });
 
     ws.addEventListener("close", () => {
       console.log("WebSocket connection closed.");
-      reject("WebSocket connection closed."); // Reject the promise with an error message
+      reject("WebSocket connection closed.");
     });
 
     ws.addEventListener("message", (event) => {
       const data = JSON.parse(event.data);
-
       console.log("Received message:", data);
-
       updateGameCanvas(data);
     });
   });
 }
 
+// Function to send JSON message over WebSocket
 function sendJson(jsonMessage) {
   console.log("WebSocket readyState:", ws.readyState);
 
@@ -40,27 +56,25 @@ function sendJson(jsonMessage) {
   }
 }
 
+// Handle keydown event for arrow keys
 document.addEventListener("keydown", (event) => {
-  // Handle arrow key presses and send messages to the server
   handleArrowKeyPress(event.key);
 });
 
+// Handle keyup event for arrow keys
 document.addEventListener("keyup", (event) => {
-  // Handle arrow key releases and send messages to the server
   handleArrowKeyRelease(event.key);
 });
 
+// Function to update the game canvas
 function updateGameCanvas(data) {
   console.log("Updating game canvas with data:", data);
 
   if (data.type === "player_list") {
-    // Handle player list data if needed
     console.log("Received player list:", data.data);
   } else if (data.type === "game_update") {
-    // Handle game update data
     drawPongGame(data.data);
   } else if (data.type === "update_buffer") {
-    // Handle buffered game updates
     data.data.forEach((update) => {
       console.log("Buffered game update:", update);
       drawPongGame(update.game_update);
@@ -70,8 +84,8 @@ function updateGameCanvas(data) {
   }
 }
 
+// Function to draw the Pong game on the canvas
 function drawPongGame(data) {
-  // Check if the required properties exist in the data object
   if (
     data &&
     data.ball &&
@@ -79,8 +93,6 @@ function drawPongGame(data) {
     data.rightPaddle
   ) {
     ctx.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
-
-    // Draw only if the ball, leftPaddle, and rightPaddle properties are present
     drawRect(data.ball.position, data.ball.size, "blue");
     drawRect(
       data.leftPaddle.position,
@@ -108,14 +120,14 @@ function drawPongGame(data) {
   }
 }
 
-
+// Function to draw a rectangle on the canvas
 function drawRect(position, size, color) {
   ctx.fillStyle = color;
   ctx.fillRect(position.x, position.y, size.x, size.y);
 }
 
+// Handle arrow key press
 function handleArrowKeyPress(key) {
-  // Customize this based on your game's key bindings
   switch (key) {
     case "ArrowUp":
       sendKeyPress("up");
@@ -132,6 +144,7 @@ function handleArrowKeyPress(key) {
   }
 }
 
+// Send key press information to the server
 function sendKeyPress(key) {
   const jsonMessage = JSON.stringify({
     command: "keyboard",
@@ -139,7 +152,6 @@ function sendKeyPress(key) {
     key: key,
   });
 
-  // Send the JSON message to the server
   if (ws && ws.readyState === WebSocket.OPEN) {
     ws.send(jsonMessage);
     console.log("Sent JSON message:", jsonMessage);
@@ -148,8 +160,8 @@ function sendKeyPress(key) {
   }
 }
 
+// Handle arrow key release
 function handleArrowKeyRelease(key) {
-  // Customize this based on your game's key bindings
   switch (key) {
     case "ArrowUp":
       sendRelease("up");
@@ -166,6 +178,7 @@ function handleArrowKeyRelease(key) {
   }
 }
 
+// Send key release information to the server
 function sendRelease(key) {
   const jsonMessage = JSON.stringify({
     command: "keyboard",
@@ -173,7 +186,6 @@ function sendRelease(key) {
     key: key,
   });
 
-  // Send the JSON message to the server
   if (ws && ws.readyState === WebSocket.OPEN) {
     ws.send(jsonMessage);
     console.log("Sent JSON message:", jsonMessage);
@@ -182,8 +194,7 @@ function sendRelease(key) {
   }
 }
 
-// const userId = await getUserId();
-
+// Function to check if the user can join a game
 const canJoinAGame = async () => {
   try {
     const url = `${window.DJANGO_API_BASE_URL}/api/match/available`;
@@ -209,6 +220,7 @@ const canJoinAGame = async () => {
   }
 };
 
+// Function to get match information
 const getMatchInfo = async (matchId) => {
   try {
     const url = `${window.DJANGO_API_BASE_URL}/api/match/${matchId}/`;
@@ -233,6 +245,7 @@ const getMatchInfo = async (matchId) => {
   }
 };
 
+// Function to update the match in the database
 const updateMatchInDb = async (matchId, player2Id) => {
   try {
     const url = `${window.DJANGO_API_BASE_URL}/api/match/${matchId}/`;
@@ -260,6 +273,7 @@ const updateMatchInDb = async (matchId, player2Id) => {
   }
 };
 
+// Function to join a match
 const joinMatch = async (matchId) => {
   const playerId = await getUserId();
   const matchData = await getMatchInfo(matchId);
@@ -269,11 +283,13 @@ const joinMatch = async (matchId) => {
   activateGame();
 };
 
+// Function to activate the game
 const activateGame = async () => {
   const param = '{"command":"start_game"}';
   sendJson(param);
 };
 
+// Function to create and join a match
 const createAndJoinMatch = async () => {
   const userId = await getUserId();
 
@@ -295,6 +311,7 @@ const createAndJoinMatch = async () => {
   startGame(response.match_id, userId, "", userId, 11);
 };
 
+// Function to handle matchmaking
 const handleMatchmaking = async () => {
   const hasToJoinMatch = await canJoinAGame();
   if (hasToJoinMatch) {
@@ -305,7 +322,5 @@ const handleMatchmaking = async () => {
   }
 };
 
-
-// FUNCIONA PERO NO MUESTRA NADA EN PANTALLA
-// MEJORAR / TERMINAR function updateGameCanvas(data) 53
+// Start matchmaking
 handleMatchmaking();
