@@ -1,6 +1,6 @@
 const removeFriendRequest = async (friend) => {
-  console.log(`Removing invitation for ${friend.username}`);
   console.log(friend)
+  console.log(`Removing invitation for ${friend.username}`);
   sendWebSocketMessage("command", {
     command: "cancel_friend_request",
     data: {

@@ -39,7 +39,6 @@ const urlLocationHandler = async () => {
 
   ifLoggedRedirect(location);
 
-  console.log("location: ", location);
   const route = urlRoutes[location] || urlRoutes["404"];
   const html = await fetch(route.template).then((response) => response.text());
   document.getElementById("content").innerHTML = html;
@@ -125,12 +124,12 @@ const loadNavScripts = () => {
 };
 
 const loadLobbyScripts = () => {
-  const utilsDirec = `${direc}utils/`;
+  const lobbyDirec = `${direc}utils/lobby/`;
   const scriptPaths = [
-    `${utilsDirec}lobby-connection-handler.js`,
-    `${utilsDirec}lobby-friends-handler.js`,
-    `${utilsDirec}lobby-message-parser.js`,
-    `${utilsDirec}lobby-notifications-handler.js`,
+    `${lobbyDirec}lobby-connection-handler.js`,
+    `${lobbyDirec}lobby-friends-handler.js`,
+    `${lobbyDirec}lobby-message-parser.js`,
+    `${lobbyDirec}lobby-notifications-handler.js`,
   ];
   const body = document.body;
 

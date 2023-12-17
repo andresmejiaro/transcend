@@ -142,3 +142,46 @@ const showToast = (data) => {
   const bsToast = new bootstrap.Toast(toastElement);
   bsToast.show();
 };
+
+const getPlayerInfo = async (playerId) => {
+    
+	try {
+		const url = `${window.DJANGO_API_BASE_URL}/api/user/info-me-id/${playerId}/`;
+
+        const options = {
+            method: "GET",
+            mode: "cors",
+            credentials: "include",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        };
+
+        const data = await makeRequest(true, url, options);
+    	return data.user;
+	} catch (error) {
+		console.error(error)
+	}
+};
+
+const showAlertDanger = (message) => {
+  const alertContainer = document.getElementById('alert-container');
+
+  const alertElement = document.createElement('div');
+  alertElement.classList.add('alert', 'alert-danger', 'fade', 'show');
+  alertElement.setAttribute('role', 'alert');
+  alertElement.innerHTML = `
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    ${message}
+  `;
+
+  alertContainer.appendChild(alertElement);
+
+  setTimeout(() => {
+    alertElement.classList.remove('show');
+  }, 5000);
+
+  alertElement.addEventListener('transitionend', () => {
+    alertContainer.removeChild(alertElement);
+  });
+};

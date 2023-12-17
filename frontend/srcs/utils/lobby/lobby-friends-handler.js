@@ -44,25 +44,44 @@ const updateFriendStatus = async (data) => {
   data = data.data;
   if (!updatedFriendList) return null;
   nowOnlineFriends = 0;
+  if (data.online_users)
+    data = data.online_users
   updatedFriendList.forEach((friend) => {
     const friendUserId = friend.userId;
-    if (friendUserId in data.online_users) {
+    if (friendUserId in data) {
       nowOnlineFriends++;
       friend.online = true;
     }
   });
   friendList = updatedFriendList;
   listFriendsNav();
-  listInvitationFriends();
+  listInvitationFriendsNav();
 };
 
 
-const updateSendFriendRequests = async (data) => {
-  if (data.data.message == "Friend request sent")
-    await handleInviteSent();
+const handleSendFriendRequest = async (data) => {
+    await handleInviteSent(data.data.invite_id);
 }
 
-const updateReceiveFriendRequests = async (data) => {
+const handleReceivedFriendRequest = async (data) => {
   showToast(data.type)
   await getPendingNotifications();
+}
+
+const handleMeAcceptedFriendRequest = async (data) => {
+
+}
+
+const handleAcceptedFriendRequest = async (data) => {
+  showToast(data.type)
+}
+
+const handleMeRejectedFriendRequest = async (data) => {
+
+}
+
+const handleRejectedFriendRequest = async (data) => {
+  const user = await getPlayerInfo(data.data.client_id);
+  const toastMessage = `${user.username} rejected the friend request`;
+  showToast(toastMessage)
 }

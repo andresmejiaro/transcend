@@ -58,11 +58,11 @@ const getOnlineUsers = async () => {
     await connectWebSocket();
 
     lobbySocket.addEventListener("message", (event) => {
-      parseAndHandleMessage(event.data);
+      handleMessage(event.data);
     });
 
     lobbySocket.onmessage = (event) => {
-      parseAndHandleMessage(event.data);
+      handleMessage(event.data);
     };
 
     sendWebSocketMessage("command", {

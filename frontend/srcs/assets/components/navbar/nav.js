@@ -41,3 +41,15 @@ document.getElementById("logoutButton").addEventListener("click", function(e) {
   e.preventDefault();
   handleLogout();
 });
+
+
+const handleCloseModalMsg = (msg) => {
+  const closeModalBtn = document.querySelector(".btn-close.btn-close-white");
+  closeModalBtn.click();
+  showToast(msg)
+}
+
+const handleCloseModal = () => {
+  const closeModalBtn = document.querySelector(".btn-close.btn-close-white");
+  closeModalBtn.click();
+}
