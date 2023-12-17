@@ -1,6 +1,4 @@
 const changeTournamentName = async (name) => {
-  console.log(name)
-  console.log("LADHS")
   const tournamentName = document.getElementById("tournament-name");
   tournamentName.innerHTML = `Name: ${name}`;
 };

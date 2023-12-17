@@ -8,8 +8,6 @@ const updateNavNotification = (nbr) => {
 };
 
 const acceptFriendRequest = async (friend) => {
-  console.log(friend)
-  console.log(`Accepting invitation for ${friend.username}`);
   sendWebSocketMessage("command", {
     command: "accept_friend_request",
     data: {
@@ -20,8 +18,6 @@ const acceptFriendRequest = async (friend) => {
 };
 
 const rejectFriendRequest = async (friend) => {
-  console.log(friend)
-  console.log(`Rejecting invitation for ${friend.username}`);
   sendWebSocketMessage("command", {
     command: "reject_friend_request",
     data: {
