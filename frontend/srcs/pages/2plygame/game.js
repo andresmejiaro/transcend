@@ -2,8 +2,6 @@
 const gameCanvas = document.getElementById("gameCanvas");
 const ctx = gameCanvas.getContext("2d");
 
-// Buffer for key presses
-const keyPressBuffer = [];
 
 // Handle keydown event
 document.addEventListener("keydown", (event) => {
@@ -12,6 +10,20 @@ document.addEventListener("keydown", (event) => {
 
 // WebSocket instance
 let ws;
+
+
+// Textures
+const textures = {
+  ball: new Image(),
+  paddleGreen: new Image(),
+  paddleRed: new Image(),
+};
+
+// Set the source URLs for your images
+textures.ball.src = './srcs/assets/game/ball.png';
+textures.paddleGreen.src = './srcs/assets/game/green_paddle.png';
+textures.paddleRed.src = './srcs/assets/game/purple_paddle.png';
+
 
 // Function to start the game
 function startGame(matchId, player1Id, player2Id, clientId, scoreLimit) {
@@ -79,6 +91,42 @@ function updateGameCanvas(data) {
 }
 
 // Function to draw the Pong game on the canvas
+// function drawPongGame(data) {
+//   if (
+//     data &&
+//     data.ball &&
+//     data.leftPaddle &&
+//     data.rightPaddle
+//   ) {
+//     ctx.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
+//     drawRect(data.ball.position, data.ball.size, "blue");
+//     drawRect(
+//       data.leftPaddle.position,
+//       data.leftPaddle.size,
+//       "green"
+//     );
+//     drawRect(
+//       data.rightPaddle.position,
+//       data.rightPaddle.size,
+//       "red"
+//     );
+
+//     const scores = data.score;
+//     ctx.fillStyle = "black";
+//     ctx.font = "20px Arial";
+//     ctx.fillText(
+//       `${player1IdInput.value}: ${scores[player1IdInput.value]} - ${
+//         player2IdInput.value
+//       }: ${scores[player2IdInput.value]}`,
+//       10,
+//       20
+//     );
+//   } else {
+//     console.error("Invalid data format:", data);
+//   }
+// }
+
+// Function to draw the Pong game on the canvas
 function drawPongGame(data) {
   if (
     data &&
@@ -87,16 +135,20 @@ function drawPongGame(data) {
     data.rightPaddle
   ) {
     ctx.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
-    drawRect(data.ball.position, data.ball.size, "blue");
-    drawRect(
+    drawRectWithImage(
+      data.ball.position,
+      data.ball.size,
+      textures.ball
+    );
+    drawRectWithImage(
       data.leftPaddle.position,
       data.leftPaddle.size,
-      "green"
+      textures.paddleGreen
     );
-    drawRect(
+    drawRectWithImage(
       data.rightPaddle.position,
       data.rightPaddle.size,
-      "red"
+      textures.paddleRed
     );
 
     const scores = data.score;
@@ -114,11 +166,16 @@ function drawPongGame(data) {
   }
 }
 
-// Function to draw a rectangle on the canvas
-function drawRect(position, size, color) {
-  ctx.fillStyle = color;
-  ctx.fillRect(position.x, position.y, size.x, size.y);
+
+function drawRectWithImage(position, size, image) {
+  ctx.drawImage(image, position.x, position.y, size.x, size.y);
 }
+
+// Function to draw a rectangle on the canvas
+// function drawRect(position, size, color) {
+//   ctx.fillStyle = color;
+//   ctx.fillRect(position.x, position.y, size.x, size.y);
+// }
 
 // Handle arrow key press
 function handleArrowKeyPress(key) {
