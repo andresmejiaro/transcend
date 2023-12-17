@@ -26,7 +26,7 @@ class Paddle(MovingRectangle):
 		ySpeed = (self._keyboard[self._binds["down"]] - 
 			self._keyboard[self._binds["up"]]) * self.getMaxSpeed()["y"]
 		
-		speed_multiplier = 0.1
+		speed_multiplier = 0.2
 		xSpeed *= speed_multiplier
 		ySpeed *= speed_multiplier
 		if not isinstance(xSpeed, (int, float)):
