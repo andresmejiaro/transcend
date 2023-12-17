@@ -35,9 +35,7 @@ const changeParticipants = async (players) => {
 	// while (listParticipantsDiv.firstChild) {
     //     listParticipantsDiv.removeChild(listParticipantsDiv.firstChild);
     // }
-	console.log(listParticipantsDiv)
 	
-	console.log(players)
 	for (const id of players) {
         const playerData = await getPlayerInfo(id);
         let listItem = document.createElement("div");
