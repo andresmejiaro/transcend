@@ -10,3 +10,7 @@
 	border: solid 4px #FBD793;
 	background: linear-gradient(180deg, rgba(25, 26, 50, 0.73) 0%, rgba(25, 26, 50, 0.55) 75.27%, rgba(25, 26, 50, 0.00) 92.64%);
 }
+
+.user-in-tournament {
+	background-color: blue;
+}

@@ -1,4 +1,4 @@
-const direc = "./srcs/"
+const direc = "./srcs/";
 
 document.addEventListener("click", (e) => {
   const { target } = e;
@@ -15,7 +15,11 @@ const ifLoggedRedirect = (location) => {
       console.log("router logout");
       handleLogout();
     }
-  };
+  } else {
+    if (allowedLocations.includes(location)) {
+      window.location.pathname = "/play!";
+    }
+  }
 };
 
 const urlRoute = (event) => {
@@ -35,15 +39,15 @@ const urlLocationHandler = async () => {
 
   ifLoggedRedirect(location);
 
-  console.log("location: ", location);
   const route = urlRoutes[location] || urlRoutes["404"];
   const html = await fetch(route.template).then((response) => response.text());
   document.getElementById("content").innerHTML = html;
   document.title = route.title;
 
-
   // set the description of the document to the description of the route
-  document.querySelector('meta[name="description"]').setAttribute("content", route.description);
+  document
+    .querySelector('meta[name="description"]')
+    .setAttribute("content", route.description);
 
   if (route.css) {
     const head = document.head;
@@ -58,6 +62,7 @@ const urlLocationHandler = async () => {
       head.appendChild(link);
     });
   }
+
   if (route.js) {
     route.js.forEach((jsFile) => {
       if (jsFile && !document.querySelector(`script[src="${jsFile}"]`)) {
@@ -73,46 +78,74 @@ const urlLocationHandler = async () => {
     });
   }
 
-
   const navRouter = document.getElementById("nav-router");
   if (navRouter) {
     const existingContent = navRouter.innerHTML.trim();
     if (!existingContent) {
       if (isLogged()) {
-        navRouter.innerHTML = await fetch(direc + "pages/navbar/nav-logged.html").then(
-          (response) => response.text()
-        );
+        navRouter.innerHTML = await fetch(
+          direc + "assets/components/navbar/nav-logged.html"
+        ).then((response) => response.text());
       }
     }
   } else {
     console.error("Element with id 'nav-router' not found in the DOM");
   }
 
-
-
-  if (isLogged() && !document.querySelector(`script[src="${direc}pages/navbar/nav.js"]`)) {
-    const body = document.body;
-    const script = document.createElement("script");
-
-    script.type = "text/javascript";
-    script.src = direc + "pages/navbar/nav.js";
-    script.async = false;
-
-    body.appendChild(script);
-  }
-
-  if (isLogged() && !document.querySelector(`script[src="${direc}pages/navbar/nav-friends.js"]`)) {
-    const body = document.body;
-    const script = document.createElement("script");
-
-    script.type = "text/javascript";
-    script.src = direc + "pages/navbar/nav-friends.js";
-    script.async = false;
-
-    body.appendChild(script);
-  }
-
+  loadLobbyScripts();
+  loadNavScripts();
 };
+
+const loadNavScripts = () => {
+  const navDirec = `${direc}assets/components/navbar`;
+  const scriptPaths = [
+    `${navDirec}/nav.js`,
+    `${navDirec}/nav-friend-invite-handler.js`,
+    `${navDirec}/nav-friend-remove-handler.js`,
+    `${navDirec}/nav-friends-modal.js`,
+    `${navDirec}/nav-friends.js`,
+    `${navDirec}/nav-notification-handler.js`,
+    `${navDirec}/nav-notification-modal.js`,
+  ];
+  const body = document.body;
+
+  scriptPaths.forEach((path) => {
+    const scriptSrc = `${path}`;
+
+    if (isLogged() && !document.querySelector(`script[src="${scriptSrc}"]`)) {
+      const script = document.createElement("script");
+      script.type = "text/javascript";
+      script.src = scriptSrc;
+      script.async = false;
+
+      body.appendChild(script);
+    }
+  });
+};
+
+const loadLobbyScripts = () => {
+  const lobbyDirec = `${direc}utils/lobby/`;
+  const scriptPaths = [
+    `${lobbyDirec}lobby-connection-handler.js`,
+    `${lobbyDirec}lobby-friends-handler.js`,
+    `${lobbyDirec}lobby-message-parser.js`,
+    `${lobbyDirec}lobby-notifications-handler.js`,
+  ];
+  const body = document.body;
+
+  scriptPaths.forEach((path) => {
+    const scriptSrc = `${path}`;
+
+    if (isLogged() && !document.querySelector(`script[src="${scriptSrc}"]`)) {
+      const script = document.createElement("script");
+      script.type = "text/javascript";
+      script.src = scriptSrc;
+      script.async = false;
+
+      body.appendChild(script);
+    }
+  });
+}
 
 // add an event listener to the window that watches for url changes
 window.onpopstate = urlLocationHandler;

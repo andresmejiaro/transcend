@@ -6,27 +6,49 @@
     <meta name="description" content="" />
     <title>Pixel Pong</title>
     <link rel="icon" type="image/x-icon" href="./srcs/assets/imgs/logo-web.png">
+    
     <!-- Bootstrap-->
     <link
     href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous"/>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+    
     <!-- VT323 Google Font -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@600&family=VT323&display=swap" rel="stylesheet">
+    
     <!-- JS -->
     <script src="./srcs/utils/utils.js"></script>
     <script src="./srcs/utils/router/routes.js"></script>
     <script src="./srcs/utils/router/router.js"></script>
+    
     <!-- CSS -->
-    <link rel="stylesheet" href="./srcs/assets/css/index.css">
+    <link rel="stylesheet" href="./srcs/utils/index.css">
   </head>
   <body>
     <div id="nav-router"></div>
     <div class="container-fluid">
       <div id="content"></div>
+
+      <!-- TOAST BOOTSTRAP -->
+      <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 12">
+        <div id="liveToast" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true">
+          <div class="toast-header">
+            <img src="./srcs/assets/imgs/default-avatar.jpeg" class="rounded me-2" alt="..." style="width: 25px; height: 25px;">
+            <strong class="me-auto">Notification</strong>
+            <small>11 mins ago</small>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+          </div>
+          <div class="toast-body" id="toast-body-index">
+          </div>
+        </div>
+      </div>
+
+      <!-- ALERT BOOTSTRAP -->
+      <div id="alert-container" class="position-fixed top-0 start-50 translate-middle-x p-3 mt-5" style="z-index: 12;"></div>
+
     </div>
   </body>
 </html>

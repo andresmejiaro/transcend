@@ -1,0 +1,138 @@
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+	margin: 0;
+	padding: 0;
+	color: white;
+}
+
+body {
+	margin: 0;
+	padding: 0;
+	font-family: 'Open Sans', sans-serif;
+	font-family: 'VT323', monospace;
+	background-color: black;
+}
+
+body::-webkit-scrollbar {
+	width: 0 !important;
+}
+
+h1 {
+	font-size: 4rem;
+	font-weight: bold;
+	margin-bottom: 1rem;
+}
+
+h2 {
+	font-size: 3.5rem;
+	font-weight: bold;
+	margin-bottom: 1rem;
+}
+
+h3 {
+	font-size: 3rem;
+	font-weight: bold;
+	margin-bottom: 0.75rem;
+}
+
+h4 {
+	font-size: 2.5rem;
+	font-weight: bold;
+	margin-bottom: 0.75rem;
+}
+
+h5 {
+	font-size: 2rem;
+	font-weight: bold;
+	margin-bottom: 0.5rem;
+}
+
+h6 {
+	font-size: 1.75rem;
+	font-weight: bold;
+	margin-bottom: 0.5rem;
+}
+
+p {
+	font-size: 1.5rem;
+	line-height: 1.5;
+	margin-bottom: 1rem;
+}
+/*
+.container-fluid {
+	padding: 0;
+	margin: 0;
+}*/
+
+/* Navbar */
+.navbar-logged-pong {
+	display: flex;
+    justify-content: space-between; /* Aligns items to the far ends */
+	position: fixed; /* Keeps the navbar fixed at the top */
+    top: 0; /* Aligns the navbar to the top of the viewport */
+    left: 0; /* Aligns the navbar to the left of the viewport */
+    right: 0; /* Ensures the navbar extends to the right edge of the viewport */
+    z-index: 11; /* Ensures the navbar stays on top of other elements */
+    width: 97% !important;
+    height: 60px !important;
+    border-radius: 68px !important;
+    background: #15142E !important; /* Solid background color */
+    color: #FEFEE9 !important;
+    border: none !important;
+    background-clip: padding-box !important;
+    transition: border-color 0.2s ease-in-out !important;
+    margin: auto !important;
+    margin-top: 15px !important; /* Adjust this value to increase or decrease the top space */
+}
+
+
+.nav-link-logged-pong {
+	color: #FEFEE9;
+}
+
+.pm0 {
+	padding: 0!important;
+	margin: 0!important;
+}
+
+.mt-5r {
+	margin-top: 5rem;
+}
+
+.mt-10r {
+	margin-top: 10rem;
+}
+
+.nav-item {
+    margin-right: 80px; /* Adjust the space between navigation items */
+}
+
+.nav-link {
+    padding: 5px 10px; /* Add padding to make each link larger and more clickable */
+}
+
+.nav-link-logged-pong {
+    padding: 5px 10px; /* Similar to .nav-link, adjust as needed */
+}
+
+.accept-btn {
+    color: #28a745; /* Green color for the accept button */
+    background-color: transparent; /* Remove background */
+    border: none; /* Remove border */
+  }
+
+.reject-btn {
+    color: #dc3545; /* Red color for the reject button */
+    background-color: transparent; /* Remove background */
+    border: none; /* Remove border */
+}
+
+.accept-btn i,
+.reject-btn i {
+    margin-right: 5px; /* Adjust as needed */
+}

@@ -3,43 +3,43 @@ import websockets
 import json
 
 async def websocket_client():
-    match_id = input("Enter Match ID: ")
-    player_1_id = input("Enter Player 1 ID: ")
-    player_2_id = input("Enter Player 2 ID: ")
-    client_id = input("Enter Client ID: ")
-    message_type = input("Enter Message Type: ")
-    command = input("Enter Command: ")
-    data = input("Enter Data (JSON format): ")
+    try:
+        tournament_id = input("Enter Tournament ID: ")
+        client_id = input("Enter Client ID: ")
 
-    uri = f"ws://localhost:8000/ws/pong/{match_id}/?player_1_id={player_1_id}&player_2_id={player_2_id}&client_id={client_id}"
-    
-    async with websockets.connect(uri) as websocket:
-        message = {
-            'type': message_type,
-            'command': command,
-            'data': json.loads(data)
-        }
-        await websocket.send(json.dumps(message))
-        print(f"Sent message: {json.dumps(message)}")
+        uri = f"ws://localhost:8001/ws/tournament/{tournament_id}/?client_id={client_id}"
+
+        # Connect to WebSocket
+        websocket = await websockets.connect(uri)
+        print(f"Connected to {uri}")
 
         try:
             while True:
+                # Receive and print the response
                 response = await websocket.recv()
-                print(f"Received response: {response}")
-                try:
-                    response_data = json.loads(response)
-                    print(f"Response type: {response_data.get('type')}")
-                    print(f"Response command: {response_data.get('command')}")
-                    print(f"Response data: {response_data.get('data')}")
-                except json.JSONDecodeError:
-                    print("Received non-JSON response.")
-        except websockets.exceptions.ConnectionClosed:
-            print("WebSocket connection closed.")
-        except KeyboardInterrupt:
-            print("Manually interrupted. Exiting...")
+                parsed_response = json.loads(response)
+                formatted_response = json.dumps(parsed_response, indent=2)
+
+                print(f"Received response:\n{formatted_response}")
+
+                command = input("Enter Command: ").strip()
+                data = input("Enter Data (JSON format): ").strip()
+                message = {
+                    'command': command,
+                    'data': json.loads(data)
+                }
+                # Send message using the existing WebSocket connection
+                await websocket.send(json.dumps(message))
+                print(f"Sent message: {json.dumps(message)}")
+        finally:
+            await websocket.close()
+
+    except KeyboardInterrupt:
+        print("Manually interrupted. Exiting...")
 
 if __name__ == "__main__":
     try:
-        asyncio.get_event_loop().run_until_complete(websocket_client())
+        asyncio.run(websocket_client())
+
     except KeyboardInterrupt:
         print("Manually interrupted. Exiting...")

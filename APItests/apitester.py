@@ -61,7 +61,8 @@ def make_api_call(endpoint, method="GET", data=None, jwt_token=None, cookies=Non
     if jwt_token:
         headers = {
             "Content-Type": "application/json",
-            "X-CSRFToken": csrf_token
+            "X-CSRFToken": csrf_token,
+            "Authorization": f"Bearer {jwt_token}",
         }
     payload = {
         'token': jwt_token,

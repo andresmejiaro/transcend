@@ -4,44 +4,32 @@ const usersContainer = document.getElementById("user");
 
 const form = document.getElementById("createTornForm");
 
+
 const createRequest = async () => {
-  console.log("Creating tournament");
+  const userId = await getUserId();
   const name = document.getElementById("nameTournament").value;
   try {
-    const token = sessionStorage.getItem("jwt");
-    if (!token) {
-      console.log("JWT token not found");
-      return;
-    }
-    const username = sessionStorage.getItem("username");
-    if (!username) {
-      console.log("username not found");
-      return;
-    }
-
+    
     const url =
-      "http://localhost:8000/api/tournament/create/" +
-      "?token=" +
-      token +
-      "&username=" +
-      username;
+    "http://localhost:8000/api/tournament/create/" +
+    "?username=" +username;
     const options = {
       method: "POST",
       mode: "cors",
       credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
       body: JSON.stringify({
         name: name,
+        "players": [userId],
+        "tournament_admin": userId,
       }),
     };
-
-    await makeRequest(true, url, options, "");
-
-    // Refresh the list of tournaments after creating a new one
-    getListofTournaments();
+    
+    const data = await makeRequest(true, url, options, "");
+    if (data.status == "ok") {
+      // window.location = `/tournament?id=${tournamentId}`
+      getListofTournaments();
+      addEventListenerButtons();
+    }
   } catch (error) {
     console.log(error);
   }
@@ -85,27 +73,60 @@ const getListofTournaments = async () => {
     } else {
       // Update the content of the 'tournaments' div with the list of tournaments
       tournamentsContainer.innerHTML = "";
+      const userId = await getUserId();
       data.data.forEach((tournament) => {
-        const tournamentElement = document.createElement("div");
-        tournamentElement.innerHTML = `
-            <div class="d-flex justify-content-between align-items-center my-4">
-                <div class="d-flex align-items-center">
-                    <i class="bi bi-person me-2"></i> <!-- Bootstrap icon for a person -->
-                    <p class="m-0">${tournament.name}</p>
-                </div>
-                <div class="d-flex align-items-center">
-                    <p style="margin-bottom: 0 !important; margin-right: 8px;">${tournament.players.length}</p>
-                    <img src="./srcs/assets/imgs/adri.svg" style="margin-right: 8px;" />
-                    <button type="button" class="btn" data-tournament-id="${tournament.id}">
-                    <img src="./srcs/assets/buttons/join-tournament.svg" alt="" class="img-fluid">
-                    </button> 
-                </div>        
+        const userIsInTournament = tournament.players.includes(userId);
+        if (userIsInTournament) {
+          const tournamentElement = document.createElement("div");
+          
+          tournamentElement.classList.add(userIsInTournament ? "user-in-tournament" : "user-not-in-tournament");
+        
+          tournamentElement.innerHTML = `
+            <div class="d-flex justify-content-between align-items-center py-3 m-1">
+              <div class="d-flex align-items-center">
+                <i class="bi bi-person me-2"></i>
+                <p class="m-0">${tournament.name}</p>
+              </div>
+              <div class="d-flex align-items-center">
+                <p style="margin-bottom: 0 !important; margin-right: 8px;">${tournament.players.length}</p>
+                <img src="./srcs/assets/imgs/adri.svg" style="margin-right: 8px;" />
+                <button type="button" class="btn join-tournament-btn" data-tournament-id="${tournament.id}">
+                  <img src="./srcs/assets/buttons/join-tournament.svg" alt="" class="img-fluid">
+                </button> 
+              </div>        
             </div>
-            `;
-        tournamentsContainer.appendChild(tournamentElement);
+          `;
+          tournamentsContainer.appendChild(tournamentElement);
+        }
+      });
+      data.data.forEach((tournament) => {
+        const userIsInTournament = tournament.players.includes(userId);
+        if (!userIsInTournament) {
+          const tournamentElement = document.createElement("div");
+          
+          tournamentElement.classList.add(userIsInTournament ? "user-in-tournament" : "user-not-in-tournament");
+        
+          tournamentElement.innerHTML = `
+            <div class="d-flex justify-content-between align-items-center py-3 m-1">
+              <div class="d-flex align-items-center">
+                <i class="bi bi-person me-2"></i>
+                <p class="m-0">${tournament.name}</p>
+              </div>
+              <div class="d-flex align-items-center">
+                <p style="margin-bottom: 0 !important; margin-right: 8px;">${tournament.players.length}</p>
+                <img src="./srcs/assets/imgs/adri.svg" style="margin-right: 8px;" />
+                <button type="button" class="btn join-tournament-btn" data-tournament-id="${tournament.id}">
+                  <img src="./srcs/assets/buttons/join-tournament.svg" alt="" class="img-fluid">
+                </button> 
+              </div>        
+            </div>
+          `;
+          tournamentsContainer.appendChild(tournamentElement);
+        }
       });
     }
     attachDeleteEventListeners(); // Attach event listeners for delete buttons
+    addEventListenerButtons();
   } catch (error) {
     console.log(error);
   }
@@ -211,6 +232,17 @@ const getListofUsers = async () => {
     console.log("Error:", error);
   }
 };
+
+const addEventListenerButtons = () => {
+  let buttons = document.querySelectorAll('.join-tournament-btn');
+  buttons.forEach(function(button) {
+    button.addEventListener('click', function() {
+      var tournamentId = this.getAttribute('data-tournament-id');
+      console.log("CLICK ", tournamentId)
+      handleJoin(tournamentId);
+    });
+  });
+}
 
 const attachDeleteEventListeners = () => {
   const deleteButtons = document.querySelectorAll(".delete-button");

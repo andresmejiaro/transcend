@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebSocket Test</title>
+</head>
+<body>
+    <h1>WebSocket Test</h1>
+
+    <label for="clientIdInput">Client ID:</label>
+    <input type="text" id="clientIdInput" placeholder="Enter Client ID">
+
+    <button onclick="initializeConnection()">Initialize Connection</button>
+
+    <hr>
+
+    <label for="commandInput">Command:</label>
+    <input type="text" id="commandInput" placeholder="Enter Command">
+
+    <label for="jsonDataInput">JSON Data:</label>
+    <input type="text" id="jsonDataInput" placeholder="Enter JSON Data">
+
+    <button onclick="sendCommand()">Send Command</button>
+
+    <hr>
+
+    <label for="messageLog">Message Log:</label>
+    <textarea id="messageLog" rows="10" style="width: 100%;" readonly></textarea>
+
+    <script>
+        const clientIdInput = document.getElementById('clientIdInput');
+        const commandInput = document.getElementById('commandInput');
+        const jsonDataInput = document.getElementById('jsonDataInput');
+        const messageLog = document.getElementById('messageLog');
+
+        let ws;
+
+        function initializeConnection() {
+            const clientId = clientIdInput.value;
+
+            if (!clientId) {
+                alert('Please enter a Client ID.');
+                return;
+            }
+
+            ws = new WebSocket(`ws://localhost:8001/ws/lobby2/?client_id=${clientId}`);
+
+            ws.onopen = (event) => {
+                logMessage(`WebSocket connection opened for client ID: ${clientId}`);
+            };
+
+            ws.onmessage = (event) => {
+                const data = JSON.parse(event.data);
+                logMessage(`Received message: ${JSON.stringify(data)}`);
+            };
+
+            ws.onclose = (event) => {
+                logMessage('WebSocket connection closed');
+            };
+        }
+
+        function sendCommand() {
+            const command = commandInput.value;
+            const jsonData = jsonDataInput.value;
+
+            if (!command || !jsonData) {
+                alert('Please enter both command and JSON data.');
+                return;
+            }
+
+            const data = {
+                command: command,
+                data: JSON.parse(jsonData),
+            };
+
+            ws.send(JSON.stringify(data));
+            logMessage(`Sent message: ${JSON.stringify(data)}`);
+        }
+
+        function logMessage(message) {
+            messageLog.value += `${message}\n`;
+        }
+    </script>
+</body>
+</html>
