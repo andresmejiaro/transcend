@@ -76,7 +76,7 @@ p {
     top: 0; /* Aligns the navbar to the top of the viewport */
     left: 0; /* Aligns the navbar to the left of the viewport */
     right: 0; /* Ensures the navbar extends to the right edge of the viewport */
-    z-index: 1000; /* Ensures the navbar stays on top of other elements */
+    z-index: 11; /* Ensures the navbar stays on top of other elements */
     width: 97% !important;
     height: 60px !important;
     border-radius: 68px !important;

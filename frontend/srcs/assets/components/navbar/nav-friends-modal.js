@@ -10,6 +10,7 @@ const handleModalForInvite = async () => {
   const isInputVisible = modalBody.querySelector("#invitationInput") !== null;
   if (isInputVisible) {
     modalBody.innerHTML = initialContent;
+    await listInvitationFriendsNav();
   } else {
     modalBody.innerHTML = `
             <div class="text-center">
@@ -34,10 +35,15 @@ const handleModalForInvite = async () => {
   }
 };
 
-const handleBackButtonClick = (event) => {
-  event.preventDefault();
+const handleBackButtonClick = async () => {
   const modalBody = document.getElementById("modal-body-friends");
+
+  if (!initialContent) {
+    initialContent = modalBody.innerHTML;
+  }
+
   modalBody.innerHTML = initialContent;
+  await listInvitationFriendsNav();
 };
 
 const handleSendInvitationClick = async (event) => {
@@ -46,16 +52,9 @@ const handleSendInvitationClick = async (event) => {
   const inviteId = await getIdFromUsername(clientUsername);
   if (!inviteId) alert("User not found");
   else {
-    inviteFriend(inviteId);
-    handleCloseModal();
+    await inviteFriend(inviteId);
   }
 };
-
-const handleCloseModal = () => {
-  const closeModalBtn = document.querySelector(".btn-close.btn-close-white");
-  closeModalBtn.click();
-  showToast("Invite send succesfully")
-}
 
 document
   .getElementById("friendsModal")

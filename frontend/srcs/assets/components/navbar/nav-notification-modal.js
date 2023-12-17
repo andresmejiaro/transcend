@@ -8,7 +8,7 @@ const handleModalForNotifications = async () => {
 
     const descriptionDiv = document.createElement('div');
     const descriptionParagraph = document.createElement('p');
-    descriptionParagraph.textContent = `${data.invite_type}: ${data.invite_id}`;
+    descriptionParagraph.textContent = `${data.invite_type}: ${data.username}`;
     descriptionDiv.appendChild(descriptionParagraph);
 
     const actionsDiv = document.createElement('div');
@@ -17,11 +17,21 @@ const handleModalForNotifications = async () => {
     acceptButton.type = 'button';
     acceptButton.classList.add('accept-btn');
     acceptButton.innerHTML = '<i class="bi bi-check"></i>';
+    acceptButton.addEventListener("click", async () => {
+      (async () => {
+        await acceptFriendRequest(data);
+      })();
+    });
     
     const rejectButton = document.createElement('button');
     rejectButton.type = 'button';
     rejectButton.classList.add('reject-btn');
     rejectButton.innerHTML = '<i class="bi bi-x"></i>';
+    rejectButton.addEventListener("click", async () => {
+      (async () => {
+        await rejectFriendRequest(data);
+      })();
+    });
 
     actionsDiv.appendChild(acceptButton);
     actionsDiv.appendChild(rejectButton);
@@ -33,7 +43,7 @@ const handleModalForNotifications = async () => {
   }
 
   // Iterate over the sample data and create notification elements
-  notificationInfo.forEach(createNotificationElement);
+  receivedFriendsNotifications.forEach(createNotificationElement);
 }
 
 // const btn = document.getElementById("notificationsModalInvite");
@@ -42,5 +52,6 @@ document.getElementById("notificationsModal").addEventListener("shown.bs.modal",
 	handleModalForNotifications();
 });
 
-if (notificationInfo.length)
-	updateNavNotification(notificationInfo.length)
+// if (notificationInfo.length) {
+//   updateNavNotification(notificationInfo.length)
+// }

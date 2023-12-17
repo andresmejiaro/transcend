@@ -1,6 +1,22 @@
 
 let lobbySocket;
 
+
+const sendWebSocketMessage = (messageType, payload) => {
+  if (lobbySocket && lobbySocket.readyState === WebSocket.OPEN) {
+    lobbySocket.send(
+      JSON.stringify({
+        type: messageType,
+        ...payload,
+      })
+    );
+  } else {
+    console.error("WebSocket is not in the OPEN state.");
+    // Handle the case where WebSocket is not open (e.g., display a user-friendly message)
+  }
+};
+
+
 const connectWebSocket = async () => {
   const userId = await getUserId();
 
@@ -42,11 +58,11 @@ const getOnlineUsers = async () => {
     await connectWebSocket();
 
     lobbySocket.addEventListener("message", (event) => {
-      parseAndHandleMessage(event.data);
+      handleMessage(event.data);
     });
 
     lobbySocket.onmessage = (event) => {
-      parseAndHandleMessage(event.data);
+      handleMessage(event.data);
     };
 
     sendWebSocketMessage("command", {
@@ -58,39 +74,16 @@ const getOnlineUsers = async () => {
   }
 };
 
-const parseAndHandleMessage = async (message) => {
-    const data = JSON.parse(message);
-    console.log(data)
-    if (data.type == "user_joined")
-        updateFriendStatus(data);
-    else if (data.type == "user_left")
-        updateFriendStatus(data);
-    else if (data.type == "send_friend_request")
-        await updateSendFriendRequests(data);
-    else if (data.type == "recieved_friend_request")
-        await updateReceiveFriendRequests(data);
-    else if (data.type == "list_invites")
-        await updateNotifications(data);
-}
-
-const sendWebSocketMessage = (messageType, payload) => {
-  if (lobbySocket && lobbySocket.readyState === WebSocket.OPEN) {
-    lobbySocket.send(
-      JSON.stringify({
-        type: messageType,
-        ...payload,
-      })
-    );
-  } else {
-    console.error("WebSocket is not in the OPEN state.");
-    // Handle the case where WebSocket is not open (e.g., display a user-friendly message)
-  }
-};
-
 const getPendingNotifications = async () => {
   const userId = await getUserId();
   sendWebSocketMessage("command", {
-    command: "list_invites",
+    command: "list_sent_invites",
+    data: {
+      "client_id": userId
+    },
+  });
+  sendWebSocketMessage("command", {
+    command: "list_received_invites",
     data: {
       "client_id": userId
     },
