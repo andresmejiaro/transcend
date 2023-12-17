@@ -59,6 +59,7 @@ const urlRoutes = {
     template: directory + "play!/play!.html",
     title: urlPageTitle,
     description: "This is the home page",
+    css: [directory + "play!/play!.css"]
   },
 
   "/profile": {
@@ -73,6 +74,7 @@ const urlRoutes = {
     title: urlPageTitle + " - Profile",
     description: "This is the user page",
     js: [directory + "profilesettings/user-settings.js"],
+    css: [directory + "profilesettings/user-settings.css"]
     // js: [directory + "profilesettings/user-settings.js", "./srcs/utils/google-auth-utils.js"],
   },
 
@@ -101,7 +103,30 @@ const urlRoutes = {
     // "./srcs/utils/pongJs/Game.js","./srcs/utils/pongJs/main.js"],
     js: [directory + "2plygame/game.js"],
     css: [directory + "2plygame/2plygame.css"]
+  },
+
+  "/1plygame": {
+    template: directory + "1plygame/1plygame.html",
+    title: urlPageTitle,
+    description: "This is the local pong page",
+    // js: ["./srcs/utils/pongJs/environment.js","./srcs/utils/pongJs/MovingRectangle.js",
+    // "./srcs/utils/pongJs/Ball.js","./srcs/utils/pongJs/Paddle.js","./srcs/utils/pongJs/Player.js", 
+    // "./srcs/utils/pongJs/Game.js","./srcs/utils/pongJs/main.js"],
+    js: [directory + "1plygame/game.js"],
+    css: [directory + "1plygame/1plygame.css"]
+  },
+
+  "/onlinegame": {
+    template: directory + "0nlinegame/onlinegame.html",
+    title: urlPageTitle,
+    description: "This is the local pong page",
+    // js: ["./srcs/utils/pongJs/environment.js","./srcs/utils/pongJs/MovingRectangle.js",
+    // "./srcs/utils/pongJs/Ball.js","./srcs/utils/pongJs/Paddle.js","./srcs/utils/pongJs/Player.js", 
+    // "./srcs/utils/pongJs/Game.js","./srcs/utils/pongJs/main.js"],
+    js: [directory + "2plygame/game.js"],
+    css: [directory + "0nlinegame/onlinegame.css"]
   }
+
 };
 
 const allowedLocations = ["/", "/home", "/login", "/signin", "/signup", "/intra", "/otp"];

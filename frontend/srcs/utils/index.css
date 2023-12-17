@@ -63,10 +63,11 @@ p {
 	line-height: 1.5;
 	margin-bottom: 1rem;
 }
+/*
 .container-fluid {
 	padding: 0;
 	margin: 0;
-}
+}*/
 
 /* Navbar */
 .navbar-logged-pong {
