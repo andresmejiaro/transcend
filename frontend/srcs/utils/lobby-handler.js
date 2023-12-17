@@ -69,7 +69,9 @@ const parseAndHandleMessage = async (message) => {
         await updateSendFriendRequests(data);
     else if (data.type == "recieved_friend_request")
         await updateReceiveFriendRequests(data);
-    else if (data.type == "list_invites")
+    else if (data.type == "list_sent_invites")
+        await updateNotifications(data);
+    else if (data.type == "list_received_invites")
         await updateNotifications(data);
 }
 
@@ -90,7 +92,13 @@ const sendWebSocketMessage = (messageType, payload) => {
 const getPendingNotifications = async () => {
   const userId = await getUserId();
   sendWebSocketMessage("command", {
-    command: "list_invites",
+    command: "list_sent_invites",
+    data: {
+      "client_id": userId
+    },
+  });
+  sendWebSocketMessage("command", {
+    command: "list_received_invites",
     data: {
       "client_id": userId
     },

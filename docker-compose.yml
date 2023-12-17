@@ -36,20 +36,20 @@ services:
       - postgres_data:/var/lib/postgresql/data/
 
   # pgAdmin container for database management
-  pgadmin4:
-    image: dpage/pgadmin4
-    container_name: 'pgadmin4'
-    environment:
-      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
-      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
-    ports:
-      - "5050:80"
-    depends_on:
-      - db
-    networks:
-      - app-network
-    volumes:
-      - pgadmin_data:/var/lib/pgadmin/
+  # pgadmin4:
+  #   image: dpage/pgadmin4
+  #   container_name: 'pgadmin4'
+  #   environment:
+  #     PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+  #     PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+  #   ports:
+  #     - "5050:80"
+  #   depends_on:
+  #     - db
+  #   networks:
+  #     - app-network
+  #   volumes:
+  #     - pgadmin_data:/var/lib/pgadmin/
 
   nginx:
     container_name: 'nginx'

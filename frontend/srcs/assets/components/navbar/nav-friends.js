@@ -28,12 +28,6 @@ const listInvitationFriends = async () => {
   const invitationListContainer = document.getElementById("friends-invitation-list");
   
   invitationListContainer.innerHTML = "";
-  // if (invitationListContainer) {
-  //   while (invitationListContainer.firstChild) {
-  //     invitationListContainer.removeChild(invitationListContainer.firstChild);
-  //   }
-  // }
-  // console.log(invitationListContainer)
 
   const invitationListFriends = await getListOfInvites();
   console.log(invitationListFriends)
