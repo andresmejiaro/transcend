@@ -25,8 +25,6 @@ const infoToNavHome = async () => {
       if (data.user.avatar_url) {
         const completeAvatarUrl = `${window.DJANGO_API_BASE_URL}${data.user.avatar_url}`;
         avatarImage.src = completeAvatarUrl;
-      } else {
-        avatarImage.src = "../assets/imgs/default-avatar.jpeg";
       }
     }
 
