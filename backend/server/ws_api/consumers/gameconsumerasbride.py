@@ -74,6 +74,12 @@ class GameConsumerAsBridge(AsyncWebsocketConsumer):
             match_object.active = False
             match_object.player1_score = self.player_1_score
             match_object.player2_score = self.player_2_score
+            if self.player_1_score > self.player_2_score:
+                match_object.winner = match_object.player1
+            elif self.player_1_score < self.player_2_score:
+                match_object.winner = match_object.player2
+            else:
+                match_object.winner = None
             match_object.save()
             ic(f'Match {self.match_id} finalized')
 
