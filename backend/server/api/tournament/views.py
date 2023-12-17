@@ -684,15 +684,19 @@ def user_stats(request, pk):
             matches = Match.objects.filter(player1=user) | Match.objects.filter(player2=user)
             match_list = []
 
+            total_match_wins = 0
+            total_tournament_wins = 0
+
             for tournament in tournaments:
                 tournament_list.append({
                     'id': tournament.id,
                     'name': tournament.name,
                     'start_date': tournament.start_date,
-                    'end_date': tournament.end_date,
                     'round': tournament.round,
                     'players': [player.id for player in tournament.players.all()],        
                 })
+                if tournament.winner == user:
+                    total_tournament_wins += 1
 
             for match in matches:
                 match_list.append({
@@ -703,13 +707,16 @@ def user_stats(request, pk):
                     'player2_score': match.player2_score,
                     'winner': match.winner.id if match.winner else None,
                     'date_played': match.date_played,
-                    'active': match.active
                     })
+                if match.winner == user:
+                    total_match_wins += 1
                 
             formated_reponse = {
                 'id': user.id,
                 'username': user.username,
                 'ELO': user.ELO,
+                'total_match_wins': total_match_wins,
+                'total_tournament_wins': total_tournament_wins,
                 'tournaments': tournament_list,
                 'matches': match_list
             }
