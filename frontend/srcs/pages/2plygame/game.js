@@ -1,12 +1,6 @@
-// Import lodash
-import _ from "lodash";
-
 // Get your canvas and context
 const gameCanvas = document.getElementById("gameCanvas");
 const ctx = gameCanvas.getContext("2d");
-
-// Throttle keyboard events
-const throttledKeyPress = _.throttle(sendKeyPress, 100);
 
 // Buffer for key presses
 const keyPressBuffer = [];
