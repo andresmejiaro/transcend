@@ -23,6 +23,7 @@ urlpatterns = [
     path('user/<int:pk>/', user_operations, name='user_detail'),
     path('user/<int:pk>/match/', user_all_matches, name='user_match'),
     path('user/<int:pk>/tournament/', user_all_tournaments, name='user_tournament'),
+    path('user/<int:pk>/stats/', user_stats, name='user_stats'),
     
     # Matchmaking for Tournaments
     # <int:pk> is the tournament id
@@ -31,5 +32,5 @@ urlpatterns = [
     # It will then return the first round of matches
     # You can then call this again to get the next round of matches until there are no more rounds
     # If you call this again after all rounds have been played, it will return a the winner of the tournament
-    path('tournament/<int:pk>/matchmaking/', game_matchmaking, name='game_matchmaking'),
+    path('tournament/<int:pk>/matchmaking/', game_matchmaking, name='game_matchmaking'), # No longer needed, will remove after making sure it's not needed
 ]

@@ -5,7 +5,6 @@ const ctx = gameCanvas.getContext("2d");
 // WebSocket instance
 let ws;
 
-
 // Textures
 const textures = {
   ball: new Image(),

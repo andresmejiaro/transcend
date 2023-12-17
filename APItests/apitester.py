@@ -13,7 +13,7 @@ import argparse
 # python3 apitester.py <endpoint> <method>
 # python3 apitester.py tournament/1/ GET
 
-BASE_URL = "http://localhost:8000/api/"  # Replace with your actual base URL
+BASE_URL = "http://localhost:8001/api/"  # Replace with your actual base URL
 
 def get_cookie():
     # Fetch CSRF token

@@ -673,6 +673,53 @@ def user_all_tournaments(request, pk):
         except Exception as e:
             return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
     return JsonResponse({'status': 'error', 'message': 'Only GET requests are allowed'}, status=400)
+
+def user_stats(request, pk):
+    if request.method == 'GET':
+        try:
+            user = User.objects.get(id=pk)
+            tournaments = Tournament.objects.filter(players=user)
+            tournament_list = []
+
+            matches = Match.objects.filter(player1=user) | Match.objects.filter(player2=user)
+            match_list = []
+
+            for tournament in tournaments:
+                tournament_list.append({
+                    'id': tournament.id,
+                    'name': tournament.name,
+                    'start_date': tournament.start_date,
+                    'end_date': tournament.end_date,
+                    'round': tournament.round,
+                    'players': [player.id for player in tournament.players.all()],        
+                })
+
+            for match in matches:
+                match_list.append({
+                    'id': match.id,
+                    'player1': match.player1.id,
+                    'player2': match.player2.id,
+                    'player1_score': match.player1_score,
+                    'player2_score': match.player2_score,
+                    'winner': match.winner.id if match.winner else None,
+                    'date_played': match.date_played,
+                    'active': match.active
+                    })
+                
+            formated_reponse = {
+                'id': user.id,
+                'username': user.username,
+                'ELO': user.ELO,
+                'tournaments': tournament_list,
+                'matches': match_list
+            }
+                
+            return JsonResponse({'status': 'ok', 'data': formated_reponse})
+        except User.DoesNotExist:
+            return JsonResponse({'status': 'error', 'message': 'User does not exist'}, status=400)
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
+    return JsonResponse({'status': 'error', 'message': 'Only GET requests are allowed'}, status=400)
 # -----------------------------
 
 # Tournament Matchmaking
@@ -725,7 +772,7 @@ def calculate_player_score(player, tournament=None):
         player_score = 0
 
     return player_score
-
+# -----------------------------
 
 # Actual matchmaking view
 def game_matchmaking(request, pk):
