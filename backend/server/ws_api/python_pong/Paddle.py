@@ -4,7 +4,7 @@ class Paddle(MovingRectangle):
 
 	def __init__(self, dictCanvas: dict, name:str, keyboard: dict,
 			position ={"x" : 30,"y" : 0}, speed = {"x" : 10, "y" : 10},
-			size = {"x" : 10, "y" : 30}, 
+			size = {"x" : 10, "y" : 40}, 
 			binds = {"up" : "UNUSED_DEFAULT_KEY", "down" : "UNUSED_DEFAULT_KEY",
 			"left" : "UNUSED_DEFAULT_KEY", "right" : "UNUSED_DEFAULT_KEY"}, 
 			enclousure = None):
