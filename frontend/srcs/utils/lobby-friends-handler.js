@@ -1,14 +1,5 @@
 let friendList = [];
-let pendingFriendInvitationList = [];
 let nowOnlineFriends;
-let notificationInfo = [];
-
-const updateNotifications = async (data) => {
-	notificationInfo = data.data;
-	const bellSpan = document.getElementById("nav-notification-bell-span");
-  if (notificationInfo.length)
-    bellSpan.innerHTML = notificationInfo.length;
-};
 
 const getListFriends = async () => {
   const userId = await getUserId();
@@ -61,7 +52,7 @@ const updateFriendStatus = async (data) => {
     }
   });
   friendList = updatedFriendList;
-  listFriends();
+  listFriendsNav();
   listInvitationFriends();
 };
 

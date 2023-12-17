@@ -127,8 +127,10 @@ const loadNavScripts = () => {
 const loadLobbyScripts = () => {
   const utilsDirec = `${direc}utils/`;
   const scriptPaths = [
-    `${utilsDirec}lobby-handler.js`,
-    `${utilsDirec}lobby-friends-status.js`,
+    `${utilsDirec}lobby-connection-handler.js`,
+    `${utilsDirec}lobby-friends-handler.js`,
+    `${utilsDirec}lobby-message-parser.js`,
+    `${utilsDirec}lobby-notifications-handler.js`,
   ];
   const body = document.body;
 

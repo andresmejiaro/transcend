@@ -1,6 +1,22 @@
 
 let lobbySocket;
 
+
+const sendWebSocketMessage = (messageType, payload) => {
+  if (lobbySocket && lobbySocket.readyState === WebSocket.OPEN) {
+    lobbySocket.send(
+      JSON.stringify({
+        type: messageType,
+        ...payload,
+      })
+    );
+  } else {
+    console.error("WebSocket is not in the OPEN state.");
+    // Handle the case where WebSocket is not open (e.g., display a user-friendly message)
+  }
+};
+
+
 const connectWebSocket = async () => {
   const userId = await getUserId();
 
@@ -55,37 +71,6 @@ const getOnlineUsers = async () => {
     });
   } catch (error) {
     console.error("Error while connecting to WebSocket:", error.message);
-  }
-};
-
-const parseAndHandleMessage = async (message) => {
-    const data = JSON.parse(message);
-    console.log(data)
-    if (data.type == "user_joined")
-        updateFriendStatus(data);
-    else if (data.type == "user_left")
-        updateFriendStatus(data);
-    else if (data.type == "send_friend_request")
-        await updateSendFriendRequests(data);
-    else if (data.type == "recieved_friend_request")
-        await updateReceiveFriendRequests(data);
-    else if (data.type == "list_sent_invites")
-        await updateNotifications(data);
-    else if (data.type == "list_received_invites")
-        await updateNotifications(data);
-}
-
-const sendWebSocketMessage = (messageType, payload) => {
-  if (lobbySocket && lobbySocket.readyState === WebSocket.OPEN) {
-    lobbySocket.send(
-      JSON.stringify({
-        type: messageType,
-        ...payload,
-      })
-    );
-  } else {
-    console.error("WebSocket is not in the OPEN state.");
-    // Handle the case where WebSocket is not open (e.g., display a user-friendly message)
   }
 };
 

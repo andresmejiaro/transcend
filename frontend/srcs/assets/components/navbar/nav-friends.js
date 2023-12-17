@@ -61,7 +61,7 @@ const listInvitationFriends = async () => {
 
 
 
-const listFriends = async () => {
+const listFriendsNav = async () => {
   if (nowOnlineFriends) toggleFriendNav(nowOnlineFriends);
   else removeToggleFriendNav();
 
