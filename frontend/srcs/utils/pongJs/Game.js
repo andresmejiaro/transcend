@@ -30,7 +30,7 @@ class Game {
         if (this.#backgroundLoaded) {
             if (this.statusToText() == "ai")
                     this.setupAI();
-            if (this.#remote != 1 )
+            if (this.#remote == 0 || this.#remote == 2)
                 requestAnimationFrame(() => this.gameSetup());
             else {
                 handleMatchmaking(this);

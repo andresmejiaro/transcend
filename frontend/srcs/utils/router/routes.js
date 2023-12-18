@@ -98,6 +98,24 @@ const urlRoutes = {
      "./srcs/utils/pongJs/Ball.js","./srcs/utils/pongJs/Paddle.js","./srcs/utils/pongJs/Player.js", 
      "./srcs/utils/pongJs/Game.js",directory + "2plygame/helper.js", directory + "2plygame/main.js"],
     css: [directory + "2plygame/2plygame.css"]
+  },
+  "/ai": {
+    template: directory + "ai/ai.html",
+    title: urlPageTitle,
+    description: "This is the local pong page",
+    js: [directory + "ai/enviroment.js","./srcs/utils/pongJs/MovingRectangle.js",
+     "./srcs/utils/pongJs/Ball.js","./srcs/utils/pongJs/Paddle.js","./srcs/utils/pongJs/Player.js", 
+     "./srcs/utils/pongJs/Game.js", "./srcs/utils/pongJs/PongAI.js", directory + "ai/main.js"],
+    css: [directory + "ai/ai.css"]
+  },
+  "/localPlay": {
+    template: directory + "localPlay/localPlay.html",
+    title: urlPageTitle,
+    description: "This is the local pong page",
+    js: [directory + "localPlay/enviroment.js","./srcs/utils/pongJs/MovingRectangle.js",
+     "./srcs/utils/pongJs/Ball.js","./srcs/utils/pongJs/Paddle.js","./srcs/utils/pongJs/Player.js", 
+     "./srcs/utils/pongJs/Game.js",  directory + "localPlay/main.js"],
+    css: [directory + "localPlay/localPlay.css"]
   }
 };
 
