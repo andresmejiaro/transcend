@@ -24,11 +24,15 @@ user interface and real-time multiplayer online games!
 - [Description](#description)
 - [Features](#features)
 - [Arquitecture](#arquitecture)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Links](#links)
+- [Installation](#installation)- [Web](#web)
+- [Chat](#chat)
+- [Game](#game)
+- [Multiplayer](#multiplayer)
+- [Tournament](#tournament)	
+- [IA](#ia)
+- [Database](#database)
+- [Concepts](#concepts)
 - [Contribution](#contribution)
-- [License](#license)
 
 ## Description
 
@@ -36,7 +40,7 @@ user interface and real-time multiplayer online games!
 
 Welcome to The Ultimate Pong Tournament!!!
 
-A thrilling web application that brings the classic Pong game to life in an interactive and engaging multiplayer environment.
+A thrilling single page web application that brings the classic Pong game to life in an interactive and engaging multiplayer environment.
 
 ![Pong Game GIF](https://potduggans.com/wp-content/uploads/2019/02/PING-PONG-GIF.gif)
 
@@ -50,10 +54,32 @@ Ft_trascendence is an ambitious project that endeavors to create an immersive we
 
 - **Alone against the machine:** A working IA to  give you the oportunity to improve your gaming to impress your friends.
 
-### Arquitecture
-Una descripción general de la estructura del proyecto, componentes clave, patrones de diseño utilizados, etc.
+- **Users data base:** 
 
-## Installation and Usage
+## Arquitecture
+
+### Project Structure Overview
+
+The project comprises various folders and files, each serving a distinct purpose:
+
+![estructure]()
+
+
+The project structure segregates functionalities and components, dividing them into backend, frontend, testing, AI implementation, and configurations. Each directory contains specific updates and functionalities based on recent commits, aiming to enhance the overall user experience, server logic, and game functionalities.
+
+- **APItests:** Contains CLI clients for API testing, primarily focused on the CLI game.
+
+- **Backend:** Handles the server-side logic and functionalities. Recent updates include enhancements related to lobby WebSocket and online status.
+
+- **Frontend:** Manages the client-side interface and user experience. Recent updates involve improvements associated with lobby WebSocket and online status.
+
+- **Nginx:** Includes configurations and updates related to the NGINX web server, particularly in merging the develop branch.
+
+- **Python-pong:** Incorporates features related to the AI option within the Pong game, added recently.
+
+- **Makefile:** Manages compilation and build operations. Recent fixes include cleaning functionalities.
+
+- **docker-compose.yml:** Specifies the services and configurations for Docker Compose.
 
 ### Installation
 1. Clone the repository.
@@ -62,26 +88,27 @@ Una descripción general de la estructura del proyecto, componentes clave, patro
 4. Configure environment variables.
 5. Start the server using `npm start`.
 
-### Usage
 1. Access the website through the provided URL.
 2. Sign up or log in securely.
 3. Choose the Pong game option to start playing.
 4. Interact with friends, other users or the evil IA in real-time gameplay.
 
-## Links
-Enlaces a la documentación más detallada, sitios web, demos en vivo, blogs o cualquier recurso externo relevante.
+Chat: Describe la implementación del chat en tiempo real, las tecnologías utilizadas (por ejemplo, WebSockets), cómo los usuarios se comunican entre sí, etc.
 
-## Contribution
+Juego: Detalla cómo se implementó el juego de Pong, los controles, la lógica del juego, etc.
 
-We welcome contributions to Ft_trascendence! To contribute, follow these steps:
-1. Fork the repository.
-2. Create a new branch (`git checkout -b feature/awesome-feature`).
-3. Make modifications and commit changes (`git commit -am 'Add awesome feature'`).
-4. Push the changes to the branch (`git push origin feature/awesome-feature`).
-5. Create a Pull Request.
+Multijugador: Explica cómo se gestionan las partidas multijugador, la sincronización entre jugadores, etc.
 
-Please follow our [Contribution Guidelines](CONTRIBUTING.md) for more details.
+Torneo: Si está implementado, describe cómo se estructuran los torneos, cómo los jugadores participan, las reglas, etc.
 
-## License
+IA: Explica la implementación del modo de juego contra la IA, cómo se diseñó y qué estrategias sigue la IA.
 
-This project is licensed under the [42 License](LICENSE).
+Base de Datos
+Detalla la estructura de la base de datos utilizada para almacenar la información de los usuarios, partidas, registros, etc. Puedes incluir:
+
+Tipo de base de datos: Si es relacional o no relacional.
+Esquema de la base de datos: Describe las tablas (en caso de bases de datos relacionales), colecciones (en caso de bases de datos no relacionales), y cómo están relacionadas entre sí.
+Seguridad y gestión de datos: Si se implementan medidas de seguridad, como cifrado de contraseñas, y cómo se manejan los datos de los usuarios.
+
+Conceptos
+términos o tecnologías clave utilizadas en el proyecto.
