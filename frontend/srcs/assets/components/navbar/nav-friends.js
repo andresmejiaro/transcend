@@ -30,6 +30,9 @@ const listInvitationFriendsNav = async () => {
   }));
 };
 
+const handleInviteFriend = async (friend) => {
+  console.log("invite to a match", friend);
+}
 
 
 const listFriendsNav = async () => {
@@ -57,9 +60,20 @@ const listFriendsNav = async () => {
     pElement.classList.add("pm0");
     pElement.textContent = friend.username;
 
+    const inviteButton = document.createElement("button");
+    inviteButton.type = "button";
+    inviteButton.classList.add("btn", "ms-5");
+    inviteButton.style = "background: #fffeee; color: #4CA2BB";
+    inviteButton.textContent = "Friendly Battle";
+  
+    inviteButton.addEventListener("click", () => {
+      handleInviteFriend(friend);
+    });
+
     friendElement.appendChild(circleElement);
     friendElement.appendChild(mxElement);
     friendElement.appendChild(pElement);
+    friendElement.appendChild(inviteButton);
 
     friendsListContainer.appendChild(friendElement);
   });
