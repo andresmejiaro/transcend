@@ -83,6 +83,8 @@ Entails specific decisions regarding the server's implementation in a Dockerized
   
   The `urls.py` file manages URL routing by mapping specific URLs to corresponding views or endpoints within the Django server. It configures the admin panel, API endpoints, WebSocket URLs, and serves static media files, controlling the handling of incoming requests in the web application.
 
+  The `manage.py` script is Django's command-line tool used for administrative tasks. It configures the Django environment, executes management commands, and serves as the entry point for interacting with the Django project via the command line, facilitating tasks like database operations, server startup, and project management.
+
 - **Frontend:** Manages the client-side interface and user experience. Recent updates involve improvements associated with lobby WebSocket and online status.
 
 - **Nginx:** Includes configurations and updates related to the NGINX web server, particularly in merging the develop branch.
