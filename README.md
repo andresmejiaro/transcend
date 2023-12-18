@@ -89,6 +89,8 @@ Entails specific decisions regarding the server's implementation in a Dockerized
 
 - **Nginx:** Includes configurations and updates related to the NGINX web server, particularly in merging the develop branch.
 
+  Within the Nginx configuration, settings for port 3000, typically used for Node.js applications or frontend services, might be established. Additionally, SSL/TLS configurations could be defined to ensure secure communication over HTTPS for enhanced data encryption and security measures. These SSL settings are crucial for encrypting data transmitted between clients and the server, particularly when dealing with sensitive information.
+
 - **Python-pong:** Incorporates features related to the AI option within the Pong game, added recently.
 
 - **Makefile:** Manages compilation and build operations. Recent fixes include cleaning functionalities.
