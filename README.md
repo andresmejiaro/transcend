@@ -70,7 +70,7 @@ The project structure segregates functionalities and components, dividing them i
 
 - **APItests:** Contains CLI clients for API testing, primarily focused on the CLI game.
 
- `CLItester.py` is a Python script responsible for managing WebSocket connections, handling game updates, and rendering a terminal-based Pong game. It enables communication with a WebSocket server, updates the game canvas based on incoming data, draws game components, and performs essential terminal actions such as screen clearing. Customizations or enhancements might be necessary depending on specific use cases.
+  `CLItester.py` is a Python script responsible for managing WebSocket connections, handling game updates, and rendering a terminal-based Pong game. It enables communication with a WebSocket server, updates the game canvas based on incoming data, draws game components, and performs essential terminal actions such as screen clearing. Customizations or enhancements might be necessary depending on specific use cases.
 
   The `apitester.py` Python script is a utility tool designed for making HTTP requests to an API. It handles functionalities like obtaining CSRF tokens, signing up users, and executing various API calls (GET, POST, PUT, DELETE) using the requests library. The script supports CLI usage and requires proper endpoint specifications along with optional data for POST and PUT requests.
 
@@ -78,8 +78,10 @@ The project structure segregates functionalities and components, dividing them i
 
 - **Backend:** Handles the server-side logic and functionalities. Recent updates include enhancements related to lobby WebSocket and online status. Using as image base `python:3.7-alpine` and exposes de port 8000 to allow backend communication.
   
-The `settings.py` file determine the server's particular behavior, Dockerized environments, application management, database, the utilization of channels for real-time communication, and CORS to enable requests between different origins.
+  The `settings.py` file determine the server's particular behavior, Dockerized environments, application management, database, the utilization of channels for real-time communication, and CORS to enable requests between different origins.
 Entails specific decisions regarding the server's implementation in a Dockerized environment, channel layers for asynchronous and real-time communication, and permitted origins for requests between domains.
+  
+  The `urls.py` file manages URL routing by mapping specific URLs to corresponding views or endpoints within the Django server. It configures the admin panel, API endpoints, WebSocket URLs, and serves static media files, controlling the handling of incoming requests in the web application.
 
 - **Frontend:** Manages the client-side interface and user experience. Recent updates involve improvements associated with lobby WebSocket and online status.
 
