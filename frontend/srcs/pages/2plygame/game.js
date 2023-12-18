@@ -4,9 +4,9 @@ const ctx = gameCanvas.getContext("2d");
 
 
 // Handle keydown event
-document.addEventListener("keydown", (event) => {
-  throttledKeyPress(event.key);
-});
+// document.addEventListener("keydown", (event) => {
+//   throttledKeyPress(event.key);
+// });
 
 // WebSocket instance
 let ws;
@@ -51,16 +51,22 @@ function startGame(matchId, player1Id, player2Id, clientId, scoreLimit) {
 }
 
 // Function to send JSON message over WebSocket
-function sendJson(jsonMessage) {
-  console.log("WebSocket readyState:", ws.readyState);
-
-  if (ws && ws.readyState === WebSocket.OPEN) {
-    ws.send(jsonMessage);
-    console.log("Sent JSON message:", jsonMessage);
-  } else {
-    console.error("WebSocket connection not open.");
-  }
-}
+const sendJson = (messageType, payload) => {
+  return new Promise((resolve, reject) => {
+    if (ws && ws.readyState === WebSocket.OPEN) {
+      ws.send(
+        JSON.stringify({
+          type: messageType,
+          ...payload,
+        })
+      );
+      resolve();
+    } else {
+      console.error("WebSocket is not in the OPEN state.");
+      reject(new Error("WebSocket is not open"));
+    }
+  });
+};
 
 // Handle keydown event for arrow keys
 document.addEventListener("keydown", (event) => {
@@ -271,59 +277,6 @@ const canJoinAGame = async () => {
   }
 };
 
-// Function to get match information
-const getMatchInfo = async (matchId) => {
-  try {
-    const url = `${window.DJANGO_API_BASE_URL}/api/match/${matchId}/`;
-    const options = {
-      method: "GET",
-      mode: "cors",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
-
-    const data = await makeRequest(true, url, options);
-    console.log(data);
-    if (data.status == "ok") {
-      return data;
-    }
-
-    return null;
-  } catch (error) {
-    console.error("Error:", error.message);
-  }
-};
-
-// Function to update the match in the database
-const updateMatchInDb = async (matchId, player2Id) => {
-  try {
-    const url = `${window.DJANGO_API_BASE_URL}/api/match/${matchId}/`;
-    const options = {
-      method: "PUT",
-      mode: "cors",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        player2: player2Id,
-      }),
-    };
-
-    const data = await makeRequest(true, url, options);
-    console.log(data);
-    if (data.status == "ok") {
-      return data;
-    }
-
-    return null;
-  } catch (error) {
-    console.error("Error:", error.message);
-  }
-};
-
 // Function to join a match
 const joinMatch = async (matchId) => {
   const playerId = await getUserId();
@@ -336,8 +289,10 @@ const joinMatch = async (matchId) => {
 
 // Function to activate the game
 const activateGame = async () => {
-  const param = '{"command":"start_game"}';
-  sendJson(param);
+  console.log("activating game")
+  await sendJson("command", {
+    command: "start_game",
+  });
 };
 
 // Function to create and join a match
@@ -374,4 +329,17 @@ const handleMatchmaking = async () => {
 };
 
 // Start matchmaking
-handleMatchmaking();
+
+
+const urlParams = new URLSearchParams(window.location.search);
+const matchId = urlParams.get("matchid");
+
+const handleFirstSteps = async () => {
+  if (matchId) {
+    await handleMatchmakingFriend(matchId);
+  } else {
+    handleMatchmaking();
+  }
+}
+
+handleFirstSteps();

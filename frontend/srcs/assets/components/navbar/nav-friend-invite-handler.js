@@ -53,3 +53,4 @@ const inviteFriend = async (clientUsername) => {
   });
   handleCloseFriendsModalMsg("Invite send succesfully");
 };
+

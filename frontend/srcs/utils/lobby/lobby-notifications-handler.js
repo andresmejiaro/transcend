@@ -37,7 +37,6 @@ const handleListReceivedInvites = async (data) => {
 	updateNotifications(notificationInfoReceived);
 
 	const updatedInfo = await Promise.all(notificationInfoReceived.map(async (user) => {
-        console.log(user)
         const userInfo = await getPlayerInfo(user.invite_id);
         return {
             ...userInfo,

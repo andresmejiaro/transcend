@@ -30,10 +30,6 @@ const listInvitationFriendsNav = async () => {
   }));
 };
 
-const handleInviteFriend = async (friend) => {
-  console.log("invite to a match", friend);
-}
-
 
 const listFriendsNav = async () => {
   if (nowOnlineFriends) toggleFriendNav(nowOnlineFriends);
@@ -67,7 +63,7 @@ const listFriendsNav = async () => {
     inviteButton.textContent = "Friendly Battle";
   
     inviteButton.addEventListener("click", () => {
-      handleInviteFriend(friend);
+      handleInviteFriendToMatch(friend);
     });
 
     friendElement.appendChild(circleElement);

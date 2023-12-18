@@ -165,11 +165,11 @@ const getPlayerInfo = async (playerId) => {
 	}
 };
 
-const showAlertDanger = (message) => {
-  const alertContainer = document.getElementById('alert-container');
+const showAlertSuccess = (message) => {
+  const alertContainer = document.getElementById('alert-container-success');
 
   const alertElement = document.createElement('div');
-  alertElement.classList.add('alert', 'alert-danger', 'fade', 'show');
+  alertElement.classList.add('alert', 'alert-success', 'fade', 'show');
   alertElement.setAttribute('role', 'alert');
   alertElement.innerHTML = `
     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>

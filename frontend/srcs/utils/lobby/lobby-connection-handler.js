@@ -3,17 +3,20 @@ let lobbySocket;
 
 
 const sendWebSocketMessage = (messageType, payload) => {
-  if (lobbySocket && lobbySocket.readyState === WebSocket.OPEN) {
-    lobbySocket.send(
-      JSON.stringify({
-        type: messageType,
-        ...payload,
-      })
-    );
-  } else {
-    console.error("WebSocket is not in the OPEN state.");
-    // Handle the case where WebSocket is not open (e.g., display a user-friendly message)
-  }
+  return new Promise((resolve, reject) => {
+    if (lobbySocket && lobbySocket.readyState === WebSocket.OPEN) {
+      lobbySocket.send(
+        JSON.stringify({
+          type: messageType,
+          ...payload,
+        })
+      );
+      resolve();
+    } else {
+      console.error("WebSocket is not in the OPEN state.");
+      reject(new Error("WebSocket is not open"));
+    }
+  });
 };
 
 
@@ -61,9 +64,9 @@ const getOnlineUsers = async () => {
       handleMessage(event.data);
     });
 
-    lobbySocket.onmessage = (event) => {
-      handleMessage(event.data);
-    };
+    // lobbySocket.onmessage = (event) => {
+    //   handleMessage(event.data);
+    // };
 
     sendWebSocketMessage("command", {
       command: "list_of_users",
