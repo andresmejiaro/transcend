@@ -72,6 +72,7 @@ The project structure segregates functionalities and components, dividing them i
 
   'CLItester.py' is a Python script responsible for managing WebSocket connections, handling game updates, and rendering a terminal-based Pong game. It enables communication with a WebSocket server, updates the game canvas based on incoming data, draws game components, and performs essential terminal actions such as screen clearing. Customizations or enhancements might be necessary depending on specific use cases.
 
+  The 'apitester.py' Python script is a utility tool designed for making HTTP requests to an API. It handles functionalities like obtaining CSRF tokens, signing up users, and executing various API calls (GET, POST, PUT, DELETE) using the requests library. The script supports CLI usage and requires proper endpoint specifications along with optional data for POST and PUT requests.
 
 - **Backend:** Handles the server-side logic and functionalities. Recent updates include enhancements related to lobby WebSocket and online status.
 
