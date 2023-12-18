@@ -94,6 +94,9 @@ The project structure segregates functionalities and components, dividing them i
 3. Choose the Pong game option to start playing.
 4. Interact with friends, other users or the evil IA in real-time gameplay.
 
+## Web
+sdgzdg
+
 ## Chat
 Describe la implementación del chat en tiempo real, las tecnologías utilizadas (por ejemplo, WebSockets), cómo los usuarios se comunican entre sí, etc.
 
