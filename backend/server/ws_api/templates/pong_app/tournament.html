@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebSocket Tester</title>
+</head>
+<body>
+    <h1>WebSocket Tester</h1>
+    <label for="tournamentId">Tournament ID:</label>
+    <input type="text" id="tournamentId" placeholder="Enter Tournament ID">
+
+    <label for="clientId">Client ID:</label>
+    <input type="text" id="clientId" placeholder="Enter Client ID">
+
+    <button onclick="connect()">Connect</button>
+
+    <hr>
+
+    <label for="command">Command:</label>
+    <input type="text" id="command" placeholder="Enter Command">
+
+    <label for="jsonData">JSON Data:</label>
+    <textarea id="jsonData" placeholder="Enter JSON Data"></textarea>
+
+    <button onclick="sendMessage()">Send Message</button>
+
+    <hr>
+
+    <h2>Server Response:</h2>
+    <div id="response"></div>
+
+    <script>
+        let websocket;
+
+        async function connect() {
+            const tournamentId = document.getElementById('tournamentId').value;
+            const clientId = document.getElementById('clientId').value;
+
+            const uri = `ws://localhost:8001/ws/tournament/${tournamentId}/?client_id=${clientId}`;
+
+            websocket = new WebSocket(uri);
+
+            websocket.onopen = () => {
+                writeToResponse("Connected to WebSocket");
+            };
+
+            websocket.onmessage = (event) => {
+                writeToResponse(`Received: ${event.data}`);
+            };
+
+            websocket.onclose = () => {
+                writeToResponse("WebSocket connection closed");
+            };
+
+            websocket.onerror = (error) => {
+                writeToResponse(`WebSocket Error: ${error}`);
+            };
+        }
+
+        function sendMessage() {
+            const command = document.getElementById('command').value;
+            const jsonData = document.getElementById('jsonData').value;
+
+            const message = {
+                command,
+                data: JSON.parse(jsonData)
+            };
+
+            websocket.send(JSON.stringify(message));
+
+            writeToResponse(`Sent: ${JSON.stringify(message)}`);
+        }
+
+        function writeToResponse(message) {
+            const responseDiv = document.getElementById('response');
+            responseDiv.innerHTML += `<p>${message}</p>`;
+        }
+    </script>
+</body>
+</html>
