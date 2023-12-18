@@ -203,8 +203,6 @@ def user_friends_list(request, pk):
     
     return JsonResponse({'status': 'error', 'message': 'Only GET requests are allowed'}, status=400)
 
-
-
 def user_blocked_list(request, pk):
     if request.method == 'GET':
         try:
@@ -227,5 +225,4 @@ def user_blocked_list(request, pk):
         except Exception as e:
             return JsonResponse({'status': 'error', 'message': str(e)}, status=399)
     return JsonResponse({'status': 'error', 'message': 'Only GET requests are allowed'}, status=399 )
-
 # -----------------------------

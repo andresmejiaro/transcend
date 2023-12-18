@@ -284,7 +284,7 @@ class TournamentConsumer(AsyncWebsocketConsumer):
 # Object Getters
     async def get_tournament_object(self):
         try:
-            Tournament = import_string('api.tournament.models.Tournament')
+            Tournament = import_string('api.tournament.models.tournament_model.Tournament')
             tournament = await database_sync_to_async(Tournament.objects.get)(pk=self.tournament_id)
             print(f'Found tournament with info {tournament}')
             return tournament
@@ -344,7 +344,7 @@ class TournamentConsumer(AsyncWebsocketConsumer):
 # Object initialization/save methods
     @database_sync_to_async
     def create_matches(self, sorted_players):
-        from api.tournament.models import Match
+        from api.tournament.models.match_model import Match
         matches = []
         num_players = len(sorted_players)
 
@@ -375,7 +375,7 @@ class TournamentConsumer(AsyncWebsocketConsumer):
 
     @database_sync_to_async
     def create_round(self, tournament, matches, current_round=None):
-        from api.tournament.models import Round
+        from api.tournament.models.round_model import Round
         print(f'Creating round for tournament {tournament}')
         new_round = Round(tournament=tournament, round_number=current_round)
         new_round.save()
@@ -408,7 +408,7 @@ class TournamentConsumer(AsyncWebsocketConsumer):
     @database_sync_to_async
     def init_tour_obj(self, pk):
         try:
-            Tournament = import_string('api.tournament.models.Tournament')
+            Tournament = import_string('api.tournament.models.tournament_model.Tournament')
             tournament = get_object_or_404(Tournament, pk=pk)
 
             if tournament is None:
@@ -442,7 +442,7 @@ class TournamentConsumer(AsyncWebsocketConsumer):
     @database_sync_to_async
     def save_tournament_results(self):
         try:
-            Tournament = import_string('api.tournament.models.Tournament')
+            Tournament = import_string('api.tournament.models.tournament_model.Tournament')
             tournament = get_object_or_404(Tournament, pk=self.tournament_id)
 
             players = tournament.players.all()
