@@ -76,7 +76,10 @@ The project structure segregates functionalities and components, dividing them i
 
   The `wstester.py` Python script acts as a WebSocket client, allowing users to interact with a WebSocket server. It prompts for user input to specify the Tournament ID and Client ID, establishes a WebSocket connection to the provided URI, and enables users to send and receive messages in JSON format, facilitating communication with the WebSocket server through command inputs.
 
-- **Backend:** Handles the server-side logic and functionalities. Recent updates include enhancements related to lobby WebSocket and online status.
+- **Backend:** Handles the server-side logic and functionalities. Recent updates include enhancements related to lobby WebSocket and online status. Using as image base `python:3.7-alpine` and exposes de port 8000 to allow backend communication.
+  
+The `settings.py` file determine the server's particular behavior, Dockerized environments, application management, database, the utilization of channels for real-time communication, and CORS to enable requests between different origins.
+Entails specific decisions regarding the server's implementation in a Dockerized environment, channel layers for asynchronous and real-time communication, and permitted origins for requests between domains.
 
 - **Frontend:** Manages the client-side interface and user experience. Recent updates involve improvements associated with lobby WebSocket and online status.
 
@@ -127,3 +130,28 @@ Seguridad y gestión de datos: Si se implementan medidas de seguridad, como cifr
 
 ## Concepts
 términos o tecnologías clave utilizadas en el proyecto.
+asgiref==3.7.2
+asttokens==2.4.1
+async-timeout==4.0.3
+channels==4.0.0
+channels-redis==4.1.0
+colorama==0.4.6
+Django==3.2.23
+django-cors-headers==4.1.0
+executing==2.0.1
+icecream==2.1.3
+importlib-metadata==6.7.0
+msgpack==1.0.5
+passlib==1.7.4
+Pillow==9.5.0
+psycopg2-binary==2.9.9
+Pygments==2.17.2
+pyotp==2.9.0
+pypng==0.20220715.0
+pytz==2023.3.post1
+qrcode==7.4.2
+redis==5.0.1
+six==1.16.0
+sqlparse==0.4.4
+typing_extensions==4.7.1
+zipp==3.15.0
