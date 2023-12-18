@@ -69,6 +69,7 @@ The project comprises various folders and files, each serving a distinct purpose
 The project structure segregates functionalities and components, dividing them into backend, frontend, testing, AI implementation, and configurations. Each directory contains specific updates and functionalities based on recent commits, aiming to enhance the overall user experience, server logic, and game functionalities.
 
 - **APItests:** Contains CLI clients for API testing, primarily focused on the CLI game.
+'CLItester.py' is a Python script responsible for managing WebSocket connections, handling game updates, and rendering a terminal-based Pong game. It enables communication with a WebSocket server, updates the game canvas based on incoming data, draws game components, and performs essential terminal actions such as screen clearing. Customizations or enhancements might be necessary depending on specific use cases.
 
 - **Backend:** Handles the server-side logic and functionalities. Recent updates include enhancements related to lobby WebSocket and online status.
 
