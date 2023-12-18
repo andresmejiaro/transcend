@@ -322,7 +322,7 @@ const joinMatch = async (matchId) => {
   const playerId = await getUserId();
   const matchData = await getMatchInfo(matchId);
   await updateMatchInDb(matchId, playerId);
-  await startGame(matchId, matchData.data.player1, playerId, playerId, 11);
+  await startGame(matchId, matchData.data.player1, playerId, playerId, 3);
 
   activateGame();
 };

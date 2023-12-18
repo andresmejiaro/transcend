@@ -66,9 +66,8 @@ class GameConsumerAsBridge(AsyncWebsocketConsumer):
     @database_sync_to_async
     def finalize_match(self):
         from api.tournament.models import Match
-        self.run_game = False
-
         try:
+            self.run_game = False
             ic(f'Finalizing match {self.match_id}')
             match_object = Match.objects.get(pk=self.match_id)
             match_object.active = False
@@ -81,7 +80,6 @@ class GameConsumerAsBridge(AsyncWebsocketConsumer):
             else:
                 match_object.winner = None
             match_object.save()
-            ic(f'Match {self.match_id} finalized')
 
         except Exception as e:
             ic(f'Error during match finalization: {e}')
@@ -254,7 +252,7 @@ class GameConsumerAsBridge(AsyncWebsocketConsumer):
         )
 
         # Send message to group announcing player left
-        await self.broadcast_to_group(self.match_id, 'player_list', self.list_of_players)
+        await self.broadcast_to_group(self.match_id, 'match_finished', self.match_id)
         await self.close(code=close_code)
 
     # Receive message from WebSocket and process it

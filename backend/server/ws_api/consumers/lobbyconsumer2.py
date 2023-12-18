@@ -82,13 +82,16 @@ class LobbyConsumer(AsyncWebsocketConsumer):
             print(f'Client {self.client_id} disconnected with code {close_code}')
             if self.list_of_online_users.get(self.client_id):
                 del self.list_of_online_users[self.client_id]
-                        # Remove client from the group channel
+
+            if self.list_of_admins.get(self.client_id):
+                del self.list_of_admins[self.client_id]
+
             await self.channel_layer.group_discard(self.lobby_name, self.channel_name)
             await self.channel_layer.group_discard(self.client_id, self.channel_name)
 
             # Send info of group status every time a client leaves
             await self.announce_departure()
-            self.close()
+            await self.close()
 
         except Exception as e:
             error_message = f"Error in disconnect method: {e}"
@@ -881,6 +884,37 @@ class LobbyConsumer(AsyncWebsocketConsumer):
             print(f'Could not find user with id {pk}')
             return None
 # ---------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 # WebSocket close codes
