@@ -13,6 +13,13 @@ class GameConsumerAsBridge(AsyncWebsocketConsumer):
     list_of_keyboard_inputs = {}    # Holds the keyboard inputs for each match (eg. self.list_of_keyboard_inputs[self.match_id] = {"up.1": False, "down.1": False, "up.2": False, "down.2": False})
     list_of_games = {}              # Holds the Game objects for each match (eg. self.list_of_games[self.match_id] = Game(...))
 
+# Endpoints:
+    PLAYER_LIST = 'player_list'    # Returns list of players in the match
+    START_GAME = 'start_game'      # Command for starting the game
+    KEYBOARD = 'keyboard'          # Takes in keyboard input from the client and updates the keyboard input for the game
+    DISCONNECT = 'disconnect'      # Command for disconnecting the client.
+# -----------------------------
+
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -25,6 +32,7 @@ class GameConsumerAsBridge(AsyncWebsocketConsumer):
         self.update_buffer = []
         self.run_game = True
 
+#
     @database_sync_to_async
     def get_match(self, match_id):
         # We import the model here to avoid circular imports and allow the consumer to be imported in the routing.py file
@@ -252,13 +260,13 @@ class GameConsumerAsBridge(AsyncWebsocketConsumer):
         
         print(f'Received command: {command} with data: {data}')
 
-        if command == 'player_list':
+        if command == self.PLAYER_LIST:
             await self.send(text_data=json.dumps({
                 'type': 'player_list',
                 'data': list(self.list_of_players.keys()),
             }))
               
-        elif command == 'start_game':
+        elif command == self.START_GAME:
             print(f'Sending start command to game {self.match_id}')
             if not self.list_of_games.get(self.match_id):
                 print(f'Initializing game {self.match_id}')
@@ -272,7 +280,7 @@ class GameConsumerAsBridge(AsyncWebsocketConsumer):
                 else:
                     print(f'Cannot start game. Both players for this match are not connected yet.')
 
-        elif command == 'keyboard':
+        elif command == self.KEYBOARD:
             print(f'Updating keyboard for client {self.client_id} with data: {data}')
             if self.list_of_games[self.match_id]:
                 if self.list_of_games[self.match_id] and self.list_of_games[self.match_id].isAlive() and self.left_player and self.right_player:
@@ -283,7 +291,7 @@ class GameConsumerAsBridge(AsyncWebsocketConsumer):
                         key = data.get('key')
                         self.on_release(key)
 
-        elif command == 'disconnect':
+        elif command == self.DISCONNECT:
             print(f'Disconnecting client {self.client_id}')
             await self.disconnect(1000)
 
