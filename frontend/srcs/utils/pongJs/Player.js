@@ -25,6 +25,10 @@ class Player {
         return this.#name;
     }
 
+    set name(data){
+        this.#name = data;
+    }
+
     get binds(){
         return this.#binds;
     }

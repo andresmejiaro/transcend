@@ -222,11 +222,14 @@ class Game {
         return lcanvas;
     }
 
-    updatePlayerNames(data){
+    async updatePlayerNames(data){
         let names = Object.keys(data.data);
-        this.#leftPlayer.name = names[0];
+        let name1 = await getPlayerInfo(names[0]);
+        let name2 = await getPlayerInfo(names[1]);
+       
+        this.#leftPlayer.name = name1.username;
         if (names.length > 1)
-            this.#rightPlayer.name = names[1];
+            this.#rightPlayer.name = name2.username;
         this.#playersConnected = names.length;
     }
 

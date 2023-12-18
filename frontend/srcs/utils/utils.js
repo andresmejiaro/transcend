@@ -130,3 +130,24 @@ const getIdFromUsername = async (clientUsername) => {
     return null;
   }
 };
+
+const getPlayerInfo = async (playerId) => {
+
+  try {
+      const url = "${window.DJANGO_API_BASE_URL}/api/user/info-me-id/${playerId}/";
+
+      const options = {
+          method: "GET",
+          mode: "cors",
+          credentials: "include",
+          headers: {
+              "Content-Type": "application/json",
+          },
+      };
+
+      const data = await makeRequest(true, url, options);
+      return data.user;
+  } catch (error) {
+      console.error(error)
+  }
+};
