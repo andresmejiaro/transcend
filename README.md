@@ -29,7 +29,7 @@ user interface and real-time multiplayer online games!
 - [Game](#game)
 - [Multiplayer](#multiplayer)
 - [Tournament](#tournament)	
-- [IA](#ia)
+- [AI](#ai)
 - [Database](#database)
 - [Concepts](#concepts)
 - [Contribution](#contribution)
@@ -93,22 +93,27 @@ The project structure segregates functionalities and components, dividing them i
 3. Choose the Pong game option to start playing.
 4. Interact with friends, other users or the evil IA in real-time gameplay.
 
-Chat: Describe la implementación del chat en tiempo real, las tecnologías utilizadas (por ejemplo, WebSockets), cómo los usuarios se comunican entre sí, etc.
+## Chat
+Describe la implementación del chat en tiempo real, las tecnologías utilizadas (por ejemplo, WebSockets), cómo los usuarios se comunican entre sí, etc.
 
-Juego: Detalla cómo se implementó el juego de Pong, los controles, la lógica del juego, etc.
+## Game
+Detalla cómo se implementó el juego de Pong, los controles, la lógica del juego, etc.
 
-Multijugador: Explica cómo se gestionan las partidas multijugador, la sincronización entre jugadores, etc.
+## Multiplayer
+Explica cómo se gestionan las partidas multijugador, la sincronización entre jugadores, etc.
 
-Torneo: Si está implementado, describe cómo se estructuran los torneos, cómo los jugadores participan, las reglas, etc.
+## Tournament
+Si está implementado, describe cómo se estructuran los torneos, cómo los jugadores participan, las reglas, etc.
 
-IA: Explica la implementación del modo de juego contra la IA, cómo se diseñó y qué estrategias sigue la IA.
+## AI
+Explica la implementación del modo de juego contra la IA, cómo se diseñó y qué estrategias sigue la IA.
 
-Base de Datos
+## Database
 Detalla la estructura de la base de datos utilizada para almacenar la información de los usuarios, partidas, registros, etc. Puedes incluir:
 
 Tipo de base de datos: Si es relacional o no relacional.
 Esquema de la base de datos: Describe las tablas (en caso de bases de datos relacionales), colecciones (en caso de bases de datos no relacionales), y cómo están relacionadas entre sí.
 Seguridad y gestión de datos: Si se implementan medidas de seguridad, como cifrado de contraseñas, y cómo se manejan los datos de los usuarios.
 
-Conceptos
+## Concepts
 términos o tecnologías clave utilizadas en el proyecto.
