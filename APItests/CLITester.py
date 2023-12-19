@@ -5,6 +5,8 @@ import websockets
 import requests
 import traceback
 import re
+import curses
+import asyncio
 
 BASE_URL = "http://localhost:8000/api/"
 WS_URL = "ws://localhost:8001/ws/"
@@ -79,7 +81,40 @@ class WebSocketHandler:
 
     async def recieve(self):
         message = await self.websocket.recv()
-        print(f"Message: {message}")
+
+        type = message.get("type")
+        data = message.get("data")
+
+        if type == "player_list":
+            print(f"Player list: {data}")
+        elif type == "update_buffer":
+            self.draw(data)
+
+    def draw(self, data):
+        self.screen.clear()
+
+        ball = data.get("ball")
+        left_paddle = data.get("leftPaddle")
+        right_paddle = data.get("rightPaddle")
+        score_update = data.get("score_update")
+
+        # Draw ball
+        ball_x, ball_y = int(ball["position"]["x"]), int(ball["position"]["y"])
+        self.screen.addch(ball_y, ball_x, 'o')
+
+        # Draw left paddle
+        left_paddle_x, left_paddle_y = int(left_paddle["position"]["x"]), int(left_paddle["position"]["y"])
+        for i in range(left_paddle_y, left_paddle_y + int(left_paddle["size"]["y"])):
+            self.screen.addch(i, left_paddle_x, '|')
+
+        # Draw right paddle
+        right_paddle_x, right_paddle_y = int(right_paddle["position"]["x"]), int(right_paddle["position"]["y"])
+        for i in range(right_paddle_y, right_paddle_y + int(right_paddle["size"]["y"])):
+            self.screen.addch(i, right_paddle_x, '|')
+
+        self.screen.refresh()
+
+
 
 class PongClient:
     def __init__(self, username, password, fullname, email):
@@ -181,7 +216,13 @@ class PongClient:
 
             # If we connect, we will continually listen for received messages
             while True:
+                # Replace this with your actual data retrieval logic
                 await self.websocket_handler.recieve()
+
+                # Send a keypress to the server
+
+                await asyncio.sleep(0.1)  # Adjust sleep time based on your update rate
+
 
         except Exception as e:
             print(f"Error during play: {e}")
