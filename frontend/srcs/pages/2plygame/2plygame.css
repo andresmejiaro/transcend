@@ -11,7 +11,8 @@ canvas {
     display: block;
     background-color: #000;
     border: 2px solid white;
-}
+    max-width: 100%;
+  }
 
 .canvas-cont {
     position: absolute;
