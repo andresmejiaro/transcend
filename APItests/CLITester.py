@@ -4,69 +4,60 @@ import json
 import websockets
 import requests
 import traceback
+import re
 
 BASE_URL = "http://localhost:8000/api/"
 WS_URL = "ws://localhost:8001/ws/"
 
-
 class WebSocketHandler:
-    def __init__(self, ws_url, jwt_token, username):
+    def __init__(self, ws_url, jwt_token, cookies, username):
         self.ws_url = ws_url
         self.jwt_token = jwt_token
         self.username = username
         self.websocket = None
-        self.csrf_token = None
+        self.csrf_token = cookies
 
-    async def make_api_call(self, endpoint, method="GET", data=None):
+    def make_api_call(self, endpoint, method="GET", data=None):
+
         url = BASE_URL + endpoint
-        headers = {
-            "Content-Type": "application/json",
-            "Authorization": f"Bearer {self.jwt_token}",
-        }
 
-        if self.csrf_token:
-            headers["X-CSRFToken"] = self.csrf_token
+        print(f"Making API call to {url}")
 
-        try:
-            async with aiohttp.ClientSession() as session:
-                if data:
-                    data_str = json.dumps(data)  # Convert data to JSON string
-                else:
-                    data_str = None
+        headers = {}
+        if self.jwt_token:
+            headers = {
+                "Content-Type": "application/json",
+                "X-CSRFToken": self.csrf_token['csrftoken'],
+                "Authorization": f"Bearer {self.jwt_token}",
+            }
 
-                print(f"Making {method} request to {url} with data: {data_str} and headers: {headers}")
+        json_data = json.dumps(data) if data else None
+            
+        print (f"Headers: {headers}")
+        print (f"Data: {data}")
+        print (f'Cookies {self.csrf_token}')
 
-                if method == "GET":
-                    response = await session.get(url, headers=headers, data=data_str)
-                elif method == "POST":
-                    response = await session.post(url, headers=headers, data=data_str)
-                elif method == "PUT":
-                    response = await session.put(url, headers=headers, data=data_str)
-                elif method == "DELETE":
-                    response = await session.delete(url, headers=headers)
-                else:
-                    raise ValueError(f"Unsupported HTTP method: {method}")
-
-                return response
-
-        except Exception as e:
-            print(f"Error making API call: {e}")
-            return None
-
-    async def fetch_csrf_token(self):
-        csrf_url = BASE_URL + "get_csrf_token/"
-        response = await self.make_api_call(csrf_url)
-        if response and response.status == 200:
-            data = await response.json()
-            csrf_token = data.get("csrf_token")
-            return csrf_token
+        if method == "GET":
+            response = requests.get(url, headers=headers, data=json_data, cookies=self.csrf_token)
+        elif method == "POST":
+            response = requests.post(url, headers=headers, data=json_data, cookies=self.csrf_token)
+        elif method == "PUT":
+            response = requests.put(url, headers=headers, data=json_data, cookies=self.csrf_token)
+        elif method == "DELETE":
+            response = requests.delete(url, headers=headers, data=json_data, cookies=self.csrf_token)
         else:
-            print("Failed to fetch CSRF token.")
-            return None
+            print(f"Unsupported HTTP method: {method}")
+            return False
+        
+        print(f"Response: {response}")
+        
+        response_json = response.json()
+        print(f"Response JSON: {response_json}")
+        return response_json    
 
     async def connect(self):
-        self.csrf_token = await self.fetch_csrf_token()
-        headers = {"X-CSRFToken": self.csrf_token} if self.csrf_token else {}
+        await self.fetch_csrf_token()  # Fetch CSRF token before connecting
+        headers = {"csrf": self.csrf_token} if self.csrf_token else {}
         self.websocket = await websockets.connect(self.ws_url, extra_headers=headers)
 
     async def send_message(self, command, data):
@@ -77,19 +68,20 @@ class WebSocketHandler:
         if self.websocket:
             await self.websocket.close()
 
-
 class PongClient:
     def __init__(self, username, password, fullname, email):
         self.username = username
         self.password = password
         self.email = email
+        self.csrf_token = {}
         self.jwt_token = self.signup_user(username, password, fullname, email)
-        self.websocket_handler = WebSocketHandler(WS_URL, self.jwt_token, username)
-        self.client_id = None
-
+  
         if not self.jwt_token:
-            print("Failed to initialize client")
-            exit(1)
+            print("Failed to signup user")
+            return None
+
+        self.websocket_handler = WebSocketHandler(WS_URL, jwt_token=self.jwt_token, cookies=self.csrf_token, username=username)
+        self.client_id = None
 
     def signup_user(self, username, password, fullname, email, cookie=None):
         try:
@@ -107,19 +99,26 @@ class PongClient:
 
             response = requests.post(signup_url, json=payload, headers=headers)
 
+            print(f"Response headers: {response.headers}")
+
+            # Extract and save the CSRF token from the Set-Cookie header
+            csrf_cookie = response.headers.get('Set-Cookie')
+            if csrf_cookie:
+                csrf_token = csrf_cookie.split(';')[0].split('=')[1]
+                if csrf_token:
+                    self.csrf_token['csrftoken'] = csrf_token
+
             jwt_token = response.json().get("token")
             if jwt_token:
-                print(f"Successfully signed up user {username}")
                 return jwt_token
             else:
-                print(f"Failed to signup user. Status code: {response.status_code}")
                 return False
 
         except Exception as e:
             print(f"Failed to signup user. Exception: {e}")
             traceback.print_exc()
             return e
-
+        
     def make_api_call(self, endpoint, method="GET", data=None):
         return self.websocket_handler.make_api_call(endpoint, method, data)
 
@@ -131,43 +130,33 @@ class PongClient:
 
     async def close(self):
         await self.websocket_handler.close()
-
+   
     async def play(self):
         try:
-            response = await self.make_api_call(f"get_user_id/{self.username}", "GET")
+            # Get the user ID
+            response = self.make_api_call(f'get_user_id/{self.username}/', "GET")
+            self.client_id = response.get("user_id")
 
-            if response.status == 200:
-                user_data = await response.json()
-                self.client_id = user_data.get("user_id")
-                print(f"Client ID: {self.client_id}")
+            # Check if there is an existing match missing player 2 so we can join it
+            list_of_matches = self.make_api_call("match/", "GET")
 
-                match_data = {
-                    "player1": self.client_id,
-                    "player2": None,
-                    "player1_score": 0,
-                    "player2_score": 0,
-                    "winner": None,
-                    "date_played": None,
-                    "active": True,
-                }
-
-                print(f"Creating match with data: {match_data}")
-
-                match_response = await self.make_api_call(
-                    "match/create/" + "?username=" + self.username, "POST", data=match_data
-                )
-
-                if match_response and match_response.status == 200:
-                    match = await match_response.json()
-                    if "error" in match:
-                        print(f"Error creating match: {match['error']}")
-                    else:
-                        print(f"Created match: {match}")
+            if list_of_matches and 'data' in list_of_matches:
+                matches_data = list_of_matches['data']
+                for match in matches_data:
+                    if match.get("player2") is None:
+                        match_id = match.get("id")
+                        break
                 else:
-                    print("Failed to create match")
+                    # Create a match
+                    match_data = {'player1': f'{self.client_id}'}
+                    match_response = self.make_api_call("match/create/", "POST", data=match_data)
+                    match_json = json.loads(match_response)
+                    match_id = match_json.get("match_id")
 
-            else:
-                print(f"Failed to get user data. Status code: {response.status}")
+            print(f"Match ID: {match_id}")
+            # Get the object and see if we have enough players
+            match_response = self.make_api_call(f"match/{match_id}/", "GET")
+            print(f"You will be playing in this match: {match_response}")
 
         except Exception as e:
             print(f"Error during play: {e}")

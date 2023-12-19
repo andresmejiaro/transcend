@@ -22,7 +22,7 @@ def match_create(request):
             try:
                 player1 = User.objects.get(id=player1_id)
             except User.DoesNotExist:
-                return JsonResponse({'status': 'error', 'message': 'Invalid player 1 ID'}, status=400)
+                return JsonResponse({'status': 'error', 'message': 'Invalid player 1 ID'}, status=399)
             
             try:
                 player2 = User.objects.get(id=player2_id)
@@ -36,13 +36,13 @@ def match_create(request):
                 try:
                     winner_user = User.objects.get(id=winner_id)
                     if winner_user not in [player1, player2]:
-                        return JsonResponse({"status": "error", "message": "Winner must be one of the players"}, status=400)
+                        return JsonResponse({"status": "error", "message": "Winner must be one of the players"}, status=399)
                 except User.DoesNotExist:
-                    return JsonResponse({"status": "error", "message": "Winner does not exist"}, status=400)
+                    return JsonResponse({"status": "error", "message": "Winner does not exist"}, status=399)
             if not (player1_score >= 0 and player2_score >= 0):
-                return JsonResponse({"status": "error", "message": "Score must be positive"}, status=400)
+                return JsonResponse({"status": "error", "message": "Score must be positive"}, status=399)
             if active not in [True, False]:
-                return JsonResponse({"status": "error", "message": "Active must be a boolean"}, status=400)
+                return JsonResponse({"status": "error", "message": "Active must be a boolean"}, status=399)
             
             match = Match(
                 player1=player1,
