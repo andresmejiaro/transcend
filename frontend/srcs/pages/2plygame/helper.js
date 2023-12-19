@@ -55,21 +55,20 @@ function updateGameCanvas(data, game) {
     //console.log("Received player list:", data.data);
     game.updatePlayerNames(data);
     
-  } else if (data.type === "game_update") {
+  } else if (data.type === "update_buffer") {
     // Handle game update data
     //console.log("game data:", data.data);
-    drawPongGame(data, game);
-  } else if (data.type === "score_update") {
-    // Handle game update data
-    //console.log("game data:", data.data);
-    game.scoreUpdate(data.data);
+    drawPongGame(data.data[0]["game_update"], game);
+    game.scoreUpdate(data.data[0]["score_update"]);
   } else {
-    //console.error("Invalid message type:", data.type);
+    // Handle game update data
+    //console.log("game data:", data.data);
+    console.error("Invalid message type:", data.type);
   }
 }
 
 function drawPongGame(data,game) {
-  game.receiveRemoteCanvas(data.data);
+  game.receiveRemoteCanvas(data);
 }
 
 function sendKeyPress(key) {
@@ -246,5 +245,3 @@ const handleMatchmaking = async (game) => {
 
 
 
-// FUNCIONA PERO NO MUESTRA NADA EN PANTALLA
-// MEJORAR / TERMINAR function updateGameCanvas(data) 53

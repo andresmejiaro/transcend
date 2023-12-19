@@ -47,8 +47,7 @@ class Game {
 
     conectingScreen(){
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.fillText(this.#leftPlayer.name, 50, 30);
-        ctx.fillText(this.#rightPlayer.name, 50, 50);
+        ctx.fillText("Waiting for opponent ...", 50, 30);
         if (this.#playersConnected < 2)
             requestAnimationFrame(() => this.conectingScreen());
         else{ 

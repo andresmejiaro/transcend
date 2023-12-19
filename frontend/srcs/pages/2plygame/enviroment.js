@@ -6,6 +6,10 @@ canvas.width = 858;
 canvas.height= 525;
 document.addEventListener('keydown', (event) => {
     keysPressed[event.key] = true;
+    if(event.key == "q" || event.key == "Q")
+        sendKeyPress("up");
+    if(event.key == "s" || event.key == "S")
+        sendKeyPress("down");
 });
 document.addEventListener('keyup', (event) => {
     keysPressed[event.key] = false;

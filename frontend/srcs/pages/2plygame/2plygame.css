@@ -1,6 +1,6 @@
 canvas {
     display: block;
     background-color: #000;
-    margin: auto;
+    margin: 100px auto 0;
     border: 2px solid white;
 }
