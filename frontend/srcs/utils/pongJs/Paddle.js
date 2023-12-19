@@ -53,7 +53,11 @@ class Paddle extends MovingRectangle{
             yNewPos = canvas.height - this.getSize.y;
         super.setPosition({x: xNewPos, 
                     y : yNewPos});
-        this.setSpeed({x : xSpeed, y : ySpeed});
+        let toReturn = 0;
+        if (this.getSpeed.x != xSpeed || this.getSpeed.y != ySpeed)
+            toReturn = 1;
+        super.setSpeed({x : xSpeed, y : ySpeed});
+        return toReturn;
     }
 
     draw() {

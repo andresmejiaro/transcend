@@ -49,6 +49,15 @@ class Game:
 		self._scoreReporter[self._rightPlayer.getName()] = self._rightPlayer.getScore()
 		return self._scoreReporter.copy()
 
+	def recievePaddle(self, data):
+		for (key, value) in data.items:
+			if (key == "leftPaddle"):
+				self._leftPaddle.setPosition(x = value["position"]["x"], y = value["position"]["y"])
+				self._leftPaddle.setSpeed(x = value["speed"]["x"], y = value["speed"]["y"])
+			if (key == "rightPaddle"):
+				self._rightPaddle.setPosition(x = value["position"]["x"], y = value["position"]["y"])
+				self._rightPaddle.setSpeed(x = value["speed"]["x"], y = value["speed"]["y"])
+
 
 	def pointLoop(self):
 		self._ball.draw()

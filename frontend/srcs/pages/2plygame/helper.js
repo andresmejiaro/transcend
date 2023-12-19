@@ -60,6 +60,8 @@ function updateGameCanvas(data, game) {
     //console.log("game data:", data.data);
     drawPongGame(data.data[0]["game_update"], game);
     game.scoreUpdate(data.data[0]["score_update"]);
+  } else if (data.type === "paddle_update") {
+      game.paddleRemoteUpdate(data);
   } else {
     // Handle game update data
     //console.log("game data:", data.data);
@@ -86,6 +88,26 @@ function sendKeyPress(key) {
     console.error("WebSocket connection not open.");
   }
 }
+
+function sendPaddle(id, paddle) {
+  const jsonMessage = JSON.stringify({
+    command: "paddle_update",
+    [id]:{
+      position: paddle.getPosition,
+      size: paddle.getSize,
+      speed: paddle.getSpeed
+    }
+  });
+
+  // Send the JSON message to the server
+  if (ws && ws.readyState === WebSocket.OPEN) {
+    ws.send(jsonMessage);
+    console.log("Sent JSON message:", jsonMessage);
+  } else {
+    console.error("WebSocket connection not open.");
+  }
+}
+
 
 function handleArrowKeyRelease(key) {
   // Customize this based on your game's key bindings

@@ -11,6 +11,7 @@ class Game {
     #remoteCanvas
     #ai
     #playersConnected
+    #remoteIAM
 
     constructor(leftPlayer, rightPlayer, remote = 0) {
         this.#leftPlayer = leftPlayer;
@@ -22,6 +23,7 @@ class Game {
         this.#background.onload = () => { this.#backgroundLoaded = true; };
         this.#remote = remote; 
         this.#playersConnected = 0;
+        this.remoteIAM = "none";
     }
     
     startScreen() {
@@ -48,11 +50,27 @@ class Game {
     conectingScreen(){
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.fillText("Waiting for opponent ...", 50, 30);
-        if (this.#playersConnected < 2)
+        if (this.#playersConnected < 2){
             requestAnimationFrame(() => this.conectingScreen());
+        }
         else{ 
             requestAnimationFrame(() => this.gameSetup());
+            this.setbinds();
             activateGame();
+        }
+    }
+    
+       
+    setbinds(){
+        if (this.#remoteIAM == "right"){
+            this.#rightPlayer.binds = {up:"w", 
+                down:"s", left:"UNUSED_DEFAULT_KEY", 
+                right:"UNUSED_DEFAULT_KEY"}
+        }
+        if (this.#remoteIAM == "left"){
+            this.#leftPlayer.binds = {up:"w", 
+                down:"s", left:"UNUSED_DEFAULT_KEY", 
+                right:"UNUSED_DEFAULT_KEY"}
         }
     }
 
@@ -78,7 +96,6 @@ class Game {
             requestAnimationFrame(() => this.endScreen());
     }
 
-
     // game loop
 
     pointLoop() {
@@ -97,25 +114,43 @@ class Game {
     }
     
         remoteGameLogic() {
-        let canvas = this.#remoteCanvas;
-        if (canvas === undefined)
-            return;
-        this.#ball.setPosition(canvas["ball"]["position"]);
-        this.#ball.setSize(canvas["ball"]["size"]);
-        this.#leftPaddle.setPosition(canvas["leftPaddle"]["position"]);
-        this.#leftPaddle.setSize(canvas["leftPaddle"]["size"]);
-        this.#rightPaddle.setPosition(canvas["rightPaddle"]["position"]);
-        this.#rightPaddle.setSize(canvas["rightPaddle"]["size"]);
-        if (keysPressed["w"])
-            sendKeyPress("up");
-        if (keysPressed["s"])
-            sendKeyPress("down");
-        //if (this.newScore()){
-        //    this.#leftPlayer.score = score["p1"];
-        //    this.#rightPlayer.score = score["p2"];
-        //}
+            let canvas = this.#remoteCanvas;
+            if (canvas === undefined)
+                return;
+            if (canvas["ball"]["speed"] != this.#ball.speed ||
+                Math.abs(canvas["ball"]["position"]["x"] -this.#ball.position.x) > 10){
+                this.#ball.setPosition(canvas["ball"]["position"]);
+                this.#ball.setSpeed(canvas["ball"]["speed"]);
+                this.#ball.setSize(canvas["ball"]["size"]);
+            }
+            else {
+                this.#ball.updatePosition();
+            }
+            let sendleft = this.#leftPaddle.updatePosition();
+            let sendright = this.#rightPaddle.updatePosition();
+            //sendleft = 0;
+            //sendright = 0;
+            if(this.#remoteIAM == "left" && sendleft){
+                sendPaddle("leftPaddle",this.#leftPaddle)
+            }
+            if(this.#remoteIAM == "right" && sendright){
+                sendPaddle("rightPaddle",this.#rightPaddle)
+            }
+            
     }
 
+    paddleRemoteUpdate(data){
+        if(this.#remoteIAM != "left" && data.data.leftPaddle !== undefined){
+            this.#leftPaddle.setPosition = data.data.leftPaddle.position;
+            this.#leftPaddle.setSpeed = data.data.leftPaddle.speed;
+            this.#leftPaddle.setSize = data.data.leftPaddle.size;
+        }
+        if(this.#remoteIAM != "right" && data.data.rightPaddle !== undefined){
+            this.#rightPaddle.setPosition = data.data.rightPaddle.position;
+            this.#rightPaddle.setSpeed = data.data.rightPaddle.speed;
+            this.#rightPaddle.setSize = data.data.rightPaddle.size;
+        }
+    }
 
     localGameLogic() {
         if (this.statusToText() == "ai"){
@@ -154,6 +189,8 @@ class Game {
         const p2metrics = ctx.measureText(text2);
         ctx.fillText(text1, canvas.width / 4 - p1metrics.width / 2, 40);
         ctx.fillText(text2, canvas.width * 3 / 4 - p2metrics.width / 2, 40);
+        ctx.fillText(this.#remoteIAM, canvas.width / 2, 40);
+        
     }
 
     resetPosition() {
@@ -230,12 +267,19 @@ class Game {
         if (names.length > 1)
             this.#rightPlayer.name = name2.username;
         this.#playersConnected = names.length;
+        if (name1.username == sessionStorage.getItem("username")){
+            this.#remoteIAM = "left";
+        }
+        if (name2.username == sessionStorage.getItem("username")){
+            this.#remoteIAM = "right";
+        }
     }
 
     receiveRemoteCanvas(data){
         this.#remoteCanvas = data;
     }
 
+  
     scoreUpdate(data){
         console.log(data)
         this.#leftPlayer.score = data["left"];
