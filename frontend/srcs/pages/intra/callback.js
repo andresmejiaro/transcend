@@ -95,9 +95,32 @@ const getInfoMe = async (username) => {
   }
 };
 
+const getInfoUsernameFullname = async (userData) => {
+  try {
+    const username = userData.login;
+    const fullname = userData.displayname;
+    const url = `${window.DJANGO_API_BASE_URL}/api/user/exists/${username}/${fullname}/`;
+    const response = await makeRequest(false, url);
+    return response;
+  } catch (error) {
+    console.error("Error getting user ID:", error.message);
+    return false;
+  }
+};
+
 const intrahandler = async (userData) => {
-  const exists = await getInfoMe(userData.login);
-  if (!exists.error) await tryLoginFormPostIntra(userData);
+  const usernameExists = await getInfoMe(userData.login);
+  if (!usernameExists.error) {
+    const usernameTakenNotIntra = await getInfoUsernameFullname(userData);
+    if (usernameTakenNotIntra.error) {
+      showAlertDanger("Username taken, create a user")
+      setTimeout(function () {
+        window.location.href = '/home';
+      }, 1000);
+      return;
+    }
+    await tryLoginFormPostIntra(userData);
+  }
   else {
     await tryFormPostIntra(userData);
     await handleUpload(userData.login, userData.image.link);

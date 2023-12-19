@@ -148,4 +148,11 @@ def user_exists(request, username):
     except CustomUser.DoesNotExist:
         return JsonResponse({"error": "no user found"})
 
+@csrf_exempt
+def user_intra_exists(request, username, fullname):
+    try:
+        user = CustomUser.objects.get(username=username, fullname=fullname)
+        return JsonResponse({"status": "exists"})
+    except CustomUser.DoesNotExist:
+        return JsonResponse({"error": "no user found"})
 
