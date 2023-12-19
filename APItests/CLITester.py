@@ -31,7 +31,10 @@ class WebSocketHandler:
                 "Authorization": f"Bearer {self.jwt_token}",
             }
 
-        json_data = json.dumps(data) if data else None
+        if data and isinstance(data, dict):
+            json_data = json.dumps(data)
+        else:
+            json_data = data
             
         print (f"Headers: {headers}")
         print (f"Data: {data}")
@@ -55,18 +58,28 @@ class WebSocketHandler:
         print(f"Response JSON: {response_json}")
         return response_json    
 
-    async def connect(self):
-        await self.fetch_csrf_token()  # Fetch CSRF token before connecting
-        headers = {"csrf": self.csrf_token} if self.csrf_token else {}
-        self.websocket = await websockets.connect(self.ws_url, extra_headers=headers)
+    async def ws_connect(self, endpoint, query_params=None):
+        url = self.ws_url + endpoint
+        if query_params:
+            url += "?" + query_params
+
+        print(f"Connecting to websocket at {url}")
+        self.websocket = await websockets.connect(url)
+        print(f"Connected to websocket at {url}")
 
     async def send_message(self, command, data):
-        message = {"command": command, "data": data}
-        await self.websocket.send(json.dumps(message))
+        payload = {
+            "command": command,
+            "data": data,
+        }
+        await self.websocket.send(json.dumps(payload))
 
     async def close(self):
-        if self.websocket:
-            await self.websocket.close()
+        await self.websocket.close()
+
+    async def recieve(self):
+        message = await self.websocket.recv()
+        print(f"Message: {message}")
 
 class PongClient:
     def __init__(self, username, password, fullname, email):
@@ -99,8 +112,6 @@ class PongClient:
 
             response = requests.post(signup_url, json=payload, headers=headers)
 
-            print(f"Response headers: {response.headers}")
-
             # Extract and save the CSRF token from the Set-Cookie header
             csrf_cookie = response.headers.get('Set-Cookie')
             if csrf_cookie:
@@ -110,6 +121,7 @@ class PongClient:
 
             jwt_token = response.json().get("token")
             if jwt_token:
+                print(f"Successfully signed up user {username}")
                 return jwt_token
             else:
                 return False
@@ -122,8 +134,8 @@ class PongClient:
     def make_api_call(self, endpoint, method="GET", data=None):
         return self.websocket_handler.make_api_call(endpoint, method, data)
 
-    async def connect(self):
-        await self.websocket_handler.connect()
+    async def connect(self, endpoint, query_params=None):
+        await self.websocket_handler.ws_connect(endpoint, query_params)
 
     async def send_message(self, command, data):
         await self.websocket_handler.send_message(command, data)
@@ -145,18 +157,31 @@ class PongClient:
                 for match in matches_data:
                     if match.get("player2") is None:
                         match_id = match.get("id")
+                        match_data = {'player2': f'{self.client_id}'}
+                        match_response = self.make_api_call(f"match/{match_id}/", "PUT", data=match_data)
                         break
                 else:
                     # Create a match
                     match_data = {'player1': f'{self.client_id}'}
                     match_response = self.make_api_call("match/create/", "POST", data=match_data)
-                    match_json = json.loads(match_response)
-                    match_id = match_json.get("match_id")
+                    match_id = match_response.get("match_id")
 
             print(f"Match ID: {match_id}")
             # Get the object and see if we have enough players
             match_response = self.make_api_call(f"match/{match_id}/", "GET")
             print(f"You will be playing in this match: {match_response}")
+            # Get the player IDs
+            match = match_response.get("data")
+            player_1_id = match.get("player1")
+            player_2_id = match.get("player2")
+
+            # Join the match
+            print(f"Joining match {match_id}")
+            await self.connect(f'pong/{match_id}/', query_params=f"client_id={self.client_id}&player_1_id={player_1_id}&player_2_id={player_2_id}")
+
+            # If we connect, we will continually listen for received messages
+            while True:
+                await self.websocket_handler.recieve()
 
         except Exception as e:
             print(f"Error during play: {e}")
