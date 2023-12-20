@@ -203,7 +203,6 @@ class PongClient:
             print(f"Joining match {match_id}")
             await self.connect(f'pong/{match_id}/', query_params=f"client_id={self.client_id}&player_1_id={player_1_id}&player_2_id={player_2_id}")
 
-<<<<<<< HEAD
             # If we connect, we will continually listen for received messages
             curses.curs_set(0)  # Hide cursor
             stdscr.nodelay(True)
@@ -218,9 +217,6 @@ class PongClient:
 
                 await asyncio.sleep(0.1)  # Adjust sleep time based on your update rate
 
-=======
-            await self.game()
->>>>>>> 33d8e5a9f3277ea100d35f0601a33b7e1ffbe01b
 
         except Exception as e:
             print(f"Error during play: {e}")
