@@ -46,6 +46,7 @@ const urlRoutes = {
     title: urlPageTitle,
     description: "This is the 2FA page",
     js: [directory + "otp/otp-handler.js", "./srcs/utils/google-auth-utils.js"],
+    css: [directory + "otp/otp.css"]
   },
 
   "/intra": {
@@ -73,9 +74,8 @@ const urlRoutes = {
     template: directory + "profilesettings/user-settings.html",
     title: urlPageTitle + " - Profile",
     description: "This is the user page",
-    js: [directory + "profilesettings/user-settings.js"],
+    js: [directory + "profilesettings/user-settings.js", "./srcs/utils/google-auth-utils.js"],
     css: [directory + "profilesettings/user-settings.css"]
-    // js: [directory + "profilesettings/user-settings.js", "./srcs/utils/google-auth-utils.js"],
   },
 
   "/tournaments": {
@@ -129,4 +129,4 @@ const urlRoutes = {
 
 };
 
-const allowedLocations = ["/", "/home", "/login", "/signin", "/signup", "/intra", "/otp"];
+const allowedLocations = ["/", "/home", "/login", "/signin", "/signup", "/intra"];

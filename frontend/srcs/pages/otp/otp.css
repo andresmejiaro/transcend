@@ -1,0 +1,14 @@
+.input-signup {
+	border: 5px solid white !important;
+	background-color: #142d49 !important;
+}
+
+.input-signup:not(:focus),
+.input-signup:focus,
+.input-signup::placeholder {
+	color: white !important;
+}
+
+.input-signup::placeholder {
+	opacity: 0.7 !important;
+}
