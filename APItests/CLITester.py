@@ -1,12 +1,15 @@
-import aiohttp
 import asyncio
 import json
 import websockets
 import requests
 import traceback
-import re
+import click
 import curses
 import asyncio
+from pynput import keyboard
+import curses
+import time
+import sys
 
 BASE_URL = "http://localhost:8000/api/"
 WS_URL = "ws://localhost:8001/ws/"
@@ -82,38 +85,22 @@ class WebSocketHandler:
     async def recieve(self):
         message = await self.websocket.recv()
 
+        message = json.loads(message)
+
         type = message.get("type")
         data = message.get("data")
 
         if type == "player_list":
             print(f"Player list: {data}")
         elif type == "update_buffer":
-            self.draw(data)
-
-    def draw(self, data):
-        self.screen.clear()
-
-        ball = data.get("ball")
-        left_paddle = data.get("leftPaddle")
-        right_paddle = data.get("rightPaddle")
-        score_update = data.get("score_update")
-
-        # Draw ball
-        ball_x, ball_y = int(ball["position"]["x"]), int(ball["position"]["y"])
-        self.screen.addch(ball_y, ball_x, 'o')
-
-        # Draw left paddle
-        left_paddle_x, left_paddle_y = int(left_paddle["position"]["x"]), int(left_paddle["position"]["y"])
-        for i in range(left_paddle_y, left_paddle_y + int(left_paddle["size"]["y"])):
-            self.screen.addch(i, left_paddle_x, '|')
-
-        # Draw right paddle
-        right_paddle_x, right_paddle_y = int(right_paddle["position"]["x"]), int(right_paddle["position"]["y"])
-        for i in range(right_paddle_y, right_paddle_y + int(right_paddle["size"]["y"])):
-            self.screen.addch(i, right_paddle_x, '|')
-
-        self.screen.refresh()
-
+            print(f"Update buffer: {data}")
+        elif type == "match_finished":
+            print(f"Match {data} has finished, disconnecting.")
+            await self.send_message("disconnect", {})
+        else:
+            print(f"Unknown message type: {type}")
+            if data:
+                print(f"Data: {data}")
 
 
 class PongClient:
@@ -215,6 +202,11 @@ class PongClient:
             await self.connect(f'pong/{match_id}/', query_params=f"client_id={self.client_id}&player_1_id={player_1_id}&player_2_id={player_2_id}")
 
             # If we connect, we will continually listen for received messages
+            curses.curs_set(0)  # Hide cursor
+            stdscr.nodelay(True)
+            stdscr.clear()
+            curses.noecho()
+
             while True:
                 # Replace this with your actual data retrieval logic
                 await self.websocket_handler.recieve()
@@ -247,6 +239,34 @@ class PongClient:
             print(f"Failed to run client. Exception: {e}")
             traceback.print_exc()
             await self.close()
+
+
+
+    def scaler(self, prior, priorMax, posMax):
+        return int(posMax * prior / priorMax)
+
+    def draw(self, stdscr, dictCanvas: dict, obj:str, 
+             enclousure = {"xl" : 0,"xh": 858,"yl": 0,"yh": 525}):
+        height,width = stdscr.getmaxyx()
+        startY = self.scaler(dictCanvas[obj]["position"]["y"],enclousure["yh"],height)
+        endY = self.scaler(dictCanvas[obj]["position"]["y"] + dictCanvas[obj]["size"]["y"],enclousure["yh"],height)
+        startX = self.scaler(dictCanvas[obj]["position"]["x"],enclousure["xh"],width)
+        endX = self.scaler(dictCanvas[obj]["position"]["x"] + dictCanvas[obj]["size"]["x"],enclousure["xh"],width)
+        for i in range(round(startY), round(endY)):
+            for j in range(round(startX), round(endX)):
+                stdscr.addstr(i, j, "x")
+
+    def update_key_status(key_status):
+        def on_press(key):
+            key_status[getattr(key, 'char', key)] = True
+
+        def on_release(key):
+            key_status[getattr(key, 'char', key)] = False
+
+        listener = keyboard.Listener(on_press=on_press, on_release=on_release)
+        listener.start()
+
+
 
 
 if __name__ == "__main__":
