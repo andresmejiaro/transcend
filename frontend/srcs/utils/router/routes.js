@@ -112,14 +112,15 @@ const urlRoutes = {
      "./srcs/utils/pongJs/Game.js", "./srcs/utils/pongJs/PongAI.js", directory + "ai/main.js"],
     css: [directory + "ai/ai.css"]
   },
-  "/localPlay": {
-    template: directory + "localPlay/localPlay.html",
+  "/localp": {
+    template: directory + "localp/localp.html",
     title: urlPageTitle,
     description: "This is the local pong page",
-    js: [directory + "localPlay/enviroment.js","./srcs/utils/pongJs/MovingRectangle.js",
-     "./srcs/utils/pongJs/Ball.js","./srcs/utils/pongJs/Paddle.js","./srcs/utils/pongJs/Player.js", 
-     "./srcs/utils/pongJs/Game.js",  directory + "localPlay/main.js"],
-    css: [directory + "localPlay/localPlay.css"]
+    js: [directory + "localp/enviroment.js","./srcs/utils/pongJs/MovingRectangle.js",
+     "./srcs/utils/pongJs/Ball.js","./srcs/utils/pongJs/Paddle.js",
+     "./srcs/utils/pongJs/Player.js", 
+     "./srcs/utils/pongJs/Game.js",  directory + "localp/main.js"],
+    css: [directory + "localPlay/localp.css"]
   }
 };
 

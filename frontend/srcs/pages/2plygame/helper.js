@@ -8,12 +8,12 @@ function SetUpListeners(matchId, player1Id, player2Id, clientId, scoreLimit,
     ws = new WebSocket(uri);
 
     ws.addEventListener("open", () => {
-      console.log("WebSocket connection opened.");
+      //console.log("WebSocket connection opened.");
       resolve(ws); // Resolve the promise with the WebSocket instance
     });
 
     ws.addEventListener("close", () => {
-      console.log("WebSocket connection closed.");
+      //console.log("WebSocket connection closed.");
       reject("WebSocket connection closed."); // Reject the promise with an error message
     });
 
@@ -38,13 +38,13 @@ function SetUpListeners(matchId, player1Id, player2Id, clientId, scoreLimit,
 }
 
 function sendJson(jsonMessage) {
-  console.log("WebSocket readyState:", ws.readyState);
+  //console.log("WebSocket readyState:", ws.readyState);
 
   if (ws && ws.readyState === WebSocket.OPEN) {
     ws.send(jsonMessage);
-    console.log("Sent JSON message:", jsonMessage);
+    //console.log("Sent JSON message:", jsonMessage);
   } else {
-    console.error("WebSocket connection not open.");
+    //console.error("WebSocket connection not open.");
   }
 }
 
@@ -60,11 +60,10 @@ function updateGameCanvas(data, game) {
     //console.log("game data:", data.data);
     drawPongGame(data.data[0]["game_update"], game);
     game.scoreUpdate(data.data[0]["score_update"]);
-  } else if (data.type === "paddle_update") {
-      game.paddleRemoteUpdate(data);
+  
   } else {
     // Handle game update data
-    //console.log("game data:", data.data);
+    console.log("game data:", data.data);
     console.error("Invalid message type:", data.type);
   }
 }
@@ -83,7 +82,7 @@ function sendKeyPress(key) {
   // Send the JSON message to the server
   if (ws && ws.readyState === WebSocket.OPEN) {
     ws.send(jsonMessage);
-    console.log("Sent JSON message:", jsonMessage);
+    //console.log("Sent JSON message:", jsonMessage);
   } else {
     console.error("WebSocket connection not open.");
   }
@@ -102,7 +101,7 @@ function sendPaddle(id, paddle) {
   // Send the JSON message to the server
   if (ws && ws.readyState === WebSocket.OPEN) {
     ws.send(jsonMessage);
-    console.log("Sent JSON message:", jsonMessage);
+    //console.log("Sent JSON message:", jsonMessage);
   } else {
     console.error("WebSocket connection not open.");
   }
@@ -137,7 +136,7 @@ function sendRelease(key) {
   // Send the JSON message to the server
   if (ws && ws.readyState === WebSocket.OPEN) {
     ws.send(jsonMessage);
-    console.log("Sent JSON message:", jsonMessage);
+    //console.log("Sent JSON message:", jsonMessage);
   } else {
     console.error("WebSocket connection not open.");
   }
@@ -183,7 +182,7 @@ const getMatchInfo = async (matchId) => {
     };
 
     const data = await makeRequest(true, url, options);
-    console.log(data);
+    //console.log(data);
     if (data.status == "ok") {
       return data;
     }
@@ -210,7 +209,7 @@ const updateMatchInDb = async (matchId, player2Id) => {
     };
 
     const data = await makeRequest(true, url, options);
-    console.log(data);
+    //console.log(data);
     if (data.status == "ok") {
       return data;
     }
@@ -250,7 +249,7 @@ const createAndJoinMatch = async (game) => {
     }),
   });
 
-  console.log(response);
+  //console.log(response);
 
   SetUpListeners(response.match_id, userId, "", userId, 11, game);
 };

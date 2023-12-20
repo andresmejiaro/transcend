@@ -55,23 +55,26 @@ class Game {
         }
         else{ 
             requestAnimationFrame(() => this.gameSetup());
-            this.setbinds();
             activateGame();
         }
     }
     
        
     setbinds(){
+        let playerBinds = {up:"w", 
+            down:"s", left:"UNUSED_DEFAULT_KEY", 
+            right:"UNUSED_DEFAULT_KEY"};
+        //let remoteBinds = {up:"up", 
+        //    down:"s", left:"UNUSED_DEFAULT_KEY", 
+        //    right:"UNUSED_DEFAULT_KEY"}
         if (this.#remoteIAM == "right"){
-            this.#rightPlayer.binds = {up:"w", 
-                down:"s", left:"UNUSED_DEFAULT_KEY", 
-                right:"UNUSED_DEFAULT_KEY"}
+            this.#rightPlayer.binds = playerBinds; 
         }
         if (this.#remoteIAM == "left"){
-            this.#leftPlayer.binds = {up:"w", 
-                down:"s", left:"UNUSED_DEFAULT_KEY", 
-                right:"UNUSED_DEFAULT_KEY"}
+            this.#leftPlayer.binds = playerBinds;
         }
+        this.#leftPaddle.initializePaddleKeys();
+        this.#rightPaddle.initializePaddleKeys();
     }
 
     statusToText() {
@@ -98,6 +101,8 @@ class Game {
 
     // game loop
 
+    
+
     pointLoop() {
         this.drawNonInteractive();
         if (this.statusToText() == "remote")
@@ -113,7 +118,7 @@ class Game {
             requestAnimationFrame(() => this.pointLoop());
     }
     
-        remoteGameLogic() {
+        async remoteGameLogic() {
             let canvas = this.#remoteCanvas;
             if (canvas === undefined)
                 return;
@@ -126,30 +131,10 @@ class Game {
             else {
                 this.#ball.updatePosition();
             }
-            let sendleft = this.#leftPaddle.updatePosition();
-            let sendright = this.#rightPaddle.updatePosition();
-            //sendleft = 0;
-            //sendright = 0;
-            if(this.#remoteIAM == "left" && sendleft){
-                sendPaddle("leftPaddle",this.#leftPaddle)
-            }
-            if(this.#remoteIAM == "right" && sendright){
-                sendPaddle("rightPaddle",this.#rightPaddle)
-            }
+           this.#leftPaddle.updatePosition();
+           this.#rightPaddle.updatePosition();
+           
             
-    }
-
-    paddleRemoteUpdate(data){
-        if(this.#remoteIAM != "left" && data.data.leftPaddle !== undefined){
-            this.#leftPaddle.setPosition = data.data.leftPaddle.position;
-            this.#leftPaddle.setSpeed = data.data.leftPaddle.speed;
-            this.#leftPaddle.setSize = data.data.leftPaddle.size;
-        }
-        if(this.#remoteIAM != "right" && data.data.rightPaddle !== undefined){
-            this.#rightPaddle.setPosition = data.data.rightPaddle.position;
-            this.#rightPaddle.setSpeed = data.data.rightPaddle.speed;
-            this.#rightPaddle.setSize = data.data.rightPaddle.size;
-        }
     }
 
     localGameLogic() {
@@ -208,16 +193,26 @@ class Game {
 
     }
 
-    gameSetup() {
+    async gameSetup() {
           this.#ball = new Ball({ x: canvas.width / 2, y: canvas.height / 2 },
             { x: 4, y: 3 }, { x: 10, y: 10 });
         this.resetPosition();
-        this.#leftPaddle = new Paddle({ x: 30, y: 0 }, { x: 10, y: 10 },
+        this.#leftPaddle = new Paddle({ x: 30, y: 0 }, { x: 0, y: 10 },
             { x: 10, y: 100 }, "white",
             this.#leftPlayer.binds);
-        this.#rightPaddle = new Paddle({ x: canvas.width - 30, y: 0 }, { x: 10, y: 10 },
+        this.#rightPaddle = new Paddle({ x: canvas.width - 30, y: 0 }, { x: 0, y: 10 },
             { x: 10, y: 100 }, "white",
             this.#rightPlayer.binds);
+        if (this.#remote == 1 && this.#remoteIAM == "right"){
+            this.#rightPaddle.binds = {up : "w", down : "s",
+            left : "UNUSED_DEFAULT_KEY", right : "UNUSED_DEFAULT_KEY"};
+            this.#rightPaddle.initializePaddleKeys();
+        }
+        if (this.#remote == 1 && this.#remoteIAM == "left"){
+            this.#leftPaddle.binds = {up : "w", down : "s",
+            left : "UNUSED_DEFAULT_KEY", right : "UNUSED_DEFAULT_KEY"};
+            this.#rightPaddle.initializePaddleKeys();
+        }
         this.#rightPlayer.resetScore();
         this.#leftPlayer.resetScore();
 
@@ -261,12 +256,15 @@ class Game {
     async updatePlayerNames(data){
         let names = Object.keys(data.data);
         let name1 = await getPlayerInfo(names[0]);
-        let name2 = await getPlayerInfo(names[1]);
-       
+        let name2;
         this.#leftPlayer.name = name1.username;
-        if (names.length > 1)
+        if (names.length > 1){
+            name2 = await getPlayerInfo(names[1]);
             this.#rightPlayer.name = name2.username;
-        this.#playersConnected = names.length;
+        }
+        this.#playersConnected = names.length; 
+
+       
         if (name1.username == sessionStorage.getItem("username")){
             this.#remoteIAM = "left";
         }
@@ -279,10 +277,27 @@ class Game {
         this.#remoteCanvas = data;
     }
 
-  
+    async waitForPaddles(){
+        return new Promise(resolve => {
+            const checkPaddles = () => {
+                if (this.#leftPaddle !== undefined && this.#rightPaddle !== undefined) {
+                    resolve();
+                } else {
+                    setTimeout(checkPaddles, 100); // check every 100ms
+                }
+            };
+            checkPaddles();
+        });
+    };
     scoreUpdate(data){
-        console.log(data)
+        //console.log(data)
         this.#leftPlayer.score = data["left"];
         this.#rightPlayer.score = data["right"];
     }
+
+   
+    
 }
+
+
+

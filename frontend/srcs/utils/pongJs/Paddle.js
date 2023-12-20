@@ -1,8 +1,9 @@
 class Paddle extends MovingRectangle{
     #binds;
     #maxSpeed;
+    
 
-    constructor(position = {x : 30, y : 0}, speed = {x : 0, y : 0},
+    constructor(position = {x : 30, y : 0}, speed = {x : 0, y : 10},
         size = {x : 10, y : 30}, color = "white",
         binds ={up : "UNUSED_DEFAULT_KEY", down : "UNUSED_DEFAULT_KEY",
         left : "UNUSED_DEFAULT_KEY", right : "UNUSED_DEFAULT_KEY"}){
@@ -10,19 +11,26 @@ class Paddle extends MovingRectangle{
         super.initialize(position, speed, size, color);
         this.#binds = binds;
         this.#maxSpeed = speed;
-        Object.values(this.#binds).forEach( bind => 
-            {keysPressed[bind] = false;});
+        this.setSpeed= {x:0,y:0};
+        this.initializePaddleKeys();
+    }
+
+    set binds(data){
+        this.#binds =data;
     }
 
     get getMaxSpeed(){
         return this.#maxSpeed;
     }
 
-    updatePosition() {
-        let xSpeed = (keysPressed[this.#binds.right]
-             - keysPressed[this.#binds.left])*this.getMaxSpeed.x;
-        let ySpeed = (keysPressed[this.#binds.down]
-                - keysPressed[this.#binds.up])*this.getMaxSpeed.y;
+        updatePosition() {
+        let xSpeed = 0;
+        let ySpeed = 0;
+    
+        xSpeed = (keysPressed[this.#binds.right]
+            - keysPressed[this.#binds.left])*this.getMaxSpeed.x;
+        ySpeed = (keysPressed[this.#binds.down]
+            - keysPressed[this.#binds.up])*this.getMaxSpeed.y;
 		if (Number.isNaN(xSpeed)){
 			xSpeed = 0;
 		}
@@ -53,11 +61,11 @@ class Paddle extends MovingRectangle{
             yNewPos = canvas.height - this.getSize.y;
         super.setPosition({x: xNewPos, 
                     y : yNewPos});
-        let toReturn = 0;
-        if (this.getSpeed.x != xSpeed || this.getSpeed.y != ySpeed)
-            toReturn = 1;
-        super.setSpeed({x : xSpeed, y : ySpeed});
-        return toReturn;
+    }
+
+    initializePaddleKeys(){
+        Object.values(this.#binds).forEach( bind => 
+            {keysPressed[bind] = false;});
     }
 
     draw() {
@@ -77,5 +85,4 @@ class Paddle extends MovingRectangle{
             this.getPosition.y, 5, 5);
         ctx.fillStyle = "white";
         }
-
-}
+    }
