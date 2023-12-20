@@ -23,7 +23,7 @@ class Game:
 		self._ball = Ball(dictCanvas = self._dictCanvas, 
 			name ="ball",
 			position = {"x": 0,	"y":0}, speed = {"x" : 0, "y" : 0},
-				size = {"x" : 20, "y" : 20})
+				size = {"x" : 10, "y" : 10})
 		self.resetPosition()
 		self._leftPaddle = Paddle(keyboard=self._dictKeyboard,
 			dictCanvas = self._dictCanvas, name = "leftPaddle",
@@ -43,6 +43,8 @@ class Game:
 		self._ball.addColider(self._rightPaddle)
 		self.resetPosition()
 		self.reportScore()
+		self._frame = 0
+		self._delayedActions = {}
 
 
 	def reportScore(self):
@@ -67,6 +69,7 @@ class Game:
 			self._leftPaddle.updatePosition()
 			self._rightPaddle.draw()
 			self._rightPaddle.updatePosition()
+		self._frame += 1
 		
 		
 
@@ -109,7 +112,8 @@ class Game:
 		print("Stopping game")
 		self._bgt._scoreLimit = 0
 
-
+	def reportFrame(self):
+		return self._frame
 
 	def reportScreen(self):
 		return self._dictCanvas.copy()
@@ -120,3 +124,31 @@ class Game:
 		except:
 			return 0
 		
+	def processInput(self, formatted_key, is_pressed,frame):
+		diff_frames = self._frame - frame
+		if (diff_frames > 0):
+			print("fast forwarding")
+			self._dictKeyboard[formatted_key] = is_pressed
+			if (formatted_key in self._leftPaddle._binds):
+				toForward = self._leftPaddle
+			elif (formatted_key in self._rightPaddle._binds):
+				toForward = self._rightPaddle
+			for j in range(diff_frames):
+				toForward.updatePosition()
+		elif diff_frames == 0:
+			self._dictKeyboard[formatted_key] = is_pressed
+		else:
+			self.addDelayedAction(frame, self.processInput,formatted_key, is_pressed, frame)
+			
+	
+	def addDelayedAction(self, frame, function, *args, **kwargs):
+		if frame not in self._delayedActions:
+			self._delayedActions[frame] = []
+		self._delayedActions[frame].append((function,args,kwargs))
+
+	def runDelayedActions(self):
+		if self._frame in self._delayedActions:
+			actions = self._delayedActions[self._frame]
+			for fun, args, kwargs in actions:
+				fun(*args, **kwargs)
+

@@ -5,6 +5,8 @@ class Game {
     #ball
     #leftPaddle
     #rightPaddle
+    #leftShadowPaddle
+    #rightShadowPaddle
     #background
     #backgroundLoaded
     #remote
@@ -12,6 +14,10 @@ class Game {
     #ai
     #playersConnected
     #remoteIAM
+    #defLocalBinds
+    #defRemoteBinds
+    #frame
+    #shadow
 
     constructor(leftPlayer, rightPlayer, remote = 0) {
         this.#leftPlayer = leftPlayer;
@@ -23,7 +29,14 @@ class Game {
         this.#background.onload = () => { this.#backgroundLoaded = true; };
         this.#remote = remote; 
         this.#playersConnected = 0;
-        this.remoteIAM = "none";
+        this.#remoteIAM = "none";
+        this.#defLocalBinds = {up : "w", down : "s",
+            left : "UNUSED_DEFAULT_KEY", right : "UNUSED_DEFAULT_KEY"};
+        this.#defRemoteBinds = {up : "ru", down : "rd",
+            left : "UNUSED_DEFAULT_KEY", right : "UNUSED_DEFAULT_KEY"};
+        this.#frame = 0;
+        //testing parameter set to 0 in prod;
+        this.#shadow = 1; 
     }
     
     startScreen() {
@@ -60,24 +73,7 @@ class Game {
     }
     
        
-    setbinds(){
-        let playerBinds = {up:"w", 
-            down:"s", left:"UNUSED_DEFAULT_KEY", 
-            right:"UNUSED_DEFAULT_KEY"};
-        //let remoteBinds = {up:"up", 
-        //    down:"s", left:"UNUSED_DEFAULT_KEY", 
-        //    right:"UNUSED_DEFAULT_KEY"}
-        if (this.#remoteIAM == "right"){
-            this.#rightPlayer.binds = playerBinds; 
-        }
-        if (this.#remoteIAM == "left"){
-            this.#leftPlayer.binds = playerBinds;
-        }
-        this.#leftPaddle.initializePaddleKeys();
-        this.#rightPaddle.initializePaddleKeys();
-    }
-
-    statusToText() {
+        statusToText() {
         if (this.#remote == 0)
             return "local";
         if (this.#remote == 1)
@@ -100,9 +96,6 @@ class Game {
     }
 
     // game loop
-
-    
-
     pointLoop() {
         this.drawNonInteractive();
         if (this.statusToText() == "remote")
@@ -118,23 +111,30 @@ class Game {
             requestAnimationFrame(() => this.pointLoop());
     }
     
-        async remoteGameLogic() {
-            let canvas = this.#remoteCanvas;
-            if (canvas === undefined)
-                return;
-            if (canvas["ball"]["speed"] != this.#ball.speed ||
-                Math.abs(canvas["ball"]["position"]["x"] -this.#ball.position.x) > 10){
-                this.#ball.setPosition(canvas["ball"]["position"]);
-                this.#ball.setSpeed(canvas["ball"]["speed"]);
-                this.#ball.setSize(canvas["ball"]["size"]);
+    async remoteGameLogic() {
+        let canvas = this.#remoteCanvas;
+        if (canvas === undefined)
+            return;
+        if (true){
+            //canvas["ball"]["speed"] != this.#ball.speed ||
+            //Math.abs(canvas["ball"]["position"]["x"] -this.#ball.position.x) > 10){
+            this.#ball.setPosition(canvas["ball"]["position"]);
+            this.#ball.setSpeed(canvas["ball"]["speed"]);
+            this.#ball.setSize(canvas["ball"]["size"]);
+            if (this.#shadow = 1){
+                console.log("Printing Shadow Paddle");
+                this.#leftShadowPaddle.setPosition(canvas["leftPaddle"]["position"]);
+                this.#leftShadowPaddle.setSize(canvas["leftPaddle"]["size"]);
+                this.#rightShadowPaddle.setPosition(canvas["rightPaddle"]["position"]);
+                this.#rightShadowPaddle.setSize(canvas["rightPaddle"]["size"]);
             }
-            else {
-                this.#ball.updatePosition();
-            }
-           this.#leftPaddle.updatePosition();
-           this.#rightPaddle.updatePosition();
-           
-            
+        }
+        else {
+            this.#ball.updatePosition();
+        }
+        this.#leftPaddle.updatePosition();
+        this.#rightPaddle.updatePosition();
+        this.#frame += 1;
     }
 
     localGameLogic() {
@@ -165,6 +165,10 @@ class Game {
         this.#ball.draw();
         this.#leftPaddle.draw();
         this.#rightPaddle.draw();
+        if (this.#shadow == 1){
+            this.#leftShadowPaddle.draw();
+            this.#rightShadowPaddle.draw();
+        }
     }
 
     drawScore() {
@@ -189,36 +193,59 @@ class Game {
             this.#ball.setSpeed({ x: 4, y: -1 });
         else
             this.#ball.setSpeed({ x: -4, y: -1 });
-
-
     }
 
     async gameSetup() {
           this.#ball = new Ball({ x: canvas.width / 2, y: canvas.height / 2 },
             { x: 4, y: 3 }, { x: 10, y: 10 });
-        this.resetPosition();
-        this.#leftPaddle = new Paddle({ x: 30, y: 0 }, { x: 0, y: 10 },
+            this.resetPosition();
+            this.#leftPaddle = new Paddle({ x: 30, y: 0 }, { x: 0, y: 10 },
             { x: 10, y: 100 }, "white",
             this.#leftPlayer.binds);
-        this.#rightPaddle = new Paddle({ x: canvas.width - 30, y: 0 }, { x: 0, y: 10 },
+            this.#rightPaddle = new Paddle({ x: canvas.width - 30, y: 0 }, { x: 0, y: 10 },
             { x: 10, y: 100 }, "white",
             this.#rightPlayer.binds);
+            if (this.#remote == 1)
+                this.remoteGameSetup();
+            this.#rightPlayer.resetScore();
+            this.#leftPlayer.resetScore();
+            this.#ball.addColider(this.#leftPaddle);
+            this.#ball.addColider(this.#rightPaddle);
+            requestAnimationFrame(() => this.pointLoop());
+        }
+        
+    remoteGameSetup(){
         if (this.#remote == 1 && this.#remoteIAM == "right"){
-            this.#rightPaddle.binds = {up : "w", down : "s",
-            left : "UNUSED_DEFAULT_KEY", right : "UNUSED_DEFAULT_KEY"};
-            this.#rightPaddle.initializePaddleKeys();
+            this.#rightPaddle.binds = this.#defLocalBinds;
+            this.#leftPaddle.binds = this.#defRemoteBinds;
         }
         if (this.#remote == 1 && this.#remoteIAM == "left"){
-            this.#leftPaddle.binds = {up : "w", down : "s",
-            left : "UNUSED_DEFAULT_KEY", right : "UNUSED_DEFAULT_KEY"};
-            this.#rightPaddle.initializePaddleKeys();
+            this.#leftPaddle.binds = this.#defLocalBinds;
+            this.#rightPaddle.binds = this.#defRemoteBinds;
         }
-        this.#rightPlayer.resetScore();
-        this.#leftPlayer.resetScore();
-
-        this.#ball.addColider(this.#leftPaddle);
-        this.#ball.addColider(this.#rightPaddle);
-        requestAnimationFrame(() => this.pointLoop());
+        this.#leftPaddle.initializePaddleKeys();
+        this.#rightPaddle.initializePaddleKeys();
+        if(this.#remote == 1){
+            document.addEventListener('keydown', (event) => {
+                if (event.key == "w")
+                    sendKeyPress("up",this.#remoteIAM, this.#frame);
+                if(event.key == "s")
+                    sendKeyPress("down",this.#remoteIAM, this.#frame);
+            });
+            document.addEventListener('keyup', (event) => {
+                if (event.key == "w")
+                    sendRelease("up", this.#remoteIAM, this.#frame);
+                if(event.key == "s")
+                    sendRelease("down",  this.#remoteIAM, this.#frame);
+            });
+        //shadowPaddles for testing sync comment in prod
+        if(this.#shadow == 1){
+            this.#leftShadowPaddle = new Paddle({ x: 30, y: 0 }, { x: 0, y: 10 },
+                { x: 10, y: 100 }, "white");
+            this.#rightShadowPaddle = new Paddle({ x: canvas.width - 30, y: 0 }, { x: 0, y: 10 },
+                { x: 10, y: 100 }, "white");
+        }
+        }
     }
 
     conexionSetup() {
@@ -259,8 +286,15 @@ class Game {
         let name2;
         this.#leftPlayer.name = name1.username;
         if (names.length > 1){
-            name2 = await getPlayerInfo(names[1]);
-            this.#rightPlayer.name = name2.username;
+            
+            try{
+                name2 = await getPlayerInfo(names[1]);
+                this.#rightPlayer.name = name2.username;
+            }
+            catch(error){
+                console.error(error);
+                console.error(names, names.length,data)
+            }
         }
         this.#playersConnected = names.length; 
 
@@ -268,7 +302,7 @@ class Game {
         if (name1.username == sessionStorage.getItem("username")){
             this.#remoteIAM = "left";
         }
-        if (name2.username == sessionStorage.getItem("username")){
+        if (name2 && name2.username == sessionStorage.getItem("username")){
             this.#remoteIAM = "right";
         }
     }
@@ -277,25 +311,36 @@ class Game {
         this.#remoteCanvas = data;
     }
 
-    async waitForPaddles(){
-        return new Promise(resolve => {
-            const checkPaddles = () => {
-                if (this.#leftPaddle !== undefined && this.#rightPaddle !== undefined) {
-                    resolve();
-                } else {
-                    setTimeout(checkPaddles, 100); // check every 100ms
-                }
-            };
-            checkPaddles();
-        });
-    };
     scoreUpdate(data){
         //console.log(data)
         this.#leftPlayer.score = data["left"];
         this.#rightPlayer.score = data["right"];
     }
 
-   
+    remoteKeyUpHandling(data){
+        if (["left", "right"].includes(data.data.side)){
+            if (data.data.side != this.#remoteIAM){
+                console.log(data);
+                let keyToPress;
+                if (data.data.key == "down"){
+                    keyToPress = this.#defRemoteBinds["down"];
+                    
+                }
+                if (data.data.key == "up"){
+                    keyToPress = this.#defRemoteBinds["up"];
+                    
+                }
+                let status;
+                if (data.data.key_status == "on_press")
+                    status = true;
+                if (data.data.key_status == "on_release")
+                    status = false;
+                keysPressed[keyToPress] = status;
+               // console.log(keyToPress,data.data.key,keysPressed[keyToPress], data.data.key_status);
+            }
+        }
+    }
+
     
 }
 
