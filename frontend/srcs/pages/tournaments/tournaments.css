@@ -5,7 +5,7 @@
   flex-direction: column; /* Optional: To stack elements vertically */
   margin: 0;
   background: url("../../assets/imgs/tournament-background.svg") center center no-repeat;
-  background-size: cover;
+  background-size: 80%; /* Set the background size to 80% of the viewport */
   background-attachment: fixed; /* Keeps the background fixed while scrolling */
   height: 100vh; /* Set height to cover the entire viewport */
 }
