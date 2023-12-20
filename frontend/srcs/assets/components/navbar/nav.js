@@ -40,3 +40,22 @@ document.getElementById("logoutButton").addEventListener("click", function(e) {
   handleLogout();
 });
 
+
+var navbar = document.getElementById('navbarSupportedContent');
+
+    navbar.addEventListener('show.bs.collapse', function () {
+      // Navbar is about to collapse
+      document.getElementById('navContentClass').classList.remove('mx-auto', 'd-flex', 'align-items-center');
+      document.getElementById('navContentClass').classList.add('text-center');
+      document.getElementById('logoutButton').style.margin = "auto";
+      document.getElementById('rightNavBall').style.display = "none";
+      document
+    });
+
+    navbar.addEventListener('hidden.bs.collapse', function () {
+      // Navbar is about to expand
+      document.getElementById('navContentClass').classList.remove('text-center');
+      document.getElementById('navContentClass').classList.add('mx-auto', 'd-flex', 'align-items-center');
+      document.getElementById('logoutButton').style.margin = "0";
+      document.getElementById('rightNavBall').style.display = "block";
+    });
