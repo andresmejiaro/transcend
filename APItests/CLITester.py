@@ -5,11 +5,6 @@ import requests
 import traceback
 import click
 import curses
-import asyncio
-from pynput import keyboard
-import curses
-import time
-import sys
 
 BASE_URL = "http://localhost:8000/api/"
 WS_URL = "ws://localhost:8001/ws/"
@@ -21,9 +16,30 @@ class WebSocketHandler:
         self.username = username
         self.websocket = None
         self.csrf_token = cookies
+        self.stdscr = None
+
+    def init_curses(self):
+        # Initialize curses and set it up
+        self.stdscr = curses.initscr()
+        curses.noecho()
+        curses.cbreak()
+        self.stdscr.keypad(True)
+        curses.curs_set(0)
+
+        # Initialize color pairs (if needed)
+        curses.start_color()
+        curses.init_pair(1, curses.COLOR_RED, curses.COLOR_BLACK)
+        curses.init_pair(2, curses.COLOR_GREEN, curses.COLOR_BLACK)
+
+    def cleanup_curses(self):
+        # Clean up curses when done
+        if self.stdscr:
+            curses.nocbreak()
+            self.stdscr.keypad(False)
+            curses.echo()
+            curses.endwin()
 
     def make_api_call(self, endpoint, method="GET", data=None):
-
         url = BASE_URL + endpoint
 
         print(f"Making API call to {url}")
@@ -40,10 +56,10 @@ class WebSocketHandler:
             json_data = json.dumps(data)
         else:
             json_data = data
-            
-        print (f"Headers: {headers}")
-        print (f"Data: {data}")
-        print (f'Cookies {self.csrf_token}')
+
+        print(f"Headers: {headers}")
+        print(f"Data: {data}")
+        print(f'Cookies {self.csrf_token}')
 
         if method == "GET":
             response = requests.get(url, headers=headers, data=json_data, cookies=self.csrf_token)
@@ -56,12 +72,12 @@ class WebSocketHandler:
         else:
             print(f"Unsupported HTTP method: {method}")
             return False
-        
+
         print(f"Response: {response}")
-        
+
         response_json = response.json()
         print(f"Response JSON: {response_json}")
-        return response_json    
+        return response_json
 
     async def ws_connect(self, endpoint, query_params=None):
         url = self.ws_url + endpoint
@@ -73,7 +89,7 @@ class WebSocketHandler:
         print(f"Connected to websocket at {url}")
 
         if self.websocket:
-            asyncio.get_event_loop().create_task(self.recieve())
+            asyncio.get_event_loop().create_task(self.receive())
 
     async def send_message(self, command, data):
         payload = {
@@ -83,27 +99,83 @@ class WebSocketHandler:
         await self.websocket.send(json.dumps(payload))
 
     async def close(self):
-        await self.websocket.close()
+        if self.websocket:
+            await self.websocket.close()
 
-    async def recieve(self):
-        message = await self.websocket.recv()
+    async def receive(self):
+        if self.stdscr is None:
+            self.init_curses()
+        try:
+            while True:
+                message = await self.websocket.recv()
+                message = json.loads(message)
 
-        message = json.loads(message)
+                type = message.get("type")
+                data = message.get("data")
 
-        type = message.get("type")
-        data = message.get("data")
+                if type == "player_list":
+                    print(f"Player list: {data}")
+                elif type == "update_buffer":
+                    print(f"Update buffer: {data}")
+                    self.draw_game(data)
+                elif type == "match_finished":
+                    print(f"Match {data} has finished, disconnecting.")
+                    await self.send_message("disconnect", {})
+                else:
+                    print(f"Unknown message type: {type}")
+                    if data:
+                        print(f"Data: {data}")
 
-        if type == "player_list":
-            print(f"Player list: {data}")
-        elif type == "update_buffer":
-            print(f"Update buffer: {data}")
-        elif type == "match_finished":
-            print(f"Match {data} has finished, disconnecting.")
-            await self.send_message("disconnect", {})
-        else:
-            print(f"Unknown message type: {type}")
-            if data:
-                print(f"Data: {data}")
+        except websockets.ConnectionClosed:
+            print("WebSocket connection closed")
+            self.cleanup_curses()
+
+    def draw_game(self, updates):
+        # Clear the screen
+        self.stdscr.clear()
+
+        for update in updates:
+            game_state = update.get('game_update', {})
+            self.draw_paddle(game_state.get('leftPaddle', {}), 'left')
+            self.draw_paddle(game_state.get('rightPaddle', {}), 'right')
+            self.draw_ball(game_state.get('ball', {}))
+            self.draw_scores(game_state.get('score_update', {}))
+
+        # Refresh the screen to display changes
+        self.stdscr.refresh()
+
+    def draw_paddle(self, paddle, position):
+        if not paddle:
+            return
+
+        # Assuming 'position' is either 'left' or 'right'
+        color_pair = 1 if position == 'left' else 2
+        paddle_pos = paddle.get('position', {})
+        paddle_size = paddle.get('size', {})
+
+        for i in range(int(paddle_pos['y']), int(paddle_pos['y'] + paddle_size['y'])):
+            self.stdscr.addstr(i, int(paddle_pos['x']), '|', curses.color_pair(color_pair))
+
+    def draw_ball(self, ball):
+        if not ball:
+            return
+
+        ball_pos = ball.get('position', {})
+        ball_size = ball.get('size', {})
+
+        self.stdscr.addstr(int(ball_pos['y']), int(ball_pos['x']), 'O')
+
+    def draw_scores(self, scores):
+        if not scores:
+            return
+
+        left_score = scores.get('left', 0)
+        right_score = scores.get('right', 0)
+
+        # Adjust the coordinates based on where you want to display the scores
+        self.stdscr.addstr(0, 0, f"Left Score: {left_score}")
+        self.stdscr.addstr(0, curses.COLS // 2, f"Right Score: {right_score}")
+
 
 class PongClient:
     def __init__(self, username, password, fullname, email):
@@ -112,7 +184,7 @@ class PongClient:
         self.email = email
         self.csrf_token = {}
         self.jwt_token = self.signup_user(username, password, fullname, email)
-  
+
         if not self.jwt_token:
             print("Failed to signup user")
             return None
@@ -154,9 +226,6 @@ class PongClient:
             print(f"Failed to signup user. Exception: {e}")
             traceback.print_exc()
             return e
-        
-    def make_api_call(self, endpoint, method="GET", data=None):
-        return self.websocket_handler.make_api_call(endpoint, method, data)
 
     async def connect(self, endpoint, query_params=None):
         await self.websocket_handler.ws_connect(endpoint, query_params)
@@ -166,52 +235,6 @@ class PongClient:
 
     async def close(self):
         await self.websocket_handler.close()
-   
-    async def play(self):
-        try:
-            # Get the user ID
-            response = self.make_api_call(f'get_user_id/{self.username}/', "GET")
-            self.client_id = response.get("user_id")
-
-            # Check if there is an existing match missing player 2 so we can join it
-            list_of_matches = self.make_api_call("match/", "GET")
-
-            if list_of_matches and 'data' in list_of_matches:
-                matches_data = list_of_matches['data']
-                for match in matches_data:
-                    if match.get("player2") is None:
-                        match_id = match.get("id")
-                        match_data = {'player2': f'{self.client_id}'}
-                        match_response = self.make_api_call(f"match/{match_id}/", "PUT", data=match_data)
-                        break
-                else:
-                    # Create a match
-                    match_data = {'player1': f'{self.client_id}'}
-                    match_response = self.make_api_call("match/create/", "POST", data=match_data)
-                    match_id = match_response.get("match_id")
-
-            print(f"Match ID: {match_id}")
-            # Get the object and see if we have enough players
-            match_response = self.make_api_call(f"match/{match_id}/", "GET")
-            print(f"You will be playing in this match: {match_response}")
-            # Get the player IDs
-            match = match_response.get("data")
-            player_1_id = match.get("player1")
-            player_2_id = match.get("player2")
-
-            # Join the match
-            print(f"Joining match {match_id}")
-            await self.connect(f'pong/{match_id}/', query_params=f"client_id={self.client_id}&player_1_id={player_1_id}&player_2_id={player_2_id}")
-
-            while True:
-                # Listen for messages from the websocket
-                await self.websocket_handler.recieve()  
-
-                await asyncio.sleep(0.1)  # Adjust sleep time based on your update rate
-
-
-        except Exception as e:
-            print(f"Error during play: {e}")
 
     async def listen(self):
         try:
@@ -234,33 +257,52 @@ class PongClient:
             traceback.print_exc()
             await self.close()
 
+    async def play(self):
+        try:
+            # Get the user ID
+            response = self.websocket_handler.make_api_call(f'get_user_id/{self.username}/', "GET")
+            self.client_id = response.get("user_id")
 
+            # Check if there is an existing match missing player 2 so we can join it
+            list_of_matches = self.websocket_handler.make_api_call("match/", "GET")
 
-    def scaler(self, prior, priorMax, posMax):
-        return int(posMax * prior / priorMax)
+            if list_of_matches and 'data' in list_of_matches:
+                matches_data = list_of_matches['data']
+                for match in matches_data:
+                    if match.get("player2") is None:
+                        match_id = match.get("id")
+                        match_data = {'player2': f'{self.client_id}'}
+                        match_response = self.websocket_handler.make_api_call(f"match/{match_id}/", "PUT",
+                                                                             data=match_data)
+                        break
+                else:
+                    # Create a match
+                    match_data = {'player1': f'{self.client_id}'}
+                    match_response = self.websocket_handler.make_api_call("match/create/", "POST", data=match_data)
+                    match_id = match_response.get("match_id")
 
-    def draw(self, stdscr, dictCanvas: dict, obj:str, 
-             enclousure = {"xl" : 0,"xh": 858,"yl": 0,"yh": 525}):
-        height,width = stdscr.getmaxyx()
-        startY = self.scaler(dictCanvas[obj]["position"]["y"],enclousure["yh"],height)
-        endY = self.scaler(dictCanvas[obj]["position"]["y"] + dictCanvas[obj]["size"]["y"],enclousure["yh"],height)
-        startX = self.scaler(dictCanvas[obj]["position"]["x"],enclousure["xh"],width)
-        endX = self.scaler(dictCanvas[obj]["position"]["x"] + dictCanvas[obj]["size"]["x"],enclousure["xh"],width)
-        for i in range(round(startY), round(endY)):
-            for j in range(round(startX), round(endX)):
-                stdscr.addstr(i, j, "x")
+            print(f"Match ID: {match_id}")
+            # Get the object and see if we have enough players
+            match_response = self.websocket_handler.make_api_call(f"match/{match_id}/", "GET")
+            print(f"You will be playing in this match: {match_response}")
+            # Get the player IDs
+            match = match_response.get("data")
+            player_1_id = match.get("player1")
+            player_2_id = match.get("player2")
 
-    def update_key_status(key_status):
-        def on_press(key):
-            key_status[getattr(key, 'char', key)] = True
+            # Join the match
+            print(f"Joining match {match_id}")
+            await self.connect(f'pong/{match_id}/', query_params=f"client_id={self.client_id}&player_1_id={player_1_id}&player_2_id={player_2_id}")
 
-        def on_release(key):
-            key_status[getattr(key, 'char', key)] = False
+            while True:
+                # Listen for messages from the websocket
+                await asyncio.sleep(0.1)  # Adjust sleep time based on your update rate
 
-        listener = keyboard.Listener(on_press=on_press, on_release=on_release)
-        listener.start()
+        except Exception as e:
+            print(f"Error during play: {e}")
 
-
+        finally:
+            self.websocket_handler.cleanup_curses()
 
 
 if __name__ == "__main__":
