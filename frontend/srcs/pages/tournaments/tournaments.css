@@ -1,14 +1,18 @@
 .tournament-div {
-	margin: 0;
-	background: url("../../assets/imgs/tournament-background.svg") center center no-repeat;
-	background-size: cover;
-	height: 100vh;
-	width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column; /* Optional: To stack elements vertically */
+  margin: 0;
+  background: url("../../assets/imgs/tournament-background.svg") center center no-repeat;
+  background-size: cover;
+  background-attachment: fixed; /* Keeps the background fixed while scrolling */
+  height: 100vh; /* Set height to cover the entire viewport */
 }
 
 .tournaments-box {
-	border: solid 4px #FBD793;
-	background: linear-gradient(180deg, rgba(25, 26, 50, 0.73) 0%, rgba(25, 26, 50, 0.55) 75.27%, rgba(25, 26, 50, 0.00) 92.64%);
+  border: solid 4px #fbd793;
+  background: linear-gradient(180deg, rgba(25, 26, 50, 0.73) 0%, rgba(25, 26, 50, 0.55) 75.27%, rgba(25, 26, 50, 0.00) 92.64%);
 }
 
 .user-in-tournament {
