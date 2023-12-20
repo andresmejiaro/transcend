@@ -203,46 +203,15 @@ class PongClient:
             print(f"Joining match {match_id}")
             await self.connect(f'pong/{match_id}/', query_params=f"client_id={self.client_id}&player_1_id={player_1_id}&player_2_id={player_2_id}")
 
-            # If we connect, we will continually listen for received messages
-            curses.curs_set(0)  # Hide cursor
-            stdscr.nodelay(True)
-            stdscr.clear()
-            curses.noecho()
-
             while True:
-                # Replace this with your actual data retrieval logic
-                await self.websocket_handler.recieve()
-
-                # Send a keypress to the server
+                # Listen for messages from the websocket
+                await self.websocket_handler.recieve()  
 
                 await asyncio.sleep(0.1)  # Adjust sleep time based on your update rate
 
 
         except Exception as e:
             print(f"Error during play: {e}")
-
-    async def game(self):
-        try:
-            while True:
-                command = input("Enter a command: ")
-
-                if command == "move_up":
-                    await self.send_message("up", {})
-                elif command == "move_down":
-                    await self.send_message("down", {})
-                elif command == "quit":
-                    break
-                else:
-                    print("Invalid command. Please try again.")
-
-        except KeyboardInterrupt:
-            print("Exiting.")
-            await self.close()
-
-        except Exception as e:
-            print(f"Failed to run client. Exception: {e}")
-            traceback.print_exc()
-            await self.close()
 
     async def listen(self):
         try:
