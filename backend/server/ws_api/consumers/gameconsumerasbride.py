@@ -291,6 +291,7 @@ class GameConsumerAsBridge(AsyncWebsocketConsumer):
             ic(f'Updating keyboard for client {self.client_id} with data: {data}')
             if self.list_of_games[self.match_id]:
                 if self.list_of_games[self.match_id] and self.list_of_games[self.match_id].isAlive() and self.left_player and self.right_player:
+                    await self.broadcast_to_group(self.match_id, 'keyup', data)
                     if key_status == 'on_press':
                         key = data.get('key')
                         self.on_press(key)
@@ -302,8 +303,7 @@ class GameConsumerAsBridge(AsyncWebsocketConsumer):
             ic(f'Disconnecting client {self.client_id}')
             await self.disconnect(1000)
 
-
-    # Game update loop for sending game state to the group
+       # Game update loop for sending game state to the group
     async def game_update(self):
         ic(f'Starting the game update loop for match {self.match_id}')
         try:

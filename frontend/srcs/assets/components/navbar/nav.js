@@ -19,12 +19,16 @@ const infoToNavHome = async () => {
     if (data.status === "ok") {
       const usernameH = document.getElementById("usernameNav");
       const avatarImage = document.getElementById("avatarImageNav");
+      const usernameH2 = document.getElementById("usernameNav2");
+      const avatarImage2 = document.getElementById("avatarImageNav2");
 
       usernameH.innerHTML = data.user.username;
+      usernameH2.innerHTML = data.user.username;
 
       if (data.user.avatar_url) {
         const completeAvatarUrl = `${window.DJANGO_API_BASE_URL}${data.user.avatar_url}`;
         avatarImage.src = completeAvatarUrl;
+        avatarImage2.src = completeAvatarUrl;
       }
     }
 
@@ -40,3 +44,23 @@ document.getElementById("logoutButton").addEventListener("click", function(e) {
   handleLogout();
 });
 
+
+var navbar = document.getElementById('navbarSupportedContent');
+
+    navbar.addEventListener('show.bs.collapse', function () {
+      // Navbar is about to collapse
+      document.getElementById('navContentClass').classList.remove('mx-auto', 'd-flex', 'align-items-center');
+      document.getElementById('navContentClass').classList.add('text-center');
+      document.getElementById('logoutButton').style.margin = "auto";
+      document.getElementById('rightNavBall').style.display = "none";
+      navbar.style.maxHeight = null;
+    });
+
+    navbar.addEventListener('hidden.bs.collapse', function () {
+      // Navbar is about to expand
+      document.getElementById('navContentClass').classList.remove('text-center');
+      document.getElementById('navContentClass').classList.add('mx-auto', 'd-flex', 'align-items-center');
+      document.getElementById('logoutButton').style.margin = "0";
+      document.getElementById('rightNavBall').style.display = "block";
+      navbar.style.maxHeight = "100%";
+    });
