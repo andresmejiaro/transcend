@@ -121,5 +121,44 @@ document.getElementById("removeGA").addEventListener("click", function (e) {
   document.getElementById("startGA").style.display = "block";
 });
 
+const handleGoogleAuthActivated = async () => {
+	document.getElementById("div-ga-active").style.display = "block";
+	document.getElementById("div-ga-not-active").style.display = "none";
+}
 
-// userSettingForm display none?
+const removeGaA = async () => {
+	await removeGA();
+	document.getElementById("div-ga-active").style.display = "none";
+	document.getElementById("div-ga-not-active").style.display = "block";
+	showAlertDanger("GA removed succesfully");
+}
+
+document.getElementById("removeGAActive").addEventListener("click", function (e) {
+	e.preventDefault();
+	removeGaA();
+  });
+
+const checkIfGoogleAuthActivated = async () => {
+	const userId = await getUserId();
+	try {
+		const url = `${window.DJANGO_API_BASE_URL}/api/is_2fa_setup_complete/${userId}/`;
+	
+		const options = {
+		  method: "GET",
+		  mode: "cors",
+		  credentials: "include",
+		  headers: {
+			"Content-Type": "application/json",
+		  },
+		};
+	
+		const data = await makeRequest(true, url, options);
+		console.log(data)
+		if (data.status)
+			handleGoogleAuthActivated();
+	} catch (error) {
+		console.error(error);
+	}
+};
+
+checkIfGoogleAuthActivated();

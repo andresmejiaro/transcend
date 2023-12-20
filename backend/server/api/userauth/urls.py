@@ -24,7 +24,7 @@ urlpatterns = [
     path('disable_2fa/<int:user_id>/', disable_2fa, name='disable_2fa'),
     path('display_qr_code/<int:user_id>/', display_qr_code, name='display_qr_code'),
     path('verify_totp_code/', verify_totp_code, name='verify_totp_code'),
-	path('is_2fa_setup_complete/', user_2fa_setup_complete, name="is_2fa_setup_complete")
+	path('is_2fa_setup_complete/<int:user_id>/', user_2fa_setup_complete, name="is_2fa_setup_complete")
 ] 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
