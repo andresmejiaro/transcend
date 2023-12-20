@@ -98,35 +98,30 @@ const urlRoutes = {
     template: directory + "2plygame/2plygame.html",
     title: urlPageTitle,
     description: "This is the local pong page",
-    // js: ["./srcs/utils/pongJs/environment.js","./srcs/utils/pongJs/MovingRectangle.js",
-    // "./srcs/utils/pongJs/Ball.js","./srcs/utils/pongJs/Paddle.js","./srcs/utils/pongJs/Player.js", 
-    // "./srcs/utils/pongJs/Game.js","./srcs/utils/pongJs/main.js"],
-    js: [directory + "2plygame/game.js"],
+    js: [directory + "2plygame/enviroment.js","./srcs/utils/pongJs/MovingRectangle.js",
+     "./srcs/utils/pongJs/Ball.js","./srcs/utils/pongJs/Paddle.js","./srcs/utils/pongJs/Player.js", 
+     "./srcs/utils/pongJs/Game.js",directory + "2plygame/helper.js", directory + "2plygame/main.js"],
     css: [directory + "2plygame/2plygame.css"]
   },
-
-  "/1plygame": {
-    template: directory + "1plygame/1plygame.html",
+  "/ai": {
+    template: directory + "ai/ai.html",
     title: urlPageTitle,
     description: "This is the local pong page",
-    // js: ["./srcs/utils/pongJs/environment.js","./srcs/utils/pongJs/MovingRectangle.js",
-    // "./srcs/utils/pongJs/Ball.js","./srcs/utils/pongJs/Paddle.js","./srcs/utils/pongJs/Player.js", 
-    // "./srcs/utils/pongJs/Game.js","./srcs/utils/pongJs/main.js"],
-    js: [directory + "1plygame/game.js"],
-    css: [directory + "1plygame/1plygame.css"]
+    js: [directory + "ai/enviroment.js","./srcs/utils/pongJs/MovingRectangle.js",
+     "./srcs/utils/pongJs/Ball.js","./srcs/utils/pongJs/Paddle.js","./srcs/utils/pongJs/Player.js", 
+     "./srcs/utils/pongJs/Game.js", "./srcs/utils/pongJs/PongAI.js", directory + "ai/main.js"],
+    css: [directory + "ai/ai.css"]
   },
-
-  "/onlinegame": {
-    template: directory + "0nlinegame/onlinegame.html",
+  "/localp": {
+    template: directory + "localp/localp.html",
     title: urlPageTitle,
     description: "This is the local pong page",
-    // js: ["./srcs/utils/pongJs/environment.js","./srcs/utils/pongJs/MovingRectangle.js",
-    // "./srcs/utils/pongJs/Ball.js","./srcs/utils/pongJs/Paddle.js","./srcs/utils/pongJs/Player.js", 
-    // "./srcs/utils/pongJs/Game.js","./srcs/utils/pongJs/main.js"],
-    js: [directory + "2plygame/game.js"],
-    css: [directory + "0nlinegame/onlinegame.css"]
+    js: [directory + "localp/enviroment.js","./srcs/utils/pongJs/MovingRectangle.js",
+     "./srcs/utils/pongJs/Ball.js","./srcs/utils/pongJs/Paddle.js",
+     "./srcs/utils/pongJs/Player.js", 
+     "./srcs/utils/pongJs/Game.js",  directory + "localp/main.js"],
+    css: [directory + "localPlay/localp.css"]
   }
-
 };
 
 const allowedLocations = ["/", "/home", "/login", "/signin", "/signup", "/intra", "/otp"];

@@ -73,6 +73,7 @@ class MovingRectangle:
 	def draw(self):
 		self._dictCanvas[self._name]["position"] = self.getPosition()
 		self._dictCanvas[self._name]["size"] = self.getSize()
+		self._dictCanvas[self._name]["speed"] = self.getSpeed()
 
 	@abstractmethod
 	def updatePosition(self):

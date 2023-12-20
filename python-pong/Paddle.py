@@ -51,3 +51,5 @@ class Paddle(MovingRectangle):
 			yNewPos = self.getEnclousure()["yh"] - self.getSize()["y"]
 		self.setPosition(x = xNewPos, y = yNewPos)
 		self.setSpeed(x = xSpeed, y = ySpeed)
+
+		
