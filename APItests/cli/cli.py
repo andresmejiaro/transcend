@@ -9,6 +9,12 @@ import click
 import os
 from APIclient import APIClient
 from pong import PongGameClient
+import signal
+
+# Global variable to track KeyboardInterrupt
+interrupted = False
+
+
 
 API_BASE_URL = "http://localhost:8000/api"
 TOKEN_FILE = "token.txt"
@@ -16,24 +22,38 @@ CLIENT_INFO_FILE = "client_info.txt"
 COOKIES_FILE = "cookies.txt"
 api_client = APIClient()
 
+def handle_interrupt(signum, frame):
+    global interrupted
+    print("\nCtrl+C detected. Cleaning up and exiting.")
+    interrupted = True
+
+# Register the signal handler
+signal.signal(signal.SIGINT, handle_interrupt)
 
 async def handle_websocket_messages(websocket, message_queue):
     try:
-        while True:
+        while websocket.open:
             message = await websocket.recv()
             print(f"Received WebSocket message: {message}")
 
             try:
                 data = json.loads(message)
+
+                message_type = data.get("type")
+
+                if message_type == "user_joined":
+                    user_data = data.get("data", {}).get("online_users", {})
+                    for user_id, username in user_data.items():
+                        print(f"User {username} (ID: {user_id}) joined the lobby")
+
                 await message_queue.put(data)
             except json.JSONDecodeError:
                 print(f"Received non-JSON message: {message}")
- 
+
     except websockets.exceptions.ConnectionClosed as e:
         print(f"WebSocket connection closed: {e}")
     except Exception as ex:
         print(f"Error in handle_websocket_messages: {ex}")
-
 
 async def handle_user_input(lobby_websocket, message_queue, pong_client):
     while True:
@@ -44,15 +64,16 @@ async def handle_user_input(lobby_websocket, message_queue, pong_client):
             if user_input == "play_pong":
                 match_id = await asyncio.to_thread(input, "Enter the match ID you want to join or create: ")
                 asyncio.create_task(pong_client.play_pong(match_id))
+            elif user_input == "exit":
+                print("Exiting...")
+                # Close the WebSocket connection
+                await lobby_websocket.close()
+                break
 
-            # Your existing user input handling code...
-
-            # Assuming you want to send messages to the lobby_websocket
             await lobby_websocket.send(user_input)
 
         except Exception as e:
             print(f"Error in handle_user_input: {e}")
-
 
 def save_client_info(client_id, username):
     info = {"client_id": client_id, "username": username}
@@ -155,6 +176,8 @@ async def main():
     password = input("Enter your password: ")
     client_id = None
 
+    global interrupted
+
     api_client.session = requests.Session()
 
     # Authenticate the user
@@ -194,16 +217,37 @@ async def main():
 
     try:
         async with websockets.connect(websocket_uri) as websocket:
-            # Start tasks concurrently
-            await asyncio.gather(
+            gather_task = asyncio.gather(
                 handle_websocket_messages(websocket, message_queue),
                 handle_user_input(websocket, message_queue, pong_client)
             )
 
-    except websockets.WebSocketException as e:
-        print(f"WebSocket connection error: {e}")
-    except KeyboardInterrupt:
-        print("WebSocket connection closed.")
+            while not interrupted:
+                # Periodically check for KeyboardInterrupt
+                await asyncio.sleep(1)
+
+            await gather_task
+
+
+    except Exception as e:
+        print(f"Error in main: {e}")
+
+    finally:
+        # Explicitly cancel the tasks
+        gather_task.cancel()
+
+        try:
+            # Wait for all tasks to be canceled
+            await asyncio.gather(gather_task, return_exceptions=True)
+        except asyncio.CancelledError:
+            pass
+        except Exception as e:
+            print(f"Error during cleanup: {e}")
+
+        await pong_client.disconnect()
+
+        print("Exiting..")
+        exit(0)
 
 
 if __name__ == "__main__":
