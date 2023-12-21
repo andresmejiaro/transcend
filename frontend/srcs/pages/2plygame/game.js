@@ -120,6 +120,7 @@ function updateGameCanvas(data) {
 // }
 
 // Function to draw the Pong game on the canvas
+
 function drawPongGame(data) {
   if (
     data &&
@@ -158,7 +159,6 @@ function drawPongGame(data) {
     console.error("Invalid data format:", data);
   }
 }
-
 
 function drawRectWithImage(position, size, image) {
   ctx.drawImage(image, position.x, position.y, size.x, size.y);

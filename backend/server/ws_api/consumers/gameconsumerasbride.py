@@ -20,7 +20,6 @@ class GameConsumerAsBridge(AsyncWebsocketConsumer):
     DISCONNECT = 'disconnect'      # Command for disconnecting the client.
 # -----------------------------
 
-
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.client_object = None   # Holds the model object of the client
@@ -295,7 +294,6 @@ class GameConsumerAsBridge(AsyncWebsocketConsumer):
             print(f'Disconnecting client {self.client_id}')
             await self.disconnect(1000)
 
-
     # Game update loop for sending game state to the group
     async def game_update(self):
         print(f'Starting the game update loop for match {self.match_id}')
@@ -345,7 +343,6 @@ class GameConsumerAsBridge(AsyncWebsocketConsumer):
             print(f'Game update for match {self.match_id} stopped')
 
         await self.disconnect(1000)
-
 
     # Keyboard input processing and formatting
     def on_press(self, key):
