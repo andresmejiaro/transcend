@@ -58,8 +58,8 @@ function updateGameCanvas(data, game) {
   } else if (data.type === "update_buffer") {
     // Handle game update data
     //console.log("game data:", data.data);
-    let k = data.data.length
-    drawPongGame(data.data[k-1]["game_update"], game);
+    k = data.data.length;
+    game.receiveRemoteCanvas(data);
     game.scoreUpdate(data.data[k-1]["score_update"]);
   
   } else if (data.type === "keyup") {
@@ -67,15 +67,16 @@ function updateGameCanvas(data, game) {
     //console.log("game data:", data.data);
     game.remoteKeyUpHandling(data);
   }
+  else if (data.type === "game_end") {
+    // Handle game update data
+      //console.log("game data:", data.data);
+      game.remoteGameEnd();
+    }
   else {
     // Handle game update data
     console.log("game data:", data.data);
     console.error("Invalid message type:", data.type);
   }
-}
-
-function drawPongGame(data,game) {
-  game.receiveRemoteCanvas(data);
 }
 
 function sendKeyPress(key, side, frame) {

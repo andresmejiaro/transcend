@@ -5,8 +5,6 @@ class Game {
     #ball
     #leftPaddle
     #rightPaddle
-    #leftShadowPaddle
-    #rightShadowPaddle
     #background
     #backgroundLoaded
     #remote
@@ -17,7 +15,10 @@ class Game {
     #defLocalBinds
     #defRemoteBinds
     #frame
-    #shadow
+    #remoteCanvasQ
+    #delay
+    #endGame
+    #actualframe;
 
     constructor(leftPlayer, rightPlayer, remote = 0) {
         this.#leftPlayer = leftPlayer;
@@ -34,9 +35,11 @@ class Game {
             left : "UNUSED_DEFAULT_KEY", right : "UNUSED_DEFAULT_KEY"};
         this.#defRemoteBinds = {up : "ru", down : "rd",
             left : "UNUSED_DEFAULT_KEY", right : "UNUSED_DEFAULT_KEY"};
-        this.#frame = 0;
-        //testing parameter set to 0 in prod;
-        this.#shadow = 1; 
+        this.#frame = -5;
+        this.#remoteCanvasQ = {};
+        this.#delay = 0;
+        this.#endGame = 0;
+        this.#actualframe = 0; 
     }
     
     startScreen() {
@@ -90,8 +93,10 @@ class Game {
             ctx.fillText(`Winner: ${this.#rightPlayer.name}`, 100, 100);
         ctx.fillText(`Thanks for playing to play again press Enter`, 50, 30);
         if (keysPressed["Enter"])
-            requestAnimationFrame(() => this.gameSetup());
-        else
+            //requestAnimationFrame(() => this.gameSetup());
+            // Using location.assign()
+            window.location.href('/play');
+         else
             requestAnimationFrame(() => this.endScreen());
     }
 
@@ -105,35 +110,62 @@ class Game {
         this.drawInteractive();
         this.drawScore();
         if (this.#leftPlayer.score >= this.#scoreLimit
-            || this.#rightPlayer.score >= this.#scoreLimit)
+            || this.#rightPlayer.score >= this.#scoreLimit || 
+                this.#endGame == 1)
             requestAnimationFrame(() => this.endScreen());
         else
             requestAnimationFrame(() => this.pointLoop());
     }
     
-    async remoteGameLogic() {
-        let canvas = this.#remoteCanvas;
-        if (canvas === undefined)
+    updateRemoteCanvas(){
+        //try to print from memory
+        if (this.#remoteCanvasQ[this.#actualframe]){
+            this.#remoteCanvas= this.#remoteCanvasQ[this.#actualframe];
+            this.#actualframe += 1;
+            this.#delay = 0;
+            console.log("printing from memory");
             return;
-        if (true){
-            //canvas["ball"]["speed"] != this.#ball.speed ||
-            //Math.abs(canvas["ball"]["position"]["x"] -this.#ball.position.x) > 10){
-            this.#ball.setPosition(canvas["ball"]["position"]);
-            this.#ball.setSpeed(canvas["ball"]["speed"]);
-            this.#ball.setSize(canvas["ball"]["size"]);
-            if (this.#shadow = 1){
-                console.log("Printing Shadow Paddle");
-                this.#leftShadowPaddle.setPosition(canvas["leftPaddle"]["position"]);
-                this.#leftShadowPaddle.setSize(canvas["leftPaddle"]["size"]);
-                this.#rightShadowPaddle.setPosition(canvas["rightPaddle"]["position"]);
-                this.#rightShadowPaddle.setSize(canvas["rightPaddle"]["size"]);
+        } else{
+            // try to find if skipped
+            let lowestHigherNumber = Math.min(...Object.keys(this.#remoteCanvasQ).
+            map(Number).filter(key => key > this.#actualframe));
+            if (isFinite(lowestHigherNumber)){
+                this.#actualframe = lowestHigherNumber;
+                this.#remoteCanvas= this.#remoteCanvasQ[this.#actualframe];
+                return;
+            }
+        
+        }
+        if (!this.#remoteCanvasQ[this.#actualframe + this.#delay]){
+            this.#delay = Math.max(...Object.keys(this.#remoteCanvasQ).map(Number)) - this.#actualframe;
+            console.log(this.#delay);
+        }
+        if (isFinite(this.#delay)){
+            this.#remoteCanvas = this.#remoteCanvasQ[this.#frame + this.#delay]
+        }
+    }
+    
+    async remoteGameLogic() {
+        this.updateRemoteCanvas();
+        let canvas = this.#remoteCanvas;
+        if (canvas === undefined){
+            console.log("undefined canvas");
+            return;
+        }
+        this.#ball.setPosition(canvas["ball"]["position"]);
+        this.#ball.setSpeed(canvas["ball"]["speed"]);
+        this.#ball.setSize(canvas["ball"]["size"]);
+        this.#leftPaddle.setPosition(canvas["leftPaddle"]["position"]);
+        this.#leftPaddle.setSize(canvas["leftPaddle"]["size"]);
+        this.#rightPaddle.setPosition(canvas["rightPaddle"]["position"]);
+        this.#rightPaddle.setSize(canvas["rightPaddle"]["size"]);
+        if (isFinite(this.#delay) && this.#delay < 0){
+                for (let i = 0; i < Math.max(0, -this.#delay); i++){
+                this.localGameLogic2();
             }
         }
-        else {
-            this.#ball.updatePosition();
-        }
-        this.#leftPaddle.updatePosition();
-        this.#rightPaddle.updatePosition();
+        
+        
         this.#frame += 1;
     }
 
@@ -155,6 +187,12 @@ class Game {
         }
     }
 
+    localGameLogic2() {
+        this.#ball.updatePosition();
+        this.#leftPaddle.updatePosition();
+        this.#rightPaddle.updatePosition();
+    }
+
     drawNonInteractive() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.drawImage(this.#background, 0, 0, canvas.width, canvas.height);
@@ -165,10 +203,6 @@ class Game {
         this.#ball.draw();
         this.#leftPaddle.draw();
         this.#rightPaddle.draw();
-        if (this.#shadow == 1){
-            this.#leftShadowPaddle.draw();
-            this.#rightShadowPaddle.draw();
-        }
     }
 
     drawScore() {
@@ -178,7 +212,7 @@ class Game {
         const p2metrics = ctx.measureText(text2);
         ctx.fillText(text1, canvas.width / 4 - p1metrics.width / 2, 40);
         ctx.fillText(text2, canvas.width * 3 / 4 - p2metrics.width / 2, 40);
-        ctx.fillText(this.#remoteIAM, canvas.width / 2, 40);
+        //ctx.fillText(this.#remoteIAM, canvas.width / 2, 40);
         
     }
 
@@ -238,13 +272,6 @@ class Game {
                 if(event.key == "s")
                     sendRelease("down",  this.#remoteIAM, this.#frame);
             });
-        //shadowPaddles for testing sync comment in prod
-        if(this.#shadow == 1){
-            this.#leftShadowPaddle = new Paddle({ x: 30, y: 0 }, { x: 0, y: 10 },
-                { x: 10, y: 100 }, "white");
-            this.#rightShadowPaddle = new Paddle({ x: canvas.width - 30, y: 0 }, { x: 0, y: 10 },
-                { x: 10, y: 100 }, "white");
-        }
         }
     }
 
@@ -308,7 +335,12 @@ class Game {
     }
 
     receiveRemoteCanvas(data){
-        this.#remoteCanvas = data;
+
+        data.data.forEach(item => {
+            let frame = item.frame;
+            let gameUpdate = item.game_update;
+            this.#remoteCanvasQ[frame] = gameUpdate; 
+        });
     }
 
     scoreUpdate(data){
@@ -341,6 +373,9 @@ class Game {
         }
     }
 
+    remoteGameEnd(){
+        this.#endGame = 1;
+    }
     
 }
 

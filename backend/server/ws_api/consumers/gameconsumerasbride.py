@@ -195,7 +195,7 @@ class GameConsumerAsBridge(AsyncWebsocketConsumer):
 
     # Messaging helper function
     async def broadcast_to_group(self, group_name, command, data):
-        print(f'Channel Broadcasting {command} to group {group_name}')
+        #print(f'Channel Broadcasting {command} to group {group_name}')
 
         # Send message to group, this utilizes channel_layer.group_send
         # channel_layer.group_send: This is a low-level function to send a message directly to a group of channels.
@@ -335,12 +335,12 @@ class GameConsumerAsBridge(AsyncWebsocketConsumer):
                 self.update_buffer.append(update_data)
                 
                 try:
-                    await asyncio.sleep(update_interval) # For use with FPS
-                    # await asyncio.sleep(0) # For manual control of FPS
 
-                    if len(self.update_buffer) >= 4:
+                    if self.checkWorthySend():
                         await self.broadcast_to_group(self.match_id, 'update_buffer', self.update_buffer)
                         self.update_buffer = []
+                    await asyncio.sleep(update_interval) # For use with FPS
+                    # await asyncio.sleep(0) # For manual control of FPS
 
                 except asyncio.CancelledError:
                     ic(f'Game update for match {self.match_id} cancelled')
@@ -353,10 +353,31 @@ class GameConsumerAsBridge(AsyncWebsocketConsumer):
         except Exception as e:
             ic(f'Error during game update for match {self.match_id}: {e}')
         finally:
+            await self.broadcast_to_group(self.match_id, 'game_end', [])
             self.list_of_games[self.match_id] = None
             ic(f'Game update for match {self.match_id} stopped')
 
         await self.disconnect(1000)
+
+    def checkWorthySend(self):
+        if(len(self.update_buffer)< 2):
+            return 0
+        if (self.update_buffer[-1]["game_update"]["ball"]["speed"] != 
+                self.update_buffer[-2]["game_update"]["ball"]["speed"]):
+            return 1
+        if (self.update_buffer[-1]["game_update"]["rightPaddle"]["speed"] != 
+                self.update_buffer[-2]["game_update"]["rightPaddle"]["speed"]):
+            return 1
+        if (self.update_buffer[-1]["game_update"]["leftPaddle"]["speed"] != 
+                self.update_buffer[-2]["game_update"]["leftPaddle"]["speed"]):
+            return 1
+        if (self.update_buffer[-1]["score_update"] != 
+                self.update_buffer[-2]["score_update"]):
+            return 1
+        if (len(self.update_buffer) > 5):
+            return 1
+        return 0
+
 
 
     # Keyboard input processing and formatting
@@ -394,7 +415,7 @@ class GameConsumerAsBridge(AsyncWebsocketConsumer):
     def update_key2(self, formatted_key, is_pressed, frame):
         if self.match_id in self.list_of_keyboard_inputs and formatted_key in self.list_of_keyboard_inputs[self.match_id]:
             self.list_of_games[self.match_id].processInput(formatted_key, is_pressed, frame)
-            ic(f'Passed {formatted_key} to {is_pressed} at frame {frame}')
+            #ic(f'Passed {formatted_key} to {is_pressed} at frame {frame}')
         else:
             ic(f'Invalid match_id {self.match_id} or key {formatted_key}')
         

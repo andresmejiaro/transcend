@@ -54,6 +54,7 @@ class Game:
 
 
 	def pointLoop(self):
+		self.runDelayedActions()
 		self._ball.draw()
 		ballState = self._ball.updatePosition()
 		if ballState == 1:
@@ -100,6 +101,8 @@ class Game:
 				tsleep = frame_dur - elapsed_time
 				if tsleep > 0:
 					time.sleep(tsleep)
+				else:
+					print("I'm taking too long")
 		except Exception as e:
 			print(f"Exception in game loop: {e}")
 
@@ -126,15 +129,17 @@ class Game:
 		
 	def processInput(self, formatted_key, is_pressed,frame):
 		diff_frames = self._frame - frame
+		print(formatted_key)
+		print(self._rightPaddle._binds)
 		if (diff_frames > 0):
 			print("fast forwarding")
 			self._dictKeyboard[formatted_key] = is_pressed
 			if (formatted_key in self._leftPaddle._binds):
-				toForward = self._leftPaddle
+				for j in range(diff_frames):
+					self._leftPaddle.updatePosition()
 			elif (formatted_key in self._rightPaddle._binds):
-				toForward = self._rightPaddle
-			for j in range(diff_frames):
-				toForward.updatePosition()
+				for j in range(diff_frames):
+					self._rightPaddle.updatePosition()
 		elif diff_frames == 0:
 			self._dictKeyboard[formatted_key] = is_pressed
 		else:
