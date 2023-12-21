@@ -6,7 +6,9 @@ import json
 import requests
 import time
 import click
+import os
 from APIclient import APIClient
+from pong import PongGameClient
 
 API_BASE_URL = "http://localhost:8000/api"
 TOKEN_FILE = "token.txt"
@@ -15,28 +17,47 @@ COOKIES_FILE = "cookies.txt"
 api_client = APIClient()
 
 
-async def handle_websocket_messages(websocket_uri, message_queue):
-    async with websockets.connect(websocket_uri) as websocket:
+async def handle_websocket_messages(websocket, message_queue):
+    try:
         while True:
             message = await websocket.recv()
             print(f"Received WebSocket message: {message}")
-            await message_queue.put(message)
+
+            try:
+                data = json.loads(message)
+                await message_queue.put(data)
+            except json.JSONDecodeError:
+                print(f"Received non-JSON message: {message}")
+ 
+    except websockets.exceptions.ConnectionClosed as e:
+        print(f"WebSocket connection closed: {e}")
+    except Exception as ex:
+        print(f"Error in handle_websocket_messages: {ex}")
 
 
-async def handle_user_input(websocket, message_queue):
+async def handle_user_input(lobby_websocket, message_queue, pong_client):
     while True:
-        user_input = input("Type a message to send: ")
-        await websocket.send(user_input)
+        try:
+            # Use asyncio.to_thread() to run input() in a separate thread
+            user_input = await asyncio.to_thread(input, "Enter a command: ")
 
-        if user_input.lower() == "exit":
-            break
+            if user_input == "play_pong":
+                match_id = await asyncio.to_thread(input, "Enter the match ID you want to join or create: ")
+                asyncio.create_task(pong_client.play_pong(match_id))
+
+            # Your existing user input handling code...
+
+            # Assuming you want to send messages to the lobby_websocket
+            await lobby_websocket.send(user_input)
+
+        except Exception as e:
+            print(f"Error in handle_user_input: {e}")
 
 
 def save_client_info(client_id, username):
     info = {"client_id": client_id, "username": username}
     with open(CLIENT_INFO_FILE, "w") as file:
         json.dump(info, file)
-
 
 def load_client_info():
     try:
@@ -52,11 +73,9 @@ def load_client_info():
         print("Error decoding JSON in client_info.txt. File may be empty or corrupted.")
         return None
 
-
 def save_cookies(cookie):
     with open(COOKIES_FILE, "w") as file:
         file.write(cookie)
-
 
 def load_cookies():
     try:
@@ -68,22 +87,20 @@ def load_cookies():
         print("Error decoding JSON in cookies.txt. File may be empty or corrupted.")
         return None
 
-
 def save_token(token):
-    with open(TOKEN_FILE, "w") as file:
-        file.write(token)
-
+    with open(TOKEN_FILE, "a") as file:
+        file.write(token + "\n")
 
 def load_token():
     try:
         with open(TOKEN_FILE, "r") as file:
-            return file.read().strip()
+            # Read all lines and return as a list
+            return file.read().strip().splitlines()
     except FileNotFoundError:
-        return None
+        return []
     except json.JSONDecodeError:
         print("Error decoding JSON in token.txt. File may be empty or corrupted.")
-        return None
-
+        return []
 
 def authenticate(username, password, session):
     login_url = f"{API_BASE_URL}/user/login/"
@@ -98,7 +115,11 @@ def authenticate(username, password, session):
 
             cookie = response.headers.get('Set-Cookie')
             jwt_token = json_response.get("token")
+
             if cookie and jwt_token:
+                # Clear existing tokens and save the new one
+                with open(TOKEN_FILE, "w"):
+                    pass
                 save_cookies(cookie.split(';')[0].split('=')[1])
                 save_token(jwt_token)
 
@@ -106,15 +127,13 @@ def authenticate(username, password, session):
     else:
         return None
 
-
 def get_token_expiration(response):
     if response.status_code == 200:
         json_response = response.json()
-        expiration_timestamp = json_response.get('expires_at')
+        expiration_timestamp = json_response.get('exp')
         if expiration_timestamp:
             return int(expiration_timestamp)
     return None
-
 
 def signup(username, password, fullname, email):
     signup_url = f"{API_BASE_URL}/user/signup/"
@@ -158,21 +177,12 @@ async def main():
             print("Signup failed. Exiting.")
             return
 
-    token_expiration = get_token_expiration(response)
-    if token_expiration and token_expiration < time.time():
-        print("Token has expired. Refreshing...")
-        response = authenticate(username, password, api_client.session)
-        if response is None:
-            print("Token refresh failed. Exiting.")
-            return
-
     client_info = load_client_info()
     if client_info is None:
         client_id = api_client.get_client_id(username)
         save_client_info(client_id, username)
 
     client_id = client_info["client_id"]
-    
 
     websocket_uri = f"ws://localhost:8001/ws/lobby2/?client_id={client_id}"
     print(f'Connecting to {websocket_uri}...')
@@ -180,15 +190,16 @@ async def main():
     # Create an asyncio Queue to communicate between tasks
     message_queue = asyncio.Queue()
 
+    pong_client = PongGameClient(websocket_uri_base="ws://localhost:8001/ws/pong")
+
     try:
         async with websockets.connect(websocket_uri) as websocket:
             # Start tasks concurrently
-            tasks = [
-                handle_websocket_messages(websocket_uri, message_queue),
-                handle_user_input(websocket, message_queue)
-            ]
+            await asyncio.gather(
+                handle_websocket_messages(websocket, message_queue),
+                handle_user_input(websocket, message_queue, pong_client)
+            )
 
-            await asyncio.gather(*tasks)
     except websockets.WebSocketException as e:
         print(f"WebSocket connection error: {e}")
     except KeyboardInterrupt:
