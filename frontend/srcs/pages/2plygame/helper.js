@@ -20,7 +20,7 @@ function SetUpListeners(matchId, player1Id, player2Id, clientId, scoreLimit,
     ws.addEventListener("message", (event) => {
       const data = JSON.parse(event.data);
 
-      console.log("Received message:", data);
+      
 
       updateGameCanvas(data, game);
     });
@@ -58,27 +58,36 @@ function updateGameCanvas(data, game) {
   } else if (data.type === "update_buffer") {
     // Handle game update data
     //console.log("game data:", data.data);
-    drawPongGame(data.data[0]["game_update"], game);
-    game.scoreUpdate(data.data[0]["score_update"]);
+    k = data.data.length;
+    game.receiveRemoteCanvas(data);
+    game.scoreUpdate(data.data[k-1]["score_update"]);
   
-  } else {
+  } else if (data.type === "keyup") {
+  // Handle game update data
+    //console.log("game data:", data.data);
+    game.remoteKeyUpHandling(data);
+  }
+  else if (data.type === "game_end") {
+    // Handle game update data
+      //console.log("game data:", data.data);
+      game.remoteGameEnd();
+    }
+  else {
     // Handle game update data
     console.log("game data:", data.data);
     console.error("Invalid message type:", data.type);
   }
 }
 
-function drawPongGame(data,game) {
-  game.receiveRemoteCanvas(data);
-}
-
-function sendKeyPress(key) {
+function sendKeyPress(key, side, frame) {
   const jsonMessage = JSON.stringify({
     command: "keyboard",
     key_status: "on_press",
     key: key,
+    side : side,
+    frame: frame
   });
-
+  
   // Send the JSON message to the server
   if (ws && ws.readyState === WebSocket.OPEN) {
     ws.send(jsonMessage);
@@ -88,49 +97,13 @@ function sendKeyPress(key) {
   }
 }
 
-function sendPaddle(id, paddle) {
-  const jsonMessage = JSON.stringify({
-    command: "paddle_update",
-    [id]:{
-      position: paddle.getPosition,
-      size: paddle.getSize,
-      speed: paddle.getSpeed
-    }
-  });
-
-  // Send the JSON message to the server
-  if (ws && ws.readyState === WebSocket.OPEN) {
-    ws.send(jsonMessage);
-    //console.log("Sent JSON message:", jsonMessage);
-  } else {
-    console.error("WebSocket connection not open.");
-  }
-}
-
-
-function handleArrowKeyRelease(key) {
-  // Customize this based on your game's key bindings
-  switch (key) {
-    case "ArrowUp":
-      sendRelease("up");
-      break;
-    case "ArrowDown":
-      sendRelease("down");
-      break;
-    case "ArrowLeft":
-      sendRelease("left");
-      break;
-    case "ArrowRight":
-      sendRelease("right");
-      break;
-  }
-}
-
-function sendRelease(key) {
+function sendRelease(key, side, frame) {
   const jsonMessage = JSON.stringify({
     command: "keyboard",
     key_status: "on_release",
     key: key,
+    side: side,
+    frame : frame
   });
 
   // Send the JSON message to the server
