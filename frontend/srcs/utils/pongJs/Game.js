@@ -12,6 +12,13 @@ class Game {
     #ai
     #playersConnected
     #remoteIAM
+    #defLocalBinds
+    #defRemoteBinds
+    #frame
+    #remoteCanvasQ
+    #delay
+    #endGame
+    #actualframe;
 
     constructor(leftPlayer, rightPlayer, remote = 0) {
         this.#leftPlayer = leftPlayer;
@@ -23,7 +30,16 @@ class Game {
         this.#background.onload = () => { this.#backgroundLoaded = true; };
         this.#remote = remote; 
         this.#playersConnected = 0;
-        this.remoteIAM = "none";
+        this.#remoteIAM = "none";
+        this.#defLocalBinds = {up : "w", down : "s",
+            left : "UNUSED_DEFAULT_KEY", right : "UNUSED_DEFAULT_KEY"};
+        this.#defRemoteBinds = {up : "ru", down : "rd",
+            left : "UNUSED_DEFAULT_KEY", right : "UNUSED_DEFAULT_KEY"};
+        this.#frame = -5;
+        this.#remoteCanvasQ = {};
+        this.#delay = 0;
+        this.#endGame = 0;
+        this.#actualframe = 0; 
     }
     
     startScreen() {
@@ -60,24 +76,7 @@ class Game {
     }
     
        
-    setbinds(){
-        let playerBinds = {up:"w", 
-            down:"s", left:"UNUSED_DEFAULT_KEY", 
-            right:"UNUSED_DEFAULT_KEY"};
-        //let remoteBinds = {up:"up", 
-        //    down:"s", left:"UNUSED_DEFAULT_KEY", 
-        //    right:"UNUSED_DEFAULT_KEY"}
-        if (this.#remoteIAM == "right"){
-            this.#rightPlayer.binds = playerBinds; 
-        }
-        if (this.#remoteIAM == "left"){
-            this.#leftPlayer.binds = playerBinds;
-        }
-        this.#leftPaddle.initializePaddleKeys();
-        this.#rightPaddle.initializePaddleKeys();
-    }
-
-    statusToText() {
+        statusToText() {
         if (this.#remote == 0)
             return "local";
         if (this.#remote == 1)
@@ -94,15 +93,14 @@ class Game {
             ctx.fillText(`Winner: ${this.#rightPlayer.name}`, 100, 100);
         ctx.fillText(`Thanks for playing to play again press Enter`, 50, 30);
         if (keysPressed["Enter"])
-            requestAnimationFrame(() => this.gameSetup());
-        else
+            //requestAnimationFrame(() => this.gameSetup());
+            // Using location.assign()
+            window.location.href('/play');
+         else
             requestAnimationFrame(() => this.endScreen());
     }
 
     // game loop
-
-    
-
     pointLoop() {
         this.drawNonInteractive();
         if (this.statusToText() == "remote")
@@ -112,29 +110,63 @@ class Game {
         this.drawInteractive();
         this.drawScore();
         if (this.#leftPlayer.score >= this.#scoreLimit
-            || this.#rightPlayer.score >= this.#scoreLimit)
+            || this.#rightPlayer.score >= this.#scoreLimit || 
+                this.#endGame == 1)
             requestAnimationFrame(() => this.endScreen());
         else
             requestAnimationFrame(() => this.pointLoop());
     }
     
-        async remoteGameLogic() {
-            let canvas = this.#remoteCanvas;
-            if (canvas === undefined)
+    updateRemoteCanvas(){
+        //try to print from memory
+        if (this.#remoteCanvasQ[this.#actualframe]){
+            this.#remoteCanvas= this.#remoteCanvasQ[this.#actualframe];
+            this.#actualframe += 1;
+            this.#delay = 0;
+            // console.log("printing from memory");
+            return;
+        } else{
+            // try to find if skipped
+            let lowestHigherNumber = Math.min(...Object.keys(this.#remoteCanvasQ).
+            map(Number).filter(key => key > this.#actualframe));
+            if (isFinite(lowestHigherNumber)){
+                this.#actualframe = lowestHigherNumber;
+                this.#remoteCanvas= this.#remoteCanvasQ[this.#actualframe];
                 return;
-            if (canvas["ball"]["speed"] != this.#ball.speed ||
-                Math.abs(canvas["ball"]["position"]["x"] -this.#ball.position.x) > 10){
-                this.#ball.setPosition(canvas["ball"]["position"]);
-                this.#ball.setSpeed(canvas["ball"]["speed"]);
-                this.#ball.setSize(canvas["ball"]["size"]);
             }
-            else {
-                this.#ball.updatePosition();
+        
+        }
+        if (!this.#remoteCanvasQ[this.#actualframe + this.#delay]){
+            this.#delay = Math.max(...Object.keys(this.#remoteCanvasQ).map(Number)) - this.#actualframe;
+            // console.log(this.#delay);
+        }
+        if (isFinite(this.#delay)){
+            this.#remoteCanvas = this.#remoteCanvasQ[this.#frame + this.#delay]
+        }
+    }
+    
+    async remoteGameLogic() {
+        this.updateRemoteCanvas();
+        let canvas = this.#remoteCanvas;
+        if (canvas === undefined){
+            // console.log("undefined canvas");
+            return;
+        }
+        this.#ball.setPosition(canvas["ball"]["position"]);
+        this.#ball.setSpeed(canvas["ball"]["speed"]);
+        this.#ball.setSize(canvas["ball"]["size"]);
+        this.#leftPaddle.setPosition(canvas["leftPaddle"]["position"]);
+        this.#leftPaddle.setSize(canvas["leftPaddle"]["size"]);
+        this.#rightPaddle.setPosition(canvas["rightPaddle"]["position"]);
+        this.#rightPaddle.setSize(canvas["rightPaddle"]["size"]);
+        if (isFinite(this.#delay) && this.#delay < 0){
+                for (let i = 0; i < Math.max(0, -this.#delay); i++){
+                this.localGameLogic2();
             }
-           this.#leftPaddle.updatePosition();
-           this.#rightPaddle.updatePosition();
-           
-            
+        }
+        
+        
+        this.#frame += 1;
     }
 
     localGameLogic() {
@@ -153,6 +185,12 @@ class Game {
             this.#leftPaddle.updatePosition();
             this.#rightPaddle.updatePosition();
         }
+    }
+
+    localGameLogic2() {
+        this.#ball.updatePosition();
+        this.#leftPaddle.updatePosition();
+        this.#rightPaddle.updatePosition();
     }
 
     drawNonInteractive() {
@@ -174,7 +212,7 @@ class Game {
         const p2metrics = ctx.measureText(text2);
         ctx.fillText(text1, canvas.width / 4 - p1metrics.width / 2, 40);
         ctx.fillText(text2, canvas.width * 3 / 4 - p2metrics.width / 2, 40);
-        ctx.fillText(this.#remoteIAM, canvas.width / 2, 40);
+        //ctx.fillText(this.#remoteIAM, canvas.width / 2, 40);
         
     }
 
@@ -189,36 +227,52 @@ class Game {
             this.#ball.setSpeed({ x: 4, y: -1 });
         else
             this.#ball.setSpeed({ x: -4, y: -1 });
-
-
     }
 
     async gameSetup() {
           this.#ball = new Ball({ x: canvas.width / 2, y: canvas.height / 2 },
             { x: 4, y: 3 }, { x: 10, y: 10 });
-        this.resetPosition();
-        this.#leftPaddle = new Paddle({ x: 30, y: 0 }, { x: 0, y: 10 },
+            this.resetPosition();
+            this.#leftPaddle = new Paddle({ x: 30, y: 0 }, { x: 0, y: 10 },
             { x: 10, y: 100 }, "white",
             this.#leftPlayer.binds);
-        this.#rightPaddle = new Paddle({ x: canvas.width - 30, y: 0 }, { x: 0, y: 10 },
+            this.#rightPaddle = new Paddle({ x: canvas.width - 30, y: 0 }, { x: 0, y: 10 },
             { x: 10, y: 100 }, "white",
             this.#rightPlayer.binds);
+            if (this.#remote == 1)
+                this.remoteGameSetup();
+            this.#rightPlayer.resetScore();
+            this.#leftPlayer.resetScore();
+            this.#ball.addColider(this.#leftPaddle);
+            this.#ball.addColider(this.#rightPaddle);
+            requestAnimationFrame(() => this.pointLoop());
+        }
+        
+    remoteGameSetup(){
         if (this.#remote == 1 && this.#remoteIAM == "right"){
-            this.#rightPaddle.binds = {up : "w", down : "s",
-            left : "UNUSED_DEFAULT_KEY", right : "UNUSED_DEFAULT_KEY"};
-            this.#rightPaddle.initializePaddleKeys();
+            this.#rightPaddle.binds = this.#defLocalBinds;
+            this.#leftPaddle.binds = this.#defRemoteBinds;
         }
         if (this.#remote == 1 && this.#remoteIAM == "left"){
-            this.#leftPaddle.binds = {up : "w", down : "s",
-            left : "UNUSED_DEFAULT_KEY", right : "UNUSED_DEFAULT_KEY"};
-            this.#rightPaddle.initializePaddleKeys();
+            this.#leftPaddle.binds = this.#defLocalBinds;
+            this.#rightPaddle.binds = this.#defRemoteBinds;
         }
-        this.#rightPlayer.resetScore();
-        this.#leftPlayer.resetScore();
-
-        this.#ball.addColider(this.#leftPaddle);
-        this.#ball.addColider(this.#rightPaddle);
-        requestAnimationFrame(() => this.pointLoop());
+        this.#leftPaddle.initializePaddleKeys();
+        this.#rightPaddle.initializePaddleKeys();
+        if(this.#remote == 1){
+            document.addEventListener('keydown', (event) => {
+                if (event.key == "w")
+                    sendKeyPress("up",this.#remoteIAM, this.#frame);
+                if(event.key == "s")
+                    sendKeyPress("down",this.#remoteIAM, this.#frame);
+            });
+            document.addEventListener('keyup', (event) => {
+                if (event.key == "w")
+                    sendRelease("up", this.#remoteIAM, this.#frame);
+                if(event.key == "s")
+                    sendRelease("down",  this.#remoteIAM, this.#frame);
+            });
+        }
     }
 
     conexionSetup() {
@@ -259,8 +313,15 @@ class Game {
         let name2;
         this.#leftPlayer.name = name1.username;
         if (names.length > 1){
-            name2 = await getPlayerInfo(names[1]);
-            this.#rightPlayer.name = name2.username;
+            
+            try{
+                name2 = await getPlayerInfo(names[1]);
+                this.#rightPlayer.name = name2.username;
+            }
+            catch(error){
+                console.error(error);
+                console.error(names, names.length,data)
+            }
         }
         this.#playersConnected = names.length; 
 
@@ -268,34 +329,53 @@ class Game {
         if (name1.username == sessionStorage.getItem("username")){
             this.#remoteIAM = "left";
         }
-        if (name2.username == sessionStorage.getItem("username")){
+        if (name2 && name2.username == sessionStorage.getItem("username")){
             this.#remoteIAM = "right";
         }
     }
 
     receiveRemoteCanvas(data){
-        this.#remoteCanvas = data;
+
+        data.data.forEach(item => {
+            let frame = item.frame;
+            let gameUpdate = item.game_update;
+            this.#remoteCanvasQ[frame] = gameUpdate; 
+        });
     }
 
-    async waitForPaddles(){
-        return new Promise(resolve => {
-            const checkPaddles = () => {
-                if (this.#leftPaddle !== undefined && this.#rightPaddle !== undefined) {
-                    resolve();
-                } else {
-                    setTimeout(checkPaddles, 100); // check every 100ms
-                }
-            };
-            checkPaddles();
-        });
-    };
     scoreUpdate(data){
         //console.log(data)
         this.#leftPlayer.score = data["left"];
         this.#rightPlayer.score = data["right"];
     }
 
-   
+    remoteKeyUpHandling(data){
+        if (["left", "right"].includes(data.data.side)){
+            if (data.data.side != this.#remoteIAM){
+                // console.log(data);
+                let keyToPress;
+                if (data.data.key == "down"){
+                    keyToPress = this.#defRemoteBinds["down"];
+                    
+                }
+                if (data.data.key == "up"){
+                    keyToPress = this.#defRemoteBinds["up"];
+                    
+                }
+                let status;
+                if (data.data.key_status == "on_press")
+                    status = true;
+                if (data.data.key_status == "on_release")
+                    status = false;
+                keysPressed[keyToPress] = status;
+               // console.log(keyToPress,data.data.key,keysPressed[keyToPress], data.data.key_status);
+            }
+        }
+    }
+
+    remoteGameEnd(){
+        this.#endGame = 1;
+    }
     
 }
 
