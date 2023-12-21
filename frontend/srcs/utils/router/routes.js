@@ -99,19 +99,32 @@ const urlRoutes = {
     title: urlPageTitle,
     description: "This is the local pong page",
     js: [directory + "2plygame/enviroment.js","./srcs/utils/pongJs/MovingRectangle.js",
-     "./srcs/utils/pongJs/Ball.js","./srcs/utils/pongJs/Paddle.js","./srcs/utils/pongJs/Player.js", 
-     "./srcs/utils/pongJs/Game.js",directory + "2plygame/helper.js", directory + "2plygame/main.js"],
+     "./srcs/utils/pongJs/Ball.js","./srcs/utils/pongJs/Paddle.js",
+     "./srcs/utils/pongJs/Player.js", 
+     "./srcs/utils/pongJs/Game.js",  directory + "2plygame/main.js"],
     css: [directory + "2plygame/2plygame.css"]
   },
-  "/ai": {
-    template: directory + "ai/ai.html",
+
+  "/1plygame": {
+    template: directory + "1plygame/1plygame.html",
     title: urlPageTitle,
     description: "This is the local pong page",
-    js: [directory + "ai/enviroment.js","./srcs/utils/pongJs/MovingRectangle.js",
+    js: [directory + "1plygame/enviroment.js","./srcs/utils/pongJs/MovingRectangle.js",
      "./srcs/utils/pongJs/Ball.js","./srcs/utils/pongJs/Paddle.js","./srcs/utils/pongJs/Player.js", 
-     "./srcs/utils/pongJs/Game.js", "./srcs/utils/pongJs/PongAI.js", directory + "ai/main.js"],
-    css: [directory + "ai/ai.css"]
+     "./srcs/utils/pongJs/Game.js", "./srcs/utils/pongJs/PongAI.js", directory + "1plygame/main.js"],
+    css: [directory + "1plygame/1plygame.css"]
   },
+
+  "/onlinegame": {
+    template: directory + "0nlinegame/onlinegame.html",
+    title: urlPageTitle,
+    description: "This is the local pong page",
+    js: [directory + "0nlinegame/enviroment.js","./srcs/utils/pongJs/MovingRectangle.js",
+     "./srcs/utils/pongJs/Ball.js","./srcs/utils/pongJs/Paddle.js","./srcs/utils/pongJs/Player.js", 
+     "./srcs/utils/pongJs/Game.js",directory + "0nlinegame/helper.js", directory + "0nlinegame/main.js"],
+    css: [directory + "0nlinegame/onlinegame.css"]
+  },
+
   "/localp": {
     template: directory + "localp/localp.html",
     title: urlPageTitle,
