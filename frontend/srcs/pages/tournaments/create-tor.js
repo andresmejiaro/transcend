@@ -36,7 +36,7 @@ const createRequest = async () => {
 };
 
 const getListofTournaments = async () => {
-  console.log("Getting list of tournaments");
+  // console.log("Getting list of tournaments");
   try {
     const token = sessionStorage.getItem("jwt");
     if (!token) {
@@ -238,7 +238,7 @@ const addEventListenerButtons = () => {
   buttons.forEach(function(button) {
     button.addEventListener('click', function() {
       var tournamentId = this.getAttribute('data-tournament-id');
-      console.log("CLICK ", tournamentId)
+      // console.log("CLICK ", tournamentId)
       handleJoin(tournamentId);
     });
   });

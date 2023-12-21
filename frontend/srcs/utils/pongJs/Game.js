@@ -25,7 +25,7 @@ class Game {
         this.#rightPlayer = rightPlayer;
         this.#scoreLimit = 11;
         this.#background = new Image();
-        this.#background.src = './srcs/assets/game/table.png';
+        this.#background.src = './srcs/assets/game/table.svg';
         this.#backgroundLoaded = false;
         this.#background.onload = () => { this.#backgroundLoaded = true; };
         this.#remote = remote; 
@@ -123,7 +123,7 @@ class Game {
             this.#remoteCanvas= this.#remoteCanvasQ[this.#actualframe];
             this.#actualframe += 1;
             this.#delay = 0;
-            console.log("printing from memory");
+            // console.log("printing from memory");
             return;
         } else{
             // try to find if skipped
@@ -138,7 +138,7 @@ class Game {
         }
         if (!this.#remoteCanvasQ[this.#actualframe + this.#delay]){
             this.#delay = Math.max(...Object.keys(this.#remoteCanvasQ).map(Number)) - this.#actualframe;
-            console.log(this.#delay);
+            // console.log(this.#delay);
         }
         if (isFinite(this.#delay)){
             this.#remoteCanvas = this.#remoteCanvasQ[this.#frame + this.#delay]
@@ -149,7 +149,7 @@ class Game {
         this.updateRemoteCanvas();
         let canvas = this.#remoteCanvas;
         if (canvas === undefined){
-            console.log("undefined canvas");
+            // console.log("undefined canvas");
             return;
         }
         this.#ball.setPosition(canvas["ball"]["position"]);
@@ -352,7 +352,7 @@ class Game {
     remoteKeyUpHandling(data){
         if (["left", "right"].includes(data.data.side)){
             if (data.data.side != this.#remoteIAM){
-                console.log(data);
+                // console.log(data);
                 let keyToPress;
                 if (data.data.key == "down"){
                     keyToPress = this.#defRemoteBinds["down"];
