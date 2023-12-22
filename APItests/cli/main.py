@@ -1,79 +1,64 @@
-# cli.py
+# main.py
 
 import asyncio
 import websockets
-import json
-import requests
-import time
-import click
-import os
 from http_api import http_api
-import signal
+from websocket_api import websocket_api
 
 api_client = http_api()
+websocket_manager = websocket_api()
 
+# Global variable to control the infinite loops
+keep_running = True
 
-async def handle_websocket_messages(websocket, message_queue):
+async def handle_lobby_websocket(websocket):
+    global keep_running
     try:
-        while websocket.open:
-            message = await websocket.recv()
-            print(f"Received WebSocket message: {message}")
+        while keep_running:
+            data = await websocket_manager.receive(websocket)
+            if data:
+                print(data)
 
-            try:
-                data = json.loads(message)
+    except websockets.exceptions.ConnectionClosedOK:
+        print("Connection closed")
+    except Exception as e:
+        print(f"Error: {e}")
+    finally:
+        await websocket_manager.close(websocket)
 
-                message_type = data.get("type")
-
-                if message_type == "user_joined":
-                    user_data = data.get("data", {}).get("online_users", {})
-                    for user_id, username in user_data.items():
-                        print(f"User {username} (ID: {user_id}) joined the lobby")
-
-                await message_queue.put(data)
-            except json.JSONDecodeError:
-                print(f"Received non-JSON message: {message}")
-
-    except websockets.exceptions.ConnectionClosed as e:
-        print(f"WebSocket connection closed: {e}")
-    except Exception as ex:
-        print(f"Error in handle_websocket_messages: {ex}")
-
-async def handle_user_input(lobby_websocket, message_queue, pong_client):
-    while True:
-        try:
-            # Use asyncio.to_thread() to run input() in a separate thread
-            user_input = await asyncio.to_thread(input, "Enter a command: ")
-
-            if user_input == "play_pong":
-                match_id = await asyncio.to_thread(input, "Enter the match ID you want to join or create: ")
-                asyncio.create_task(pong_client.play_pong(match_id))
-            elif user_input == "exit":
-                print("Exiting...")
-                # Close the WebSocket connection
-                await lobby_websocket.close()
-                break
-
-            await lobby_websocket.send(user_input)
-
-        except Exception as e:
-            print(f"Error in handle_user_input: {e}")
-
+async def clean_close():
+    # Close all WebSocket connections
+    await websocket_manager.close_all()
 
 async def main():
-    username = input("Enter your username: ")
-    password = input("Enter your password: ")
+    try:
+        global keep_running
+        username = input("Enter your username: ")
+        password = input("Enter your password: ")
 
-    # Create a new user
-    api_client.login(username, password)
-    matches = api_client.make_api_call("GET", "/match/")
-    print(matches.json().get("data", {}))
+        # Create a new user
+        api_client.login(username, password)
+        
+        lobby_websocket = await websocket_manager.connect("ws://localhost:8001/ws/lobby2/", {"client_id": api_client.client_id})
+        websocket_task = asyncio.create_task(handle_lobby_websocket(lobby_websocket))
+
+        while keep_running:
+            print("Waiting for messages...")
+            await asyncio.sleep(1)
 
 
-
-
-
-
-
+    except KeyboardInterrupt:
+        # Handle Ctrl+C gracefully
+        print("Ctrl+C pressed. Cleaning up...")
+        keep_running = False  # Set the flag to False to stop all the infinite loops
+    finally:
+        # Wait for cleanup
+        await asyncio.gather(clean_close(), websocket_task, return_exceptions=True)
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    try:
+        asyncio.run(main())
+    except KeyboardInterrupt:
+        pass  # Suppress the second KeyboardInterrupt error during exit
+    finally:
+        print("Exiting...")

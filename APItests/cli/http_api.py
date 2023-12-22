@@ -14,6 +14,7 @@ COOKIES_FILE = "./tmp_files/cookies.txt"
 class http_api:
     def __init__(self):
         self.session = requests.Session()
+        self.client_id = None
 
     def close_session(self):
         self.session.close()
@@ -137,8 +138,8 @@ class http_api:
                     self.save_cookies(csrf_token, expires_datetime)
                     self.save_token({'token': jwt_token})
 
-                    client_id = self.get_client_id(username)
-                    self.save_client_info(client_id, username)
+                    self.client_id = self.get_client_id(username)
+                    self.save_client_info(self.client_id, username)
 
     def get_client_id(self, username):
         endpoint = f"/get_user_id/{username}/"
