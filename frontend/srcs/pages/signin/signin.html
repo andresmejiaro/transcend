@@ -50,21 +50,21 @@
 <!-- Modal for Google Authentication -->
 <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
   <div class="modal-dialog">
-      <div class="modal-content">
+    <div class="modal-content" style="background: #191f38; border: 5px solid #FFFEEE;">
           <div class="modal-header">
-              <h5 class="modal-title" id="loginModalLabel">Google Auth</h5>
+              <h5 class="modal-title text-light" id="loginModalLabel">Google Auth</h5>
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
               <div class="form-group">
-                  <label for="otpLoginForm" class="form-label">2FA Code</label>
+                  <label for="otpLoginForm" class="form-label text-light">2FA Code</label>
                   <input type="text" class="form-control input-signup" name="otpLoginForm" id="otpLoginForm" placeholder="Enter your OTP code" autocomplete="off"/>
                   <div class="invalid-feedback" id="otpHelp"></div>
+                  <div class="alert alert-danger mt-2" id="errorGaAlert" style="display: none"></div>
               </div>
           </div>
           <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-              <button type="button" class="btn btn-primary" id="checkOTP">Save changes</button>
+              <button type="button" class="btn btn-primary" id="checkOTP">Check</button>
           </div>
       </div>
   </div>
