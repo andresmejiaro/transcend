@@ -17,7 +17,7 @@ async def handle_lobby_websocket(websocket):
         while keep_running:
             data = await websocket_manager.receive(websocket)
             if data:
-                print(data)
+                print(f"Received message: {data}")
 
     except websockets.exceptions.ConnectionClosedOK:
         print("Connection closed")
@@ -25,10 +25,6 @@ async def handle_lobby_websocket(websocket):
         print(f"Error: {e}")
     finally:
         await websocket_manager.close(websocket)
-
-async def clean_close():
-    # Close all WebSocket connections
-    await websocket_manager.close_all()
 
 async def main():
     try:
@@ -40,7 +36,7 @@ async def main():
         api_client.login(username, password)
         
         lobby_websocket = await websocket_manager.connect("ws://localhost:8001/ws/lobby2/", {"client_id": api_client.client_id})
-        websocket_task = asyncio.create_task(handle_lobby_websocket(lobby_websocket))
+        asyncio.create_task(handle_lobby_websocket(lobby_websocket))
 
         while keep_running:
             print("Waiting for messages...")
@@ -51,9 +47,6 @@ async def main():
         # Handle Ctrl+C gracefully
         print("Ctrl+C pressed. Cleaning up...")
         keep_running = False  # Set the flag to False to stop all the infinite loops
-    finally:
-        # Wait for cleanup
-        await asyncio.gather(clean_close(), websocket_task, return_exceptions=True)
 
 if __name__ == "__main__":
     try:
