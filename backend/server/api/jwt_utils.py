@@ -8,7 +8,7 @@ from datetime import datetime, timedelta
     
 secret_key = 'hola'
 
-def create_jwt_token(user_id, username, expiration_time_minutes=30):
+def create_jwt_token(user_id, username, expiration_time_minutes=240):
     now = datetime.utcnow()
     expiration_time = now + timedelta(minutes=expiration_time_minutes)
 
