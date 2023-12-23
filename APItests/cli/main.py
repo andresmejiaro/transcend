@@ -59,9 +59,6 @@ async def main():
             email = input("Enter your email: ")
             api_client.register(username, password, fullname, email)
 
-        # Create a new user
-        # api_client.login(username, password)
-
         views.home_page()
         
         lobby_websocket = await websocket_manager.connect("ws://localhost:8001/ws/lobby2/", {"client_id": api_client.client_id})
