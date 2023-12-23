@@ -143,6 +143,35 @@ class http_api:
                     self.client_id = self.get_client_id(username)
                     self.save_client_info(self.client_id, username)
 
+    def register(self, username, password, fullname, email):
+        register_url = f"{API_BASE_URL}/user/signup/"
+        data = {"username": username, "password": password, "fullname": fullname, "email": email}
+
+        response = self.session.post(register_url, json=data)
+
+        if response.status_code == 200:
+            json_response = response.json()
+            if json_response['status'] == 'ok':
+
+                jwt_token = json_response.get("token")
+                cookies_dict = response.headers.get('Set-Cookie')
+
+                if cookies_dict and jwt_token:
+                    # Parse the expiration time from the 'Set-Cookie' header
+                    expires_str = cookies_dict.split('expires=')[1].split(';')[0].strip()   
+                    # Convert the expiration time to a datetime object
+                    expires_datetime = datetime.strptime(expires_str, "%a, %d %b %Y %H:%M:%S %Z")
+                    # Get the CSRF token from the 'Set-Cookie' header
+                    csrf_token = cookies_dict.split('csrftoken=')[1].split(';')[0].strip()
+
+                    # Save only the expiration date in a format for easy comparison
+                    self.save_cookies(csrf_token, expires_datetime)
+                    self.save_token({'token': jwt_token})
+
+                    self.client_id = self.get_client_id(username)
+                    self.save_client_info(self.client_id, username)
+
+
     def get_client_id(self, username):
         endpoint = f"/get_user_id/{username}/"
         response = self.make_api_call("GET", endpoint)

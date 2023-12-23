@@ -43,11 +43,24 @@ async def handle_lobby_websocket(websocket):
 async def main():
     try:
         global keep_running
-        username = input("Enter your username: ")
-        password = input("Enter your password: ")
+        print("Welcome to the Pong Game!")
+        print("Type 'login' or 'register' to start")
+        input_str = input("Enter command: ")
+
+        if input_str == "login":
+            username = input("Enter your username: ")
+            password = input("Enter your password: ")
+            api_client.login(username, password)
+
+        elif input_str == "register":
+            username = input("Enter your username: ")
+            password = input("Enter your password: ")
+            fullname = input("Enter your fullname: ")
+            email = input("Enter your email: ")
+            api_client.register(username, password, fullname, email)
 
         # Create a new user
-        api_client.login(username, password)
+        # api_client.login(username, password)
 
         views.home_page()
         
@@ -60,18 +73,18 @@ async def main():
                 keep_running = False
             elif input_str == "home":
                 views.home_page()
-            elif input_str == "login":
-                username = input("Enter your username: ")
-                password = input("Enter your password: ")
-                api_client.login(username, password)
-            elif input_str == "register":
-                username = input("Enter your username: ")
-                password = input("Enter your password: ")
-                fullname = input("Enter your fullname: ")
-                email = input("Enter your email: ")
-                api_client.register(username, password, fullname, email)
             elif input_str == "stats":
                 views.see_my_stats()
+            elif input_str == "friendlist":
+                views.see_friend_list()
+            elif input_str == "addfriend":
+                views.add_friend()
+            elif input_str == "removefriend":
+                views.remove_friend()
+            elif input_str == "playfriend":
+                views.play_pong_with_friend()
+            elif input_str == "playai":
+                views.play_pong_against_ai()
 
 
 

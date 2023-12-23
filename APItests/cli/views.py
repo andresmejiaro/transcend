@@ -15,10 +15,14 @@ class View:
         friends = user_friend_list.get("data", {})
 
         username = user_info.get("username")
-        email = user_info.get("email")
 
-        # Calculate dynamic content width based on the maximum length
-        max_username_length = max(len(username), max(len(friend.get('username')) for friend in friends))
+        # Check if the friends list is empty
+        if not friends:
+            max_username_length = len(username)
+        else:
+            # Calculate dynamic content width based on the maximum length
+            max_username_length = max(len(username), max(len(friend.get('username')) for friend in friends))
+
         max_option_length = max(len(option) for option in ["Invite Friend", "Play Pong with Friend", "Play Pong Against AI", "See My Stats"])
 
         content_width = max(max_username_length, max_option_length) + 5
@@ -59,8 +63,16 @@ class View:
 
         print("+" + "-" * content_width + "+")
 
+    def see_my_stats(self):
+        pass
 
-    def friend_invite(self):
+    def see_friend_list(self):
+        pass
+
+    def add_friend(self):
+        pass
+
+    def remove_friend(self):
         pass
 
     def play_pong_with_friend(self):
@@ -68,10 +80,6 @@ class View:
 
     def play_pong_against_ai(self):
         pass
-
-    def see_my_stats(self):
-        pass
-
 
     def pong_game(self, match_id, player1, player2, websocket):
         pass
