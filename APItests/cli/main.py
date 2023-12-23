@@ -1,12 +1,15 @@
 # main.py
 
+import json
 import asyncio
 import websockets
 from http_api import http_api
 from websocket_api import websocket_api
+from views import View
 
 api_client = http_api()
 websocket_manager = websocket_api()
+views = View(api_client, websocket_manager)
 
 # Global variable to control the infinite loops
 keep_running = True
@@ -15,9 +18,20 @@ async def handle_lobby_websocket(websocket):
     global keep_running
     try:
         while keep_running:
-            data = await websocket_manager.receive(websocket)
-            if data:
-                print(f"Received message: {data}")
+            received_str = await websocket_manager.receive(websocket)
+            try:
+                received = json.loads(received_str)
+                # Print the recieved message with proper indentation for Json readability
+                # print(json.dumps(received, indent=4))
+                type = received.get("type")
+                if type == "user_joined":
+                    online_users_data = received.get("data", {}).get("online_users", {})
+                    for client_id, username in online_users_data.items():
+                        # print(f"User joined: {username}")
+                        pass
+
+            except json.JSONDecodeError as e:
+                print(f"Error decoding JSON: {e}")
 
     except websockets.exceptions.ConnectionClosedOK:
         print("Connection closed")
@@ -34,12 +48,35 @@ async def main():
 
         # Create a new user
         api_client.login(username, password)
+
+        views.home_page()
         
         lobby_websocket = await websocket_manager.connect("ws://localhost:8001/ws/lobby2/", {"client_id": api_client.client_id})
         asyncio.create_task(handle_lobby_websocket(lobby_websocket))
 
         while keep_running:
-            print("Waiting for messages...")
+            input_str = input("Enter command: ")
+            if input_str == "exit":
+                keep_running = False
+            elif input_str == "home":
+                views.home_page()
+            elif input_str == "login":
+                username = input("Enter your username: ")
+                password = input("Enter your password: ")
+                api_client.login(username, password)
+            elif input_str == "register":
+                username = input("Enter your username: ")
+                password = input("Enter your password: ")
+                fullname = input("Enter your fullname: ")
+                email = input("Enter your email: ")
+                api_client.register(username, password, fullname, email)
+            elif input_str == "stats":
+                views.see_my_stats()
+
+
+
+
+
             await asyncio.sleep(1)
 
 

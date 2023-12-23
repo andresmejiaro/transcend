@@ -87,6 +87,8 @@ class http_api:
             else:
                 json_data = data
 
+            print(f'Making {method} request to {url} with data: {json_data}')
+
             response = self.session.request(method, url, headers=headers, data=json_data, cookies=cookies)
 
             return response
@@ -147,6 +149,26 @@ class http_api:
 
         if response.status_code == 200:
             return response.json()["user_id"]
+        else:
+            raise click.ClickException("User not found.")
+        
+    def get_client_info(self):
+        username = self.load_client_info()["username"]
+        endpoint = f"/user/info-me/{username}/"
+        response = self.make_api_call("GET", endpoint)
+
+        if response.status_code == 200:
+            return response.json()
+        else:
+            raise click.ClickException("User not found.")
+
+    def get_list_friends(self):
+        client_id = self.load_client_info()["client_id"]
+        endpoint = f"/user/{client_id}/friendlist/"
+        response = self.make_api_call("GET", endpoint)
+
+        if response.status_code == 200:
+            return response.json()
         else:
             raise click.ClickException("User not found.")
 

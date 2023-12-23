@@ -13,7 +13,7 @@ class websocket_api:
             if query_params:
                 url += "?" + "&".join([f"{key}={value}" for key, value in query_params.items()])
             
-            print(f'Connecting to {url}')
+            # print(f'Connecting to {url}')
 
             websocket = await websockets.connect(url)
             self.logger.info(f"Connected to {url}")
