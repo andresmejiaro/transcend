@@ -37,7 +37,8 @@ class websocket_api:
                 if isinstance(data, dict):
                     data = json.dumps(data)
                 await websocket.send(data)
-                self.logger.info(f"Sent message to {url}")
+                self.logger.info(f"Sent message: {data}")
+                
         except Exception as e:
             self.logger.error(f"Error sending message: {e}")
 

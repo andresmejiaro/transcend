@@ -11,7 +11,7 @@ api_client = http_api()
 websocket_manager = websocket_api()
 views = View(api_client, websocket_manager)
 
-# Global variable to control the infinite loops
+# Global variable to control all the loops for cleaner exit
 keep_running = True
 
 async def handle_lobby_websocket(websocket):
@@ -22,13 +22,17 @@ async def handle_lobby_websocket(websocket):
             try:
                 received = json.loads(received_str)
                 # Print the recieved message with proper indentation for Json readability
-                # print(json.dumps(received, indent=4))
+                print(json.dumps(received, indent=4))
                 type = received.get("type")
+
                 if type == "user_joined":
                     online_users_data = received.get("data", {}).get("online_users", {})
                     for client_id, username in online_users_data.items():
                         # print(f"User joined: {username}")
                         pass
+
+                # Here we can add more cases for different types of messages
+                # recieved from the lobby websocket
 
             except json.JSONDecodeError as e:
                 print(f"Error decoding JSON: {e}")
@@ -82,18 +86,17 @@ async def main():
                 views.play_pong_with_friend()
             elif input_str == "playai":
                 views.play_pong_against_ai()
-
-
-
-
+            elif input_str == "online users":
+                await websocket_manager.send(lobby_websocket, {"command": "list_of_users"})
+            elif input_str == "invites":
+                await websocket_manager.send(lobby_websocket, {"command": "list_received_invites"})
 
             await asyncio.sleep(1)
-
 
     except KeyboardInterrupt:
         # Handle Ctrl+C gracefully
         print("Ctrl+C pressed. Cleaning up...")
-        keep_running = False  # Set the flag to False to stop all the infinite loops
+        keep_running = False
 
 if __name__ == "__main__":
     try:

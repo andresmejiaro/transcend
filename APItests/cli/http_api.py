@@ -19,7 +19,7 @@ class http_api:
     def close_session(self):
         self.session.close()
 
-# Open/Close .txt files
+# Open/Close .txt files (cookies, token, client_info) for saving/loading
     def save_cookies(self, csrf_token, expires_datetime):
         cookies_dict = {"csrftoken": csrf_token, "expiry": expires_datetime.strftime("%a, %d %b %Y %H:%M:%S %Z")}
         with open(COOKIES_FILE, "w") as file:
@@ -64,7 +64,7 @@ class http_api:
             return None
 # -----------------------------
 
-# Api calls
+# API caller function
     def make_api_call(self, method, endpoint, data=None):
         try:
             url = API_BASE_URL + endpoint
@@ -114,7 +114,7 @@ class http_api:
         return False
 # -----------------------------
     
-# Predifined API calls
+# Predifined Login/Register API calls
     def login(self, username, password):
         login_url = f"{API_BASE_URL}/user/login/"
         data = {"username": username, "password": password}
@@ -170,8 +170,9 @@ class http_api:
 
                     self.client_id = self.get_client_id(username)
                     self.save_client_info(self.client_id, username)
-
-
+# -----------------------------
+                    
+# Predifined API calls
     def get_client_id(self, username):
         endpoint = f"/get_user_id/{username}/"
         response = self.make_api_call("GET", endpoint)
@@ -201,4 +202,41 @@ class http_api:
         else:
             raise click.ClickException("User not found.")
 
+    def add_friend(self, friend_username):
+        client_id = self.load_client_info()["client_id"]
+        friend_id = self.get_client_id(friend_username)
+
+        endpoint = f"/user/{client_id}/addfriend/"
+        data = {"friend_id": friend_id}
+
+        response = self.make_api_call("POST", endpoint, data)
+
+        if response.status_code == 200:
+            return response.json()
+        else:
+            raise click.ClickException("User not found.")
+        
+    def remove_friend(self, friend_username):
+        client_id = self.load_client_info()["client_id"]
+        friend_id = self.get_client_id(friend_username)
+
+        endpoint = f"/user/{client_id}/removefriend/"
+        data = {"friend_id": friend_id}
+
+        response = self.make_api_call("POST", endpoint, data)
+
+        if response.status_code == 200:
+            return response.json()
+        else:
+            raise click.ClickException("User not found.")
+
+    def get_user_stats(self):
+        client_id = self.load_client_info()["client_id"]
+        endpoint = f"/user/{client_id}/stats/"
+        response = self.make_api_call("GET", endpoint)
+
+        if response.status_code == 200:
+            return response.json()
+        else:
+            raise click.ClickException("User not found.")
 # -----------------------------
