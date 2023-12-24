@@ -50,3 +50,13 @@ class websocket_api:
         except Exception as e:
             self.logger.error(f"Error receiving message: {e}")
             raise
+
+# Predifined websocket requests and responses
+        
+    async def get_online_users(self, websocket):
+        try:
+            data = await self.send(websocket, {"command": "list_of_users"})
+            return data
+        except Exception as e:
+            self.logger.error(f"Error sending message: {e}")
+            raise

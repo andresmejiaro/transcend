@@ -7,14 +7,15 @@ from http_api import http_api
 from websocket_api import websocket_api
 from views import View
 
+# API callers for HTTP and Websocket
 api_client = http_api()
 websocket_manager = websocket_api()
-views = View(api_client, websocket_manager)
 
-# Global variable to control all the loops for cleaner exit
+# Global variables
+# Keeps all the loops running until the user exits
 keep_running = True
 
-async def handle_lobby_websocket(websocket):
+async def handle_lobby_websocket(websocket, online_users):
     global keep_running
     try:
         while keep_running:
@@ -22,17 +23,18 @@ async def handle_lobby_websocket(websocket):
             try:
                 received = json.loads(received_str)
                 # Print the recieved message with proper indentation for Json readability
-                print(json.dumps(received, indent=4))
+                # print(json.dumps(received, indent=4))
                 type = received.get("type")
 
                 if type == "user_joined":
                     online_users_data = received.get("data", {}).get("online_users", {})
                     for client_id, username in online_users_data.items():
-                        # print(f"User joined: {username}")
-                        pass
+                        online_users[client_id] = username
 
-                # Here we can add more cases for different types of messages
-                # recieved from the lobby websocket
+                elif type == "user_left":
+                    client_id = received.get("data", {}).get("client_id")
+                    online_users.pop(client_id, None)
+                        
 
             except json.JSONDecodeError as e:
                 print(f"Error decoding JSON: {e}")
@@ -63,17 +65,19 @@ async def main():
             email = input("Enter your email: ")
             api_client.register(username, password, fullname, email)
 
-        views.home_page()
-        
         lobby_websocket = await websocket_manager.connect("ws://localhost:8001/ws/lobby2/", {"client_id": api_client.client_id})
-        asyncio.create_task(handle_lobby_websocket(lobby_websocket))
+        online_users = {}
+        asyncio.create_task(handle_lobby_websocket(lobby_websocket, online_users))
+
+        views = View(api_client, websocket_manager, lobby_websocket)
+
+        # views.home_page(online_users)
 
         while keep_running:
-            input_str = input("Enter command: ")
             if input_str == "exit":
                 keep_running = False
             elif input_str == "home":
-                views.home_page()
+                views.home_page(online_users)
             elif input_str == "stats":
                 views.see_my_stats()
             elif input_str == "friendlist":
@@ -90,6 +94,9 @@ async def main():
                 await websocket_manager.send(lobby_websocket, {"command": "list_of_users"})
             elif input_str == "invites":
                 await websocket_manager.send(lobby_websocket, {"command": "list_received_invites"})
+
+            # print(f'Online users: {online_users}')
+            input_str = input("Enter command: ")
 
             await asyncio.sleep(1)
 
