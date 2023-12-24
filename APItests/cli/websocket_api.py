@@ -13,8 +13,6 @@ class websocket_api:
             if query_params:
                 url += "?" + "&".join([f"{key}={value}" for key, value in query_params.items()])
             
-            # print(f'Connecting to {url}')
-
             websocket = await websockets.connect(url)
             self.logger.info(f"Connected to {url}")
             return websocket
@@ -51,8 +49,8 @@ class websocket_api:
             self.logger.error(f"Error receiving message: {e}")
             raise
 
-# Predifined websocket requests and responses
-        
+
+# Predifined websocket requests and responses       
     async def get_online_users(self, websocket):
         try:
             data = await self.send(websocket, {"command": "list_of_users"})

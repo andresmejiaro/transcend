@@ -87,7 +87,7 @@ class http_api:
             else:
                 json_data = data
 
-            print(f'Making {method} request to {url} with data: {json_data}')
+            # print(f'Making {method} request to {url} with data: {json_data}')
 
             response = self.session.request(method, url, headers=headers, data=json_data, cookies=cookies)
 

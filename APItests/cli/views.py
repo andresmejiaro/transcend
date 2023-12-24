@@ -9,7 +9,7 @@ class View:
         self.lobby_websocket = lobby_websocket
         self.online_friends = {}
 
-    # Views
+# Views
     def home_page(self, online_users):
         stdscr = curses.initscr()
         stdscr.clear()
@@ -33,8 +33,9 @@ class View:
 
             username = user_info.get("username")
 
-            # self.print_debug(f"Online friends: {self.online_friends}")
-            # self.print_debug(f"All friends: {friends}")
+            self.print_debug(f"Username: {username}")
+            self.print_debug(f"Online friends: {self.online_friends}")
+            self.print_debug(f"All friends: {friends}")
 
             # Calculate centered position for the title
             title_width = len(f" Welcome to the Home Page, {username}! ")
@@ -57,7 +58,8 @@ class View:
                 "2. Remove Friend",
                 "3. Play Pong with Friend",
                 "4. Play Pong Against AI",
-                "5. See My Stats",
+                "5. Random Matchmaking",
+                "6. See My Stats",
             ]
             self.draw_box(stdscr, "User Options", options, 2 + online_friends_height + all_friends_height, 0, 80, curses.color_pair(2))
 
@@ -68,8 +70,8 @@ class View:
             user_input = stdscr.getch()
 
             if user_input == ord('1'):
-                friend_to_invite = self.get_user_input(stdscr, "Enter friend's username to invite: ", friends, options)
-                # Implement the logic for inviting a friend
+                # self.add_friend(online_users)
+                pass
             elif user_input == ord('2'):
                 # Implement the logic for removing a friend
                 pass
@@ -80,6 +82,9 @@ class View:
                 # Implement the logic for playing Pong against AI
                 pass
             elif user_input == ord('5'):
+                self.play_pong_against_random(online_users)
+                pass
+            elif user_input == ord('6'):
                 self.see_my_stats(online_users)
 
         finally:
@@ -106,6 +111,8 @@ class View:
             elo = user_data.get("ELO", "N/A")
             match_wins = user_data.get("total_match_wins", 0)
             tournament_wins = user_data.get("total_tournament_wins", 0)
+
+            self.print_debug(f"Incoming user info: {user_info}")
 
             # Calculate centered position for the title
             title_width = len(f" Welcome to the Home Page, {username}! ")
@@ -138,8 +145,11 @@ class View:
         finally:
             pass
 
+    def play_pong_against_random(self, online_users):
+        pass
+# ----------------------------------------------------------
 
-    # Helper methods
+# Helper methods
     def draw_box(self, stdscr, title, content, start_row, start_col, width, color_pair):
         # Calculate box height
         box_height = len(content) + 4  # 2 lines for title, 1 line for top border, 1 line for bottom border
@@ -170,3 +180,4 @@ class View:
     def print_debug(self, message):
         with open("debug_output.txt", "a") as debug_file:
             debug_file.write(f"{message}\n")
+# ----------------------------------------------------------
