@@ -11,8 +11,7 @@ from views import View
 api_client = http_api()
 websocket_manager = websocket_api()
 
-# Global variables
-# Keeps all the loops running until the user exits
+# Global variable to keep all loops running
 keep_running = True
 
 async def handle_lobby_websocket(websocket, online_users):
