@@ -12,10 +12,12 @@ class websocket_api:
     async def connect(self, url, query_params=None):
         try:
             if query_params:
-                url += "?" + "&".join([f"{key}={value}" for key, value in query_params.items()])
+                # Construct query string from query_params
+                query_string = "&".join([f"{key}={value}" for key, value in query_params.items()])
+                url += f"?{query_string}"
 
-            self.print_to_debug_file(f"Connecting to {url}")
-            
+            self.print_to_debug_file(f"Connecting to {url}\n")
+
             websocket = await websockets.connect(url)
             self.logger.info(f"Connected to {url}")
             return websocket
@@ -25,6 +27,7 @@ class websocket_api:
 
     async def close(self, websocket):
         try:
+            if websocket:
                 await websocket.close()
                 self.logger.info(f"Closed connection to {websocket}")
 
@@ -71,8 +74,6 @@ class websocket_api:
             self.logger.error(f"Error sending message: {e}")
             raise
 # -----------------------------
-
-
 
 # Debug methods
     def print_to_debug_file(self, message):

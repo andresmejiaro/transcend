@@ -14,19 +14,29 @@ class Page(Enum):
 
 class CursesUI:
 # Initialize the CursesUI instance
-    def __init__(self, stdscr, logo_file="logo.txt", api_client=None, websocket_manager=None, lobby_websocket=None):
+    def __init__(self, stdscr, api_client=None, websocket_manager=None, lobby_websocket=None):
         """Initialize the CursesUI instance.
 
         Args:
             stdscr (curses.window): The curses window object.
-            logo_file (str): The path to the file containing the logo.
             api_client: The API client object.
             websocket_manager: The websocket manager object.
             lobby_websocket: The lobby websocket object.
         """
         self.stdscr = stdscr        # Initialize stdscr as an instance variable, this is the curses window object
         self.selected_index = 0     # Initialize selected_index as an instance variable
-        self.logo = self.read_logo_from_file("./textures/logo.txt")
+        self.logo_file1 = self.read_logo_from_file("./textures/logo.txt")
+        self.logo_file2 = self.read_logo_from_file("./textures/logo1.txt")
+        
+        # Handle the case where logo files are not found
+        try:
+            self.logo_file1 = self.read_logo_from_file("./textures/logo.txt")
+            self.logo_file2 = self.read_logo_from_file("./textures/logo1.txt")
+        except FileNotFoundError:
+            self.print_to_debbug_file("Logo files not found. Setting logo_file1 and logo_file2 to None.")
+            self.logo_file1 = None
+            self.logo_file2 = None
+
         signal.signal(signal.SIGWINCH, self.handle_resize)  # Handle window resize
         curses.curs_set(0)                                  # Hide the cursor
         self.stdscr.timeout(100)  # Set a timeout for getch to enable non-blocking input
@@ -41,6 +51,7 @@ class CursesUI:
         self.pages = [Page.HOME, Page.PLAY, Page.STATS, Page.FRIENDS, Page.SETTINGS]
         self.selected_page_index = 0 # Initialize selected_page_index as an instance variable
 
+
 # Drawing methods
     def draw_home_page(self):
         """Draw the home page."""
@@ -52,13 +63,12 @@ class CursesUI:
         curses.init_pair(1, curses.COLOR_CYAN, curses.COLOR_BLACK)
 
         # Draw ASCII art centered
-        start_row = (self.screen_height - len(self.logo)) // 2
-        for i, line in enumerate(self.logo):
-            self.center_text(line, start_row + i)
+        start_row = (self.screen_height - len(self.logo_file1)) // 2
+        self.draw_logo(self.logo_file1, start_row)
 
         # Draw "Press any key to start" centered
         prompt_message = "Press any key to start"
-        self.center_text(prompt_message, start_row + len(self.logo) + 2)
+        self.center_text(prompt_message, start_row + len(self.logo_file1) + 2)
         self.stdscr.refresh()
 
         return self.stdscr.getch()
@@ -79,12 +89,11 @@ class CursesUI:
         curses.init_pair(1, curses.COLOR_CYAN, curses.COLOR_BLACK)
 
         # Draw ASCII art centered
-        start_row = (self.screen_height - len(self.logo)) // 2
-        for i, line in enumerate(self.logo):
-            self.center_text(line, start_row + i)
+        start_row = (self.screen_height - len(self.logo_file1)) // 2
+        self.draw_logo(self.logo_file1, start_row)
 
         # Draw choices for login/register centered
-        choices_row = start_row + len(self.logo) + 2
+        choices_row = start_row + len(self.logo_file1) + 2
         total_width = sum(len(choice) for choice in choices) + (len(choices) - 1) * 2  # Total width considering spaces between choices
         choices_col = (self.screen_width - total_width) // 2
 
@@ -113,12 +122,11 @@ class CursesUI:
         curses.init_pair(blue_color_pair, curses.COLOR_CYAN, curses.COLOR_BLACK)
 
         # Draw ASCII art centered
-        start_row = (self.screen_height - len(self.logo)) // 2
-        for i, line in enumerate(self.logo):
-            self.center_text(line, start_row + i)
+        start_row = (self.screen_height - len(self.logo_file1)) // 2
+        self.draw_logo(self.logo_file1, start_row)
 
         # Draw login form centered
-        form_row = start_row + len(self.logo) + 2
+        form_row = start_row + len(self.logo_file1) + 2
         form_col = (self.screen_width - 30) // 2  # Adjust the width of the form
         self.stdscr.addstr(form_row, form_col, "Username:", curses.color_pair(blue_color_pair))
         username_col = form_col + 10  # Adjust the column position for the username input
@@ -321,6 +329,23 @@ class CursesUI:
             elif len(input_text) < max_length and 32 <= key <= 126:
                 # Only append the actual character to the input_text
                 input_text += chr(key)
+
+    def draw_logo(self, logo_lines, start_row=None):
+        """Display the logo on the screen.
+
+        Args:
+            logo_lines (list): List of lines representing the logo.
+            start_row (int): The starting row for displaying the logo.
+        """
+        if start_row is None:
+            start_row = (self.screen_height - len(logo_lines)) // 2
+
+        # Display each line of the logo
+        for i, line in enumerate(logo_lines):
+            self.center_text(line, start_row + i)
+
+        # Refresh the screen
+        self.stdscr.refresh()
 # -----------------------------
 
 # Utility methods       
@@ -334,7 +359,17 @@ class CursesUI:
 
     def center_text(self, text, row):
         start_col = (self.screen_width - len(text)) // 2
-        self.stdscr.addstr(row, start_col, text, curses.color_pair(1))
+
+        # Check if there is enough space on the screen
+        if start_col < 0 or start_col + len(text) > self.screen_width:
+            print("Not enough space to center text.")
+            return
+
+        try:
+            self.stdscr.addstr(row, start_col, text, curses.color_pair(1))
+        except curses.error as e:
+            print(f"Error in center_text: {e}")
+            return
 
     def read_logo_from_file(self, logo_file):
         with open(logo_file, "r") as file:
