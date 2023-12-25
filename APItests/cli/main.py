@@ -1,113 +1,126 @@
 # main.py
 
-import json
-import asyncio
-import websockets
+import curses
+from curses_ui import CursesUI
 from http_api import http_api
 from websocket_api import websocket_api
-from views import View
+from landing_page_handler import LandingPageHandler 
 
-# API callers for HTTP and Websocket
-api_client = http_api()
-websocket_manager = websocket_api()
+class CursesApp:
+    def __init__(self, stdscr):
+        self.stdscr = stdscr
+        self.resize_terminal()  # Resize the terminal initially
+        self.api_client = http_api()
+        self.websocket_manager = websocket_api()
+        self.lobby_websocket = None
+        self.curses_ui = CursesUI(stdscr, self.websocket_manager, self.api_client, self.lobby_websocket)
+        self.mode = "home"  # Initial mode
+        self.landing_page_handler = LandingPageHandler(self.api_client, self.websocket_manager, self.curses_ui)
 
-# Global variable to keep all loops running
-keep_running = True
+    def resize_terminal(self):
+        curses.resizeterm(30, 120)  # Adjust the dimensions as needed
 
-async def handle_lobby_websocket(websocket, online_users):
-    global keep_running
-    try:
-        while keep_running:
-            received_str = await websocket_manager.receive(websocket)
-            try:
-                received = json.loads(received_str)
-                # Print the recieved message with proper indentation for Json readability
-                # print(json.dumps(received, indent=4))
-                type = received.get("type")
+    def quit(self):
+        curses.curs_set(1)  # Restore cursor visibility
+        curses.endwin()  # End curses mode
+        self.set_mode("exit")
 
-                if type == "user_joined":
-                    online_users_data = received.get("data", {}).get("online_users", {})
-                    for client_id, username in online_users_data.items():
-                        online_users[client_id] = username
+    def run(self):
+        try:
+            while self.mode != "exit":
+                if self.mode == "home":
+                    self.handle_home_mode()
+                elif self.mode == "login_register":
+                    self.handle_login_register_mode()
+                elif self.mode == "login":
+                    self.handle_login_mode()
+                elif self.mode == "register":
+                    self.handle_register_mode()
+                elif self.mode == "landing_page":
+                    self.handle_landing_page_mode()
+                elif self.mode == "logout":
+                    self.handle_logout()
+                elif self.mode == "exit":
+                    self.quit()
 
-                elif type == "user_left":
-                    client_id = received.get("data", {}).get("client_id")
-                    online_users.pop(client_id, None)
-                        
+        except KeyboardInterrupt:
+            self.quit()  # Handle Ctrl+C
+            raise
 
-            except json.JSONDecodeError as e:
-                print(f"Error decoding JSON: {e}")
+    def handle_home_mode(self):
+        key = self.curses_ui.draw_home_page()
+        if key == ord('q'):
+            self.quit()
+        elif key == ord(' '):
+            self.set_mode("login_register")
 
-    except websockets.exceptions.ConnectionClosedOK:
-        print("Connection closed")
-    except Exception as e:
-        print(f"Error: {e}")
-    finally:
-        await websocket_manager.close(websocket)
+    def handle_login_register_mode(self):
+        choices = ["Login", "Register", "Exit"]
+        selected_choice = self.curses_ui.draw_login_register_page(choices)
 
-async def main():
-    try:
-        global keep_running
-        print("Welcome to the Pong Game!")
-        print("Type 'login' or 'register' to start")
-        input_str = input("Enter command: ")
+        if selected_choice == 0:
+            self.set_mode("login")
+        elif selected_choice == 1:
+            self.set_mode("register")
+        elif selected_choice == 2:
+            self.set_mode("exit")
 
-        if input_str == "login":
-            username = input("Enter your username: ")
-            password = input("Enter your password: ")
-            api_client.login(username, password)
+    def handle_login_mode(self):
+        login_result = self.curses_ui.draw_login_page()
 
-        elif input_str == "register":
-            username = input("Enter your username: ")
-            password = input("Enter your password: ")
-            fullname = input("Enter your fullname: ")
-            email = input("Enter your email: ")
-            api_client.register(username, password, fullname, email)
+        if login_result is None:
+            self.set_mode("login_register")
+            return
 
-        lobby_websocket = await websocket_manager.connect("ws://localhost:8001/ws/lobby2/", {"client_id": api_client.client_id})
-        online_users = {}
-        asyncio.create_task(handle_lobby_websocket(lobby_websocket, online_users))
+        username, password = login_result
 
-        views = View(api_client, websocket_manager, lobby_websocket)
+        if self.api_client.login(username, password):
+            # Successful login, change mode or perform other actions
+            self.set_mode("landing_page")
+        else:
+            # Failed login, handle the error or display a message
+            self.set_mode("login_register")
+            # Display the error message, delay, or take other actions as needed...
 
-        # views.home_page(online_users)
+    def handle_register_mode(self):
+        username = self.curses_ui.draw_register_page()
 
-        while keep_running:
-            if input_str == "exit":
-                keep_running = False
-            elif input_str == "home":
-                views.home_page(online_users)
-            elif input_str == "stats":
-                views.see_my_stats()
-            elif input_str == "friendlist":
-                views.see_friend_list()
-            elif input_str == "addfriend":
-                views.add_friend()
-            elif input_str == "removefriend":
-                views.remove_friend()
-            elif input_str == "playfriend":
-                views.play_pong_with_friend()
-            elif input_str == "playai":
-                views.play_pong_against_ai()
-            elif input_str == "online users":
-                await websocket_manager.send(lobby_websocket, {"command": "list_of_users"})
-            elif input_str == "invites":
-                await websocket_manager.send(lobby_websocket, {"command": "list_received_invites"})
+        if username is None:
+            self.set_mode("home")
+        else:
+            self.set_mode("landing_page")
 
-            # print(f'Online users: {online_users}')
-            input_str = input("Enter command: ")
+    def handle_landing_page_mode(self):
+        self.lobby_websocket = self.landing_page_handler.handle_landing_page()
+        logout = self.curses_ui.draw_landing_page()
 
-            await asyncio.sleep(1)
+        if logout:
+            self.set_mode("logout")
 
-    except KeyboardInterrupt:
-        # Handle Ctrl+C gracefully
-        print("Ctrl+C pressed. Cleaning up...")
-        keep_running = False
+    def handle_logout(self):
+        self.api_client.logout()
+        self.set_mode("home")
+
+    def set_mode(self, mode):
+        self.mode = mode
+
+
+def main(stdscr):
+    curses_app = CursesApp(stdscr)
+    curses_app.run()
 
 if __name__ == "__main__":
+    stdscr = curses.initscr()
+    curses.noecho()
+    curses.cbreak()
+    stdscr.keypad(True)
+
     try:
-        asyncio.run(main())
+        main(stdscr)
     except KeyboardInterrupt:
-        pass  # Suppress the second KeyboardInterrupt error during exit
+        pass  # Ctrl+C was pressed
     finally:
-        print("Exiting...")
+        curses.nocbreak()
+        stdscr.keypad(False)
+        curses.echo()
+        curses.endwin()

@@ -12,6 +12,8 @@ class websocket_api:
         try:
             if query_params:
                 url += "?" + "&".join([f"{key}={value}" for key, value in query_params.items()])
+
+            self.print_to_debug_file(f"Connecting to {url}")
             
             websocket = await websockets.connect(url)
             self.logger.info(f"Connected to {url}")
@@ -52,9 +54,23 @@ class websocket_api:
 
 # Predifined websocket requests and responses       
     async def get_online_users(self, websocket):
+     
         try:
             data = await self.send(websocket, {"command": "list_of_users"})
             return data
         except Exception as e:
             self.logger.error(f"Error sending message: {e}")
             raise
+
+
+    async def get_user_info(self, websocket, username):
+        try:
+            data = await self.send(websocket, {"command": "user_info", "username": username})
+            return data
+        except Exception as e:
+            self.logger.error(f"Error sending message: {e}")
+            raise
+
+    def print_to_debug_file(self, message):
+        with open("./debbug.txt", "a") as file:
+            file.write(message + "\n")

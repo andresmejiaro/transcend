@@ -1,0 +1,386 @@
+username: splix password: ***
+valid: False
+username: splix password: ***
+valid: False
+username: splix password: ***
+valid: False
+username: splix password: ***
+valid: False
+username: splix password: ***
+response.status_code: 401
+valid: False
+username: splix password: ***
+response.status_code: {'status': 'error', 'message': 'Invalid credentials'}
+valid: False
+username: splix password: ***
+response.status_code: {'status': 'error', 'message': 'Invalid credentials'}
+valid: False
+username: splix password: ***
+response.status_code: {'status': 'error', 'message': 'Invalid credentials'}
+valid: False
+username: splix password: ***
+response.status_code: {'status': 'error', 'message': 'Invalid credentials'}
+valid: False
+username: splix password: ***
+response.status_code: {'status': 'error', 'message': 'Invalid credentials'}
+valid: False
+username: splix password: 123
+valid: True
+username: splix password: joier
+response.status_code: {'status': 'error', 'message': 'Invalid credentials'}
+valid: False
+username: splix password: 123
+valid: True
+username: splix password: 123
+valid: True
+username: splix password: 123
+valid: True
+username: fsfs password: fsefesf
+response.status_code: {'status': 'error', 'message': 'User not found'}
+valid: False
+username: splix password: 123
+valid: True
+username: splix password: 123
+valid: splix
+username: fsdfs password: dfsfs
+response.status_code: {'status': 'error', 'message': 'User not found'}
+valid: False
+username: jfioasf password: jfoiea
+response.status_code: {'status': 'error', 'message': 'User not found'}
+valid: False
+username: splixjoijj password: feawf
+response.status_code: {'status': 'error', 'message': 'User not found'}
+valid: False
+username: faeajoijaef password: 
+valid: False
+username: ffs password: fjiosef
+response.status_code: {'status': 'error', 'message': 'User not found'}
+valid: False
+username: fjoiea password: fioeja
+response.status_code: {'status': 'error', 'message': 'User not found'}
+valid: False
+username: fjoieaj password: jofieaj
+response.status_code: {'status': 'error', 'message': 'User not found'}
+valid: False
+username: oifjaeoioiajfoijae password: jofiejafoi
+response.status_code: {'status': 'error', 'message': 'User not found'}
+valid: False
+username: oiajfoaijeoiajfea password: iofjeaoi
+response.status_code: {'status': 'error', 'message': 'User not found'}
+valid: False
+username: ofijea password: oifjeaosi
+response.status_code: {'status': 'error', 'message': 'User not found'}
+valid: False
+username: splix password: 123
+username: splix password: 123
+valid: splix
+username: jfioae password: jifoea
+response.status_code: {'status': 'error', 'message': 'User not found'}
+valid: False
+username: splix password: 123
+valid: splix
+username: splix password: 123
+valid: splix
+username:  password: 
+valid: False
+username: splix password: 123
+valid: splix
+username: jfoi password: jfoipes
+response.status_code: {'status': 'error', 'message': 'User not found'}
+valid: False
+username: splix password: 123
+valid: splix
+username: splix password: 123
+valid: splix
+username: ofijds password: jfois
+response.status_code: {'status': 'error', 'message': 'User not found'}
+valid: False
+username:   password: 
+valid: False
+username: saf password: fa
+response.status_code: {'status': 'error', 'message': 'User not found'}
+valid: False
+username: fjoiawe password: jofiea
+response.status_code: {'status': 'error', 'message': 'User not found'}
+valid: False
+username: jiofewa password: joifeaw
+response.status_code: {'status': 'error', 'message': 'User not found'}
+valid: False
+username: jofeiia password: joifea
+response.status_code: {'status': 'error', 'message': 'User not found'}
+valid: False
+username: jofiea password: jiofiae
+response.status_code: {'status': 'error', 'message': 'User not found'}
+valid: False
+username: splix password: 123
+valid: splix
+username: splix password: 123
+valid: splix
+username: fjoia password: joifea
+response.status_code: {'status': 'error', 'message': 'User not found'}
+valid: False
+response.status_code: {'status': 'error', 'message': 'User not found'}
+valid: False
+valid: splix
+valid: splix
+valid: splix
+valid: splix
+valid: splix
+valid: splix
+valid: splix
+valid: splix
+valid: splix
+valid: splix
+valid: splix
+valid: splix
+valid: splix
+valid: splix
+valid: splix
+valid: splix
+valid: splix
+valid: splix
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+valid: splix
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+Connecting to http://localhost:8001/api/lobby2/ with query params: {'client_id': 1}
+valid: splix

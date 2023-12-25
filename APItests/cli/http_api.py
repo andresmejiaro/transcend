@@ -143,6 +143,11 @@ class http_api:
                     self.client_id = self.get_client_id(username)
                     self.save_client_info(self.client_id, username)
 
+                    return username
+        else:
+            self.print_to_debbug_file(f"response.status_code: {response.json()}\n")
+            return False
+
     def register(self, username, password, fullname, email):
         register_url = f"{API_BASE_URL}/user/signup/"
         data = {"username": username, "password": password, "fullname": fullname, "email": email}
@@ -240,3 +245,8 @@ class http_api:
         else:
             raise click.ClickException("User not found.")
 # -----------------------------
+        
+# Debug 
+    def print_to_debbug_file(self, text):
+        with open("./debbug.txt", "a") as file:
+            file.write(text)
