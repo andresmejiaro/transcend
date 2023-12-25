@@ -7,6 +7,7 @@ from websocket_api import websocket_api
 from landing_page_handler import LandingPageHandler 
 
 class CursesApp:
+# Initialize the curses application
     def __init__(self, stdscr):
         self.stdscr = stdscr
         self.resize_terminal()  # Resize the terminal initially
@@ -17,14 +18,17 @@ class CursesApp:
         self.mode = "home"  # Initial mode
         self.landing_page_handler = LandingPageHandler(self.api_client, self.websocket_manager, self.curses_ui)
 
+# Resize the terminal to the specified dimensions
     def resize_terminal(self):
         curses.resizeterm(30, 120)  # Adjust the dimensions as needed
 
+# Quit the application
     def quit(self):
         curses.curs_set(1)  # Restore cursor visibility
         curses.endwin()  # End curses mode
         self.set_mode("exit")
 
+# Run the application
     def run(self):
         try:
             while self.mode != "exit":
@@ -47,6 +51,7 @@ class CursesApp:
             self.quit()  # Handle Ctrl+C
             raise
 
+# Handle Helper methods
     def handle_home_mode(self):
         key = self.curses_ui.draw_home_page()
         if key == ord('q'):
@@ -100,11 +105,14 @@ class CursesApp:
     def handle_logout(self):
         self.api_client.logout()
         self.set_mode("home")
-
+# -----------------------------
+        
+# Set the mode of the application
     def set_mode(self, mode):
         self.mode = mode
-
-
+# -----------------------------
+        
+# Main function
 def main(stdscr):
     curses_app = CursesApp(stdscr)
     curses_app.run()

@@ -8,6 +8,7 @@ class websocket_api:
     def __init__(self):
         self.logger = logging.getLogger("websocket_api")
 
+# Connection methods
     async def connect(self, url, query_params=None):
         try:
             if query_params:
@@ -50,7 +51,7 @@ class websocket_api:
         except Exception as e:
             self.logger.error(f"Error receiving message: {e}")
             raise
-
+# -----------------------------
 
 # Predifined websocket requests and responses       
     async def get_online_users(self, websocket):
@@ -62,7 +63,6 @@ class websocket_api:
             self.logger.error(f"Error sending message: {e}")
             raise
 
-
     async def get_user_info(self, websocket, username):
         try:
             data = await self.send(websocket, {"command": "user_info", "username": username})
@@ -70,7 +70,11 @@ class websocket_api:
         except Exception as e:
             self.logger.error(f"Error sending message: {e}")
             raise
+# -----------------------------
 
+
+
+# Debug methods
     def print_to_debug_file(self, message):
         with open("./debbug.txt", "a") as file:
             file.write(message + "\n")

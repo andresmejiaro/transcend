@@ -13,6 +13,7 @@ class Page(Enum):
     SETTINGS = "Settings"
 
 class CursesUI:
+# Initialize the CursesUI instance
     def __init__(self, stdscr, logo_file="logo.txt", api_client=None, websocket_manager=None, lobby_websocket=None):
         """Initialize the CursesUI instance.
 
@@ -23,22 +24,22 @@ class CursesUI:
             websocket_manager: The websocket manager object.
             lobby_websocket: The lobby websocket object.
         """
-        self.stdscr = stdscr
-        self.selected_index = 0  # Initialize selected_index as an instance variable
+        self.stdscr = stdscr        # Initialize stdscr as an instance variable, this is the curses window object
+        self.selected_index = 0     # Initialize selected_index as an instance variable
         self.logo = self.read_logo_from_file("./textures/logo.txt")
-        signal.signal(signal.SIGWINCH, self.handle_resize)
-        curses.curs_set(0)  # Hide the cursor
+        signal.signal(signal.SIGWINCH, self.handle_resize)  # Handle window resize
+        curses.curs_set(0)                                  # Hide the cursor
         self.stdscr.timeout(100)  # Set a timeout for getch to enable non-blocking input
-        self.screen_height, self.screen_width = self.stdscr.getmaxyx()
+        self.screen_height, self.screen_width = self.stdscr.getmaxyx() # Get the screen dimensions
         self.api_client = api_client
         self.websocket_manager = websocket_manager
         self.lobby_websocket = lobby_websocket
-        self.login_attempts = {}
-        self.form_row = 0  # Initialize form_row as an instance variable
-        self.form_col = 0  # Initialize form_col as an instance variable
-        self.blue_color_pair = 0  # Initialize blue_color_pair as an instance variable
+        self.login_attempts = {}    # Initialize login_attempts as an instance variable
+        self.form_row = 0           # Initialize form_row as an instance variable
+        self.form_col = 0           # Initialize form_col as an instance variable
+        self.blue_color_pair = 0    # Initialize blue_color_pair as an instance variable
         self.pages = [Page.HOME, Page.PLAY, Page.STATS, Page.FRIENDS, Page.SETTINGS]
-        self.selected_page_index = 0
+        self.selected_page_index = 0 # Initialize selected_page_index as an instance variable
 
 # Drawing methods
     def draw_home_page(self):
@@ -153,7 +154,6 @@ class CursesUI:
         # Handle user input for navigation
         self.handle_landing_page_input()
 
-
     def draw_navigation_bar(self):
         # Set the color for the navigation bar
         self.stdscr.attron(curses.color_pair(1))
@@ -189,6 +189,7 @@ class CursesUI:
             self.draw_friends_page_content()
         elif selected_page == Page.SETTINGS:
             self.draw_settings_page_content()
+# -----------------------------
 
 # Handling methods
     def handle_landing_page_input(self):
@@ -238,7 +239,6 @@ class CursesUI:
 
         # Update the screen
         self.stdscr.refresh()
-
 # -----------------------------
 
 # Validation methods
@@ -350,6 +350,10 @@ class CursesUI:
         """Get user input."""
         return self.stdscr.getch()
     
+    def get_user_input_key(self):
+        """Get user input."""
+        return self.stdscr.getkey()
+
     def process_user_input(self, key, choices):
         """Process user input for the login/register page.
 
@@ -421,4 +425,4 @@ class CursesUI:
         self.stdscr.addstr(2, 0, content_message, curses.color_pair(1))
 
         self.stdscr.refresh()
-
+# -----------------------------
