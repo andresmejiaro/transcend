@@ -1,9 +1,6 @@
-2023-12-26 01:58:35,248 [INFO] [log_message] Logo file not found.
-2023-12-26 02:02:57,186 [INFO] [log_message] Logo file not found.
-2023-12-26 02:03:17,360 [INFO] [log_message] Logo file not found.
-2023-12-26 02:05:38,454 [INFO] [log_message] Logo file not found.
-2023-12-26 02:06:31,004 [INFO] [log_message] Logo file not found.
-2023-12-26 02:07:22,568 [INFO] [log_message] Logo file not found.
-2023-12-26 02:07:39,906 [INFO] [log_message] Logo file not found.
-2023-12-26 02:08:15,844 [INFO] [log_message] Logo file not found.
-2023-12-26 02:12:14,799 [INFO] [log_message] Logo file not found.
+2023-12-26 15:30:32,682 [INFO] [log_message] Error updating screen: level must be an integer
+2023-12-26 15:30:33,481 [INFO] [log_message] Error updating screen: level must be an integer
+2023-12-26 15:31:32,996 [INFO] [log_message] Error updating registration screen: level must be an integer
+2023-12-26 15:31:33,360 [INFO] [log_message] Error updating registration screen: level must be an integer
+2023-12-26 15:31:33,749 [INFO] [log_message] Error updating registration screen: level must be an integer
+2023-12-26 15:31:34,081 [INFO] [log_message] Error updating registration screen: level must be an integer

@@ -19,6 +19,9 @@ async def main(stdscr):
     curses.noecho()
     stdscr.keypad(True)
 
+    # Hide the cursor at the beginning
+    curses.curs_set(0)
+
     main_menu = SplashScreen(stdscr)
 
     current_view = main_menu
@@ -46,6 +49,10 @@ async def main(stdscr):
         curses.nocbreak()
         curses.echo()
         stdscr.keypad(False)
+        
+        # Make the cursor visible before cleanup
+        curses.curs_set(1)
+
         curses.endwin()  # Cleanup curses on exit
 
 if __name__ == "__main__":

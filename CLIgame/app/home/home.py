@@ -2,8 +2,6 @@
 
 from utils.logger import log_message
 from app.home.splash_screen import SplashScreen
-from app.home.login import Login
-from app.home.register import Register
 import time
 
 class Home:
