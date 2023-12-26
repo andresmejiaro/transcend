@@ -5,7 +5,6 @@ import curses
 import signal
 import atexit
 from app.home.splash_screen import SplashScreen
-from utils.input_handler import get_user_ch
 from utils.logger import initialize_logs_directory, initialize_logger
 from utils.data_storage import initialize_data_directory, save_data, load_data
 
@@ -22,15 +21,18 @@ async def main(stdscr):
     # Hide the cursor at the beginning
     curses.curs_set(0)
 
-    main_menu = SplashScreen(stdscr)
+    # Initialize views
+    splash_screen = SplashScreen(stdscr)
 
-    current_view = main_menu
+    current_view = splash_screen
 
     try:
         while True:
             current_view.update_screen()
-            
-            user_input = await get_user_ch(stdscr)
+
+            # Get user input for the current view
+            user_input = await current_view.get_user_input()
+
             if user_input is None:
                 break  # Exit the loop on None
 
@@ -38,6 +40,7 @@ async def main(stdscr):
 
             # Check if the view wants to switch
             new_view = current_view.get_next_view()
+
             if new_view:
                 current_view = new_view
 

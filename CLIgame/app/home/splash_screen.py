@@ -10,9 +10,9 @@ class SplashScreen:
     def __init__(self, stdscr):
         self.stdscr = stdscr
         self.next_view = None
-        self.logo_frames = self.load_logo_frames()
+        self.logo = self.load_logo()
 
-    def load_logo_frames(self):
+    def load_logo(self):
         file_path = os.path.join(os.path.dirname(__file__), "textures", "logo.txt")
         try:
             with open(file_path, "r") as logo_file:
@@ -23,6 +23,10 @@ class SplashScreen:
         except Exception as e:
             log_message(f"Error loading logo frames: {e}")
             return None
+
+    async def get_user_input(self):
+        user_input = self.stdscr.getch()
+        return user_input
 
     def process_input(self, user_input):
         try:
@@ -40,17 +44,17 @@ class SplashScreen:
             self.stdscr.clear()
 
             # Display the logo centered on the screen
-            if self.logo_frames:
+            if self.logo:
                 rows, cols = self.stdscr.getmaxyx()
-                logo_row = max(0, (rows - len(self.logo_frames)) // 2)
-                col = max(0, (cols - len(self.logo_frames[0])) // 2)
-                for i, line in enumerate(self.logo_frames):
+                logo_row = max(0, (rows - len(self.logo)) // 2)
+                col = max(0, (cols - len(self.logo[0])) // 2)
+                for i, line in enumerate(self.logo):
                     self.stdscr.addstr(logo_row + i, col, line)
 
             # Display a static message right under the logo
             message = "Welcome to the Game!\nPress Enter to start..."
             rows, cols = self.stdscr.getmaxyx()
-            text_row = logo_row + len(self.logo_frames) + 1  # Add 1 for spacing
+            text_row = logo_row + len(self.logo) + 1  # Add 1 for spacing
             col = max(0, (cols - len(message.splitlines()[0])) // 2)
             for i, line in enumerate(message.splitlines()):
                 self.stdscr.addstr(text_row + i, col, line)

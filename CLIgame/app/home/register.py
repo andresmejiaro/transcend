@@ -1,6 +1,7 @@
 # app/home/register.py
 
 from utils.logger import log_message
+import logging
 
 class Register:
     def __init__(self, stdscr):
@@ -11,7 +12,16 @@ class Register:
         pass
 
     def update_screen(self):
-        # Update the screen for the register view
+        try:
+            self.stdscr.clear()
+
+            # Display simple for testing
+            self.stdscr.addstr(0, 0, "REGISTER")
+
+            self.stdscr.refresh()
+
+        except Exception as e:
+            log_message(f"Error updating screen: {e}", level=logging.ERROR)
         pass
 
     def get_next_view(self):

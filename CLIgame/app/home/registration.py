@@ -12,10 +12,10 @@ class Registration:
         self.stdscr = stdscr
         self.choices = ["LOGIN", "REGISTER"]
         self.selected_index = 0  # Index of the currently selected choice
-        self.logo_frames = self.load_logo_frames()
-        self.enter_pressed = False
+        self.logo = self.load_logo()
+        self.next_view = None
 
-    def load_logo_frames(self):
+    def load_logo(self):
         file_path = os.path.join(os.path.dirname(__file__), "textures", "logo.txt")
         try:
             with open(file_path, "r") as logo_file:
@@ -27,6 +27,23 @@ class Registration:
             log_message(f"Error loading logo frames: {e}", level=logging.ERROR)
             return None
 
+    async def get_user_input(self):
+        # Get user input for the login view
+        try:
+            key = self.stdscr.getch()
+            if key == curses.KEY_LEFT:
+                return "left"
+            elif key == curses.KEY_RIGHT:
+                return "right"
+            elif key == curses.KEY_ENTER or key in [10, 13]:
+                return "enter"
+            elif key == 27:  # ESC key
+                return None
+            
+        except Exception as e:
+            log_message(f"Error getting user input: {e}", level=logging.ERROR)
+            return None
+
     def process_input(self, user_input):
         # Process user input for the login view
         if user_input == "left":
@@ -34,17 +51,13 @@ class Registration:
         elif user_input == "right":
             self.selected_index = (self.selected_index + 1) % len(self.choices)
         elif user_input == "enter":
-            # Use get next view to determine which view to display next
-            if self.selected_index == 0:
-                self.get_next_view("login")
-            elif self.selected_index == 1:
-                self.get_next_view("register")
+                self.next_view = Login(self.stdscr) if self.selected_index == 0 else Register(self.stdscr)
                 
     def update_screen(self):
         try:
             self.stdscr.clear()
 
-            if self.logo_frames:
+            if self.logo:
                 self.display_logo()
 
             self.display_choices()
@@ -55,23 +68,20 @@ class Registration:
         except Exception as e:
             log_message(f"Error updating screen: {e}", level=logging.ERROR)
 
-    def get_next_view(self, selected_index):
-        if selected_index == 0:
-            return Login(self.stdscr)
-        elif selected_index == 1:
-            return Register(self.stdscr)
+    def get_next_view(self):
+        return self.next_view
 
 # Display Helper Methods
     def display_logo(self):
         rows, cols = self.stdscr.getmaxyx()
-        logo_row = max(0, (rows - len(self.logo_frames)) // 2)
-        col = max(0, (cols - len(self.logo_frames[0])) // 2)
-        for i, line in enumerate(self.logo_frames):
+        logo_row = max(0, (rows - len(self.logo)) // 2)
+        col = max(0, (cols - len(self.logo[0])) // 2)
+        for i, line in enumerate(self.logo):
             self.stdscr.addstr(logo_row + i, col, line)
 
     def display_choices(self):
         rows, cols = self.stdscr.getmaxyx()
-        logo_row = max(0, (rows - len(self.logo_frames)) // 2)
+        logo_row = max(0, (rows - len(self.logo)) // 2)
 
         # Calculate the total width required for the choices
         total_width = sum(len(choice) for choice in self.choices) + len(self.choices) - 1
@@ -89,17 +99,17 @@ class Registration:
     def display_choice(self, logo_row, start_col, choice, is_selected):
         # Helper function to display an individual choice
         if is_selected:
-            self.stdscr.addstr(logo_row + len(self.logo_frames) + 1, start_col, choice, curses.A_REVERSE)
+            self.stdscr.addstr(logo_row + len(self.logo) + 1, start_col, choice, curses.A_REVERSE)
         else:
-            self.stdscr.addstr(logo_row + len(self.logo_frames) + 1, start_col, choice)
+            self.stdscr.addstr(logo_row + len(self.logo) + 1, start_col, choice)
 
     def display_additional_info(self):
         rows, cols = self.stdscr.getmaxyx()
-        logo_row = max(0, (rows - len(self.logo_frames)) // 2)
+        logo_row = max(0, (rows - len(self.logo)) // 2)
 
         # Display additional information at the bottom of the screen
         bottom_message = "Or press ESC to exit..."
-        bottom_row = logo_row + len(self.logo_frames) + 3  # Add spacing
+        bottom_row = logo_row + len(self.logo) + 3  # Add spacing
         col = max(0, (cols - len(bottom_message)) // 2)
         self.stdscr.addstr(bottom_row, col, bottom_message)
 # ---------------------------------------------

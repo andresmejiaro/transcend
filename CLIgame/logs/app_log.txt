@@ -1,6 +1,26 @@
-2023-12-26 15:30:32,682 [INFO] [log_message] Error updating screen: level must be an integer
-2023-12-26 15:30:33,481 [INFO] [log_message] Error updating screen: level must be an integer
-2023-12-26 15:31:32,996 [INFO] [log_message] Error updating registration screen: level must be an integer
-2023-12-26 15:31:33,360 [INFO] [log_message] Error updating registration screen: level must be an integer
-2023-12-26 15:31:33,749 [INFO] [log_message] Error updating registration screen: level must be an integer
-2023-12-26 15:31:34,081 [INFO] [log_message] Error updating registration screen: level must be an integer
+2023-12-26 17:42:40,427 [INFO] [log_message] Entered Data: {'Username': 'test', 'Password': 'test'}
+2023-12-26 17:45:01,870 [ERROR] [log_message] Error updating screen: Login.display_prompt() missing 1 required positional argument: 'is_current_input'
+2023-12-26 17:45:03,013 [ERROR] [log_message] Error updating screen: Login.display_prompt() missing 1 required positional argument: 'is_current_input'
+2023-12-26 17:45:03,418 [ERROR] [log_message] Error updating screen: Login.display_prompt() missing 1 required positional argument: 'is_current_input'
+2023-12-26 17:45:03,559 [ERROR] [log_message] Error updating screen: Login.display_prompt() missing 1 required positional argument: 'is_current_input'
+2023-12-26 17:45:03,560 [ERROR] [log_message] Error updating screen: Login.display_prompt() missing 1 required positional argument: 'is_current_input'
+2023-12-26 17:45:03,763 [ERROR] [log_message] Error updating screen: Login.display_prompt() missing 1 required positional argument: 'is_current_input'
+2023-12-26 17:45:04,309 [ERROR] [log_message] Error updating screen: Login.display_prompt() missing 1 required positional argument: 'is_current_input'
+2023-12-26 17:45:04,392 [ERROR] [log_message] Error updating screen: Login.display_prompt() missing 1 required positional argument: 'is_current_input'
+2023-12-26 17:45:04,457 [ERROR] [log_message] Error updating screen: Login.display_prompt() missing 1 required positional argument: 'is_current_input'
+2023-12-26 17:45:04,564 [ERROR] [log_message] Error updating screen: Login.display_prompt() missing 1 required positional argument: 'is_current_input'
+2023-12-26 17:45:04,740 [ERROR] [log_message] Error updating screen: Login.display_prompt() missing 1 required positional argument: 'is_current_input'
+2023-12-26 17:45:04,747 [ERROR] [log_message] Error updating screen: Login.display_prompt() missing 1 required positional argument: 'is_current_input'
+2023-12-26 17:45:04,867 [ERROR] [log_message] Error updating screen: Login.display_prompt() missing 1 required positional argument: 'is_current_input'
+2023-12-26 17:45:05,020 [INFO] [log_message] Entered Data: {'Username': 'faef', 'Password': 'feafwae'}
+2023-12-26 17:45:05,021 [ERROR] [log_message] Error updating screen: Login.display_prompt() missing 1 required positional argument: 'is_current_input'
+2023-12-26 17:45:24,818 [INFO] [log_message] Entered Data: {'Username': 'fede', 'Password': 'testpwerrd'}
+2023-12-26 17:52:46,039 [INFO] [log_message] Entered Data: {'Username': 'test', 'Password': 'test'}
+2023-12-26 17:59:38,241 [ERROR] [log_message] Error updating screen: Login.display_prompt() takes 3 positional arguments but 4 were given
+2023-12-26 17:59:39,195 [ERROR] [log_message] Error updating screen: Login.display_prompt() takes 3 positional arguments but 4 were given
+2023-12-26 17:59:39,260 [ERROR] [log_message] Error updating screen: Login.display_prompt() takes 3 positional arguments but 4 were given
+2023-12-26 17:59:39,328 [ERROR] [log_message] Error updating screen: Login.display_prompt() takes 3 positional arguments but 4 were given
+2023-12-26 17:59:39,585 [ERROR] [log_message] Error updating screen: 'value}'
+2023-12-26 17:59:39,764 [ERROR] [log_message] Error updating screen: 'value}'
+2023-12-26 17:59:39,947 [ERROR] [log_message] Error updating screen: 'value}'
+2023-12-26 18:00:20,916 [INFO] [log_message] Entered Data: {'Username': 'fjiea', 'Password': 'oifea'}
