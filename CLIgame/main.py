@@ -14,6 +14,13 @@ initialize_data_directory()
 initialize_logs_directory()
 initialize_logger()
 
+async def get_user_input_with_timeout(current_view, timeout):
+    try:
+        user_input = await asyncio.wait_for(current_view.get_user_input(), timeout=timeout)
+        return user_input
+    except asyncio.TimeoutError:
+        return None  # Return None if no input within the timeout
+
 async def main(stdscr):
     # Set up the terminal
     curses.cbreak()
@@ -35,15 +42,15 @@ async def main(stdscr):
 
     try:
         while True:
-            current_view.update_screen()
+            current_view.update_screen(all_views)
 
             # Get user input for the current view
-            user_input = await current_view.get_user_input()
+            user_input = await get_user_input_with_timeout(current_view, timeout=0.1)
 
             if user_input is None:
-                break  # Exit the loop on None
+                continue  # Exit the loop on None
 
-            current_view.process_input(user_input, all_views)
+            current_view.process_input(user_input)
 
             # Check if the view wants to switch
             new_view = current_view.get_next_view()

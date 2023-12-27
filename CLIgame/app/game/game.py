@@ -1,3 +1,5 @@
+# game/game.py
+
 import asyncio
 import curses
 import threading
@@ -43,9 +45,32 @@ class Game:
         # Implement your input processing logic here
         pass
 
-    def update_screen(self):
-        # Implement your screen updating logic here
-        pass
+    def update_screen(self, all_views):
+        try:
+            if self.views is None:
+                self.views = all_views
+                
+            self.stdscr.clear()
+
+            # Display menu bar
+            self.stdscr.addstr(0, 1, "Menu: ")
+            for i, view_data in enumerate(self.views):
+                name = view_data["name"]
+                if i == self.current_view_index:
+                    # Highlight the selected view
+                    self.stdscr.addstr(0, len("Menu: ") + 1 + sum(len(v["name"]) + 2 for v in self.views[:i]), name, curses.A_REVERSE)
+                else:
+                    self.stdscr.addstr(0, len("Menu: ") + 1 + sum(len(v["name"]) + 2 for v in self.views[:i]), name)
+
+            # Display current subview
+            current_subview = self.views[self.current_view_index]["view"]
+            current_subview.display()
+
+            self.stdscr.refresh()
+            
+        except Exception as e:
+            log_message(f"Error updating screen: {e}", level=logging.ERROR)
+
 
     def display(self):
         # Implement your display logic here

@@ -21,6 +21,7 @@ class Register:
         self.error_message = None
         self.http = http
         self.ws = ws
+        self.views = None
 
     def load_logo(self):
         file_path = os.path.join(os.path.dirname(__file__), "textures", "logo.txt")
@@ -52,7 +53,7 @@ class Register:
             log_message(f"Error getting user input: {e}", level=logging.ERROR)
             return None
 
-    def process_input(self, user_input, all_views):
+    def process_input(self, user_input):
         current_input = self.inputs[self.current_input_index]
 
         if user_input == "enter":
@@ -61,7 +62,7 @@ class Register:
             else:
                 self.current_input_index += 1
                 if self.current_input_index == len(self.inputs):
-                    if self.Register(all_views) is False:
+                    if self.Register(self.views) is False:
                         return
                 else:
                     self.error_message = None  # Clear any previous error messages
@@ -72,8 +73,11 @@ class Register:
             if 32 <= user_input <= 126:
                 current_input["value"] += chr(user_input)
 
-    def update_screen(self):
+    def update_screen(self, all_views):
         try:
+            if self.views is None:
+                self.views = all_views
+                
             self.stdscr.clear()
 
             if self.logo:

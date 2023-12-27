@@ -16,6 +16,7 @@ class Login:
         self.error_message = None
         self.http = http
         self.ws = ws
+        self.views = None
 
     def load_logo(self):
         file_path = os.path.join(os.path.dirname(__file__), "textures", "logo.txt")
@@ -47,7 +48,7 @@ class Login:
             log_message(f"Error getting user input: {e}", level=logging.ERROR)
             return None
 
-    def process_input(self, user_input, all_views):
+    def process_input(self, user_input):
         current_input = self.inputs[self.current_input_index]
 
         if user_input == "enter":
@@ -56,8 +57,8 @@ class Login:
             else:
                 self.current_input_index += 1
                 if self.current_input_index == len(self.inputs):
-                    if self.login(all_views) is False:
-                        return
+                    if self.login(self.views) is False:
+                        self.current_input_index = 0
                 else:
                     self.error_message = None  # Clear any previous error messages
         elif user_input == "backspace":
@@ -67,8 +68,11 @@ class Login:
             if 32 <= user_input <= 126:
                 current_input["value"] += chr(user_input)
 
-    def update_screen(self):
+    def update_screen(self, all_views):
         try:
+            if self.views is None:
+                self.views = all_views
+
             self.stdscr.clear()
 
             if self.logo:
@@ -139,6 +143,7 @@ class Login:
 
         if response:
             next_view = next(view_data for view_data in all_views if view_data["name"] == "Home")
+            self.current_input_index = 0
             self.next_view = next_view["view"]
         else:
             self.display_error_message("Login failed!")
@@ -146,8 +151,4 @@ class Login:
             for input_data in self.inputs:
                 input_data["value"] = ""  # Clear the input values
             self.error_message = None  # Clear the error message
-            self.update_screen()  
-
-
-
-
+            return False

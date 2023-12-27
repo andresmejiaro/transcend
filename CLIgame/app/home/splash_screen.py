@@ -13,6 +13,7 @@ class SplashScreen:
         self.logo = self.load_logo()
         self.http = http
         self.ws = ws
+        self.views = None
 
     def load_logo(self):
         file_path = os.path.join(os.path.dirname(__file__), "textures", "logo.txt")
@@ -30,19 +31,21 @@ class SplashScreen:
         user_input = self.stdscr.getch()
         return user_input
 
-    def process_input(self, user_input, all_views):
+    def process_input(self, user_input):
         try:
             # Process user input for the splash screen
             if user_input:
                 # Set the next view to Login when the user presses Enter
-                next_view = next(view_data for view_data in all_views if view_data["name"] == "Registration")
+                next_view = next(view_data for view_data in self.views if view_data["name"] == "Registration")
                 self.next_view = next_view["view"]
 
         except Exception as e:
             log_message(f"Error processing input: {e}")
 
-    def update_screen(self):
+    def update_screen(self, all_views):
         try:
+            if self.views is None:
+                self.views = all_views
             # Update the screen for the splash screen
             self.stdscr.clear()
 

@@ -33,30 +33,27 @@ class Profile:
             log_message(f"Error getting user input: {e}", level=logging.ERROR)
             return None
 
-    def process_input(self, user_input, all_views):
+    def process_input(self, user_input):
         try:
-            if self.views is None:
-                self.views = all_views
             if user_input == "right":
                 self.current_view_index = (self.current_view_index + 1) % len(self.views)
             elif user_input == "left":
                 self.current_view_index = (self.current_view_index - 1) % len(self.views)
             elif user_input == "enter":
                 current_view = self.views[self.current_view_index]["view"]
-                current_view.reset_index()
                 self.next_view = current_view
+                current_view.reset_index()
 
         except Exception as e:
             log_message(f"Error processing user input: {e}", level=logging.ERROR)
             return None
 
-    def update_screen(self):
+    def update_screen(self, all_views):
         try:
-            self.stdscr.clear()
-
-            # Check if views are not initialized, then initialize them
             if self.views is None:
-                self.process_input("right") 
+                self.views = all_views
+
+            self.stdscr.clear()
 
             # Display menu bar
             self.stdscr.addstr(0, 1, "Menu: ")

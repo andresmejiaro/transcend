@@ -14,6 +14,7 @@ class Registration:
         self.next_view = None
         self.http = http
         self.ws = ws
+        self.views = None
 
     def load_logo(self):
         file_path = os.path.join(os.path.dirname(__file__), "textures", "logo.txt")
@@ -46,19 +47,22 @@ class Registration:
             log_message(f"Error getting user input: {e}", level=logging.ERROR)
             return None
 
-    def process_input(self, user_input, all_views):
+    def process_input(self, user_input):
         # Process user input for the login view
         if user_input == "left":
             self.selected_index = (self.selected_index - 1) % len(self.choices)
         elif user_input == "right":
             self.selected_index = (self.selected_index + 1) % len(self.choices)
         elif user_input == "enter":
-                login = next(view_data for view_data in all_views if view_data["name"] == "Login")
-                register = next(view_data for view_data in all_views if view_data["name"] == "Register")
+                login = next(view_data for view_data in self.views if view_data["name"] == "Login")
+                register = next(view_data for view_data in self.views if view_data["name"] == "Register")
                 self.next_view = login["view"] if self.selected_index == 0 else register["view"]
                 
-    def update_screen(self):
+    def update_screen(self, all_views):
         try:
+            if self.views is None:
+                self.views = all_views
+
             self.stdscr.clear()
 
             if self.logo:
