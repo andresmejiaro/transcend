@@ -7,10 +7,12 @@ import time
 import os
 
 class SplashScreen:
-    def __init__(self, stdscr):
+    def __init__(self, stdscr, http, ws):
         self.stdscr = stdscr
         self.next_view = None
         self.logo = self.load_logo()
+        self.http = http
+        self.ws = ws
 
     def load_logo(self):
         file_path = os.path.join(os.path.dirname(__file__), "textures", "logo.txt")
@@ -28,12 +30,13 @@ class SplashScreen:
         user_input = self.stdscr.getch()
         return user_input
 
-    def process_input(self, user_input):
+    def process_input(self, user_input, all_views):
         try:
             # Process user input for the splash screen
             if user_input:
                 # Set the next view to Login when the user presses Enter
-                self.next_view = Registration(self.stdscr)
+                next_view = next(view_data for view_data in all_views if view_data["name"] == "Registration")
+                self.next_view = next_view["view"]
 
         except Exception as e:
             log_message(f"Error processing input: {e}")

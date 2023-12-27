@@ -4,16 +4,16 @@ import os
 import curses
 import logging
 from utils.logger import log_message
-from app.home.login import Login
-from app.home.register import Register
 
 class Registration:
-    def __init__(self, stdscr):
+    def __init__(self, stdscr, http, ws):
         self.stdscr = stdscr
         self.choices = ["LOGIN", "REGISTER"]
         self.selected_index = 0  # Index of the currently selected choice
         self.logo = self.load_logo()
         self.next_view = None
+        self.http = http
+        self.ws = ws
 
     def load_logo(self):
         file_path = os.path.join(os.path.dirname(__file__), "textures", "logo.txt")
@@ -39,19 +39,23 @@ class Registration:
                 return "enter"
             elif key == 27:  # ESC key
                 return None
+            elif key != -1:  # Ignore special keys with value -1
+                return key
             
         except Exception as e:
             log_message(f"Error getting user input: {e}", level=logging.ERROR)
             return None
 
-    def process_input(self, user_input):
+    def process_input(self, user_input, all_views):
         # Process user input for the login view
         if user_input == "left":
             self.selected_index = (self.selected_index - 1) % len(self.choices)
         elif user_input == "right":
             self.selected_index = (self.selected_index + 1) % len(self.choices)
         elif user_input == "enter":
-                self.next_view = Login(self.stdscr) if self.selected_index == 0 else Register(self.stdscr)
+                login = next(view_data for view_data in all_views if view_data["name"] == "Login")
+                register = next(view_data for view_data in all_views if view_data["name"] == "Register")
+                self.next_view = login["view"] if self.selected_index == 0 else register["view"]
                 
     def update_screen(self):
         try:

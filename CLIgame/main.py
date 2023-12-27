@@ -4,9 +4,11 @@ import asyncio
 import curses
 import signal
 import atexit
-from app.home.splash_screen import SplashScreen
+from utils.init_views import initialize_views
 from utils.logger import initialize_logs_directory, initialize_logger
 from utils.data_storage import initialize_data_directory, save_data, load_data
+from network.http_api import http_api
+from network.ws_api import websocket_api
 
 initialize_data_directory()
 initialize_logs_directory()
@@ -17,14 +19,19 @@ async def main(stdscr):
     curses.cbreak()
     curses.noecho()
     stdscr.keypad(True)
-
-    # Hide the cursor at the beginning
     curses.curs_set(0)
 
-    # Initialize views
-    splash_screen = SplashScreen(stdscr)
+    # Initialize APIs
+    http = http_api()
+    ws = websocket_api()
 
-    current_view = splash_screen
+    # Initialize views
+    all_views = initialize_views(stdscr, http, ws)
+
+    # Start with the splash screen
+    current_view_data = next(view_data for view_data in all_views if view_data["name"] == "SplashScreen")
+
+    current_view = current_view_data["view"]
 
     try:
         while True:
@@ -36,7 +43,7 @@ async def main(stdscr):
             if user_input is None:
                 break  # Exit the loop on None
 
-            current_view.process_input(user_input)
+            current_view.process_input(user_input, all_views)
 
             # Check if the view wants to switch
             new_view = current_view.get_next_view()

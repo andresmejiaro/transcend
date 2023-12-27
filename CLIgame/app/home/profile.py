@@ -1,10 +1,10 @@
-# home/home.py
+# home/profile.py
 
 from utils.logger import log_message
 import curses
 import logging
 
-class Home:
+class Profile:
     def __init__(self, stdscr, http, ws):
         self.stdscr = stdscr
         self.next_view = None
@@ -79,6 +79,12 @@ class Home:
 
     def get_next_view(self):
         return self.next_view
+
+# Preview of the Profile view
+    def display(self):
+        # Display profile content
+        self.stdscr.addstr(2, 2, "User Profile")
+        # Add more content as needed
 
 # Helper functions
     def reset_index(self):
