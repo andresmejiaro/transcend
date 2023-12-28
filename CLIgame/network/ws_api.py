@@ -6,78 +6,65 @@ import logging
 import websockets
 import json
 
-API_WS_URL = "ws://localhost:8001/ws"
-DATA_DIR = "data"
-
 class websocket_api:
     def __init__(self):
-        self.list_of_websockets = {}
+        self.websocket_connections = {}  # Dictionary to store WebSocket instances by name
 
-# Connection methods
-    async def connect(self, url, query_params=None):
+    async def connect(self, connection_name, url):
         try:
-            if query_params:
-                # Construct query string from query_params
-                query_string = "&".join([f"{key}={value}" for key, value in query_params.items()])
-                url += f"?{query_string}"
-
-            websocket = await websockets.connect(url)
-            self.list_of_websockets[url] = websocket
-
-            log_message(f"Connected to {url}", level=logging.INFO)
-
-            return websocket
-        
+            if connection_name not in self.websocket_connections or self.websocket_connections[connection_name].closed:
+                websocket = await websockets.connect(url)
+                self.websocket_connections[connection_name] = websocket
+                log_message(f"Connected to WebSocket ({connection_name}): {url}", level=logging.INFO)
         except Exception as e:
-            log_message(f"Error connecting to {url}: {e}", level=logging.ERROR)
-            raise
+            log_message(f"Error connecting to WebSocket ({connection_name}): {e}", level=logging.ERROR)
 
-    async def close(self, websocket):
+    async def disconnect(self, connection_name):
         try:
-            if websocket:
-                await websocket.close()
-                log_message(f"Closed connection to {websocket.remote_address}", level=logging.INFO)
-
+            if connection_name in self.websocket_connections:
+                await self.websocket_connections[connection_name].close()
+                del self.websocket_connections[connection_name]
+                log_message(f"Disconnected from WebSocket ({connection_name})", level=logging.INFO)
         except Exception as e:
-            log_message(f"Error closing connection to {websocket.remote_address}: {e}", level=logging.ERROR)
-            raise
+            log_message(f"Error disconnecting from WebSocket ({connection_name}): {e}", level=logging.ERROR)
 
-    async def send(self, websocket, data):
+    async def send_message(self, connection_name, data):
         try:
-            if websocket:
-                if isinstance(data, dict):
-                    data = json.dumps(data)
-                await websocket.send(data)
-                log_message(f"Sent message: {data}", level=logging.INFO)
-                
+            if connection_name in self.websocket_connections:
+                await self.websocket_connections[connection_name].send(json.dumps(data))
+                log_message(f"Sent message to WebSocket ({connection_name}): {data}", level=logging.INFO)
         except Exception as e:
-            log_message(f"Error sending message: {e}", level=logging.ERROR)
-            raise
+            log_message(f"Error sending message to WebSocket ({connection_name}): {e}", level=logging.ERROR)
 
-    async def receive(self, websocket):
+    async def receive_messages(self, connection_name):
         try:
-            data = await websocket.recv()
-            log_message(f"Received message: {data}", level=logging.INFO)
-            return data
+            while connection_name in self.websocket_connections:
+                data = await self.websocket_connections[connection_name].recv()
+                log_message(f"Received message from WebSocket ({connection_name}): {data}", level=logging.INFO)
+                # Handle the received message as needed
+                return data
         except Exception as e:
-            log_message(f"Error receiving message: {e}", level=logging.ERROR)
-            raise
-# -----------------------------
+            log_message(f"Error receiving messages from WebSocket ({connection_name}): {e}", level=logging.ERROR)
 
-# Predifined websocket requests and responses       
-    async def get_online_users(self, websocket):
+    async def receive_messages_forever(self, connection_name, callback):
         try:
-            data = await self.send(websocket, {"command": "list_of_users"})
-            return data
+            while connection_name in self.websocket_connections:
+                data = await self.websocket_connections[connection_name].recv()
+                log_message(f"Received message from WebSocket ({connection_name}): {data}", level=logging.INFO)
+                await callback(data)
         except Exception as e:
-            log_message(f"Error sending message: {e}", level=logging.ERROR)
-            raise
+            log_message(f"Error receiving messages from WebSocket ({connection_name}): {e}", level=logging.ERROR)
+            
+    async def receive_messages_until(self, connection_name, condition):
+        try:
+            while connection_name in self.websocket_connections:
+                data = await self.websocket_connections[connection_name].recv()
+                log_message(f"Received message from WebSocket ({connection_name}): {data}", level=logging.INFO)
+                # Handle the received message as needed
+                if condition(data):
+                    break
+        except Exception as e:
+            log_message(f"Error receiving messages from WebSocket ({connection_name}): {e}", level=logging.ERROR)
 
-    async def get_user_info(self, websocket, username):
-        try:
-            data = await self.send(websocket, {"command": "user_info", "username": username})
-            return data
-        except Exception as e:
-            log_message(f"Error sending message: {e}", level=logging.ERROR)
-            raise
-# -----------------------------
+    async def connected(self, connection_name):
+        return connection_name in self.websocket_connections and not self.websocket_connections[connection_name].closed

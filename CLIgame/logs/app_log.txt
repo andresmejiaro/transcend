@@ -1,217 +1,183 @@
-2023-12-28 13:30:18,265 [INFO] [log_message] Entered Data: {'Username': 'splix', 'Password': '123'}
-2023-12-28 13:30:18,576 [INFO] [log_message] Login response: splix
-2023-12-28 13:30:18,659 [INFO] [log_message] User stats: {'status': 'ok', 'data': {'id': 1, 'username': 'splix', 'ELO': 0, 'total_match_wins': 0, 'total_tournament_wins': 0, 'tournaments': [], 'matches': []}}
-2023-12-28 13:30:22,289 [INFO] [log_message] User input: 261
-2023-12-28 13:30:22,785 [INFO] [log_message] User input: 260
-2023-12-28 13:30:22,812 [INFO] [log_message] User stats: {'status': 'ok', 'data': {'id': 1, 'username': 'splix', 'ELO': 0, 'total_match_wins': 0, 'total_tournament_wins': 0, 'tournaments': [], 'matches': []}}
-2023-12-28 13:32:45,752 [INFO] [log_message] Entered Data: {'Username': 'splix', 'Password': '123'}
-2023-12-28 13:32:46,067 [INFO] [log_message] Login response: splix
-2023-12-28 13:32:46,152 [INFO] [log_message] User stats: {'status': 'ok', 'data': {'id': 1, 'username': 'splix', 'ELO': 0, 'total_match_wins': 0, 'total_tournament_wins': 0, 'tournaments': [], 'matches': []}}
-2023-12-28 13:32:46,867 [INFO] [log_message] User input: 261
-2023-12-28 13:32:46,900 [INFO] [log_message] User friends: {'status': 'error', 'message': 'User not found or has no friends'}
-2023-12-28 13:33:31,080 [INFO] [log_message] User input: 260
-2023-12-28 13:33:31,104 [INFO] [log_message] User stats: {'status': 'ok', 'data': {'id': 1, 'username': 'splix', 'ELO': 0, 'total_match_wins': 0, 'total_tournament_wins': 0, 'tournaments': [], 'matches': []}}
-2023-12-28 13:33:31,463 [INFO] [log_message] User input: 261
-2023-12-28 13:33:31,481 [INFO] [log_message] User friends: {'status': 'ok', 'data': [{'id': 2, 'username': 'fsalazar'}, {'id': 3, 'username': 'feder'}, {'id': 4, 'username': 'fede'}, {'id': 5, 'username': 'ihfieaf'}, {'id': 6, 'username': 'fedeeee'}]}
-2023-12-28 13:33:31,481 [ERROR] [log_message] Error updating screen: 'friends'
-2023-12-28 13:33:32,884 [INFO] [log_message] User input: 261
-2023-12-28 13:33:33,239 [INFO] [log_message] User input: 260
-2023-12-28 13:33:33,257 [INFO] [log_message] User friends: {'status': 'ok', 'data': [{'id': 2, 'username': 'fsalazar'}, {'id': 3, 'username': 'feder'}, {'id': 4, 'username': 'fede'}, {'id': 5, 'username': 'ihfieaf'}, {'id': 6, 'username': 'fedeeee'}]}
-2023-12-28 13:33:33,257 [ERROR] [log_message] Error updating screen: 'friends'
-2023-12-28 13:35:19,181 [INFO] [log_message] User input: 10
-2023-12-28 13:35:19,203 [INFO] [log_message] User stats: {'status': 'ok', 'data': {'id': 1, 'username': 'splix', 'ELO': 0, 'total_match_wins': 0, 'total_tournament_wins': 0, 'tournaments': [], 'matches': []}}
-2023-12-28 13:35:20,496 [INFO] [log_message] User input: 261
-2023-12-28 13:35:20,538 [INFO] [log_message] User friends: {'status': 'ok', 'data': [{'id': 2, 'username': 'fsalazar'}, {'id': 3, 'username': 'feder'}, {'id': 4, 'username': 'fede'}, {'id': 5, 'username': 'ihfieaf'}, {'id': 6, 'username': 'fedeeee'}]}
-2023-12-28 13:35:20,538 [ERROR] [log_message] Error updating screen: 'friends'
-2023-12-28 13:35:20,924 [INFO] [log_message] User input: 10
-2023-12-28 13:35:20,944 [INFO] [log_message] User stats: {'status': 'ok', 'data': {'id': 1, 'username': 'splix', 'ELO': 0, 'total_match_wins': 0, 'total_tournament_wins': 0, 'tournaments': [], 'matches': []}}
-2023-12-28 13:35:22,466 [INFO] [log_message] User input: 261
-2023-12-28 13:35:22,491 [INFO] [log_message] User friends: {'status': 'ok', 'data': [{'id': 2, 'username': 'fsalazar'}, {'id': 3, 'username': 'feder'}, {'id': 4, 'username': 'fede'}, {'id': 5, 'username': 'ihfieaf'}, {'id': 6, 'username': 'fedeeee'}]}
-2023-12-28 13:35:22,491 [ERROR] [log_message] Error updating screen: 'friends'
-2023-12-28 13:35:22,879 [INFO] [log_message] User input: 261
-2023-12-28 13:35:23,301 [INFO] [log_message] User input: 260
-2023-12-28 13:35:23,321 [INFO] [log_message] User friends: {'status': 'ok', 'data': [{'id': 2, 'username': 'fsalazar'}, {'id': 3, 'username': 'feder'}, {'id': 4, 'username': 'fede'}, {'id': 5, 'username': 'ihfieaf'}, {'id': 6, 'username': 'fedeeee'}]}
-2023-12-28 13:35:23,322 [ERROR] [log_message] Error updating screen: 'friends'
-2023-12-28 13:35:23,473 [INFO] [log_message] User input: 260
-2023-12-28 13:35:23,495 [INFO] [log_message] User stats: {'status': 'ok', 'data': {'id': 1, 'username': 'splix', 'ELO': 0, 'total_match_wins': 0, 'total_tournament_wins': 0, 'tournaments': [], 'matches': []}}
-2023-12-28 13:35:23,996 [INFO] [log_message] User input: 10
-2023-12-28 13:35:24,018 [INFO] [log_message] User stats: {'status': 'ok', 'data': {'id': 1, 'username': 'splix', 'ELO': 0, 'total_match_wins': 0, 'total_tournament_wins': 0, 'tournaments': [], 'matches': []}}
-2023-12-28 13:35:24,329 [INFO] [log_message] User input: 261
-2023-12-28 13:35:24,348 [INFO] [log_message] User friends: {'status': 'ok', 'data': [{'id': 2, 'username': 'fsalazar'}, {'id': 3, 'username': 'feder'}, {'id': 4, 'username': 'fede'}, {'id': 5, 'username': 'ihfieaf'}, {'id': 6, 'username': 'fedeeee'}]}
-2023-12-28 13:35:24,349 [ERROR] [log_message] Error updating screen: 'friends'
-2023-12-28 13:35:24,667 [INFO] [log_message] User input: 10
-2023-12-28 13:35:24,688 [INFO] [log_message] User stats: {'status': 'ok', 'data': {'id': 1, 'username': 'splix', 'ELO': 0, 'total_match_wins': 0, 'total_tournament_wins': 0, 'tournaments': [], 'matches': []}}
-2023-12-28 13:35:25,416 [INFO] [log_message] User input: 261
-2023-12-28 13:35:25,434 [INFO] [log_message] User friends: {'status': 'ok', 'data': [{'id': 2, 'username': 'fsalazar'}, {'id': 3, 'username': 'feder'}, {'id': 4, 'username': 'fede'}, {'id': 5, 'username': 'ihfieaf'}, {'id': 6, 'username': 'fedeeee'}]}
-2023-12-28 13:35:25,435 [ERROR] [log_message] Error updating screen: 'friends'
-2023-12-28 13:35:25,965 [INFO] [log_message] User input: 10
-2023-12-28 13:35:25,987 [INFO] [log_message] User stats: {'status': 'ok', 'data': {'id': 1, 'username': 'splix', 'ELO': 0, 'total_match_wins': 0, 'total_tournament_wins': 0, 'tournaments': [], 'matches': []}}
-2023-12-28 13:35:37,982 [INFO] [log_message] User input: 261
-2023-12-28 13:35:38,023 [INFO] [log_message] User friends: {'status': 'ok', 'data': [{'id': 2, 'username': 'fsalazar'}, {'id': 3, 'username': 'feder'}, {'id': 4, 'username': 'fede'}, {'id': 5, 'username': 'ihfieaf'}, {'id': 6, 'username': 'fedeeee'}]}
-2023-12-28 13:35:38,023 [ERROR] [log_message] Error updating screen: 'friends'
-2023-12-28 13:35:39,570 [INFO] [log_message] User input: 261
-2023-12-28 13:35:40,005 [INFO] [log_message] User input: 260
-2023-12-28 13:35:40,026 [INFO] [log_message] User friends: {'status': 'ok', 'data': [{'id': 2, 'username': 'fsalazar'}, {'id': 3, 'username': 'feder'}, {'id': 4, 'username': 'fede'}, {'id': 5, 'username': 'ihfieaf'}, {'id': 6, 'username': 'fedeeee'}]}
-2023-12-28 13:35:40,026 [ERROR] [log_message] Error updating screen: 'friends'
-2023-12-28 13:35:41,527 [INFO] [log_message] User input: 260
-2023-12-28 13:35:41,555 [INFO] [log_message] User stats: {'status': 'ok', 'data': {'id': 1, 'username': 'splix', 'ELO': 0, 'total_match_wins': 0, 'total_tournament_wins': 0, 'tournaments': [], 'matches': []}}
-2023-12-28 13:35:41,943 [INFO] [log_message] User input: 261
-2023-12-28 13:35:41,963 [INFO] [log_message] User friends: {'status': 'ok', 'data': [{'id': 2, 'username': 'fsalazar'}, {'id': 3, 'username': 'feder'}, {'id': 4, 'username': 'fede'}, {'id': 5, 'username': 'ihfieaf'}, {'id': 6, 'username': 'fedeeee'}]}
-2023-12-28 13:35:41,963 [ERROR] [log_message] Error updating screen: 'friends'
-2023-12-28 13:36:49,660 [INFO] [log_message] Entered Data: {'Username': 'splix', 'Password': '123'}
-2023-12-28 13:36:49,964 [INFO] [log_message] Login response: splix
-2023-12-28 13:36:50,031 [INFO] [log_message] User stats: {'status': 'ok', 'data': {'id': 1, 'username': 'splix', 'ELO': 0, 'total_match_wins': 0, 'total_tournament_wins': 0, 'tournaments': [], 'matches': []}}
-2023-12-28 13:36:50,659 [INFO] [log_message] User input: 261
-2023-12-28 13:36:50,679 [INFO] [log_message] User friends: {'status': 'ok', 'data': [{'id': 2, 'username': 'fsalazar'}, {'id': 3, 'username': 'feder'}, {'id': 4, 'username': 'fede'}, {'id': 5, 'username': 'ihfieaf'}, {'id': 6, 'username': 'fedeeee'}]}
-2023-12-28 13:36:50,679 [ERROR] [log_message] Error updating screen: 'friends'
-2023-12-28 13:36:51,920 [INFO] [log_message] User input: 261
-2023-12-28 13:36:52,317 [INFO] [log_message] User input: 260
-2023-12-28 13:36:52,335 [INFO] [log_message] User friends: {'status': 'ok', 'data': [{'id': 2, 'username': 'fsalazar'}, {'id': 3, 'username': 'feder'}, {'id': 4, 'username': 'fede'}, {'id': 5, 'username': 'ihfieaf'}, {'id': 6, 'username': 'fedeeee'}]}
-2023-12-28 13:36:52,336 [ERROR] [log_message] Error updating screen: 'friends'
-2023-12-28 13:36:53,497 [INFO] [log_message] User input: 260
-2023-12-28 13:36:53,516 [INFO] [log_message] User stats: {'status': 'ok', 'data': {'id': 1, 'username': 'splix', 'ELO': 0, 'total_match_wins': 0, 'total_tournament_wins': 0, 'tournaments': [], 'matches': []}}
-2023-12-28 13:36:54,010 [INFO] [log_message] User input: 261
-2023-12-28 13:36:54,030 [INFO] [log_message] User friends: {'status': 'ok', 'data': [{'id': 2, 'username': 'fsalazar'}, {'id': 3, 'username': 'feder'}, {'id': 4, 'username': 'fede'}, {'id': 5, 'username': 'ihfieaf'}, {'id': 6, 'username': 'fedeeee'}]}
-2023-12-28 13:36:54,031 [ERROR] [log_message] Error updating screen: 'friends'
-2023-12-28 13:36:54,835 [INFO] [log_message] User input: 260
-2023-12-28 13:36:54,855 [INFO] [log_message] User stats: {'status': 'ok', 'data': {'id': 1, 'username': 'splix', 'ELO': 0, 'total_match_wins': 0, 'total_tournament_wins': 0, 'tournaments': [], 'matches': []}}
-2023-12-28 13:37:20,650 [INFO] [log_message] Entered Data: {'Username': 'splix', 'Password': '123'}
-2023-12-28 13:37:20,947 [INFO] [log_message] Login response: splix
-2023-12-28 13:37:21,011 [INFO] [log_message] User stats: {'status': 'ok', 'data': {'id': 1, 'username': 'splix', 'ELO': 0, 'total_match_wins': 0, 'total_tournament_wins': 0, 'tournaments': [], 'matches': []}}
-2023-12-28 13:37:21,854 [INFO] [log_message] User input: 261
-2023-12-28 13:37:21,875 [INFO] [log_message] User friends: {'status': 'ok', 'data': [{'id': 2, 'username': 'fsalazar'}, {'id': 3, 'username': 'feder'}, {'id': 4, 'username': 'fede'}, {'id': 5, 'username': 'ihfieaf'}, {'id': 6, 'username': 'fedeeee'}]}
-2023-12-28 13:37:21,875 [ERROR] [log_message] Error updating screen: 'friends'
-2023-12-28 13:37:22,792 [INFO] [log_message] User input: 260
-2023-12-28 13:37:22,812 [INFO] [log_message] User stats: {'status': 'ok', 'data': {'id': 1, 'username': 'splix', 'ELO': 0, 'total_match_wins': 0, 'total_tournament_wins': 0, 'tournaments': [], 'matches': []}}
-2023-12-28 13:37:23,468 [INFO] [log_message] User input: 261
-2023-12-28 13:37:23,486 [INFO] [log_message] User friends: {'status': 'ok', 'data': [{'id': 2, 'username': 'fsalazar'}, {'id': 3, 'username': 'feder'}, {'id': 4, 'username': 'fede'}, {'id': 5, 'username': 'ihfieaf'}, {'id': 6, 'username': 'fedeeee'}]}
-2023-12-28 13:37:23,486 [ERROR] [log_message] Error updating screen: 'friends'
-2023-12-28 13:38:12,160 [INFO] [log_message] Entered Data: {'Username': 'splix', 'Password': '123'}
-2023-12-28 13:38:12,468 [INFO] [log_message] Login response: splix
-2023-12-28 13:38:12,534 [INFO] [log_message] User stats: {'status': 'ok', 'data': {'id': 1, 'username': 'splix', 'ELO': 0, 'total_match_wins': 0, 'total_tournament_wins': 0, 'tournaments': [], 'matches': []}}
-2023-12-28 13:38:12,973 [INFO] [log_message] User input: 261
-2023-12-28 13:38:12,992 [INFO] [log_message] User friends: {'status': 'ok', 'data': [{'id': 2, 'username': 'fsalazar'}, {'id': 3, 'username': 'feder'}, {'id': 4, 'username': 'fede'}, {'id': 5, 'username': 'ihfieaf'}, {'id': 6, 'username': 'fedeeee'}]}
-2023-12-28 13:38:12,992 [ERROR] [log_message] Error updating screen: 'friends'
-2023-12-28 13:38:13,531 [INFO] [log_message] User input: 261
-2023-12-28 13:38:13,935 [INFO] [log_message] User input: 260
-2023-12-28 13:38:13,965 [INFO] [log_message] User friends: {'status': 'ok', 'data': [{'id': 2, 'username': 'fsalazar'}, {'id': 3, 'username': 'feder'}, {'id': 4, 'username': 'fede'}, {'id': 5, 'username': 'ihfieaf'}, {'id': 6, 'username': 'fedeeee'}]}
-2023-12-28 13:38:13,965 [ERROR] [log_message] Error updating screen: 'friends'
-2023-12-28 13:38:14,111 [INFO] [log_message] User input: 260
-2023-12-28 13:38:14,131 [INFO] [log_message] User stats: {'status': 'ok', 'data': {'id': 1, 'username': 'splix', 'ELO': 0, 'total_match_wins': 0, 'total_tournament_wins': 0, 'tournaments': [], 'matches': []}}
-2023-12-28 13:38:14,784 [INFO] [log_message] User input: 261
-2023-12-28 13:38:14,810 [INFO] [log_message] User friends: {'status': 'ok', 'data': [{'id': 2, 'username': 'fsalazar'}, {'id': 3, 'username': 'feder'}, {'id': 4, 'username': 'fede'}, {'id': 5, 'username': 'ihfieaf'}, {'id': 6, 'username': 'fedeeee'}]}
-2023-12-28 13:38:14,811 [ERROR] [log_message] Error updating screen: 'friends'
-2023-12-28 13:38:15,217 [INFO] [log_message] User input: 260
-2023-12-28 13:38:15,237 [INFO] [log_message] User stats: {'status': 'ok', 'data': {'id': 1, 'username': 'splix', 'ELO': 0, 'total_match_wins': 0, 'total_tournament_wins': 0, 'tournaments': [], 'matches': []}}
-2023-12-28 13:38:15,535 [INFO] [log_message] User input: 261
-2023-12-28 13:38:15,553 [INFO] [log_message] User friends: {'status': 'ok', 'data': [{'id': 2, 'username': 'fsalazar'}, {'id': 3, 'username': 'feder'}, {'id': 4, 'username': 'fede'}, {'id': 5, 'username': 'ihfieaf'}, {'id': 6, 'username': 'fedeeee'}]}
-2023-12-28 13:38:15,553 [ERROR] [log_message] Error updating screen: 'friends'
-2023-12-28 13:38:16,321 [INFO] [log_message] User input: 260
-2023-12-28 13:38:16,341 [INFO] [log_message] User stats: {'status': 'ok', 'data': {'id': 1, 'username': 'splix', 'ELO': 0, 'total_match_wins': 0, 'total_tournament_wins': 0, 'tournaments': [], 'matches': []}}
-2023-12-28 13:38:19,299 [INFO] [log_message] User input: 261
-2023-12-28 13:38:19,318 [INFO] [log_message] User friends: {'status': 'ok', 'data': [{'id': 2, 'username': 'fsalazar'}, {'id': 3, 'username': 'feder'}, {'id': 4, 'username': 'fede'}, {'id': 5, 'username': 'ihfieaf'}, {'id': 6, 'username': 'fedeeee'}]}
-2023-12-28 13:38:19,318 [ERROR] [log_message] Error updating screen: 'friends'
-2023-12-28 13:39:17,116 [INFO] [log_message] User input: 10
-2023-12-28 13:39:17,159 [INFO] [log_message] User stats: {'status': 'ok', 'data': {'id': 1, 'username': 'splix', 'ELO': 0, 'total_match_wins': 0, 'total_tournament_wins': 0, 'tournaments': [], 'matches': []}}
-2023-12-28 13:39:17,654 [INFO] [log_message] User input: 261
-2023-12-28 13:39:17,691 [INFO] [log_message] User friends: {'status': 'ok', 'data': [{'id': 2, 'username': 'fsalazar'}, {'id': 3, 'username': 'feder'}, {'id': 4, 'username': 'fede'}, {'id': 5, 'username': 'ihfieaf'}, {'id': 6, 'username': 'fedeeee'}]}
-2023-12-28 13:39:17,691 [ERROR] [log_message] Error updating screen: 'friends'
-2023-12-28 13:39:18,477 [INFO] [log_message] User input: 10
-2023-12-28 13:39:18,503 [INFO] [log_message] User stats: {'status': 'ok', 'data': {'id': 1, 'username': 'splix', 'ELO': 0, 'total_match_wins': 0, 'total_tournament_wins': 0, 'tournaments': [], 'matches': []}}
-2023-12-28 13:39:20,465 [INFO] [log_message] User input: 261
-2023-12-28 13:39:20,497 [INFO] [log_message] User friends: {'status': 'ok', 'data': [{'id': 2, 'username': 'fsalazar'}, {'id': 3, 'username': 'feder'}, {'id': 4, 'username': 'fede'}, {'id': 5, 'username': 'ihfieaf'}, {'id': 6, 'username': 'fedeeee'}]}
-2023-12-28 13:39:20,497 [ERROR] [log_message] Error updating screen: 'friends'
-2023-12-28 13:39:21,961 [INFO] [log_message] User input: 261
-2023-12-28 13:39:22,666 [INFO] [log_message] User input: 261
-2023-12-28 13:39:23,207 [INFO] [log_message] User input: 260
-2023-12-28 13:39:23,416 [INFO] [log_message] User input: 260
-2023-12-28 13:39:23,435 [INFO] [log_message] User friends: {'status': 'ok', 'data': [{'id': 2, 'username': 'fsalazar'}, {'id': 3, 'username': 'feder'}, {'id': 4, 'username': 'fede'}, {'id': 5, 'username': 'ihfieaf'}, {'id': 6, 'username': 'fedeeee'}]}
-2023-12-28 13:39:23,435 [ERROR] [log_message] Error updating screen: 'friends'
-2023-12-28 13:39:23,884 [INFO] [log_message] User input: 260
-2023-12-28 13:39:23,904 [INFO] [log_message] User stats: {'status': 'ok', 'data': {'id': 1, 'username': 'splix', 'ELO': 0, 'total_match_wins': 0, 'total_tournament_wins': 0, 'tournaments': [], 'matches': []}}
-2023-12-28 13:40:09,366 [INFO] [log_message] User input: 261
-2023-12-28 13:40:09,385 [INFO] [log_message] User friends: {'status': 'ok', 'data': [{'id': 2, 'username': 'fsalazar'}, {'id': 3, 'username': 'feder'}, {'id': 4, 'username': 'fede'}, {'id': 5, 'username': 'ihfieaf'}, {'id': 6, 'username': 'fedeeee'}]}
-2023-12-28 13:40:09,391 [ERROR] [log_message] Error updating screen: 'friends'
-2023-12-28 13:40:10,646 [INFO] [log_message] User input: 10
-2023-12-28 13:40:10,674 [INFO] [log_message] User stats: {'status': 'ok', 'data': {'id': 1, 'username': 'splix', 'ELO': 0, 'total_match_wins': 0, 'total_tournament_wins': 0, 'tournaments': [], 'matches': []}}
-2023-12-28 13:40:23,142 [INFO] [log_message] User input: 261
-2023-12-28 13:40:23,174 [INFO] [log_message] User friends: {'status': 'ok', 'data': [{'id': 2, 'username': 'fsalazar'}, {'id': 3, 'username': 'feder'}, {'id': 4, 'username': 'fede'}, {'id': 5, 'username': 'ihfieaf'}, {'id': 6, 'username': 'fedeeee'}]}
-2023-12-28 13:40:23,174 [ERROR] [log_message] Error updating screen: 'friends'
-2023-12-28 13:41:01,464 [INFO] [log_message] Entered Data: {'Username': 'splix', 'Password': '123'}
-2023-12-28 13:41:01,774 [INFO] [log_message] Login response: splix
-2023-12-28 13:41:01,845 [INFO] [log_message] User stats: {'status': 'ok', 'data': {'id': 1, 'username': 'splix', 'ELO': 0, 'total_match_wins': 0, 'total_tournament_wins': 0, 'tournaments': [], 'matches': []}}
-2023-12-28 13:41:02,396 [INFO] [log_message] User input: 261
-2023-12-28 13:41:02,421 [INFO] [log_message] User friends: {'status': 'ok', 'data': [{'id': 2, 'username': 'fsalazar'}, {'id': 3, 'username': 'feder'}, {'id': 4, 'username': 'fede'}, {'id': 5, 'username': 'ihfieaf'}, {'id': 6, 'username': 'fedeeee'}]}
-2023-12-28 13:41:02,421 [ERROR] [log_message] Error displaying profile: 'friends'
-2023-12-28 13:41:03,990 [INFO] [log_message] User input: 261
-2023-12-28 13:41:05,008 [INFO] [log_message] User input: 261
-2023-12-28 13:41:05,396 [INFO] [log_message] User input: 260
-2023-12-28 13:41:05,649 [INFO] [log_message] User input: 260
-2023-12-28 13:41:05,696 [INFO] [log_message] User friends: {'status': 'ok', 'data': [{'id': 2, 'username': 'fsalazar'}, {'id': 3, 'username': 'feder'}, {'id': 4, 'username': 'fede'}, {'id': 5, 'username': 'ihfieaf'}, {'id': 6, 'username': 'fedeeee'}]}
-2023-12-28 13:41:05,696 [ERROR] [log_message] Error displaying profile: 'friends'
-2023-12-28 13:41:06,045 [INFO] [log_message] User input: 260
-2023-12-28 13:41:06,067 [INFO] [log_message] User stats: {'status': 'ok', 'data': {'id': 1, 'username': 'splix', 'ELO': 0, 'total_match_wins': 0, 'total_tournament_wins': 0, 'tournaments': [], 'matches': []}}
-2023-12-28 13:41:06,996 [INFO] [log_message] User input: 260
-2023-12-28 13:41:07,021 [INFO] [log_message] User stats: {'status': 'ok', 'data': {'id': 1, 'username': 'splix', 'ELO': 0, 'total_match_wins': 0, 'total_tournament_wins': 0, 'tournaments': [], 'matches': []}}
-2023-12-28 13:41:08,240 [INFO] [log_message] User input: 261
-2023-12-28 13:41:08,272 [INFO] [log_message] User friends: {'status': 'ok', 'data': [{'id': 2, 'username': 'fsalazar'}, {'id': 3, 'username': 'feder'}, {'id': 4, 'username': 'fede'}, {'id': 5, 'username': 'ihfieaf'}, {'id': 6, 'username': 'fedeeee'}]}
-2023-12-28 13:41:08,272 [ERROR] [log_message] Error displaying profile: 'friends'
-2023-12-28 13:41:08,670 [INFO] [log_message] User input: 260
-2023-12-28 13:41:08,690 [INFO] [log_message] User stats: {'status': 'ok', 'data': {'id': 1, 'username': 'splix', 'ELO': 0, 'total_match_wins': 0, 'total_tournament_wins': 0, 'tournaments': [], 'matches': []}}
-2023-12-28 13:41:09,047 [INFO] [log_message] User input: 261
-2023-12-28 13:41:09,065 [INFO] [log_message] User friends: {'status': 'ok', 'data': [{'id': 2, 'username': 'fsalazar'}, {'id': 3, 'username': 'feder'}, {'id': 4, 'username': 'fede'}, {'id': 5, 'username': 'ihfieaf'}, {'id': 6, 'username': 'fedeeee'}]}
-2023-12-28 13:41:09,065 [ERROR] [log_message] Error displaying profile: 'friends'
-2023-12-28 13:43:55,770 [INFO] [log_message] Entered Data: {'Username': 'splix', 'Password': '123'}
-2023-12-28 13:43:56,084 [INFO] [log_message] Login response: splix
-2023-12-28 13:43:56,152 [INFO] [log_message] User stats: {'status': 'ok', 'data': {'id': 1, 'username': 'splix', 'ELO': 0, 'total_match_wins': 0, 'total_tournament_wins': 0, 'tournaments': [], 'matches': []}}
-2023-12-28 13:43:56,770 [INFO] [log_message] User input: 261
-2023-12-28 13:43:56,792 [INFO] [log_message] User friends: {'status': 'ok', 'data': [{'id': 2, 'username': 'fsalazar'}, {'id': 3, 'username': 'feder'}, {'id': 4, 'username': 'fede'}, {'id': 5, 'username': 'ihfieaf'}, {'id': 6, 'username': 'fedeeee'}]}
-2023-12-28 13:43:57,840 [INFO] [log_message] User input: 261
-2023-12-28 13:43:58,157 [INFO] [log_message] User input: 260
-2023-12-28 13:43:58,178 [INFO] [log_message] User friends: {'status': 'ok', 'data': [{'id': 2, 'username': 'fsalazar'}, {'id': 3, 'username': 'feder'}, {'id': 4, 'username': 'fede'}, {'id': 5, 'username': 'ihfieaf'}, {'id': 6, 'username': 'fedeeee'}]}
-2023-12-28 13:43:58,688 [INFO] [log_message] User input: 260
-2023-12-28 13:43:58,726 [INFO] [log_message] User stats: {'status': 'ok', 'data': {'id': 1, 'username': 'splix', 'ELO': 0, 'total_match_wins': 0, 'total_tournament_wins': 0, 'tournaments': [], 'matches': []}}
-2023-12-28 13:43:59,147 [INFO] [log_message] User input: 261
-2023-12-28 13:43:59,169 [INFO] [log_message] User friends: {'status': 'ok', 'data': [{'id': 2, 'username': 'fsalazar'}, {'id': 3, 'username': 'feder'}, {'id': 4, 'username': 'fede'}, {'id': 5, 'username': 'ihfieaf'}, {'id': 6, 'username': 'fedeeee'}]}
-2023-12-28 13:44:01,121 [INFO] [log_message] User input: 260
-2023-12-28 13:44:01,144 [INFO] [log_message] User stats: {'status': 'ok', 'data': {'id': 1, 'username': 'splix', 'ELO': 0, 'total_match_wins': 0, 'total_tournament_wins': 0, 'tournaments': [], 'matches': []}}
-2023-12-28 13:44:01,585 [INFO] [log_message] User input: 261
-2023-12-28 13:44:01,606 [INFO] [log_message] User friends: {'status': 'ok', 'data': [{'id': 2, 'username': 'fsalazar'}, {'id': 3, 'username': 'feder'}, {'id': 4, 'username': 'fede'}, {'id': 5, 'username': 'ihfieaf'}, {'id': 6, 'username': 'fedeeee'}]}
-2023-12-28 13:44:43,768 [INFO] [log_message] Entered Data: {'Username': 'splix', 'Password': '123'}
-2023-12-28 13:44:44,075 [INFO] [log_message] Login response: splix
-2023-12-28 13:44:44,159 [INFO] [log_message] User stats: {'status': 'ok', 'data': {'id': 1, 'username': 'splix', 'ELO': 0, 'total_match_wins': 0, 'total_tournament_wins': 0, 'tournaments': [], 'matches': []}}
-2023-12-28 13:44:44,704 [INFO] [log_message] User input: 261
-2023-12-28 13:44:44,728 [INFO] [log_message] User friends: {'status': 'ok', 'data': [{'id': 2, 'username': 'fsalazar'}, {'id': 3, 'username': 'feder'}, {'id': 4, 'username': 'fede'}, {'id': 5, 'username': 'ihfieaf'}, {'id': 6, 'username': 'fedeeee'}]}
-2023-12-28 13:44:46,161 [INFO] [log_message] User input: 261
-2023-12-28 13:44:46,648 [INFO] [log_message] User input: 261
-2023-12-28 13:44:46,938 [INFO] [log_message] User input: 260
-2023-12-28 13:44:47,097 [INFO] [log_message] User input: 260
-2023-12-28 13:44:47,117 [INFO] [log_message] User friends: {'status': 'ok', 'data': [{'id': 2, 'username': 'fsalazar'}, {'id': 3, 'username': 'feder'}, {'id': 4, 'username': 'fede'}, {'id': 5, 'username': 'ihfieaf'}, {'id': 6, 'username': 'fedeeee'}]}
-2023-12-28 13:44:47,517 [INFO] [log_message] User input: 260
-2023-12-28 13:44:47,545 [INFO] [log_message] User stats: {'status': 'ok', 'data': {'id': 1, 'username': 'splix', 'ELO': 0, 'total_match_wins': 0, 'total_tournament_wins': 0, 'tournaments': [], 'matches': []}}
-2023-12-28 13:44:47,901 [INFO] [log_message] User input: 261
-2023-12-28 13:44:47,920 [INFO] [log_message] User friends: {'status': 'ok', 'data': [{'id': 2, 'username': 'fsalazar'}, {'id': 3, 'username': 'feder'}, {'id': 4, 'username': 'fede'}, {'id': 5, 'username': 'ihfieaf'}, {'id': 6, 'username': 'fedeeee'}]}
-2023-12-28 13:44:48,585 [INFO] [log_message] User input: 260
-2023-12-28 13:44:48,621 [INFO] [log_message] User stats: {'status': 'ok', 'data': {'id': 1, 'username': 'splix', 'ELO': 0, 'total_match_wins': 0, 'total_tournament_wins': 0, 'tournaments': [], 'matches': []}}
-2023-12-28 13:44:48,934 [INFO] [log_message] User input: 261
-2023-12-28 13:44:48,955 [INFO] [log_message] User friends: {'status': 'ok', 'data': [{'id': 2, 'username': 'fsalazar'}, {'id': 3, 'username': 'feder'}, {'id': 4, 'username': 'fede'}, {'id': 5, 'username': 'ihfieaf'}, {'id': 6, 'username': 'fedeeee'}]}
-2023-12-28 13:44:49,596 [INFO] [log_message] User input: 261
-2023-12-28 13:44:49,958 [INFO] [log_message] User input: 260
-2023-12-28 13:44:49,976 [INFO] [log_message] User friends: {'status': 'ok', 'data': [{'id': 2, 'username': 'fsalazar'}, {'id': 3, 'username': 'feder'}, {'id': 4, 'username': 'fede'}, {'id': 5, 'username': 'ihfieaf'}, {'id': 6, 'username': 'fedeeee'}]}
-2023-12-28 13:44:50,275 [INFO] [log_message] User input: 260
-2023-12-28 13:44:50,296 [INFO] [log_message] User stats: {'status': 'ok', 'data': {'id': 1, 'username': 'splix', 'ELO': 0, 'total_match_wins': 0, 'total_tournament_wins': 0, 'tournaments': [], 'matches': []}}
-2023-12-28 13:44:52,289 [INFO] [log_message] User input: 261
-2023-12-28 13:44:52,309 [INFO] [log_message] User friends: {'status': 'ok', 'data': [{'id': 2, 'username': 'fsalazar'}, {'id': 3, 'username': 'feder'}, {'id': 4, 'username': 'fede'}, {'id': 5, 'username': 'ihfieaf'}, {'id': 6, 'username': 'fedeeee'}]}
-2023-12-28 13:44:52,992 [INFO] [log_message] User input: 261
-2023-12-28 13:44:53,846 [INFO] [log_message] User input: 260
-2023-12-28 13:44:53,870 [INFO] [log_message] User friends: {'status': 'ok', 'data': [{'id': 2, 'username': 'fsalazar'}, {'id': 3, 'username': 'feder'}, {'id': 4, 'username': 'fede'}, {'id': 5, 'username': 'ihfieaf'}, {'id': 6, 'username': 'fedeeee'}]}
-2023-12-28 13:44:54,559 [INFO] [log_message] User input: 260
-2023-12-28 13:44:54,585 [INFO] [log_message] User stats: {'status': 'ok', 'data': {'id': 1, 'username': 'splix', 'ELO': 0, 'total_match_wins': 0, 'total_tournament_wins': 0, 'tournaments': [], 'matches': []}}
-2023-12-28 13:44:55,222 [INFO] [log_message] User input: 261
-2023-12-28 13:44:55,248 [INFO] [log_message] User friends: {'status': 'ok', 'data': [{'id': 2, 'username': 'fsalazar'}, {'id': 3, 'username': 'feder'}, {'id': 4, 'username': 'fede'}, {'id': 5, 'username': 'ihfieaf'}, {'id': 6, 'username': 'fedeeee'}]}
-2023-12-28 13:44:59,151 [INFO] [log_message] User input: 260
-2023-12-28 13:44:59,174 [INFO] [log_message] User stats: {'status': 'ok', 'data': {'id': 1, 'username': 'splix', 'ELO': 0, 'total_match_wins': 0, 'total_tournament_wins': 0, 'tournaments': [], 'matches': []}}
-2023-12-28 13:45:00,194 [INFO] [log_message] User input: 261
-2023-12-28 13:45:00,215 [INFO] [log_message] User friends: {'status': 'ok', 'data': [{'id': 2, 'username': 'fsalazar'}, {'id': 3, 'username': 'feder'}, {'id': 4, 'username': 'fede'}, {'id': 5, 'username': 'ihfieaf'}, {'id': 6, 'username': 'fedeeee'}]}
-2023-12-28 13:45:03,623 [INFO] [log_message] User input: 260
-2023-12-28 13:45:03,644 [INFO] [log_message] User stats: {'status': 'ok', 'data': {'id': 1, 'username': 'splix', 'ELO': 0, 'total_match_wins': 0, 'total_tournament_wins': 0, 'tournaments': [], 'matches': []}}
+2023-12-28 15:29:17,838 [INFO] [log_message] Current view: <app.home.splash_screen.SplashScreen object at 0x7ff26a32e7a0>, Next view: <app.home.registration.Registration object at 0x7ff26a32e770>
+2023-12-28 15:29:18,064 [INFO] [log_message] Current view: <app.home.registration.Registration object at 0x7ff26a32e770>, Next view: <app.home.login.Login object at 0x7ff26a32e560>
+2023-12-28 15:29:18,628 [INFO] [log_message] Current view: <app.home.login.Login object at 0x7ff26a32e560>, Next view: None
+2023-12-28 15:29:18,775 [INFO] [log_message] Current view: <app.home.login.Login object at 0x7ff26a32e560>, Next view: None
+2023-12-28 15:29:18,954 [INFO] [log_message] Current view: <app.home.login.Login object at 0x7ff26a32e560>, Next view: None
+2023-12-28 15:29:19,127 [INFO] [log_message] Current view: <app.home.login.Login object at 0x7ff26a32e560>, Next view: None
+2023-12-28 15:29:19,208 [INFO] [log_message] Current view: <app.home.login.Login object at 0x7ff26a32e560>, Next view: None
+2023-12-28 15:29:19,558 [INFO] [log_message] Current view: <app.home.login.Login object at 0x7ff26a32e560>, Next view: None
+2023-12-28 15:29:19,739 [INFO] [log_message] Current view: <app.home.login.Login object at 0x7ff26a32e560>, Next view: None
+2023-12-28 15:29:19,856 [INFO] [log_message] Current view: <app.home.login.Login object at 0x7ff26a32e560>, Next view: None
+2023-12-28 15:29:19,912 [INFO] [log_message] Current view: <app.home.login.Login object at 0x7ff26a32e560>, Next view: None
+2023-12-28 15:29:20,057 [INFO] [log_message] Entered Data: {'Username': 'splix', 'Password': '123'}
+2023-12-28 15:29:20,374 [INFO] [log_message] Login response: splix
+2023-12-28 15:29:20,374 [INFO] [log_message] Current view: <app.home.login.Login object at 0x7ff26a32e560>, Next view: <app.home.home.Home object at 0x7ff26a32e680>
+2023-12-28 15:29:20,412 [INFO] [log_message] Connected to WebSocket (lobby): ws://localhost:8001/ws/lobby2/?client_id=1
+2023-12-28 15:29:20,435 [INFO] [log_message] User stats: {'status': 'ok', 'data': {'id': 1, 'username': 'splix', 'ELO': 0, 'total_match_wins': 0, 'total_tournament_wins': 0, 'tournaments': [], 'matches': []}}
+2023-12-28 15:29:21,633 [INFO] [log_message] User input: 261
+2023-12-28 15:29:21,634 [INFO] [log_message] Current view: <app.home.home.Home object at 0x7ff26a32e680>, Next view: None
+2023-12-28 15:29:21,661 [INFO] [log_message] User friends: {'status': 'ok', 'data': [{'id': 2, 'username': 'fsalazar'}, {'id': 3, 'username': 'feder'}, {'id': 4, 'username': 'fede'}, {'id': 5, 'username': 'ihfieaf'}, {'id': 6, 'username': 'fedeeee'}]}
+2023-12-28 15:29:21,664 [INFO] [log_message] Online friends: <coroutine object websocket_api.receive_messages_until at 0x7ff26a2f3a70>
+2023-12-28 15:29:21,665 [ERROR] [log_message] Error displaying friends: 'coroutine' object has no attribute 'get'
+2023-12-28 15:32:10,750 [INFO] [log_message] Current view: <app.home.splash_screen.SplashScreen object at 0x7ffb35155ba0>, Next view: <app.home.registration.Registration object at 0x7ffb35155b70>
+2023-12-28 15:32:11,097 [INFO] [log_message] Current view: <app.home.registration.Registration object at 0x7ffb35155b70>, Next view: <app.home.login.Login object at 0x7ffb35155960>
+2023-12-28 15:32:11,594 [INFO] [log_message] Current view: <app.home.login.Login object at 0x7ffb35155960>, Next view: None
+2023-12-28 15:32:11,758 [INFO] [log_message] Current view: <app.home.login.Login object at 0x7ffb35155960>, Next view: None
+2023-12-28 15:32:11,941 [INFO] [log_message] Current view: <app.home.login.Login object at 0x7ffb35155960>, Next view: None
+2023-12-28 15:32:12,129 [INFO] [log_message] Current view: <app.home.login.Login object at 0x7ffb35155960>, Next view: None
+2023-12-28 15:32:12,243 [INFO] [log_message] Current view: <app.home.login.Login object at 0x7ffb35155960>, Next view: None
+2023-12-28 15:32:12,545 [INFO] [log_message] Current view: <app.home.login.Login object at 0x7ffb35155960>, Next view: None
+2023-12-28 15:32:12,784 [INFO] [log_message] Current view: <app.home.login.Login object at 0x7ffb35155960>, Next view: None
+2023-12-28 15:32:12,882 [INFO] [log_message] Current view: <app.home.login.Login object at 0x7ffb35155960>, Next view: None
+2023-12-28 15:32:12,950 [INFO] [log_message] Current view: <app.home.login.Login object at 0x7ffb35155960>, Next view: None
+2023-12-28 15:32:13,082 [INFO] [log_message] Entered Data: {'Username': 'splix', 'Password': '123'}
+2023-12-28 15:32:13,401 [INFO] [log_message] Login response: splix
+2023-12-28 15:32:13,401 [INFO] [log_message] Current view: <app.home.login.Login object at 0x7ffb35155960>, Next view: <app.home.home.Home object at 0x7ffb35155a80>
+2023-12-28 15:32:13,431 [INFO] [log_message] Connected to WebSocket (lobby): ws://localhost:8001/ws/lobby2/?client_id=1
+2023-12-28 15:32:13,510 [INFO] [log_message] User stats: {'status': 'ok', 'data': {'id': 1, 'username': 'splix', 'ELO': 0, 'total_match_wins': 0, 'total_tournament_wins': 0, 'tournaments': [], 'matches': []}}
+2023-12-28 15:32:14,221 [INFO] [log_message] User input: 261
+2023-12-28 15:32:14,222 [INFO] [log_message] Current view: <app.home.home.Home object at 0x7ffb35155a80>, Next view: None
+2023-12-28 15:32:14,243 [INFO] [log_message] User friends: {'status': 'ok', 'data': [{'id': 2, 'username': 'fsalazar'}, {'id': 3, 'username': 'feder'}, {'id': 4, 'username': 'fede'}, {'id': 5, 'username': 'ihfieaf'}, {'id': 6, 'username': 'fedeeee'}]}
+2023-12-28 15:32:44,863 [INFO] [log_message] Current view: <app.home.splash_screen.SplashScreen object at 0x7f151aeba6b0>, Next view: <app.home.registration.Registration object at 0x7f151aeba680>
+2023-12-28 15:32:45,250 [INFO] [log_message] Current view: <app.home.registration.Registration object at 0x7f151aeba680>, Next view: <app.home.login.Login object at 0x7f151aeba470>
+2023-12-28 15:32:45,524 [INFO] [log_message] Current view: <app.home.login.Login object at 0x7f151aeba470>, Next view: None
+2023-12-28 15:32:45,657 [INFO] [log_message] Current view: <app.home.login.Login object at 0x7f151aeba470>, Next view: None
+2023-12-28 15:32:46,538 [INFO] [log_message] Current view: <app.home.login.Login object at 0x7f151aeba470>, Next view: None
+2023-12-28 15:32:46,749 [INFO] [log_message] Current view: <app.home.login.Login object at 0x7f151aeba470>, Next view: None
+2023-12-28 15:32:46,872 [INFO] [log_message] Current view: <app.home.login.Login object at 0x7f151aeba470>, Next view: None
+2023-12-28 15:32:47,209 [INFO] [log_message] Current view: <app.home.login.Login object at 0x7f151aeba470>, Next view: None
+2023-12-28 15:32:47,441 [INFO] [log_message] Current view: <app.home.login.Login object at 0x7f151aeba470>, Next view: None
+2023-12-28 15:32:47,542 [INFO] [log_message] Current view: <app.home.login.Login object at 0x7f151aeba470>, Next view: None
+2023-12-28 15:32:47,621 [INFO] [log_message] Current view: <app.home.login.Login object at 0x7f151aeba470>, Next view: None
+2023-12-28 15:32:47,744 [INFO] [log_message] Entered Data: {'Username': 'splix', 'Password': '123'}
+2023-12-28 15:32:48,046 [INFO] [log_message] Login response: splix
+2023-12-28 15:32:48,046 [INFO] [log_message] Current view: <app.home.login.Login object at 0x7f151aeba470>, Next view: <app.home.home.Home object at 0x7f151aeba590>
+2023-12-28 15:32:48,076 [INFO] [log_message] Connected to WebSocket (lobby): ws://localhost:8001/ws/lobby2/?client_id=1
+2023-12-28 15:32:48,145 [INFO] [log_message] User stats: {'status': 'ok', 'data': {'id': 1, 'username': 'splix', 'ELO': 0, 'total_match_wins': 0, 'total_tournament_wins': 0, 'tournaments': [], 'matches': []}}
+2023-12-28 15:32:48,749 [INFO] [log_message] User input: 261
+2023-12-28 15:32:48,750 [INFO] [log_message] Current view: <app.home.home.Home object at 0x7f151aeba590>, Next view: None
+2023-12-28 15:32:48,770 [INFO] [log_message] User friends: {'status': 'ok', 'data': [{'id': 2, 'username': 'fsalazar'}, {'id': 3, 'username': 'feder'}, {'id': 4, 'username': 'fede'}, {'id': 5, 'username': 'ihfieaf'}, {'id': 6, 'username': 'fedeeee'}]}
+2023-12-28 15:32:49,778 [INFO] [log_message] User input: 261
+2023-12-28 15:32:49,779 [INFO] [log_message] Current view: <app.home.home.Home object at 0x7f151aeba590>, Next view: None
+2023-12-28 15:32:50,221 [INFO] [log_message] User input: 260
+2023-12-28 15:32:50,221 [INFO] [log_message] Current view: <app.home.home.Home object at 0x7f151aeba590>, Next view: None
+2023-12-28 15:32:50,241 [INFO] [log_message] User friends: {'status': 'ok', 'data': [{'id': 2, 'username': 'fsalazar'}, {'id': 3, 'username': 'feder'}, {'id': 4, 'username': 'fede'}, {'id': 5, 'username': 'ihfieaf'}, {'id': 6, 'username': 'fedeeee'}]}
+2023-12-28 15:32:52,141 [INFO] [log_message] User input: 10
+2023-12-28 15:32:52,141 [INFO] [log_message] Current view: <app.home.home.Home object at 0x7f151aeba590>, Next view: <app.home.friends.Friends object at 0x7f151aeba500>
+2023-12-28 15:32:52,174 [INFO] [log_message] User stats: {'status': 'ok', 'data': {'id': 1, 'username': 'splix', 'ELO': 0, 'total_match_wins': 0, 'total_tournament_wins': 0, 'tournaments': [], 'matches': []}}
+2023-12-28 15:32:52,840 [INFO] [log_message] User input: 261
+2023-12-28 15:32:52,840 [INFO] [log_message] Current view: <app.home.friends.Friends object at 0x7f151aeba500>, Next view: None
+2023-12-28 15:32:52,859 [INFO] [log_message] User friends: {'status': 'ok', 'data': [{'id': 2, 'username': 'fsalazar'}, {'id': 3, 'username': 'feder'}, {'id': 4, 'username': 'fede'}, {'id': 5, 'username': 'ihfieaf'}, {'id': 6, 'username': 'fedeeee'}]}
+2023-12-28 15:34:00,992 [INFO] [log_message] Current view: <app.home.splash_screen.SplashScreen object at 0x7f519569dab0>, Next view: <app.home.registration.Registration object at 0x7f519569da80>
+2023-12-28 15:34:01,364 [INFO] [log_message] Current view: <app.home.registration.Registration object at 0x7f519569da80>, Next view: <app.home.login.Login object at 0x7f519569d870>
+2023-12-28 15:34:01,754 [INFO] [log_message] Current view: <app.home.login.Login object at 0x7f519569d870>, Next view: None
+2023-12-28 15:34:01,945 [INFO] [log_message] Current view: <app.home.login.Login object at 0x7f519569d870>, Next view: None
+2023-12-28 15:34:02,112 [INFO] [log_message] Current view: <app.home.login.Login object at 0x7f519569d870>, Next view: None
+2023-12-28 15:34:02,297 [INFO] [log_message] Current view: <app.home.login.Login object at 0x7f519569d870>, Next view: None
+2023-12-28 15:34:02,384 [INFO] [log_message] Current view: <app.home.login.Login object at 0x7f519569d870>, Next view: None
+2023-12-28 15:34:02,692 [INFO] [log_message] Current view: <app.home.login.Login object at 0x7f519569d870>, Next view: None
+2023-12-28 15:34:02,871 [INFO] [log_message] Current view: <app.home.login.Login object at 0x7f519569d870>, Next view: None
+2023-12-28 15:34:02,962 [INFO] [log_message] Current view: <app.home.login.Login object at 0x7f519569d870>, Next view: None
+2023-12-28 15:34:03,032 [INFO] [log_message] Current view: <app.home.login.Login object at 0x7f519569d870>, Next view: None
+2023-12-28 15:34:03,158 [INFO] [log_message] Entered Data: {'Username': 'splix', 'Password': '123'}
+2023-12-28 15:34:03,468 [INFO] [log_message] Login response: splix
+2023-12-28 15:34:03,468 [INFO] [log_message] Current view: <app.home.login.Login object at 0x7f519569d870>, Next view: <app.home.home.Home object at 0x7f519569d990>
+2023-12-28 15:34:03,501 [INFO] [log_message] Connected to WebSocket (lobby): ws://localhost:8001/ws/lobby2/?client_id=1
+2023-12-28 15:34:03,524 [INFO] [log_message] User stats: {'status': 'ok', 'data': {'id': 1, 'username': 'splix', 'ELO': 0, 'total_match_wins': 0, 'total_tournament_wins': 0, 'tournaments': [], 'matches': []}}
+2023-12-28 15:34:04,309 [INFO] [log_message] User input: 261
+2023-12-28 15:34:04,309 [INFO] [log_message] Current view: <app.home.home.Home object at 0x7f519569d990>, Next view: None
+2023-12-28 15:34:04,330 [INFO] [log_message] User friends: {'status': 'ok', 'data': [{'id': 2, 'username': 'fsalazar'}, {'id': 3, 'username': 'feder'}, {'id': 4, 'username': 'fede'}, {'id': 5, 'username': 'ihfieaf'}, {'id': 6, 'username': 'fedeeee'}]}
+2023-12-28 15:34:06,864 [INFO] [log_message] User input: 10
+2023-12-28 15:34:06,864 [INFO] [log_message] Current view: <app.home.home.Home object at 0x7f519569d990>, Next view: <app.home.friends.Friends object at 0x7f519569d900>
+2023-12-28 15:34:06,885 [INFO] [log_message] User stats: {'status': 'ok', 'data': {'id': 1, 'username': 'splix', 'ELO': 0, 'total_match_wins': 0, 'total_tournament_wins': 0, 'tournaments': [], 'matches': []}}
+2023-12-28 15:34:07,232 [INFO] [log_message] User input: 261
+2023-12-28 15:34:07,233 [INFO] [log_message] Current view: <app.home.friends.Friends object at 0x7f519569d900>, Next view: None
+2023-12-28 15:34:07,252 [INFO] [log_message] User friends: {'status': 'ok', 'data': [{'id': 2, 'username': 'fsalazar'}, {'id': 3, 'username': 'feder'}, {'id': 4, 'username': 'fede'}, {'id': 5, 'username': 'ihfieaf'}, {'id': 6, 'username': 'fedeeee'}]}
+2023-12-28 15:37:22,152 [INFO] [log_message] User input: 261
+2023-12-28 15:37:22,153 [INFO] [log_message] Current view: <app.home.friends.Friends object at 0x7f519569d900>, Next view: None
+2023-12-28 15:37:23,788 [INFO] [log_message] Current view: <app.home.splash_screen.SplashScreen object at 0x7f3fce4b66b0>, Next view: <app.home.registration.Registration object at 0x7f3fce4b6680>
+2023-12-28 15:37:23,946 [INFO] [log_message] Current view: <app.home.registration.Registration object at 0x7f3fce4b6680>, Next view: <app.home.login.Login object at 0x7f3fce4b6470>
+2023-12-28 15:37:24,406 [INFO] [log_message] Current view: <app.home.login.Login object at 0x7f3fce4b6470>, Next view: None
+2023-12-28 15:37:24,600 [INFO] [log_message] Current view: <app.home.login.Login object at 0x7f3fce4b6470>, Next view: None
+2023-12-28 15:37:24,780 [INFO] [log_message] Current view: <app.home.login.Login object at 0x7f3fce4b6470>, Next view: None
+2023-12-28 15:37:24,932 [INFO] [log_message] Current view: <app.home.login.Login object at 0x7f3fce4b6470>, Next view: None
+2023-12-28 15:37:25,000 [INFO] [log_message] Current view: <app.home.login.Login object at 0x7f3fce4b6470>, Next view: None
+2023-12-28 15:37:25,281 [INFO] [log_message] Current view: <app.home.login.Login object at 0x7f3fce4b6470>, Next view: None
+2023-12-28 15:37:25,495 [INFO] [log_message] Current view: <app.home.login.Login object at 0x7f3fce4b6470>, Next view: None
+2023-12-28 15:37:25,593 [INFO] [log_message] Current view: <app.home.login.Login object at 0x7f3fce4b6470>, Next view: None
+2023-12-28 15:37:25,697 [INFO] [log_message] Current view: <app.home.login.Login object at 0x7f3fce4b6470>, Next view: None
+2023-12-28 15:37:25,865 [INFO] [log_message] Entered Data: {'Username': 'splix', 'Password': '123'}
+2023-12-28 15:37:26,162 [INFO] [log_message] Login response: splix
+2023-12-28 15:37:26,162 [INFO] [log_message] Current view: <app.home.login.Login object at 0x7f3fce4b6470>, Next view: <app.home.home.Home object at 0x7f3fce4b6590>
+2023-12-28 15:37:26,194 [INFO] [log_message] Connected to WebSocket (lobby): ws://localhost:8001/ws/lobby2/?client_id=1
+2023-12-28 15:37:26,260 [INFO] [log_message] User stats: {'status': 'ok', 'data': {'id': 1, 'username': 'splix', 'ELO': 0, 'total_match_wins': 0, 'total_tournament_wins': 0, 'tournaments': [], 'matches': []}}
+2023-12-28 15:37:26,804 [INFO] [log_message] User input: 261
+2023-12-28 15:37:26,805 [INFO] [log_message] Current view: <app.home.home.Home object at 0x7f3fce4b6590>, Next view: None
+2023-12-28 15:37:26,824 [INFO] [log_message] User friends: {'status': 'ok', 'data': [{'id': 2, 'username': 'fsalazar'}, {'id': 3, 'username': 'feder'}, {'id': 4, 'username': 'fede'}, {'id': 5, 'username': 'ihfieaf'}, {'id': 6, 'username': 'fedeeee'}]}
+2023-12-28 15:37:27,004 [INFO] [log_message] User input: 261
+2023-12-28 15:37:27,004 [INFO] [log_message] Current view: <app.home.home.Home object at 0x7f3fce4b6590>, Next view: None
+2023-12-28 15:37:27,214 [INFO] [log_message] User input: 261
+2023-12-28 15:37:27,214 [INFO] [log_message] Current view: <app.home.home.Home object at 0x7f3fce4b6590>, Next view: None
+2023-12-28 15:37:27,409 [INFO] [log_message] User input: 260
+2023-12-28 15:37:27,409 [INFO] [log_message] Current view: <app.home.home.Home object at 0x7f3fce4b6590>, Next view: None
+2023-12-28 15:37:27,571 [INFO] [log_message] User input: 260
+2023-12-28 15:37:27,571 [INFO] [log_message] Current view: <app.home.home.Home object at 0x7f3fce4b6590>, Next view: None
+2023-12-28 15:37:27,592 [INFO] [log_message] User friends: {'status': 'ok', 'data': [{'id': 2, 'username': 'fsalazar'}, {'id': 3, 'username': 'feder'}, {'id': 4, 'username': 'fede'}, {'id': 5, 'username': 'ihfieaf'}, {'id': 6, 'username': 'fedeeee'}]}
+2023-12-28 15:37:27,709 [INFO] [log_message] User input: 260
+2023-12-28 15:37:27,709 [INFO] [log_message] Current view: <app.home.home.Home object at 0x7f3fce4b6590>, Next view: None
+2023-12-28 15:37:27,730 [INFO] [log_message] User stats: {'status': 'ok', 'data': {'id': 1, 'username': 'splix', 'ELO': 0, 'total_match_wins': 0, 'total_tournament_wins': 0, 'tournaments': [], 'matches': []}}
+2023-12-28 15:37:27,850 [INFO] [log_message] User input: 260
+2023-12-28 15:37:27,850 [INFO] [log_message] Current view: <app.home.home.Home object at 0x7f3fce4b6590>, Next view: None
+2023-12-28 15:37:27,873 [INFO] [log_message] User stats: {'status': 'ok', 'data': {'id': 1, 'username': 'splix', 'ELO': 0, 'total_match_wins': 0, 'total_tournament_wins': 0, 'tournaments': [], 'matches': []}}
+2023-12-28 15:37:27,990 [INFO] [log_message] User input: 261
+2023-12-28 15:37:27,990 [INFO] [log_message] Current view: <app.home.home.Home object at 0x7f3fce4b6590>, Next view: None
+2023-12-28 15:37:28,012 [INFO] [log_message] User friends: {'status': 'ok', 'data': [{'id': 2, 'username': 'fsalazar'}, {'id': 3, 'username': 'feder'}, {'id': 4, 'username': 'fede'}, {'id': 5, 'username': 'ihfieaf'}, {'id': 6, 'username': 'fedeeee'}]}
+2023-12-28 15:37:28,154 [INFO] [log_message] User input: 261
+2023-12-28 15:37:28,155 [INFO] [log_message] Current view: <app.home.home.Home object at 0x7f3fce4b6590>, Next view: None
+2023-12-28 15:37:28,277 [INFO] [log_message] User input: 261
+2023-12-28 15:37:28,277 [INFO] [log_message] Current view: <app.home.home.Home object at 0x7f3fce4b6590>, Next view: None
+2023-12-28 15:37:28,503 [INFO] [log_message] User input: 260
+2023-12-28 15:37:28,503 [INFO] [log_message] Current view: <app.home.home.Home object at 0x7f3fce4b6590>, Next view: None
+2023-12-28 15:37:28,634 [INFO] [log_message] User input: 260
+2023-12-28 15:37:28,635 [INFO] [log_message] Current view: <app.home.home.Home object at 0x7f3fce4b6590>, Next view: None
+2023-12-28 15:37:28,654 [INFO] [log_message] User friends: {'status': 'ok', 'data': [{'id': 2, 'username': 'fsalazar'}, {'id': 3, 'username': 'feder'}, {'id': 4, 'username': 'fede'}, {'id': 5, 'username': 'ihfieaf'}, {'id': 6, 'username': 'fedeeee'}]}
+2023-12-28 15:37:28,768 [INFO] [log_message] User input: 260
+2023-12-28 15:37:28,769 [INFO] [log_message] Current view: <app.home.home.Home object at 0x7f3fce4b6590>, Next view: None
+2023-12-28 15:37:28,792 [INFO] [log_message] User stats: {'status': 'ok', 'data': {'id': 1, 'username': 'splix', 'ELO': 0, 'total_match_wins': 0, 'total_tournament_wins': 0, 'tournaments': [], 'matches': []}}
+2023-12-28 15:37:28,888 [INFO] [log_message] User input: 260
+2023-12-28 15:37:28,888 [INFO] [log_message] Current view: <app.home.home.Home object at 0x7f3fce4b6590>, Next view: None
+2023-12-28 15:37:28,911 [INFO] [log_message] User stats: {'status': 'ok', 'data': {'id': 1, 'username': 'splix', 'ELO': 0, 'total_match_wins': 0, 'total_tournament_wins': 0, 'tournaments': [], 'matches': []}}
+2023-12-28 15:43:13,764 [INFO] [log_message] Current view: <app.home.splash_screen.SplashScreen object at 0x7fb616c45ea0>, Next view: <app.home.registration.Registration object at 0x7fb616c45e70>
+2023-12-28 15:43:14,155 [INFO] [log_message] Current view: <app.home.registration.Registration object at 0x7fb616c45e70>, Next view: <app.home.login.Login object at 0x7fb616c45c60>
+2023-12-28 15:43:14,575 [INFO] [log_message] Current view: <app.home.login.Login object at 0x7fb616c45c60>, Next view: None
+2023-12-28 15:43:14,772 [INFO] [log_message] Current view: <app.home.login.Login object at 0x7fb616c45c60>, Next view: None
+2023-12-28 15:43:14,949 [INFO] [log_message] Current view: <app.home.login.Login object at 0x7fb616c45c60>, Next view: None
+2023-12-28 15:43:15,132 [INFO] [log_message] Current view: <app.home.login.Login object at 0x7fb616c45c60>, Next view: None
+2023-12-28 15:43:15,264 [INFO] [log_message] Current view: <app.home.login.Login object at 0x7fb616c45c60>, Next view: None
+2023-12-28 15:43:15,559 [INFO] [log_message] Current view: <app.home.login.Login object at 0x7fb616c45c60>, Next view: None
+2023-12-28 15:43:15,838 [INFO] [log_message] Current view: <app.home.login.Login object at 0x7fb616c45c60>, Next view: None
+2023-12-28 15:43:15,944 [INFO] [log_message] Current view: <app.home.login.Login object at 0x7fb616c45c60>, Next view: None
+2023-12-28 15:43:16,004 [INFO] [log_message] Current view: <app.home.login.Login object at 0x7fb616c45c60>, Next view: None
+2023-12-28 15:43:16,116 [INFO] [log_message] Entered Data: {'Username': 'splix', 'Password': '123'}
+2023-12-28 15:43:16,419 [INFO] [log_message] Login response: splix
+2023-12-28 15:43:16,419 [INFO] [log_message] Current view: <app.home.login.Login object at 0x7fb616c45c60>, Next view: <app.home.home.Home object at 0x7fb616c45d80>
+2023-12-28 15:43:16,454 [INFO] [log_message] Connected to WebSocket (lobby): ws://localhost:8001/ws/lobby2/?client_id=1
+2023-12-28 15:43:16,476 [INFO] [log_message] User stats: {'status': 'ok', 'data': {'id': 1, 'username': 'splix', 'ELO': 0, 'total_match_wins': 0, 'total_tournament_wins': 0, 'tournaments': [], 'matches': []}}
+2023-12-28 15:43:17,232 [INFO] [log_message] User input: 261
+2023-12-28 15:43:17,233 [INFO] [log_message] Current view: <app.home.home.Home object at 0x7fb616c45d80>, Next view: None
+2023-12-28 15:43:17,251 [INFO] [log_message] User friends: {'status': 'ok', 'data': [{'id': 2, 'username': 'fsalazar'}, {'id': 3, 'username': 'feder'}, {'id': 4, 'username': 'fede'}, {'id': 5, 'username': 'ihfieaf'}, {'id': 6, 'username': 'fedeeee'}]}
+2023-12-28 15:43:17,795 [INFO] [log_message] User input: 261
+2023-12-28 15:43:17,796 [INFO] [log_message] Current view: <app.home.home.Home object at 0x7fb616c45d80>, Next view: None
+2023-12-28 15:43:18,141 [INFO] [log_message] User input: 261
+2023-12-28 15:43:18,141 [INFO] [log_message] Current view: <app.home.home.Home object at 0x7fb616c45d80>, Next view: None
+2023-12-28 15:43:18,408 [INFO] [log_message] User input: 260
+2023-12-28 15:43:18,408 [INFO] [log_message] Current view: <app.home.home.Home object at 0x7fb616c45d80>, Next view: None
+2023-12-28 15:43:18,554 [INFO] [log_message] User input: 260
+2023-12-28 15:43:18,554 [INFO] [log_message] Current view: <app.home.home.Home object at 0x7fb616c45d80>, Next view: None
+2023-12-28 15:43:18,574 [INFO] [log_message] User friends: {'status': 'ok', 'data': [{'id': 2, 'username': 'fsalazar'}, {'id': 3, 'username': 'feder'}, {'id': 4, 'username': 'fede'}, {'id': 5, 'username': 'ihfieaf'}, {'id': 6, 'username': 'fedeeee'}]}
+2023-12-28 15:43:18,701 [INFO] [log_message] User input: 260
+2023-12-28 15:43:18,701 [INFO] [log_message] Current view: <app.home.home.Home object at 0x7fb616c45d80>, Next view: None
+2023-12-28 15:43:18,721 [INFO] [log_message] User stats: {'status': 'ok', 'data': {'id': 1, 'username': 'splix', 'ELO': 0, 'total_match_wins': 0, 'total_tournament_wins': 0, 'tournaments': [], 'matches': []}}
+2023-12-28 15:43:19,219 [INFO] [log_message] User input: 260
+2023-12-28 15:43:19,219 [INFO] [log_message] Current view: <app.home.home.Home object at 0x7fb616c45d80>, Next view: None
+2023-12-28 15:43:19,239 [INFO] [log_message] User stats: {'status': 'ok', 'data': {'id': 1, 'username': 'splix', 'ELO': 0, 'total_match_wins': 0, 'total_tournament_wins': 0, 'tournaments': [], 'matches': []}}
