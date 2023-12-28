@@ -18,10 +18,12 @@ initialize_logger()
 
 async def get_user_input_with_timeout(current_view, timeout):
     try:
-        user_input = await asyncio.wait_for(current_view.get_user_input(), timeout=timeout)
+        task = asyncio.create_task(current_view.get_user_input())
+        user_input = await asyncio.wait_for(task, timeout=timeout)
         return user_input
     except asyncio.TimeoutError:
-        return None  # Return None if no input within the timeout
+        log_message("Timeout: No user input", level=logging.INFO)
+        return None
 
 async def connect_to_lobby_websocket(ws):
     try:
@@ -46,6 +48,20 @@ async def update_lobby_messages(ws, current_view):
     try:
         # Do not receive messages in this function
         while True:
+            # Pass the current view as a local variable to capture its state
+            current_view_instance = current_view
+
+            # Check if the current view has changed
+            if current_view_instance != current_view:
+                # Stop lobby message handling for the previous view
+                current_view.stop_lobby_message_handling()
+
+                # Start lobby message handling for the new view
+                current_view_instance.start_lobby_message_handling()
+
+                # Update the reference to the current view
+                current_view = current_view_instance
+
             await asyncio.sleep(1)  # Sleep or do other tasks if needed
     except asyncio.CancelledError:
         # Catch the cancellation when leaving the view
@@ -53,6 +69,7 @@ async def update_lobby_messages(ws, current_view):
     finally:
         # Stop lobby message handling when leaving the view
         current_view.stop_lobby_message_handling()
+
 
 async def main(stdscr):
     # Set up the terminal
@@ -76,8 +93,14 @@ async def main(stdscr):
 
             # Get user input for the current view
             user_input = await get_user_input_with_timeout(current_view, timeout=0.1)
+            # Count how many loops have passed since the last user input
+            # If the user has not provided any input for a long time, the timeout will be increased
 
+            log_message(f"User input: {user_input}", level=logging.INFO)
+            
+            
             if user_input is None:
+                log_message("No user input", level=logging.INFO)
                 continue  # Exit the loop on None
 
             current_view.process_input(user_input)
@@ -97,7 +120,7 @@ async def main(stdscr):
                     log_message("Connecting to lobby WebSocket", level=logging.INFO)
                     await connect_to_lobby_websocket(ws)
 
-                    asyncio.create_task(update_lobby_messages(ws, current_view))
+                # asyncio.create_task(update_lobby_messages(ws, current_view))
 
 
     except KeyboardInterrupt:

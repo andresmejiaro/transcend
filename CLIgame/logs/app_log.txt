@@ -1,59 +1,93 @@
-2023-12-28 17:12:45,639 [INFO] [log_message] Current view: <app.home.splash_screen.SplashScreen object at 0x7f81cf99ee60>, Next view: <app.home.registration.Registration object at 0x7f81cf99ee30>
-2023-12-28 17:12:45,936 [INFO] [log_message] Current view: <app.home.registration.Registration object at 0x7f81cf99ee30>, Next view: <app.home.login.Login object at 0x7f81cf99ec20>
-2023-12-28 17:12:46,527 [INFO] [log_message] Current view: <app.home.login.Login object at 0x7f81cf99ec20>, Next view: None
-2023-12-28 17:12:46,681 [INFO] [log_message] Current view: <app.home.login.Login object at 0x7f81cf99ec20>, Next view: None
-2023-12-28 17:12:46,872 [INFO] [log_message] Current view: <app.home.login.Login object at 0x7f81cf99ec20>, Next view: None
-2023-12-28 17:12:47,083 [INFO] [log_message] Current view: <app.home.login.Login object at 0x7f81cf99ec20>, Next view: None
-2023-12-28 17:12:47,170 [INFO] [log_message] Current view: <app.home.login.Login object at 0x7f81cf99ec20>, Next view: None
-2023-12-28 17:12:47,803 [INFO] [log_message] Current view: <app.home.login.Login object at 0x7f81cf99ec20>, Next view: None
-2023-12-28 17:12:48,203 [INFO] [log_message] Current view: <app.home.login.Login object at 0x7f81cf99ec20>, Next view: None
-2023-12-28 17:12:48,264 [INFO] [log_message] Current view: <app.home.login.Login object at 0x7f81cf99ec20>, Next view: None
-2023-12-28 17:12:48,368 [INFO] [log_message] Current view: <app.home.login.Login object at 0x7f81cf99ec20>, Next view: None
-2023-12-28 17:12:48,538 [INFO] [log_message] Entered Data: {'Username': 'splix', 'Password': '123'}
-2023-12-28 17:12:48,842 [INFO] [log_message] Login response: splix
-2023-12-28 17:12:48,842 [INFO] [log_message] Current view: <app.home.login.Login object at 0x7f81cf99ec20>, Next view: <app.home.home.Home object at 0x7f81cf99ed40>
-2023-12-28 17:12:48,842 [INFO] [log_message] Connecting to lobby WebSocket
-2023-12-28 17:12:48,874 [INFO] [log_message] Connected to WebSocket (lobby): ws://localhost:8001/ws/lobby2/?client_id=1
-2023-12-28 17:12:48,954 [INFO] [log_message] User stats: {'status': 'ok', 'data': {'id': 1, 'username': 'splix', 'ELO': 0, 'total_match_wins': 0, 'total_tournament_wins': 0, 'tournaments': [], 'matches': []}}
-2023-12-28 17:12:50,319 [INFO] [log_message] User input: 261
-2023-12-28 17:12:50,320 [INFO] [log_message] Current view: <app.home.home.Home object at 0x7f81cf99ed40>, Next view: None
-2023-12-28 17:12:50,344 [INFO] [log_message] User friends: {'status': 'ok', 'data': [{'id': 2, 'username': 'fsalazar'}, {'id': 3, 'username': 'feder'}, {'id': 4, 'username': 'fede'}, {'id': 5, 'username': 'ihfieaf'}, {'id': 6, 'username': 'fedeeee'}]}
-2023-12-28 17:12:51,878 [INFO] [log_message] User input: 261
-2023-12-28 17:12:51,878 [INFO] [log_message] Received message from WebSocket (lobby): {"type": "user_joined", "data": {"client_id": "1", "lobby_name": "lobby", "online_users": {"2": "fsalazar", "1": "splix"}}}
-2023-12-28 17:12:51,878 [INFO] [log_message] Home recieved a message: {"type": "user_joined", "data": {"client_id": "1", "lobby_name": "lobby", "online_users": {"2": "fsalazar", "1": "splix"}}}
-2023-12-28 17:12:51,878 [INFO] [log_message] Current view: <app.home.home.Home object at 0x7f81cf99ed40>, Next view: None
-2023-12-28 17:12:57,464 [INFO] [log_message] User input: 261
-2023-12-28 17:12:57,465 [INFO] [log_message] Current view: <app.home.home.Home object at 0x7f81cf99ed40>, Next view: None
-2023-12-28 17:12:58,277 [INFO] [log_message] User input: 260
-2023-12-28 17:12:58,277 [INFO] [log_message] Current view: <app.home.home.Home object at 0x7f81cf99ed40>, Next view: None
-2023-12-28 17:12:59,113 [INFO] [log_message] User input: 260
-2023-12-28 17:12:59,113 [INFO] [log_message] Current view: <app.home.home.Home object at 0x7f81cf99ed40>, Next view: None
-2023-12-28 17:12:59,135 [INFO] [log_message] User friends: {'status': 'ok', 'data': [{'id': 2, 'username': 'fsalazar'}, {'id': 3, 'username': 'feder'}, {'id': 4, 'username': 'fede'}, {'id': 5, 'username': 'ihfieaf'}, {'id': 6, 'username': 'fedeeee'}]}
-2023-12-28 17:12:59,901 [INFO] [log_message] User input: 260
-2023-12-28 17:12:59,901 [INFO] [log_message] Current view: <app.home.home.Home object at 0x7f81cf99ed40>, Next view: None
-2023-12-28 17:12:59,923 [INFO] [log_message] User stats: {'status': 'ok', 'data': {'id': 1, 'username': 'splix', 'ELO': 0, 'total_match_wins': 0, 'total_tournament_wins': 0, 'tournaments': [], 'matches': []}}
-2023-12-28 17:13:00,972 [INFO] [log_message] User input: 260
-2023-12-28 17:13:00,972 [INFO] [log_message] Current view: <app.home.home.Home object at 0x7f81cf99ed40>, Next view: None
-2023-12-28 17:13:01,007 [INFO] [log_message] User stats: {'status': 'ok', 'data': {'id': 1, 'username': 'splix', 'ELO': 0, 'total_match_wins': 0, 'total_tournament_wins': 0, 'tournaments': [], 'matches': []}}
-2023-12-28 17:13:01,764 [INFO] [log_message] User input: 261
-2023-12-28 17:13:01,765 [INFO] [log_message] Current view: <app.home.home.Home object at 0x7f81cf99ed40>, Next view: None
-2023-12-28 17:13:01,795 [INFO] [log_message] User friends: {'status': 'ok', 'data': [{'id': 2, 'username': 'fsalazar'}, {'id': 3, 'username': 'feder'}, {'id': 4, 'username': 'fede'}, {'id': 5, 'username': 'ihfieaf'}, {'id': 6, 'username': 'fedeeee'}]}
-2023-12-28 17:13:05,458 [INFO] [log_message] User input: 261
-2023-12-28 17:13:05,458 [INFO] [log_message] Current view: <app.home.home.Home object at 0x7f81cf99ed40>, Next view: None
-2023-12-28 17:13:06,156 [INFO] [log_message] User input: 260
-2023-12-28 17:13:06,156 [INFO] [log_message] Current view: <app.home.home.Home object at 0x7f81cf99ed40>, Next view: None
-2023-12-28 17:13:06,173 [INFO] [log_message] User friends: {'status': 'ok', 'data': [{'id': 2, 'username': 'fsalazar'}, {'id': 3, 'username': 'feder'}, {'id': 4, 'username': 'fede'}, {'id': 5, 'username': 'ihfieaf'}, {'id': 6, 'username': 'fedeeee'}]}
-2023-12-28 17:13:06,332 [INFO] [log_message] User input: 260
-2023-12-28 17:13:06,332 [INFO] [log_message] Current view: <app.home.home.Home object at 0x7f81cf99ed40>, Next view: None
-2023-12-28 17:13:06,354 [INFO] [log_message] User stats: {'status': 'ok', 'data': {'id': 1, 'username': 'splix', 'ELO': 0, 'total_match_wins': 0, 'total_tournament_wins': 0, 'tournaments': [], 'matches': []}}
-2023-12-28 17:13:06,743 [INFO] [log_message] User input: 10
-2023-12-28 17:13:06,744 [INFO] [log_message] Current view: <app.home.home.Home object at 0x7f81cf99ed40>, Next view: <app.home.home.Home object at 0x7f81cf99ed40>
-2023-12-28 17:13:06,744 [INFO] [log_message] Connecting to lobby WebSocket
-2023-12-28 17:13:06,744 [INFO] [log_message] Lobby WebSocket already connected
-2023-12-28 17:13:06,773 [INFO] [log_message] User stats: {'status': 'ok', 'data': {'id': 1, 'username': 'splix', 'ELO': 0, 'total_match_wins': 0, 'total_tournament_wins': 0, 'tournaments': [], 'matches': []}}
-2023-12-28 17:13:10,728 [INFO] [log_message] User input: 261
-2023-12-28 17:13:10,728 [ERROR] [log_message] Error receiving messages from WebSocket (lobby): cannot call recv while another coroutine is already waiting for the next message
-2023-12-28 17:13:10,729 [ERROR] [log_message] Error receiving messages from WebSocket (lobby): cannot call recv while another coroutine is already waiting for the next message
-2023-12-28 17:13:10,729 [INFO] [log_message] Current view: <app.home.home.Home object at 0x7f81cf99ed40>, Next view: None
-2023-12-28 17:13:10,749 [INFO] [log_message] User friends: {'status': 'ok', 'data': [{'id': 2, 'username': 'fsalazar'}, {'id': 3, 'username': 'feder'}, {'id': 4, 'username': 'fede'}, {'id': 5, 'username': 'ihfieaf'}, {'id': 6, 'username': 'fedeeee'}]}
-2023-12-28 17:13:10,750 [ERROR] [log_message] Error receiving messages from WebSocket (lobby): cannot call recv while another coroutine is already waiting for the next message
+2023-12-28 17:50:32,444 [INFO] [log_message] User input: 10
+2023-12-28 17:50:32,444 [INFO] [log_message] Current view: <app.home.splash_screen.SplashScreen object at 0x7f8658396fe0>, Next view: <app.home.registration.Registration object at 0x7f8658396fb0>
+2023-12-28 17:50:33,012 [INFO] [log_message] User input: enter
+2023-12-28 17:50:33,012 [INFO] [log_message] Current view: <app.home.registration.Registration object at 0x7f8658396fb0>, Next view: <app.home.login.Login object at 0x7f8658396da0>
+2023-12-28 17:50:33,771 [INFO] [log_message] User input: 115
+2023-12-28 17:50:33,771 [INFO] [log_message] Current view: <app.home.login.Login object at 0x7f8658396da0>, Next view: None
+2023-12-28 17:50:33,900 [INFO] [log_message] User input: 112
+2023-12-28 17:50:33,900 [INFO] [log_message] Current view: <app.home.login.Login object at 0x7f8658396da0>, Next view: None
+2023-12-28 17:50:34,103 [INFO] [log_message] User input: 108
+2023-12-28 17:50:34,104 [INFO] [log_message] Current view: <app.home.login.Login object at 0x7f8658396da0>, Next view: None
+2023-12-28 17:50:34,308 [INFO] [log_message] User input: 105
+2023-12-28 17:50:34,308 [INFO] [log_message] Current view: <app.home.login.Login object at 0x7f8658396da0>, Next view: None
+2023-12-28 17:50:34,394 [INFO] [log_message] User input: 120
+2023-12-28 17:50:34,395 [INFO] [log_message] Current view: <app.home.login.Login object at 0x7f8658396da0>, Next view: None
+2023-12-28 17:50:34,755 [INFO] [log_message] User input: enter
+2023-12-28 17:50:34,755 [INFO] [log_message] Current view: <app.home.login.Login object at 0x7f8658396da0>, Next view: None
+2023-12-28 17:50:34,913 [INFO] [log_message] User input: 49
+2023-12-28 17:50:34,913 [INFO] [log_message] Current view: <app.home.login.Login object at 0x7f8658396da0>, Next view: None
+2023-12-28 17:50:34,983 [INFO] [log_message] User input: 50
+2023-12-28 17:50:34,983 [INFO] [log_message] Current view: <app.home.login.Login object at 0x7f8658396da0>, Next view: None
+2023-12-28 17:50:35,078 [INFO] [log_message] User input: 51
+2023-12-28 17:50:35,078 [INFO] [log_message] Current view: <app.home.login.Login object at 0x7f8658396da0>, Next view: None
+2023-12-28 17:50:35,162 [INFO] [log_message] User input: enter
+2023-12-28 17:50:35,162 [INFO] [log_message] Entered Data: {'Username': 'splix', 'Password': '123'}
+2023-12-28 17:50:35,447 [INFO] [log_message] Login response: splix
+2023-12-28 17:50:35,447 [INFO] [log_message] Current view: <app.home.login.Login object at 0x7f8658396da0>, Next view: <app.home.home.Home object at 0x7f8658396ec0>
+2023-12-28 17:50:35,447 [INFO] [log_message] Connecting to lobby WebSocket
+2023-12-28 17:50:35,492 [INFO] [log_message] Connected to WebSocket (lobby): ws://localhost:8001/ws/lobby2/?client_id=1
+2023-12-28 17:50:35,514 [INFO] [log_message] User stats: {'status': 'ok', 'data': {'id': 1, 'username': 'splix', 'ELO': 0, 'total_match_wins': 0, 'total_tournament_wins': 0, 'tournaments': [], 'matches': []}}
+2023-12-28 17:50:58,256 [INFO] [log_message] User input: 261
+2023-12-28 17:50:58,257 [INFO] [log_message] User input: right
+2023-12-28 17:50:58,257 [INFO] [log_message] Current view: <app.home.home.Home object at 0x7f8658396ec0>, Next view: None
+2023-12-28 17:50:58,278 [INFO] [log_message] User friends: {'status': 'ok', 'data': [{'id': 2, 'username': 'fsalazar'}, {'id': 3, 'username': 'feder'}, {'id': 4, 'username': 'fede'}, {'id': 5, 'username': 'ihfieaf'}, {'id': 6, 'username': 'fedeeee'}]}
+2023-12-28 17:52:44,718 [INFO] [log_message] User input: 10
+2023-12-28 17:52:44,719 [INFO] [log_message] Current view: <app.home.splash_screen.SplashScreen object at 0x7fa0f23ef0a0>, Next view: <app.home.registration.Registration object at 0x7fa0f23ef070>
+2023-12-28 17:52:44,965 [INFO] [log_message] User input: enter
+2023-12-28 17:52:44,965 [INFO] [log_message] Current view: <app.home.registration.Registration object at 0x7fa0f23ef070>, Next view: <app.home.login.Login object at 0x7fa0f23eee60>
+2023-12-28 17:52:45,892 [INFO] [log_message] User input: 115
+2023-12-28 17:52:45,892 [INFO] [log_message] Current view: <app.home.login.Login object at 0x7fa0f23eee60>, Next view: None
+2023-12-28 17:52:46,005 [INFO] [log_message] User input: 112
+2023-12-28 17:52:46,005 [INFO] [log_message] Current view: <app.home.login.Login object at 0x7fa0f23eee60>, Next view: None
+2023-12-28 17:52:46,193 [INFO] [log_message] User input: 108
+2023-12-28 17:52:46,194 [INFO] [log_message] Current view: <app.home.login.Login object at 0x7fa0f23eee60>, Next view: None
+2023-12-28 17:52:46,416 [INFO] [log_message] User input: 105
+2023-12-28 17:52:46,416 [INFO] [log_message] Current view: <app.home.login.Login object at 0x7fa0f23eee60>, Next view: None
+2023-12-28 17:52:46,510 [INFO] [log_message] User input: 120
+2023-12-28 17:52:46,510 [INFO] [log_message] Current view: <app.home.login.Login object at 0x7fa0f23eee60>, Next view: None
+2023-12-28 17:52:46,873 [INFO] [log_message] User input: enter
+2023-12-28 17:52:46,874 [INFO] [log_message] Current view: <app.home.login.Login object at 0x7fa0f23eee60>, Next view: None
+2023-12-28 17:52:47,083 [INFO] [log_message] User input: 49
+2023-12-28 17:52:47,084 [INFO] [log_message] Current view: <app.home.login.Login object at 0x7fa0f23eee60>, Next view: None
+2023-12-28 17:52:47,178 [INFO] [log_message] User input: 50
+2023-12-28 17:52:47,178 [INFO] [log_message] Current view: <app.home.login.Login object at 0x7fa0f23eee60>, Next view: None
+2023-12-28 17:52:47,249 [INFO] [log_message] User input: 51
+2023-12-28 17:52:47,249 [INFO] [log_message] Current view: <app.home.login.Login object at 0x7fa0f23eee60>, Next view: None
+2023-12-28 17:52:47,404 [INFO] [log_message] User input: enter
+2023-12-28 17:52:47,404 [INFO] [log_message] Entered Data: {'Username': 'splix', 'Password': '123'}
+2023-12-28 17:52:47,698 [INFO] [log_message] Login response: splix
+2023-12-28 17:52:47,698 [INFO] [log_message] Current view: <app.home.login.Login object at 0x7fa0f23eee60>, Next view: <app.home.home.Home object at 0x7fa0f23eef80>
+2023-12-28 17:52:47,699 [INFO] [log_message] Connecting to lobby WebSocket
+2023-12-28 17:52:47,730 [INFO] [log_message] Connected to WebSocket (lobby): ws://localhost:8001/ws/lobby2/?client_id=1
+2023-12-28 17:52:47,793 [INFO] [log_message] User stats: {'status': 'ok', 'data': {'id': 1, 'username': 'splix', 'ELO': 0, 'total_match_wins': 0, 'total_tournament_wins': 0, 'tournaments': [], 'matches': []}}
+2023-12-28 17:52:57,819 [INFO] [log_message] User input: 261
+2023-12-28 17:52:57,819 [INFO] [log_message] User input: right
+2023-12-28 17:52:57,819 [INFO] [log_message] Current view: <app.home.home.Home object at 0x7fa0f23eef80>, Next view: None
+2023-12-28 17:52:57,839 [INFO] [log_message] User friends: {'status': 'ok', 'data': [{'id': 2, 'username': 'fsalazar'}, {'id': 3, 'username': 'feder'}, {'id': 4, 'username': 'fede'}, {'id': 5, 'username': 'ihfieaf'}, {'id': 6, 'username': 'fedeeee'}]}
+2023-12-28 17:53:00,873 [INFO] [log_message] User input: 261
+2023-12-28 17:53:00,873 [INFO] [log_message] User input: right
+2023-12-28 17:53:00,874 [INFO] [log_message] Current view: <app.home.home.Home object at 0x7fa0f23eef80>, Next view: None
+2023-12-28 17:53:02,805 [INFO] [log_message] User input: 260
+2023-12-28 17:53:02,805 [INFO] [log_message] User input: left
+2023-12-28 17:53:02,805 [INFO] [log_message] Current view: <app.home.home.Home object at 0x7fa0f23eef80>, Next view: None
+2023-12-28 17:53:02,824 [INFO] [log_message] User friends: {'status': 'ok', 'data': [{'id': 2, 'username': 'fsalazar'}, {'id': 3, 'username': 'feder'}, {'id': 4, 'username': 'fede'}, {'id': 5, 'username': 'ihfieaf'}, {'id': 6, 'username': 'fedeeee'}]}
+2023-12-28 17:53:03,697 [INFO] [log_message] User input: 260
+2023-12-28 17:53:03,698 [INFO] [log_message] User input: left
+2023-12-28 17:53:03,703 [INFO] [log_message] Current view: <app.home.home.Home object at 0x7fa0f23eef80>, Next view: None
+2023-12-28 17:53:03,728 [INFO] [log_message] User stats: {'status': 'ok', 'data': {'id': 1, 'username': 'splix', 'ELO': 0, 'total_match_wins': 0, 'total_tournament_wins': 0, 'tournaments': [], 'matches': []}}
+2023-12-28 17:53:05,569 [INFO] [log_message] User input: 260
+2023-12-28 17:53:05,569 [INFO] [log_message] User input: left
+2023-12-28 17:53:05,569 [INFO] [log_message] Current view: <app.home.home.Home object at 0x7fa0f23eef80>, Next view: None
+2023-12-28 17:53:05,589 [INFO] [log_message] User stats: {'status': 'ok', 'data': {'id': 1, 'username': 'splix', 'ELO': 0, 'total_match_wins': 0, 'total_tournament_wins': 0, 'tournaments': [], 'matches': []}}
+2023-12-28 17:54:13,429 [INFO] [log_message] User input: 261
+2023-12-28 17:54:13,430 [INFO] [log_message] User input: right
+2023-12-28 17:54:13,430 [INFO] [log_message] Current view: <app.home.home.Home object at 0x7fa0f23eef80>, Next view: None
+2023-12-28 17:54:13,448 [INFO] [log_message] User friends: {'status': 'ok', 'data': [{'id': 2, 'username': 'fsalazar'}, {'id': 3, 'username': 'feder'}, {'id': 4, 'username': 'fede'}, {'id': 5, 'username': 'ihfieaf'}, {'id': 6, 'username': 'fedeeee'}]}
+2023-12-28 17:54:14,781 [INFO] [log_message] User input: 260
+2023-12-28 17:54:14,781 [INFO] [log_message] User input: left
+2023-12-28 17:54:14,781 [INFO] [log_message] Current view: <app.home.home.Home object at 0x7fa0f23eef80>, Next view: None
+2023-12-28 17:54:14,813 [INFO] [log_message] User stats: {'status': 'ok', 'data': {'id': 1, 'username': 'splix', 'ELO': 0, 'total_match_wins': 0, 'total_tournament_wins': 0, 'tournaments': [], 'matches': []}}
+2023-12-28 17:54:16,788 [INFO] [log_message] User input: 260
+2023-12-28 17:54:16,789 [INFO] [log_message] User input: left
+2023-12-28 17:54:16,789 [INFO] [log_message] Current view: <app.home.home.Home object at 0x7fa0f23eef80>, Next view: None
+2023-12-28 17:54:16,808 [INFO] [log_message] User stats: {'status': 'ok', 'data': {'id': 1, 'username': 'splix', 'ELO': 0, 'total_match_wins': 0, 'total_tournament_wins': 0, 'tournaments': [], 'matches': []}}

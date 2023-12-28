@@ -44,7 +44,7 @@ class Home:
                 current_view = self.views[self.current_view_index]["view"]
                 self.next_view = current_view
                 current_view.reset_index()
-
+                
         except Exception as e:
             log_message(f"Error processing user input: {e}", level=logging.ERROR)
             return None
@@ -117,16 +117,20 @@ class Home:
 
 # Preview of the Profile view
     def display(self):
-        # Display profile content
-        user_stats = self.http.get_user_stats()
-        log_message(f"User stats: {user_stats}", level=logging.INFO)
-        if user_stats and user_stats.get("status") == "ok":
-            self.stdscr.addstr(2, 2, f"Username: {user_stats['data']['username']}")
-            self.stdscr.addstr(3, 2, f"ELO: {user_stats['data']['ELO']}")
-            self.stdscr.addstr(4, 2, f"Total Match Wins: {user_stats['data']['total_match_wins']}")
-            self.stdscr.addstr(5, 2, f"Total Tournament Wins: {user_stats['data']['total_tournament_wins']}")
-            # Display more stats as needed
-        # Add more content as needed
+        try:
+            # Display profile content
+            user_stats = self.http.get_user_stats()
+            log_message(f"User stats: {user_stats}", level=logging.INFO)
+            if user_stats and user_stats.get("status") == "ok":
+                self.stdscr.addstr(2, 2, f"Username: {user_stats['data']['username']}")
+                self.stdscr.addstr(3, 2, f"ELO: {user_stats['data']['ELO']}")
+                self.stdscr.addstr(4, 2, f"Total Match Wins: {user_stats['data']['total_match_wins']}")
+                self.stdscr.addstr(5, 2, f"Total Tournament Wins: {user_stats['data']['total_tournament_wins']}")
+            else:
+                self.stdscr.addstr(2, 2, "Error displaying profile")
+            
+        except Exception as e:
+            log_message(f"Error displaying profile: {e}", level=logging.ERROR)
 
 # Helper functions
     def reset_index(self):
