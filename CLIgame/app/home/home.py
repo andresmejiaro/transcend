@@ -86,6 +86,7 @@ class Home:
         self.next_view = None  # Reset next_view to None
         return next_view
 
+
     async def handle_lobby_messages_background(self):
         try:
             while True:
@@ -100,6 +101,9 @@ class Home:
         except Exception as e:
             log_message(f"Error receiving messages from WebSocket (lobby): {e}", level=logging.ERROR)
 
+    def handle_lobby_message(self, message):
+        # Handle lobby message
+        log_message(f"Home recieved a message: {message}", level=logging.INFO)
 
     def start_lobby_message_handling(self):
         # Start the lobby message handling task
@@ -109,6 +113,7 @@ class Home:
         # Cancel the lobby message handling task
         if self.lobby_message_task:
             self.lobby_message_task.cancel()
+
 
 # Preview of the Profile view
     def display(self):

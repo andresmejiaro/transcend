@@ -3,6 +3,7 @@
 from utils.logger import log_message
 import curses
 import logging
+import asyncio
 
 class Profile:
     def __init__(self, stdscr, http, ws):
@@ -80,6 +81,35 @@ class Profile:
         next_view = self.next_view
         self.next_view = None  # Reset next_view to None
         return next_view
+
+
+    async def handle_lobby_messages_background(self):
+        try:
+            while True:
+                message = await self.ws.receive_messages("lobby")
+                if message:
+                    self.handle_lobby_message(message)
+                
+                # Allow other coroutines to run
+                await asyncio.sleep(0)
+        except asyncio.CancelledError:
+            log_message("Cancelled lobby message handling", level=logging.INFO)
+        except Exception as e:
+            log_message(f"Error receiving messages from WebSocket (lobby): {e}", level=logging.ERROR)
+
+    def handle_lobby_message(self, message):
+        # Handle lobby message
+        log_message(f"Profile recieved a message: {message}", level=logging.INFO)
+
+    def start_lobby_message_handling(self):
+        # Start the lobby message handling task
+        self.lobby_message_task = asyncio.create_task(self.handle_lobby_messages_background())
+
+    def stop_lobby_message_handling(self):
+        # Cancel the lobby message handling task
+        if self.lobby_message_task:
+            self.lobby_message_task.cancel()
+
 
 # Preview of the Profile view
     def display(self):
