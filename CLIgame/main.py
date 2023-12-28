@@ -40,14 +40,19 @@ async def connect_to_lobby_websocket(ws):
         log_message(f"Error connecting to lobby WebSocket: {e}", level=logging.ERROR)
 
 async def update_lobby_messages(ws, current_view):
-    try:
-        while True:
-            message = await ws.receive_messages_forever("lobby")
-            current_view.handle_lobby_message(message)
-    except asyncio.CancelledError:
-        log_message("Cancelled lobby message loop", level=logging.INFO)
-        pass
+    # Start lobby message handling when entering the view
+    current_view.start_lobby_message_handling()
 
+    try:
+        # Do not receive messages in this function
+        while True:
+            await asyncio.sleep(1)  # Sleep or do other tasks if needed
+    except asyncio.CancelledError:
+        # Catch the cancellation when leaving the view
+        pass
+    finally:
+        # Stop lobby message handling when leaving the view
+        current_view.stop_lobby_message_handling()
 
 async def main(stdscr):
     # Set up the terminal
@@ -89,7 +94,11 @@ async def main(stdscr):
                 home_view_instance = next(view_data["view"] for view_data in all_views if view_data["name"] == "Home")
 
                 if isinstance(current_view, type(home_view_instance)):
+                    log_message("Connecting to lobby WebSocket", level=logging.INFO)
                     await connect_to_lobby_websocket(ws)
+
+                    asyncio.create_task(update_lobby_messages(ws, current_view))
+
 
     except KeyboardInterrupt:
         # Handle Ctrl+C gracefully
@@ -100,11 +109,11 @@ async def main(stdscr):
         curses.nocbreak()
         curses.echo()
         stdscr.keypad(False)
-        
         # Make the cursor visible before cleanup
         curses.curs_set(1)
-
-        curses.endwin()  # Cleanup curses on exit
+        # Cleanup curses on exit
+        curses.endwin()
+        await asyncio.gather(*asyncio.all_tasks())
 
 if __name__ == "__main__":
     # Set up signal handling for Ctrl+C

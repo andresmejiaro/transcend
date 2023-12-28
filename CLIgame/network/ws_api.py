@@ -51,6 +51,7 @@ class websocket_api:
             while connection_name in self.websocket_connections:
                 data = await self.websocket_connections[connection_name].recv()
                 log_message(f"Received message from WebSocket ({connection_name}): {data}", level=logging.INFO)
+                # Handle the received message as needed
                 await callback(data)
         except Exception as e:
             log_message(f"Error receiving messages from WebSocket ({connection_name}): {e}", level=logging.ERROR)
