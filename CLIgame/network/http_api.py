@@ -18,7 +18,7 @@ class http_api:
     def close_session(self):
         self.session.close()
 
-    # Save/Load data using save_data and load_data
+# Save/Load data using save_data and load_data
     def save_cookies(self, csrf_token, expires_datetime):
         cookies_dict = {"csrftoken": csrf_token, "expiry": expires_datetime.strftime("%a, %d %b %Y %H:%M:%S %Z")}
         save_data("cookies.json", cookies_dict)
@@ -62,8 +62,6 @@ class http_api:
                 json_data = json.dumps(data)
             else:
                 json_data = data
-
-            # print(f'Making {method} request to {url} with data: {json_data}')
 
             response = self.session.request(method, url, headers=headers, data=json_data, cookies=cookies)
 

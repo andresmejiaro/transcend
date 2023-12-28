@@ -1,1771 +1,217 @@
-2023-12-27 16:31:53,048 [INFO] [log_message] Entered Data: {'Username': 'splix', 'Password': '123'}
-2023-12-27 16:31:53,399 [INFO] [log_message] Login response: splix
-2023-12-27 16:31:55,460 [INFO] [log_message] User input: 261
-2023-12-27 16:31:55,460 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 16:31:59,419 [INFO] [log_message] User input: 261
-2023-12-27 16:31:59,420 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 16:31:59,951 [INFO] [log_message] User input: 261
-2023-12-27 16:32:00,309 [INFO] [log_message] User input: 261
-2023-12-27 16:32:00,310 [ERROR] [log_message] Error updating screen: 'Register' object has no attribute 'display'
-2023-12-27 16:32:00,623 [INFO] [log_message] User input: 261
-2023-12-27 16:32:00,623 [ERROR] [log_message] Error updating screen: 'Registration' object has no attribute 'display'
-2023-12-27 16:32:00,925 [INFO] [log_message] User input: 261
-2023-12-27 16:32:00,926 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 16:32:01,353 [INFO] [log_message] User input: 261
-2023-12-27 16:32:01,757 [INFO] [log_message] User input: 260
-2023-12-27 16:32:01,757 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 16:32:01,989 [INFO] [log_message] User input: 260
-2023-12-27 16:32:01,989 [ERROR] [log_message] Error updating screen: 'Registration' object has no attribute 'display'
-2023-12-27 16:32:02,155 [INFO] [log_message] User input: 260
-2023-12-27 16:32:02,155 [ERROR] [log_message] Error updating screen: 'Register' object has no attribute 'display'
-2023-12-27 16:32:02,690 [INFO] [log_message] User input: 260
-2023-12-27 16:32:03,315 [INFO] [log_message] User input: 260
-2023-12-27 16:32:03,315 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 16:32:05,449 [INFO] [log_message] User input: 260
-2023-12-27 16:32:05,450 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 16:32:05,905 [INFO] [log_message] User input: 260
-2023-12-27 16:32:40,793 [INFO] [log_message] Entered Data: {'Username': 'splix', 'Password': '123'}
-2023-12-27 16:32:41,084 [INFO] [log_message] Login response: splix
-2023-12-27 16:32:41,084 [ERROR] [log_message] Error updating screen: 'NoneType' object is not iterable
-2023-12-27 16:32:47,353 [INFO] [log_message] User input: 261
-2023-12-27 16:32:47,354 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 16:32:56,791 [INFO] [log_message] User input: 260
-2023-12-27 16:32:57,014 [INFO] [log_message] User input: 260
-2023-12-27 16:32:57,702 [INFO] [log_message] User input: 261
-2023-12-27 16:32:58,504 [INFO] [log_message] User input: 261
-2023-12-27 16:32:58,505 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 16:32:58,696 [INFO] [log_message] User input: 261
-2023-12-27 16:32:58,696 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 16:32:58,870 [INFO] [log_message] User input: 261
-2023-12-27 16:32:59,269 [INFO] [log_message] User input: 261
-2023-12-27 16:32:59,269 [ERROR] [log_message] Error updating screen: 'Register' object has no attribute 'display'
-2023-12-27 16:32:59,438 [INFO] [log_message] User input: 261
-2023-12-27 16:32:59,438 [ERROR] [log_message] Error updating screen: 'Registration' object has no attribute 'display'
-2023-12-27 16:32:59,595 [INFO] [log_message] User input: 261
-2023-12-27 16:32:59,595 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 16:32:59,854 [INFO] [log_message] User input: 261
-2023-12-27 16:32:59,998 [INFO] [log_message] User input: 261
-2023-12-27 16:33:00,147 [INFO] [log_message] User input: 261
-2023-12-27 16:33:00,148 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 16:33:00,323 [INFO] [log_message] User input: 261
-2023-12-27 16:33:00,323 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 16:33:00,480 [INFO] [log_message] User input: 261
-2023-12-27 16:33:00,647 [INFO] [log_message] User input: 261
-2023-12-27 16:33:00,647 [ERROR] [log_message] Error updating screen: 'Register' object has no attribute 'display'
-2023-12-27 16:33:00,790 [INFO] [log_message] User input: 261
-2023-12-27 16:33:00,790 [ERROR] [log_message] Error updating screen: 'Registration' object has no attribute 'display'
-2023-12-27 16:33:00,933 [INFO] [log_message] User input: 261
-2023-12-27 16:33:00,934 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 16:33:01,032 [INFO] [log_message] User input: 261
-2023-12-27 16:33:01,191 [INFO] [log_message] User input: 261
-2023-12-27 16:33:01,346 [INFO] [log_message] User input: 261
-2023-12-27 16:33:01,346 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 16:33:01,484 [INFO] [log_message] User input: 261
-2023-12-27 16:33:01,484 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 16:33:01,674 [INFO] [log_message] User input: 261
-2023-12-27 16:33:01,942 [INFO] [log_message] User input: 260
-2023-12-27 16:33:01,942 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 16:33:02,063 [INFO] [log_message] User input: 260
-2023-12-27 16:33:02,064 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 16:33:02,219 [INFO] [log_message] User input: 260
-2023-12-27 16:33:02,354 [INFO] [log_message] User input: 260
-2023-12-27 16:33:02,690 [INFO] [log_message] User input: 261
-2023-12-27 16:33:02,914 [INFO] [log_message] User input: 260
-2023-12-27 16:33:03,079 [INFO] [log_message] User input: 260
-2023-12-27 16:33:03,080 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 16:33:03,233 [INFO] [log_message] User input: 260
-2023-12-27 16:33:03,233 [ERROR] [log_message] Error updating screen: 'Registration' object has no attribute 'display'
-2023-12-27 16:33:03,370 [INFO] [log_message] User input: 260
-2023-12-27 16:33:03,370 [ERROR] [log_message] Error updating screen: 'Register' object has no attribute 'display'
-2023-12-27 16:33:03,532 [INFO] [log_message] User input: 260
-2023-12-27 16:33:03,662 [INFO] [log_message] User input: 260
-2023-12-27 16:33:03,662 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 16:33:03,796 [INFO] [log_message] User input: 260
-2023-12-27 16:33:03,796 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 16:33:04,172 [INFO] [log_message] User input: 260
-2023-12-27 16:33:04,716 [INFO] [log_message] User input: 261
-2023-12-27 16:33:04,716 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 16:33:05,093 [INFO] [log_message] User input: 261
-2023-12-27 16:33:05,093 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 16:33:05,419 [INFO] [log_message] User input: 261
-2023-12-27 16:33:06,111 [INFO] [log_message] User input: 260
-2023-12-27 16:33:06,111 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 16:33:06,324 [INFO] [log_message] User input: 260
-2023-12-27 16:33:06,325 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 16:33:06,668 [INFO] [log_message] User input: 260
-2023-12-27 16:35:27,036 [INFO] [log_message] Entered Data: {'Username': 'splix', 'Password': '123'}
-2023-12-27 16:35:27,340 [INFO] [log_message] Login response: splix
-2023-12-27 16:35:27,341 [ERROR] [log_message] Error updating screen: Home.process_input() missing 1 required positional argument: 'all_views'
-2023-12-27 16:35:28,168 [INFO] [log_message] User input: 261
-2023-12-27 16:35:28,169 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 16:35:28,467 [INFO] [log_message] User input: 260
-2023-12-27 16:35:28,808 [INFO] [log_message] User input: 261
-2023-12-27 16:35:28,808 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 16:35:28,935 [INFO] [log_message] User input: 260
-2023-12-27 16:35:29,055 [INFO] [log_message] User input: 260
-2023-12-27 16:36:24,174 [INFO] [log_message] Entered Data: {'Username': 'splix', 'Password': '123'}
-2023-12-27 16:36:24,451 [INFO] [log_message] Login response: splix
-2023-12-27 16:36:24,451 [ERROR] [log_message] Error processing user input: object of type 'NoneType' has no len()
-2023-12-27 16:36:24,451 [ERROR] [log_message] Error updating screen: 'NoneType' object is not iterable
-2023-12-27 16:36:25,111 [INFO] [log_message] User input: 261
-2023-12-27 16:36:25,111 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 16:36:25,620 [INFO] [log_message] User input: 261
-2023-12-27 16:36:25,621 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 16:36:25,785 [INFO] [log_message] User input: 261
-2023-12-27 16:36:26,034 [INFO] [log_message] User input: 260
-2023-12-27 16:36:26,035 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 16:36:26,188 [INFO] [log_message] User input: 260
-2023-12-27 16:36:26,188 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 16:36:26,323 [INFO] [log_message] User input: 260
-2023-12-27 16:36:26,518 [INFO] [log_message] User input: 261
-2023-12-27 16:36:26,519 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 16:36:26,706 [INFO] [log_message] User input: 261
-2023-12-27 16:36:26,706 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 16:36:26,794 [INFO] [log_message] User input: 260
-2023-12-27 16:36:26,794 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 16:36:26,944 [INFO] [log_message] User input: 261
-2023-12-27 16:36:26,945 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 16:36:27,063 [INFO] [log_message] User input: 260
-2023-12-27 16:36:27,063 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 16:36:27,177 [INFO] [log_message] User input: 261
-2023-12-27 16:36:27,177 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 16:36:27,287 [INFO] [log_message] User input: 260
-2023-12-27 16:36:27,288 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 16:36:27,344 [INFO] [log_message] User input: 261
-2023-12-27 16:36:27,345 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 16:36:27,447 [INFO] [log_message] User input: 260
-2023-12-27 16:36:27,447 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 16:36:27,561 [INFO] [log_message] User input: 261
-2023-12-27 16:36:27,562 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 16:36:27,651 [INFO] [log_message] User input: 260
-2023-12-27 16:36:27,652 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 16:36:27,749 [INFO] [log_message] User input: 261
-2023-12-27 16:36:27,749 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 16:36:27,835 [INFO] [log_message] User input: 260
-2023-12-27 16:36:27,835 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 16:36:27,932 [INFO] [log_message] User input: 261
-2023-12-27 16:36:27,933 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 16:36:28,028 [INFO] [log_message] User input: 260
-2023-12-27 16:36:28,028 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 16:36:28,117 [INFO] [log_message] User input: 261
-2023-12-27 16:36:28,117 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 16:36:28,209 [INFO] [log_message] User input: 260
-2023-12-27 16:36:28,209 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 16:36:28,311 [INFO] [log_message] User input: 261
-2023-12-27 16:36:28,311 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 16:36:28,417 [INFO] [log_message] User input: 260
-2023-12-27 16:36:28,420 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 16:36:28,507 [INFO] [log_message] User input: 261
-2023-12-27 16:36:28,507 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 16:36:28,618 [INFO] [log_message] User input: 260
-2023-12-27 16:36:28,618 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 16:36:28,762 [INFO] [log_message] User input: 261
-2023-12-27 16:36:28,762 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 16:36:28,881 [INFO] [log_message] User input: 260
-2023-12-27 16:36:28,881 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 16:36:28,950 [INFO] [log_message] User input: 261
-2023-12-27 16:36:28,950 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 16:36:29,052 [INFO] [log_message] User input: 260
-2023-12-27 16:36:29,053 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 16:36:29,547 [INFO] [log_message] User input: 260
-2023-12-27 16:36:47,680 [INFO] [log_message] Entered Data: {'Username': 'splix', 'Password': '123'}
-2023-12-27 16:36:47,959 [INFO] [log_message] Login response: splix
-2023-12-27 16:36:47,959 [ERROR] [log_message] Error processing user input: object of type 'NoneType' has no len()
-2023-12-27 16:36:47,959 [ERROR] [log_message] Error updating screen: 'NoneType' object is not iterable
-2023-12-27 16:36:48,550 [INFO] [log_message] User input: 261
-2023-12-27 16:36:48,550 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 16:36:48,881 [INFO] [log_message] User input: 261
-2023-12-27 16:36:48,881 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 16:36:49,038 [INFO] [log_message] User input: 261
-2023-12-27 16:36:49,190 [INFO] [log_message] User input: 261
-2023-12-27 16:36:49,190 [ERROR] [log_message] Error updating screen: 'Register' object has no attribute 'display'
-2023-12-27 16:36:49,370 [INFO] [log_message] User input: 261
-2023-12-27 16:36:49,370 [ERROR] [log_message] Error updating screen: 'Registration' object has no attribute 'display'
-2023-12-27 16:36:49,555 [INFO] [log_message] User input: 261
-2023-12-27 16:36:49,556 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 16:36:49,768 [INFO] [log_message] User input: 261
-2023-12-27 16:36:50,002 [INFO] [log_message] User input: 260
-2023-12-27 16:36:50,002 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 16:36:50,166 [INFO] [log_message] User input: 260
-2023-12-27 16:36:50,166 [ERROR] [log_message] Error updating screen: 'Registration' object has no attribute 'display'
-2023-12-27 16:36:50,306 [INFO] [log_message] User input: 260
-2023-12-27 16:36:50,306 [ERROR] [log_message] Error updating screen: 'Register' object has no attribute 'display'
-2023-12-27 16:36:50,462 [INFO] [log_message] User input: 260
-2023-12-27 16:36:50,593 [INFO] [log_message] User input: 260
-2023-12-27 16:36:50,593 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 16:36:50,715 [INFO] [log_message] User input: 260
-2023-12-27 16:36:50,715 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 16:36:50,845 [INFO] [log_message] User input: 260
-2023-12-27 16:36:51,236 [INFO] [log_message] User input: 261
-2023-12-27 16:36:51,237 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 16:36:51,399 [INFO] [log_message] User input: 261
-2023-12-27 16:36:51,399 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 16:36:51,548 [INFO] [log_message] User input: 261
-2023-12-27 16:36:51,687 [INFO] [log_message] User input: 261
-2023-12-27 16:36:51,688 [ERROR] [log_message] Error updating screen: 'Register' object has no attribute 'display'
-2023-12-27 16:36:52,188 [INFO] [log_message] User input: 261
-2023-12-27 16:36:52,189 [ERROR] [log_message] Error updating screen: 'Registration' object has no attribute 'display'
-2023-12-27 16:36:52,220 [INFO] [log_message] User input: 261
-2023-12-27 16:36:52,221 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 16:36:52,250 [INFO] [log_message] User input: 261
-2023-12-27 16:36:52,285 [INFO] [log_message] User input: 261
-2023-12-27 16:36:52,316 [INFO] [log_message] User input: 261
-2023-12-27 16:36:52,317 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 16:36:52,346 [INFO] [log_message] User input: 261
-2023-12-27 16:36:52,346 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 16:36:52,376 [INFO] [log_message] User input: 261
-2023-12-27 16:36:52,407 [INFO] [log_message] User input: 261
-2023-12-27 16:36:52,408 [ERROR] [log_message] Error updating screen: 'Register' object has no attribute 'display'
-2023-12-27 16:36:52,438 [INFO] [log_message] User input: 261
-2023-12-27 16:36:52,439 [ERROR] [log_message] Error updating screen: 'Registration' object has no attribute 'display'
-2023-12-27 16:36:52,469 [INFO] [log_message] User input: 261
-2023-12-27 16:36:52,469 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 16:36:52,500 [INFO] [log_message] User input: 261
-2023-12-27 16:36:52,532 [INFO] [log_message] User input: 261
-2023-12-27 16:36:52,563 [INFO] [log_message] User input: 261
-2023-12-27 16:36:52,563 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 16:36:52,604 [INFO] [log_message] User input: 261
-2023-12-27 16:36:52,605 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 16:36:52,635 [INFO] [log_message] User input: 261
-2023-12-27 16:36:52,667 [INFO] [log_message] User input: 261
-2023-12-27 16:36:52,667 [ERROR] [log_message] Error updating screen: 'Register' object has no attribute 'display'
-2023-12-27 16:36:52,697 [INFO] [log_message] User input: 261
-2023-12-27 16:36:52,697 [ERROR] [log_message] Error updating screen: 'Registration' object has no attribute 'display'
-2023-12-27 16:36:52,727 [INFO] [log_message] User input: 261
-2023-12-27 16:36:52,727 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 16:36:52,757 [INFO] [log_message] User input: 261
-2023-12-27 16:36:52,788 [INFO] [log_message] User input: 261
-2023-12-27 16:36:52,819 [INFO] [log_message] User input: 261
-2023-12-27 16:36:52,819 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 16:36:52,852 [INFO] [log_message] User input: 261
-2023-12-27 16:36:52,853 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 16:36:52,886 [INFO] [log_message] User input: 261
-2023-12-27 16:36:52,924 [INFO] [log_message] User input: 261
-2023-12-27 16:36:52,924 [ERROR] [log_message] Error updating screen: 'Register' object has no attribute 'display'
-2023-12-27 16:36:52,950 [INFO] [log_message] User input: 261
-2023-12-27 16:36:52,951 [ERROR] [log_message] Error updating screen: 'Registration' object has no attribute 'display'
-2023-12-27 16:36:52,980 [INFO] [log_message] User input: 261
-2023-12-27 16:36:52,980 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 16:36:53,010 [INFO] [log_message] User input: 261
-2023-12-27 16:36:53,041 [INFO] [log_message] User input: 261
-2023-12-27 16:36:53,071 [INFO] [log_message] User input: 261
-2023-12-27 16:36:53,071 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 16:36:53,101 [INFO] [log_message] User input: 261
-2023-12-27 16:36:53,101 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 16:36:53,139 [INFO] [log_message] User input: 261
-2023-12-27 16:36:53,172 [INFO] [log_message] User input: 261
-2023-12-27 16:36:53,172 [ERROR] [log_message] Error updating screen: 'Register' object has no attribute 'display'
-2023-12-27 16:36:53,201 [INFO] [log_message] User input: 261
-2023-12-27 16:36:53,201 [ERROR] [log_message] Error updating screen: 'Registration' object has no attribute 'display'
-2023-12-27 16:36:53,239 [INFO] [log_message] User input: 261
-2023-12-27 16:36:53,239 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 16:36:53,274 [INFO] [log_message] User input: 261
-2023-12-27 16:36:53,304 [INFO] [log_message] User input: 261
-2023-12-27 16:36:53,339 [INFO] [log_message] User input: 261
-2023-12-27 16:36:53,341 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 16:37:01,522 [INFO] [log_message] Entered Data: {'Username': 'splix', 'Password': '123'}
-2023-12-27 16:37:01,806 [INFO] [log_message] Login response: splix
-2023-12-27 16:37:01,806 [ERROR] [log_message] Error processing user input: object of type 'NoneType' has no len()
-2023-12-27 16:37:01,806 [ERROR] [log_message] Error updating screen: 'NoneType' object is not iterable
-2023-12-27 16:59:49,647 [INFO] [log_message] User input: 261
-2023-12-27 16:59:49,647 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 16:59:49,802 [INFO] [log_message] User input: 261
-2023-12-27 16:59:49,803 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 16:59:50,286 [INFO] [log_message] User input: 261
-2023-12-27 16:59:50,476 [INFO] [log_message] User input: 261
-2023-12-27 16:59:50,476 [ERROR] [log_message] Error updating screen: 'Register' object has no attribute 'display'
-2023-12-27 16:59:50,644 [INFO] [log_message] User input: 261
-2023-12-27 16:59:50,645 [ERROR] [log_message] Error updating screen: 'Registration' object has no attribute 'display'
-2023-12-27 17:00:26,502 [INFO] [log_message] User input: 261
-2023-12-27 17:00:26,502 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 17:00:26,693 [INFO] [log_message] User input: 261
-2023-12-27 17:00:27,408 [INFO] [log_message] User input: 260
-2023-12-27 17:00:27,409 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 17:00:27,752 [INFO] [log_message] User input: 260
-2023-12-27 17:00:27,753 [ERROR] [log_message] Error updating screen: 'Registration' object has no attribute 'display'
-2023-12-27 17:00:27,946 [INFO] [log_message] User input: 260
-2023-12-27 17:00:27,947 [ERROR] [log_message] Error updating screen: 'Register' object has no attribute 'display'
-2023-12-27 17:00:28,127 [INFO] [log_message] User input: 260
-2023-12-27 17:00:28,440 [INFO] [log_message] User input: 260
-2023-12-27 17:00:28,440 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 17:00:28,926 [INFO] [log_message] User input: 260
-2023-12-27 17:00:28,927 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 17:00:29,340 [INFO] [log_message] User input: 260
-2023-12-27 17:00:30,265 [INFO] [log_message] User input: 260
-2023-12-27 17:00:37,166 [INFO] [log_message] User input: 260
-2023-12-27 17:00:37,167 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 17:00:37,333 [INFO] [log_message] User input: 260
-2023-12-27 17:00:37,333 [ERROR] [log_message] Error updating screen: 'Registration' object has no attribute 'display'
-2023-12-27 17:00:39,048 [INFO] [log_message] User input: 260
-2023-12-27 17:00:39,048 [ERROR] [log_message] Error updating screen: 'Register' object has no attribute 'display'
-2023-12-27 17:00:39,245 [INFO] [log_message] User input: 260
-2023-12-27 17:00:40,302 [INFO] [log_message] User input: 10
-2023-12-27 17:01:09,435 [INFO] [log_message] Entered Data: {'Username': 'splix', 'Password': '123'}
-2023-12-27 17:01:09,723 [INFO] [log_message] Login response: splix
-2023-12-27 17:01:09,723 [ERROR] [log_message] Error updating screen: Home.process_input() missing 1 required positional argument: 'all_views'
-2023-12-27 17:04:24,149 [INFO] [log_message] User input: 261
-2023-12-27 17:04:24,149 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 17:04:24,597 [INFO] [log_message] User input: 260
-2023-12-27 17:04:25,609 [INFO] [log_message] User input: 261
-2023-12-27 17:04:25,609 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 17:04:25,966 [INFO] [log_message] User input: 261
-2023-12-27 17:04:25,966 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 17:04:26,233 [INFO] [log_message] User input: 261
-2023-12-27 17:04:26,576 [INFO] [log_message] User input: 261
-2023-12-27 17:04:26,576 [ERROR] [log_message] Error updating screen: 'Register' object has no attribute 'display'
-2023-12-27 17:04:26,815 [INFO] [log_message] User input: 261
-2023-12-27 17:04:26,816 [ERROR] [log_message] Error updating screen: 'Registration' object has no attribute 'display'
-2023-12-27 17:04:27,366 [INFO] [log_message] User input: 261
-2023-12-27 17:04:27,367 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 17:04:27,748 [INFO] [log_message] User input: 261
-2023-12-27 17:04:30,462 [INFO] [log_message] User input: 260
-2023-12-27 17:04:30,462 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 17:04:30,630 [INFO] [log_message] User input: 260
-2023-12-27 17:04:30,630 [ERROR] [log_message] Error updating screen: 'Registration' object has no attribute 'display'
-2023-12-27 17:04:30,771 [INFO] [log_message] User input: 260
-2023-12-27 17:04:30,771 [ERROR] [log_message] Error updating screen: 'Register' object has no attribute 'display'
-2023-12-27 17:06:09,616 [INFO] [log_message] Entered Data: {'Username': 'splox', 'Password': '123'}
-2023-12-27 17:06:09,635 [ERROR] [log_message] Login failed: {"status": "error", "message": "User not found"}
-2023-12-27 17:06:09,636 [INFO] [log_message] Login response: False
-2023-12-27 17:06:13,854 [INFO] [log_message] Entered Data: {'Username': 'splix', 'Password': '123'}
-2023-12-27 17:06:14,145 [INFO] [log_message] Login response: splix
-2023-12-27 17:06:14,145 [ERROR] [log_message] Error updating screen: Home.process_input() missing 1 required positional argument: 'all_views'
-2023-12-27 17:06:15,349 [INFO] [log_message] User input: 261
-2023-12-27 17:06:15,349 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 17:09:21,735 [INFO] [log_message] Entered Data: {'Username': 'splix', 'Password': '123'}
-2023-12-27 17:09:22,024 [INFO] [log_message] Login response: splix
-2023-12-27 17:09:22,026 [ERROR] [log_message] Error updating screen: Home.process_input() missing 1 required positional argument: 'all_views'
-2023-12-27 17:09:24,923 [INFO] [log_message] User input: 261
-2023-12-27 17:09:24,923 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 17:14:20,185 [INFO] [log_message] Entered Data: {'Username': 'splix', 'Password': '123'}
-2023-12-27 17:14:20,465 [INFO] [log_message] Login response: splix
-2023-12-27 17:14:20,465 [ERROR] [log_message] Error updating screen: Home.process_input() missing 1 required positional argument: 'all_views'
-2023-12-27 17:14:20,878 [INFO] [log_message] User input: 261
-2023-12-27 17:14:20,879 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 17:14:21,350 [INFO] [log_message] User input: 261
-2023-12-27 17:14:21,351 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 17:14:21,543 [INFO] [log_message] User input: 261
-2023-12-27 17:14:21,758 [INFO] [log_message] User input: 261
-2023-12-27 17:14:21,758 [ERROR] [log_message] Error updating screen: 'Register' object has no attribute 'display'
-2023-12-27 17:14:21,981 [INFO] [log_message] User input: 261
-2023-12-27 17:14:21,981 [ERROR] [log_message] Error updating screen: 'Registration' object has no attribute 'display'
-2023-12-27 17:14:22,147 [INFO] [log_message] User input: 261
-2023-12-27 17:14:22,148 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 17:14:22,265 [INFO] [log_message] User input: 261
-2023-12-27 17:14:22,448 [INFO] [log_message] User input: 261
-2023-12-27 17:14:22,699 [INFO] [log_message] User input: 260
-2023-12-27 17:14:22,871 [INFO] [log_message] User input: 260
-2023-12-27 17:14:22,872 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 17:14:23,021 [INFO] [log_message] User input: 260
-2023-12-27 17:14:23,022 [ERROR] [log_message] Error updating screen: 'Registration' object has no attribute 'display'
-2023-12-27 17:14:23,165 [INFO] [log_message] User input: 260
-2023-12-27 17:14:23,165 [ERROR] [log_message] Error updating screen: 'Register' object has no attribute 'display'
-2023-12-27 17:14:23,298 [INFO] [log_message] User input: 260
-2023-12-27 17:24:28,582 [INFO] [log_message] Entered Data: {'Username': 'splix', 'Password': '123'}
-2023-12-27 17:24:28,871 [INFO] [log_message] Login response: splix
-2023-12-27 17:24:28,871 [ERROR] [log_message] Error updating screen: Home.process_input() missing 1 required positional argument: 'all_views'
-2023-12-27 17:24:29,516 [INFO] [log_message] User input: 261
-2023-12-27 17:24:29,516 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 17:24:29,851 [INFO] [log_message] User input: 260
-2023-12-27 17:24:30,026 [INFO] [log_message] User input: 260
-2023-12-27 17:24:30,279 [INFO] [log_message] User input: 261
-2023-12-27 17:24:30,450 [INFO] [log_message] User input: 261
-2023-12-27 17:24:30,450 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 17:24:30,645 [INFO] [log_message] User input: 260
-2023-12-27 17:24:30,817 [INFO] [log_message] User input: 260
-2023-12-27 17:24:30,965 [INFO] [log_message] User input: 260
-2023-12-27 17:24:30,966 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 17:24:31,110 [INFO] [log_message] User input: 260
-2023-12-27 17:24:31,110 [ERROR] [log_message] Error updating screen: 'Registration' object has no attribute 'display'
-2023-12-27 17:24:31,243 [INFO] [log_message] User input: 260
-2023-12-27 17:24:31,243 [ERROR] [log_message] Error updating screen: 'Register' object has no attribute 'display'
-2023-12-27 17:24:31,354 [INFO] [log_message] User input: 260
-2023-12-27 17:24:31,854 [INFO] [log_message] User input: 260
-2023-12-27 17:24:31,854 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 17:24:31,884 [INFO] [log_message] User input: 260
-2023-12-27 17:24:31,884 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 17:24:31,915 [INFO] [log_message] User input: 260
-2023-12-27 17:24:31,946 [INFO] [log_message] User input: 260
-2023-12-27 17:24:31,977 [INFO] [log_message] User input: 260
-2023-12-27 17:24:31,977 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 17:24:32,008 [INFO] [log_message] User input: 260
-2023-12-27 17:24:32,008 [ERROR] [log_message] Error updating screen: 'Registration' object has no attribute 'display'
-2023-12-27 17:24:32,041 [INFO] [log_message] User input: 260
-2023-12-27 17:24:32,041 [ERROR] [log_message] Error updating screen: 'Register' object has no attribute 'display'
-2023-12-27 17:24:32,070 [INFO] [log_message] User input: 260
-2023-12-27 17:24:32,101 [INFO] [log_message] User input: 260
-2023-12-27 17:24:32,101 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 17:24:32,384 [INFO] [log_message] User input: 260
-2023-12-27 17:24:32,385 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 17:24:32,886 [INFO] [log_message] User input: 260
-2023-12-27 17:24:32,918 [INFO] [log_message] User input: 260
-2023-12-27 17:24:32,951 [INFO] [log_message] User input: 260
-2023-12-27 17:24:32,951 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 17:24:32,981 [INFO] [log_message] User input: 260
-2023-12-27 17:24:32,982 [ERROR] [log_message] Error updating screen: 'Registration' object has no attribute 'display'
-2023-12-27 17:24:33,014 [INFO] [log_message] User input: 260
-2023-12-27 17:24:33,015 [ERROR] [log_message] Error updating screen: 'Register' object has no attribute 'display'
-2023-12-27 17:24:33,044 [INFO] [log_message] User input: 260
-2023-12-27 17:24:33,074 [INFO] [log_message] User input: 260
-2023-12-27 17:24:33,074 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 17:24:33,104 [INFO] [log_message] User input: 260
-2023-12-27 17:24:33,104 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 17:24:33,134 [INFO] [log_message] User input: 260
-2023-12-27 17:24:33,166 [INFO] [log_message] User input: 260
-2023-12-27 17:24:33,196 [INFO] [log_message] User input: 260
-2023-12-27 17:24:33,196 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 17:24:33,226 [INFO] [log_message] User input: 260
-2023-12-27 17:24:33,226 [ERROR] [log_message] Error updating screen: 'Registration' object has no attribute 'display'
-2023-12-27 17:24:33,256 [INFO] [log_message] User input: 260
-2023-12-27 17:24:33,256 [ERROR] [log_message] Error updating screen: 'Register' object has no attribute 'display'
-2023-12-27 17:24:33,288 [INFO] [log_message] User input: 260
-2023-12-27 17:24:33,320 [INFO] [log_message] User input: 260
-2023-12-27 17:24:33,320 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 17:24:33,398 [INFO] [log_message] User input: 261
-2023-12-27 17:24:33,898 [INFO] [log_message] User input: 261
-2023-12-27 17:24:33,898 [ERROR] [log_message] Error updating screen: 'Register' object has no attribute 'display'
-2023-12-27 17:24:33,929 [INFO] [log_message] User input: 261
-2023-12-27 17:24:33,930 [ERROR] [log_message] Error updating screen: 'Registration' object has no attribute 'display'
-2023-12-27 17:24:33,961 [INFO] [log_message] User input: 261
-2023-12-27 17:24:33,961 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 17:24:33,991 [INFO] [log_message] User input: 261
-2023-12-27 17:24:34,022 [INFO] [log_message] User input: 261
-2023-12-27 17:24:34,054 [INFO] [log_message] User input: 261
-2023-12-27 17:24:34,054 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 17:24:34,086 [INFO] [log_message] User input: 261
-2023-12-27 17:24:34,086 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 17:24:34,118 [INFO] [log_message] User input: 261
-2023-12-27 17:24:34,148 [INFO] [log_message] User input: 261
-2023-12-27 17:24:34,148 [ERROR] [log_message] Error updating screen: 'Register' object has no attribute 'display'
-2023-12-27 17:24:34,179 [INFO] [log_message] User input: 261
-2023-12-27 17:24:34,179 [ERROR] [log_message] Error updating screen: 'Registration' object has no attribute 'display'
-2023-12-27 17:24:34,326 [INFO] [log_message] User input: 260
-2023-12-27 17:24:34,326 [ERROR] [log_message] Error updating screen: 'Register' object has no attribute 'display'
-2023-12-27 17:24:34,539 [INFO] [log_message] User input: 260
-2023-12-27 17:24:34,702 [INFO] [log_message] User input: 260
-2023-12-27 17:24:34,702 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 17:24:34,854 [INFO] [log_message] User input: 260
-2023-12-27 17:24:34,854 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 17:24:34,955 [INFO] [log_message] User input: 260
-2023-12-27 17:24:35,287 [INFO] [log_message] User input: 260
-2023-12-27 17:24:35,469 [INFO] [log_message] User input: 260
-2023-12-27 17:24:35,469 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 17:24:35,683 [INFO] [log_message] User input: 260
-2023-12-27 17:24:35,683 [ERROR] [log_message] Error updating screen: 'Registration' object has no attribute 'display'
-2023-12-27 17:29:05,709 [INFO] [log_message] Entered Data: {'Username': 'splix', 'Password': '123'}
-2023-12-27 17:29:05,982 [INFO] [log_message] Login response: splix
-2023-12-27 17:29:05,982 [ERROR] [log_message] Error updating screen: Home.process_input() missing 1 required positional argument: 'all_views'
-2023-12-27 17:29:06,829 [INFO] [log_message] User input: 261
-2023-12-27 17:29:06,829 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 17:29:07,498 [INFO] [log_message] User input: 261
-2023-12-27 17:29:07,499 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 17:29:07,738 [INFO] [log_message] User input: 261
-2023-12-27 17:29:08,352 [INFO] [log_message] User input: 261
-2023-12-27 17:29:08,352 [ERROR] [log_message] Error updating screen: 'Register' object has no attribute 'display'
-2023-12-27 17:29:08,512 [INFO] [log_message] User input: 261
-2023-12-27 17:29:08,512 [ERROR] [log_message] Error updating screen: 'Registration' object has no attribute 'display'
-2023-12-27 17:29:08,704 [INFO] [log_message] User input: 261
-2023-12-27 17:29:08,704 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 17:29:08,867 [INFO] [log_message] User input: 261
-2023-12-27 17:29:09,009 [INFO] [log_message] User input: 261
-2023-12-27 17:29:09,158 [INFO] [log_message] User input: 261
-2023-12-27 17:29:09,159 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 17:29:09,501 [INFO] [log_message] User input: 260
-2023-12-27 17:29:09,700 [INFO] [log_message] User input: 260
-2023-12-27 17:29:09,860 [INFO] [log_message] User input: 260
-2023-12-27 17:29:09,860 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 17:29:09,995 [INFO] [log_message] User input: 260
-2023-12-27 17:29:09,995 [ERROR] [log_message] Error updating screen: 'Registration' object has no attribute 'display'
-2023-12-27 17:29:10,147 [INFO] [log_message] User input: 260
-2023-12-27 17:29:10,147 [ERROR] [log_message] Error updating screen: 'Register' object has no attribute 'display'
-2023-12-27 17:29:10,283 [INFO] [log_message] User input: 260
-2023-12-27 17:29:10,442 [INFO] [log_message] User input: 260
-2023-12-27 17:29:10,442 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 17:29:10,728 [INFO] [log_message] User input: 261
-2023-12-27 17:29:11,134 [INFO] [log_message] User input: 10
-2023-12-27 17:29:11,135 [ERROR] [log_message] Error updating screen: Profile.process_input() missing 1 required positional argument: 'all_views'
-2023-12-27 17:29:26,526 [INFO] [log_message] Entered Data: {'Username': 'splix', 'Password': '123'}
-2023-12-27 17:29:26,803 [INFO] [log_message] Login response: splix
-2023-12-27 17:29:26,803 [ERROR] [log_message] Error updating screen: Home.process_input() missing 1 required positional argument: 'all_views'
-2023-12-27 17:29:27,828 [INFO] [log_message] User input: 261
-2023-12-27 17:29:27,828 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 17:29:28,018 [INFO] [log_message] User input: 261
-2023-12-27 17:29:28,018 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 17:29:29,139 [INFO] [log_message] User input: 261
-2023-12-27 17:29:29,448 [INFO] [log_message] User input: 10
-2023-12-27 17:29:29,449 [ERROR] [log_message] Error updating screen: Profile.process_input() missing 1 required positional argument: 'all_views'
-2023-12-27 17:29:30,047 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 17:29:30,461 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 17:29:30,718 [ERROR] [log_message] Error updating screen: 'Register' object has no attribute 'display'
-2023-12-27 17:29:30,846 [ERROR] [log_message] Error updating screen: 'Registration' object has no attribute 'display'
-2023-12-27 17:29:31,007 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 17:29:59,441 [INFO] [log_message] Entered Data: {'Username': 'splix', 'Password': '123'}
-2023-12-27 17:29:59,718 [INFO] [log_message] Login response: splix
-2023-12-27 17:29:59,719 [ERROR] [log_message] Error updating screen: Home.process_input() missing 1 required positional argument: 'all_views'
-2023-12-27 17:30:00,423 [INFO] [log_message] User input: 261
-2023-12-27 17:30:00,423 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 17:30:00,588 [INFO] [log_message] User input: 261
-2023-12-27 17:30:00,588 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 17:30:00,901 [INFO] [log_message] User input: 261
-2023-12-27 17:30:01,454 [INFO] [log_message] User input: 10
-2023-12-27 17:30:01,454 [ERROR] [log_message] Error updating screen: Profile.process_input() missing 1 required positional argument: 'all_views'
-2023-12-27 17:31:47,466 [INFO] [log_message] Entered Data: {'Username': 'splix', 'Password': '123'}
-2023-12-27 17:31:47,741 [INFO] [log_message] Login response: splix
-2023-12-27 17:31:47,742 [ERROR] [log_message] Error updating screen: Home.process_input() missing 1 required positional argument: 'all_views'
-2023-12-27 17:31:48,639 [INFO] [log_message] User input: 261
-2023-12-27 17:31:48,640 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 17:31:48,900 [INFO] [log_message] User input: 261
-2023-12-27 17:31:48,900 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 17:31:49,182 [INFO] [log_message] User input: 261
-2023-12-27 17:31:50,101 [INFO] [log_message] User input: 10
-2023-12-27 17:31:50,101 [ERROR] [log_message] Error updating screen: Profile.process_input() missing 1 required positional argument: 'all_views'
-2023-12-27 17:31:50,599 [INFO] [log_message] User input: 261
-2023-12-27 17:31:50,599 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 17:31:50,775 [INFO] [log_message] User input: 261
-2023-12-27 17:31:50,775 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 17:31:50,932 [INFO] [log_message] User input: 261
-2023-12-27 17:31:51,067 [INFO] [log_message] User input: 261
-2023-12-27 17:31:51,067 [ERROR] [log_message] Error updating screen: 'Register' object has no attribute 'display'
-2023-12-27 17:31:51,199 [INFO] [log_message] User input: 261
-2023-12-27 17:31:51,199 [ERROR] [log_message] Error updating screen: 'Registration' object has no attribute 'display'
-2023-12-27 17:31:51,425 [INFO] [log_message] User input: 261
-2023-12-27 17:31:51,426 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 17:31:51,628 [INFO] [log_message] User input: 261
-2023-12-27 17:31:51,762 [INFO] [log_message] User input: 261
-2023-12-27 17:31:51,925 [INFO] [log_message] User input: 261
-2023-12-27 17:31:51,925 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 17:31:52,122 [INFO] [log_message] User input: 260
-2023-12-27 17:31:52,278 [INFO] [log_message] User input: 260
-2023-12-27 17:31:52,422 [INFO] [log_message] User input: 260
-2023-12-27 17:31:52,422 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 17:31:52,570 [INFO] [log_message] User input: 260
-2023-12-27 17:31:52,571 [ERROR] [log_message] Error updating screen: 'Registration' object has no attribute 'display'
-2023-12-27 17:31:52,692 [INFO] [log_message] User input: 260
-2023-12-27 17:31:52,693 [ERROR] [log_message] Error updating screen: 'Register' object has no attribute 'display'
-2023-12-27 17:31:52,846 [INFO] [log_message] User input: 260
-2023-12-27 17:31:52,978 [INFO] [log_message] User input: 260
-2023-12-27 17:31:52,979 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 17:31:53,503 [INFO] [log_message] User input: 260
-2023-12-27 17:31:53,504 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 17:31:53,754 [INFO] [log_message] User input: 10
-2023-12-27 17:31:54,055 [INFO] [log_message] User input: 261
-2023-12-27 17:31:54,056 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 17:31:54,245 [INFO] [log_message] User input: 261
-2023-12-27 17:31:54,245 [ERROR] [log_message] Error updating screen: 'Register' object has no attribute 'display'
-2023-12-27 17:31:54,379 [INFO] [log_message] User input: 261
-2023-12-27 17:31:54,379 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 17:31:54,850 [INFO] [log_message] User input: 261
-2023-12-27 17:31:54,850 [ERROR] [log_message] Error updating screen: 'Registration' object has no attribute 'display'
-2023-12-27 17:31:55,000 [INFO] [log_message] User input: 261
-2023-12-27 17:31:55,157 [INFO] [log_message] User input: 261
-2023-12-27 17:31:55,158 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 17:31:55,463 [INFO] [log_message] User input: 260
-2023-12-27 17:31:55,464 [ERROR] [log_message] Error updating screen: 'Register' object has no attribute 'display'
-2023-12-27 17:31:55,701 [INFO] [log_message] User input: 260
-2023-12-27 17:31:55,701 [ERROR] [log_message] Error updating screen: 'Registration' object has no attribute 'display'
-2023-12-27 17:31:55,856 [INFO] [log_message] User input: 260
-2023-12-27 17:31:56,003 [INFO] [log_message] User input: 260
-2023-12-27 17:31:56,004 [ERROR] [log_message] Error updating screen: 'Register' object has no attribute 'display'
-2023-12-27 17:31:56,163 [INFO] [log_message] User input: 260
-2023-12-27 17:31:56,163 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 17:31:56,303 [INFO] [log_message] User input: 260
-2023-12-27 17:31:56,455 [INFO] [log_message] User input: 260
-2023-12-27 17:31:56,456 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 17:31:56,569 [INFO] [log_message] User input: 260
-2023-12-27 17:31:56,569 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 17:31:56,702 [INFO] [log_message] User input: 260
-2023-12-27 17:31:56,868 [INFO] [log_message] User input: 260
-2023-12-27 17:31:56,869 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 17:31:57,363 [INFO] [log_message] User input: 261
-2023-12-27 17:31:57,528 [INFO] [log_message] User input: 261
-2023-12-27 17:31:57,528 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 17:31:57,690 [INFO] [log_message] User input: 261
-2023-12-27 17:31:57,885 [INFO] [log_message] User input: 261
-2023-12-27 17:31:58,064 [INFO] [log_message] User input: 261
-2023-12-27 17:31:58,064 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 17:31:58,224 [INFO] [log_message] User input: 261
-2023-12-27 17:31:58,224 [ERROR] [log_message] Error updating screen: 'Register' object has no attribute 'display'
-2023-12-27 17:31:58,726 [INFO] [log_message] User input: 261
-2023-12-27 17:31:58,726 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 17:31:58,757 [INFO] [log_message] User input: 261
-2023-12-27 17:31:58,757 [ERROR] [log_message] Error updating screen: 'Registration' object has no attribute 'display'
-2023-12-27 17:31:58,788 [INFO] [log_message] User input: 261
-2023-12-27 17:31:58,819 [INFO] [log_message] User input: 261
-2023-12-27 17:31:58,819 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 17:31:58,851 [INFO] [log_message] User input: 261
-2023-12-27 17:31:58,851 [ERROR] [log_message] Error updating screen: 'Register' object has no attribute 'display'
-2023-12-27 17:31:58,883 [INFO] [log_message] User input: 261
-2023-12-27 17:31:58,916 [INFO] [log_message] User input: 261
-2023-12-27 17:31:58,917 [ERROR] [log_message] Error updating screen: 'Registration' object has no attribute 'display'
-2023-12-27 17:31:58,947 [INFO] [log_message] User input: 261
-2023-12-27 17:31:58,976 [INFO] [log_message] User input: 261
-2023-12-27 17:31:58,977 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 17:31:59,008 [INFO] [log_message] User input: 261
-2023-12-27 17:31:59,008 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 17:31:59,038 [INFO] [log_message] User input: 261
-2023-12-27 17:31:59,070 [INFO] [log_message] User input: 261
-2023-12-27 17:31:59,070 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 17:31:59,102 [INFO] [log_message] User input: 261
-2023-12-27 17:31:59,494 [INFO] [log_message] User input: 261
-2023-12-27 17:31:59,950 [INFO] [log_message] User input: 261
-2023-12-27 17:31:59,950 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 17:32:00,401 [INFO] [log_message] User input: 261
-2023-12-27 17:32:00,402 [ERROR] [log_message] Error updating screen: 'Register' object has no attribute 'display'
-2023-12-27 17:32:00,869 [INFO] [log_message] User input: 261
-2023-12-27 17:32:00,870 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 17:32:01,237 [INFO] [log_message] User input: 260
-2023-12-27 17:32:01,237 [ERROR] [log_message] Error updating screen: 'Registration' object has no attribute 'display'
-2023-12-27 17:32:01,543 [INFO] [log_message] User input: 260
-2023-12-27 17:32:01,543 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 17:32:01,712 [INFO] [log_message] User input: 260
-2023-12-27 17:32:01,713 [ERROR] [log_message] Error updating screen: 'Register' object has no attribute 'display'
-2023-12-27 17:32:01,939 [INFO] [log_message] User input: 260
-2023-12-27 17:32:02,193 [INFO] [log_message] User input: 260
-2023-12-27 17:32:02,977 [INFO] [log_message] User input: 10
-2023-12-27 17:32:03,367 [INFO] [log_message] User input: 261
-2023-12-27 17:32:03,661 [INFO] [log_message] User input: 261
-2023-12-27 17:32:03,875 [INFO] [log_message] User input: 261
-2023-12-27 17:32:03,875 [ERROR] [log_message] Error updating screen: 'Register' object has no attribute 'display'
-2023-12-27 17:32:04,078 [INFO] [log_message] User input: 261
-2023-12-27 17:32:04,078 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 17:32:04,258 [INFO] [log_message] User input: 261
-2023-12-27 17:32:04,258 [ERROR] [log_message] Error updating screen: 'Registration' object has no attribute 'display'
-2023-12-27 17:32:04,446 [INFO] [log_message] User input: 261
-2023-12-27 17:32:04,446 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 17:32:04,627 [INFO] [log_message] User input: 261
-2023-12-27 17:32:04,627 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 17:32:04,845 [INFO] [log_message] User input: 261
-2023-12-27 17:32:05,113 [INFO] [log_message] User input: 261
-2023-12-27 17:32:05,447 [INFO] [log_message] User input: 261
-2023-12-27 17:32:05,447 [ERROR] [log_message] Error updating screen: 'Register' object has no attribute 'display'
-2023-12-27 17:32:06,018 [INFO] [log_message] User input: 260
-2023-12-27 17:32:06,280 [INFO] [log_message] User input: 260
-2023-12-27 17:32:06,583 [INFO] [log_message] User input: 260
-2023-12-27 17:32:06,931 [INFO] [log_message] User input: 260
-2023-12-27 17:32:06,931 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 17:32:07,152 [INFO] [log_message] User input: 260
-2023-12-27 17:32:07,153 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 17:32:07,467 [INFO] [log_message] User input: 260
-2023-12-27 17:32:07,467 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 17:32:08,107 [INFO] [log_message] User input: 10
-2023-12-27 17:32:08,107 [ERROR] [log_message] Error updating screen: 'Registration' object has no attribute 'display'
-2023-12-27 17:32:08,655 [INFO] [log_message] User input: 261
-2023-12-27 17:32:08,656 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 17:32:08,963 [INFO] [log_message] User input: 261
-2023-12-27 17:32:08,964 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 17:32:09,203 [INFO] [log_message] User input: 261
-2023-12-27 17:32:09,203 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 17:32:09,390 [INFO] [log_message] User input: 261
-2023-12-27 17:32:09,623 [INFO] [log_message] User input: 261
-2023-12-27 17:32:09,829 [INFO] [log_message] User input: 261
-2023-12-27 17:32:10,034 [INFO] [log_message] User input: 261
-2023-12-27 17:32:10,034 [ERROR] [log_message] Error updating screen: 'Register' object has no attribute 'display'
-2023-12-27 17:32:10,256 [INFO] [log_message] User input: 261
-2023-12-27 17:32:10,257 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 17:32:10,542 [INFO] [log_message] User input: 261
-2023-12-27 17:32:10,542 [ERROR] [log_message] Error updating screen: 'Registration' object has no attribute 'display'
-2023-12-27 17:32:11,042 [INFO] [log_message] User input: 261
-2023-12-27 17:32:11,042 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 17:32:59,805 [INFO] [log_message] Entered Data: {'Username': 'splix', 'Password': '123'}
-2023-12-27 17:33:00,083 [INFO] [log_message] Login response: splix
-2023-12-27 17:33:00,083 [ERROR] [log_message] Error updating screen: Home.process_input() missing 1 required positional argument: 'all_views'
-2023-12-27 17:33:00,867 [INFO] [log_message] User input: 261
-2023-12-27 17:33:00,868 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 17:33:01,104 [INFO] [log_message] User input: 261
-2023-12-27 17:33:01,104 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 17:33:01,438 [INFO] [log_message] User input: 261
-2023-12-27 17:33:01,615 [INFO] [log_message] User input: 261
-2023-12-27 17:33:01,616 [ERROR] [log_message] Error updating screen: 'Register' object has no attribute 'display'
-2023-12-27 17:33:01,914 [INFO] [log_message] User input: 260
-2023-12-27 17:33:02,167 [INFO] [log_message] User input: 10
-2023-12-27 17:33:09,548 [INFO] [log_message] Entered Data: {'Username': 'splix', 'Password': '123'}
-2023-12-27 17:33:09,836 [INFO] [log_message] Login response: splix
-2023-12-27 17:33:09,836 [ERROR] [log_message] Error updating screen: Home.process_input() missing 1 required positional argument: 'all_views'
-2023-12-27 17:33:10,428 [INFO] [log_message] User input: 261
-2023-12-27 17:33:10,428 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 17:33:10,786 [INFO] [log_message] User input: 261
-2023-12-27 17:33:10,786 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 17:33:10,999 [INFO] [log_message] User input: 261
-2023-12-27 17:33:12,488 [INFO] [log_message] User input: 10
-2023-12-27 17:33:40,432 [INFO] [log_message] Entered Data: {'Username': 'splix', 'Password': '123'}
-2023-12-27 17:33:40,711 [INFO] [log_message] Login response: splix
-2023-12-27 17:33:40,711 [ERROR] [log_message] Error updating screen: Home.process_input() missing 1 required positional argument: 'all_views'
-2023-12-27 17:33:41,770 [INFO] [log_message] User input: 261
-2023-12-27 17:33:41,770 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 17:33:42,165 [INFO] [log_message] User input: 261
-2023-12-27 17:33:42,165 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 17:33:42,311 [INFO] [log_message] User input: 261
-2023-12-27 17:33:43,442 [INFO] [log_message] User input: 10
-2023-12-27 17:33:43,442 [ERROR] [log_message] Error updating screen: Profile.process_input() missing 1 required positional argument: 'all_views'
-2023-12-27 17:33:43,835 [INFO] [log_message] User input: 261
-2023-12-27 17:33:43,835 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 17:33:44,037 [INFO] [log_message] User input: 261
-2023-12-27 17:33:44,038 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 17:33:44,194 [INFO] [log_message] User input: 261
-2023-12-27 17:33:44,334 [INFO] [log_message] User input: 261
-2023-12-27 17:33:44,334 [ERROR] [log_message] Error updating screen: 'Register' object has no attribute 'display'
-2023-12-27 17:33:44,463 [INFO] [log_message] User input: 261
-2023-12-27 17:33:44,464 [ERROR] [log_message] Error updating screen: 'Registration' object has no attribute 'display'
-2023-12-27 17:33:44,591 [INFO] [log_message] User input: 261
-2023-12-27 17:33:44,591 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 17:33:44,716 [INFO] [log_message] User input: 261
-2023-12-27 17:33:44,852 [INFO] [log_message] User input: 261
-2023-12-27 17:33:45,045 [INFO] [log_message] User input: 260
-2023-12-27 17:33:45,231 [INFO] [log_message] User input: 260
-2023-12-27 17:33:45,231 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 17:33:45,405 [INFO] [log_message] User input: 260
-2023-12-27 17:33:45,405 [ERROR] [log_message] Error updating screen: 'Registration' object has no attribute 'display'
-2023-12-27 17:33:45,561 [INFO] [log_message] User input: 260
-2023-12-27 17:33:45,562 [ERROR] [log_message] Error updating screen: 'Register' object has no attribute 'display'
-2023-12-27 17:33:45,697 [INFO] [log_message] User input: 260
-2023-12-27 17:33:45,840 [INFO] [log_message] User input: 260
-2023-12-27 17:33:45,840 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 17:33:46,415 [INFO] [log_message] User input: 260
-2023-12-27 17:33:46,415 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 17:33:47,214 [INFO] [log_message] User input: 261
-2023-12-27 17:33:47,214 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 17:33:47,379 [INFO] [log_message] User input: 261
-2023-12-27 17:33:47,669 [INFO] [log_message] User input: 10
-2023-12-27 17:33:48,168 [INFO] [log_message] User input: 260
-2023-12-27 17:33:48,168 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 17:33:48,513 [INFO] [log_message] User input: 260
-2023-12-27 17:33:48,513 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 17:33:48,770 [INFO] [log_message] User input: 10
-2023-12-27 17:33:49,194 [INFO] [log_message] User input: 261
-2023-12-27 17:33:49,194 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 17:33:49,925 [INFO] [log_message] User input: 260
-2023-12-27 17:33:49,925 [ERROR] [log_message] Error updating screen: 'Register' object has no attribute 'display'
-2023-12-27 17:33:53,582 [INFO] [log_message] User input: 260
-2023-12-27 17:38:43,375 [INFO] [log_message] Entered Data: {'Username': 'splix', 'Password': '132'}
-2023-12-27 17:38:43,590 [ERROR] [log_message] Login failed: {"status": "error", "message": "Invalid credentials"}
-2023-12-27 17:38:43,590 [INFO] [log_message] Login response: False
-2023-12-27 17:38:46,888 [INFO] [log_message] Entered Data: {'Username': 'splix', 'Password': '123'}
-2023-12-27 17:38:47,177 [INFO] [log_message] Login response: splix
-2023-12-27 17:38:47,177 [ERROR] [log_message] Error updating screen: Home.process_input() missing 1 required positional argument: 'all_views'
-2023-12-27 17:38:47,886 [INFO] [log_message] User input: 261
-2023-12-27 17:38:47,886 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 17:38:48,072 [INFO] [log_message] User input: 261
-2023-12-27 17:38:48,073 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 17:38:48,411 [INFO] [log_message] User input: 261
-2023-12-27 17:38:48,589 [INFO] [log_message] User input: 261
-2023-12-27 17:38:48,590 [ERROR] [log_message] Error updating screen: 'Register' object has no attribute 'display'
-2023-12-27 17:38:48,850 [INFO] [log_message] User input: 261
-2023-12-27 17:38:48,850 [ERROR] [log_message] Error updating screen: 'Registration' object has no attribute 'display'
-2023-12-27 17:38:49,020 [INFO] [log_message] User input: 261
-2023-12-27 17:38:49,020 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 17:38:49,173 [INFO] [log_message] User input: 261
-2023-12-27 17:38:49,332 [INFO] [log_message] User input: 261
-2023-12-27 17:38:49,514 [INFO] [log_message] User input: 260
-2023-12-27 17:38:49,683 [INFO] [log_message] User input: 260
-2023-12-27 17:38:49,683 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 17:38:49,817 [INFO] [log_message] User input: 260
-2023-12-27 17:38:49,818 [ERROR] [log_message] Error updating screen: 'Registration' object has no attribute 'display'
-2023-12-27 17:38:49,965 [INFO] [log_message] User input: 260
-2023-12-27 17:38:49,966 [ERROR] [log_message] Error updating screen: 'Register' object has no attribute 'display'
-2023-12-27 17:38:50,115 [INFO] [log_message] User input: 260
-2023-12-27 17:38:52,379 [INFO] [log_message] User input: 10
-2023-12-27 17:38:52,380 [ERROR] [log_message] Error updating screen: Profile.process_input() missing 1 required positional argument: 'all_views'
-2023-12-27 17:38:52,796 [INFO] [log_message] User input: 260
-2023-12-27 17:38:52,964 [INFO] [log_message] User input: 260
-2023-12-27 17:38:52,965 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 17:38:53,102 [INFO] [log_message] User input: 260
-2023-12-27 17:38:53,102 [ERROR] [log_message] Error updating screen: 'Registration' object has no attribute 'display'
-2023-12-27 17:38:53,234 [INFO] [log_message] User input: 260
-2023-12-27 17:38:53,234 [ERROR] [log_message] Error updating screen: 'Register' object has no attribute 'display'
-2023-12-27 17:38:53,368 [INFO] [log_message] User input: 260
-2023-12-27 17:38:53,505 [INFO] [log_message] User input: 260
-2023-12-27 17:38:53,505 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 17:38:53,639 [INFO] [log_message] User input: 260
-2023-12-27 17:38:53,640 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 17:38:53,774 [INFO] [log_message] User input: 260
-2023-12-27 17:38:53,907 [INFO] [log_message] User input: 260
-2023-12-27 17:38:54,301 [INFO] [log_message] User input: 260
-2023-12-27 17:38:54,302 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 17:38:54,460 [INFO] [log_message] User input: 260
-2023-12-27 17:38:54,461 [ERROR] [log_message] Error updating screen: 'Registration' object has no attribute 'display'
-2023-12-27 17:38:54,624 [INFO] [log_message] User input: 260
-2023-12-27 17:38:54,624 [ERROR] [log_message] Error updating screen: 'Register' object has no attribute 'display'
-2023-12-27 17:38:54,768 [INFO] [log_message] User input: 260
-2023-12-27 17:38:54,917 [INFO] [log_message] User input: 260
-2023-12-27 17:38:54,917 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 17:38:55,286 [INFO] [log_message] User input: 260
-2023-12-27 17:38:55,286 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 17:38:55,547 [INFO] [log_message] User input: 10
-2023-12-27 17:38:55,547 [ERROR] [log_message] Error processing user input: 'Home' object has no attribute 'reset_index'
-2023-12-27 17:38:55,548 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 17:38:56,236 [INFO] [log_message] User input: 261
-2023-12-27 17:38:56,237 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 17:38:56,446 [INFO] [log_message] User input: 261
-2023-12-27 17:38:56,622 [INFO] [log_message] User input: 261
-2023-12-27 17:38:56,622 [ERROR] [log_message] Error updating screen: 'Register' object has no attribute 'display'
-2023-12-27 17:38:56,777 [INFO] [log_message] User input: 261
-2023-12-27 17:38:56,777 [ERROR] [log_message] Error updating screen: 'Registration' object has no attribute 'display'
-2023-12-27 17:38:56,903 [INFO] [log_message] User input: 261
-2023-12-27 17:38:56,903 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 17:38:57,036 [INFO] [log_message] User input: 261
-2023-12-27 17:38:57,173 [INFO] [log_message] User input: 261
-2023-12-27 17:38:57,603 [INFO] [log_message] User input: 261
-2023-12-27 17:38:57,603 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 17:38:57,743 [INFO] [log_message] User input: 261
-2023-12-27 17:38:57,744 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 17:38:57,992 [INFO] [log_message] User input: 261
-2023-12-27 17:38:58,373 [INFO] [log_message] User input: 10
-2023-12-27 17:38:58,807 [INFO] [log_message] User input: 260
-2023-12-27 17:38:58,966 [INFO] [log_message] User input: 260
-2023-12-27 17:38:58,966 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 17:38:59,112 [INFO] [log_message] User input: 260
-2023-12-27 17:38:59,112 [ERROR] [log_message] Error updating screen: 'Registration' object has no attribute 'display'
-2023-12-27 17:38:59,264 [INFO] [log_message] User input: 260
-2023-12-27 17:38:59,264 [ERROR] [log_message] Error updating screen: 'Register' object has no attribute 'display'
-2023-12-27 17:38:59,406 [INFO] [log_message] User input: 260
-2023-12-27 17:38:59,546 [INFO] [log_message] User input: 260
-2023-12-27 17:38:59,546 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 17:38:59,675 [INFO] [log_message] User input: 260
-2023-12-27 17:38:59,675 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 17:38:59,814 [INFO] [log_message] User input: 260
-2023-12-27 17:38:59,966 [INFO] [log_message] User input: 260
-2023-12-27 17:39:00,098 [INFO] [log_message] User input: 260
-2023-12-27 17:39:00,098 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 17:39:00,295 [INFO] [log_message] User input: 260
-2023-12-27 17:39:00,295 [ERROR] [log_message] Error updating screen: 'Registration' object has no attribute 'display'
-2023-12-27 17:39:00,459 [INFO] [log_message] User input: 260
-2023-12-27 17:39:00,459 [ERROR] [log_message] Error updating screen: 'Register' object has no attribute 'display'
-2023-12-27 17:39:00,618 [INFO] [log_message] User input: 260
-2023-12-27 17:39:00,773 [INFO] [log_message] User input: 260
-2023-12-27 17:39:00,773 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 17:39:00,884 [INFO] [log_message] User input: 260
-2023-12-27 17:39:00,884 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 17:39:01,021 [INFO] [log_message] User input: 260
-2023-12-27 17:39:01,355 [INFO] [log_message] User input: 261
-2023-12-27 17:39:01,355 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 17:39:02,546 [INFO] [log_message] User input: 10
-2023-12-27 17:39:02,546 [ERROR] [log_message] Error processing user input: 'Home' object has no attribute 'reset_index'
-2023-12-27 17:39:02,546 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 17:39:03,252 [INFO] [log_message] User input: 261
-2023-12-27 17:39:03,252 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 17:39:03,419 [INFO] [log_message] User input: 261
-2023-12-27 17:39:03,564 [INFO] [log_message] User input: 261
-2023-12-27 17:39:03,566 [ERROR] [log_message] Error updating screen: 'Register' object has no attribute 'display'
-2023-12-27 17:39:03,705 [INFO] [log_message] User input: 261
-2023-12-27 17:39:03,706 [ERROR] [log_message] Error updating screen: 'Registration' object has no attribute 'display'
-2023-12-27 17:39:03,846 [INFO] [log_message] User input: 261
-2023-12-27 17:39:03,846 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 17:39:03,980 [INFO] [log_message] User input: 261
-2023-12-27 17:39:04,114 [INFO] [log_message] User input: 261
-2023-12-27 17:39:04,261 [INFO] [log_message] User input: 261
-2023-12-27 17:39:04,261 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 17:39:04,343 [INFO] [log_message] User input: 261
-2023-12-27 17:39:04,343 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 17:39:04,525 [INFO] [log_message] User input: 261
-2023-12-27 17:39:04,699 [INFO] [log_message] User input: 261
-2023-12-27 17:39:04,699 [ERROR] [log_message] Error updating screen: 'Register' object has no attribute 'display'
-2023-12-27 17:39:04,980 [INFO] [log_message] User input: 260
-2023-12-27 17:39:05,251 [INFO] [log_message] User input: 10
-2023-12-27 17:39:06,695 [INFO] [log_message] User input: 260
-2023-12-27 17:39:06,860 [INFO] [log_message] User input: 260
-2023-12-27 17:39:06,861 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 17:39:07,003 [INFO] [log_message] User input: 260
-2023-12-27 17:39:07,003 [ERROR] [log_message] Error updating screen: 'Registration' object has no attribute 'display'
-2023-12-27 17:39:07,157 [INFO] [log_message] User input: 260
-2023-12-27 17:39:07,158 [ERROR] [log_message] Error updating screen: 'Register' object has no attribute 'display'
-2023-12-27 17:39:07,282 [INFO] [log_message] User input: 260
-2023-12-27 17:39:07,435 [INFO] [log_message] User input: 260
-2023-12-27 17:39:07,436 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 17:39:07,563 [INFO] [log_message] User input: 260
-2023-12-27 17:39:07,563 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 17:39:08,265 [INFO] [log_message] User input: 10
-2023-12-27 17:39:08,265 [ERROR] [log_message] Error processing user input: 'Home' object has no attribute 'reset_index'
-2023-12-27 17:39:08,265 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 17:39:09,178 [INFO] [log_message] User input: 260
-2023-12-27 17:39:09,791 [INFO] [log_message] User input: 261
-2023-12-27 17:39:09,792 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 17:39:10,263 [INFO] [log_message] User input: 10
-2023-12-27 17:39:10,263 [ERROR] [log_message] Error processing user input: 'Home' object has no attribute 'reset_index'
-2023-12-27 17:39:10,264 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 17:39:10,440 [INFO] [log_message] User input: 10
-2023-12-27 17:39:10,441 [ERROR] [log_message] Error processing user input: 'Home' object has no attribute 'reset_index'
-2023-12-27 17:39:10,441 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 17:39:10,586 [INFO] [log_message] User input: 10
-2023-12-27 17:39:10,586 [ERROR] [log_message] Error processing user input: 'Home' object has no attribute 'reset_index'
-2023-12-27 17:39:10,586 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 17:39:10,848 [INFO] [log_message] User input: 261
-2023-12-27 17:39:10,848 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 17:39:11,033 [INFO] [log_message] User input: 261
-2023-12-27 17:39:11,339 [INFO] [log_message] User input: 10
-2023-12-27 17:39:12,134 [INFO] [log_message] User input: 261
-2023-12-27 17:39:12,134 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 17:39:12,414 [INFO] [log_message] User input: 10
-2023-12-27 17:39:12,414 [ERROR] [log_message] Error processing user input: 'Home' object has no attribute 'reset_index'
-2023-12-27 17:39:12,414 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 17:39:13,129 [INFO] [log_message] User input: 261
-2023-12-27 17:39:13,129 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 17:39:13,331 [INFO] [log_message] User input: 261
-2023-12-27 17:39:13,497 [INFO] [log_message] User input: 261
-2023-12-27 17:39:13,497 [ERROR] [log_message] Error updating screen: 'Register' object has no attribute 'display'
-2023-12-27 17:39:13,651 [INFO] [log_message] User input: 261
-2023-12-27 17:39:13,651 [ERROR] [log_message] Error updating screen: 'Registration' object has no attribute 'display'
-2023-12-27 17:39:13,793 [INFO] [log_message] User input: 261
-2023-12-27 17:39:13,793 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 17:39:13,995 [INFO] [log_message] User input: 261
-2023-12-27 17:39:14,239 [INFO] [log_message] User input: 260
-2023-12-27 17:39:14,240 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 17:39:14,421 [INFO] [log_message] User input: 260
-2023-12-27 17:39:14,421 [ERROR] [log_message] Error updating screen: 'Registration' object has no attribute 'display'
-2023-12-27 17:39:14,571 [INFO] [log_message] User input: 260
-2023-12-27 17:39:14,571 [ERROR] [log_message] Error updating screen: 'Register' object has no attribute 'display'
-2023-12-27 17:39:14,706 [INFO] [log_message] User input: 260
-2023-12-27 17:39:15,197 [INFO] [log_message] User input: 10
-2023-12-27 17:39:15,497 [INFO] [log_message] User input: 260
-2023-12-27 17:39:15,663 [INFO] [log_message] User input: 260
-2023-12-27 17:39:15,663 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 17:39:15,795 [INFO] [log_message] User input: 260
-2023-12-27 17:39:15,795 [ERROR] [log_message] Error updating screen: 'Registration' object has no attribute 'display'
-2023-12-27 17:39:15,946 [INFO] [log_message] User input: 260
-2023-12-27 17:39:15,947 [ERROR] [log_message] Error updating screen: 'Register' object has no attribute 'display'
-2023-12-27 17:39:16,096 [INFO] [log_message] User input: 260
-2023-12-27 17:39:16,232 [INFO] [log_message] User input: 260
-2023-12-27 17:39:16,232 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 17:39:16,357 [INFO] [log_message] User input: 260
-2023-12-27 17:39:16,357 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 17:39:16,500 [INFO] [log_message] User input: 260
-2023-12-27 17:39:16,634 [INFO] [log_message] User input: 260
-2023-12-27 17:39:16,925 [INFO] [log_message] User input: 261
-2023-12-27 17:39:17,105 [INFO] [log_message] User input: 261
-2023-12-27 17:39:17,105 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 17:39:17,244 [INFO] [log_message] User input: 261
-2023-12-27 17:39:17,244 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 17:39:17,734 [INFO] [log_message] User input: 260
-2023-12-27 17:39:17,734 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 17:39:18,000 [INFO] [log_message] User input: 10
-2023-12-27 17:39:18,000 [ERROR] [log_message] Error processing user input: 'Home' object has no attribute 'reset_index'
-2023-12-27 17:39:18,000 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 17:39:18,273 [INFO] [log_message] User input: 261
-2023-12-27 17:39:18,273 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 17:39:18,451 [INFO] [log_message] User input: 261
-2023-12-27 17:39:18,596 [INFO] [log_message] User input: 261
-2023-12-27 17:39:18,597 [ERROR] [log_message] Error updating screen: 'Register' object has no attribute 'display'
-2023-12-27 17:39:18,711 [INFO] [log_message] User input: 261
-2023-12-27 17:39:18,712 [ERROR] [log_message] Error updating screen: 'Registration' object has no attribute 'display'
-2023-12-27 17:39:18,863 [INFO] [log_message] User input: 261
-2023-12-27 17:39:18,864 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 17:39:19,079 [INFO] [log_message] User input: 261
-2023-12-27 17:39:19,273 [INFO] [log_message] User input: 260
-2023-12-27 17:39:19,273 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 17:39:19,429 [INFO] [log_message] User input: 260
-2023-12-27 17:39:19,429 [ERROR] [log_message] Error updating screen: 'Registration' object has no attribute 'display'
-2023-12-27 17:39:19,584 [INFO] [log_message] User input: 260
-2023-12-27 17:39:19,584 [ERROR] [log_message] Error updating screen: 'Register' object has no attribute 'display'
-2023-12-27 17:39:19,723 [INFO] [log_message] User input: 260
-2023-12-27 17:39:19,836 [INFO] [log_message] User input: 260
-2023-12-27 17:39:19,836 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 17:39:20,588 [INFO] [log_message] User input: 261
-2023-12-27 17:39:20,876 [INFO] [log_message] User input: 10
-2023-12-27 19:11:52,041 [INFO] [log_message] Error updating splash screen: addwstr() returned ERR
-2023-12-27 19:12:04,972 [INFO] [log_message] Entered Data: {'Username': 'splix', 'Password': '123'}
-2023-12-27 19:12:04,978 [ERROR] [log_message] Error logging in: ('Connection aborted.', ConnectionResetError(104, 'Connection reset by peer'))
-2023-12-27 19:12:04,978 [INFO] [log_message] Login response: False
-2023-12-27 19:12:27,428 [INFO] [log_message] Entered Data: {'Username': 'splix', 'Password': '123'}
-2023-12-27 19:12:27,941 [INFO] [log_message] Login response: splix
-2023-12-27 19:12:27,941 [ERROR] [log_message] Error updating screen: Home.process_input() missing 1 required positional argument: 'all_views'
-2023-12-27 19:12:29,695 [INFO] [log_message] User input: 261
-2023-12-27 19:12:29,696 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 19:12:30,431 [INFO] [log_message] User input: 261
-2023-12-27 19:12:30,432 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 19:12:30,695 [INFO] [log_message] User input: 261
-2023-12-27 19:12:30,927 [INFO] [log_message] User input: 261
-2023-12-27 19:12:30,927 [ERROR] [log_message] Error updating screen: 'Register' object has no attribute 'display'
-2023-12-27 19:12:31,056 [INFO] [log_message] User input: 261
-2023-12-27 19:12:31,056 [ERROR] [log_message] Error updating screen: 'Registration' object has no attribute 'display'
-2023-12-27 19:12:31,207 [INFO] [log_message] User input: 261
-2023-12-27 19:12:31,208 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 19:12:31,367 [INFO] [log_message] User input: 261
-2023-12-27 19:12:31,607 [INFO] [log_message] User input: 261
-2023-12-27 19:12:31,881 [INFO] [log_message] User input: 260
-2023-12-27 19:12:32,059 [INFO] [log_message] User input: 260
-2023-12-27 19:12:32,059 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 19:12:32,272 [INFO] [log_message] User input: 260
-2023-12-27 19:12:32,272 [ERROR] [log_message] Error updating screen: 'Registration' object has no attribute 'display'
-2023-12-27 19:12:32,456 [INFO] [log_message] User input: 260
-2023-12-27 19:12:32,456 [ERROR] [log_message] Error updating screen: 'Register' object has no attribute 'display'
-2023-12-27 19:12:32,956 [INFO] [log_message] User input: 260
-2023-12-27 19:12:32,987 [INFO] [log_message] User input: 260
-2023-12-27 19:12:32,987 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 19:12:33,024 [INFO] [log_message] User input: 260
-2023-12-27 19:12:33,024 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 19:12:33,048 [INFO] [log_message] User input: 260
-2023-12-27 19:12:33,081 [INFO] [log_message] User input: 260
-2023-12-27 19:12:33,114 [INFO] [log_message] User input: 260
-2023-12-27 19:12:33,115 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 19:12:33,161 [INFO] [log_message] User input: 260
-2023-12-27 19:12:33,162 [ERROR] [log_message] Error updating screen: 'Registration' object has no attribute 'display'
-2023-12-27 19:12:33,174 [INFO] [log_message] User input: 260
-2023-12-27 19:12:33,174 [ERROR] [log_message] Error updating screen: 'Register' object has no attribute 'display'
-2023-12-27 19:12:33,204 [INFO] [log_message] User input: 260
-2023-12-27 19:12:33,234 [INFO] [log_message] User input: 260
-2023-12-27 19:12:33,234 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 19:12:33,266 [INFO] [log_message] User input: 260
-2023-12-27 19:12:33,267 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 19:12:33,313 [INFO] [log_message] User input: 260
-2023-12-27 19:12:33,351 [INFO] [log_message] User input: 260
-2023-12-27 19:12:33,359 [INFO] [log_message] User input: 260
-2023-12-27 19:12:33,359 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 19:12:33,399 [INFO] [log_message] User input: 260
-2023-12-27 19:12:33,399 [ERROR] [log_message] Error updating screen: 'Registration' object has no attribute 'display'
-2023-12-27 19:12:33,419 [INFO] [log_message] User input: 260
-2023-12-27 19:12:33,419 [ERROR] [log_message] Error updating screen: 'Register' object has no attribute 'display'
-2023-12-27 19:12:33,462 [INFO] [log_message] User input: 260
-2023-12-27 19:12:33,478 [INFO] [log_message] User input: 260
-2023-12-27 19:12:33,478 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 19:12:33,523 [INFO] [log_message] User input: 260
-2023-12-27 19:12:33,524 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 19:12:33,539 [INFO] [log_message] User input: 260
-2023-12-27 19:12:33,595 [INFO] [log_message] User input: 260
-2023-12-27 19:12:33,600 [INFO] [log_message] User input: 260
-2023-12-27 19:12:33,600 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 19:12:33,649 [INFO] [log_message] User input: 260
-2023-12-27 19:12:33,649 [ERROR] [log_message] Error updating screen: 'Registration' object has no attribute 'display'
-2023-12-27 19:12:33,670 [INFO] [log_message] User input: 260
-2023-12-27 19:12:33,670 [ERROR] [log_message] Error updating screen: 'Register' object has no attribute 'display'
-2023-12-27 19:12:33,714 [INFO] [log_message] User input: 260
-2023-12-27 19:12:33,724 [INFO] [log_message] User input: 260
-2023-12-27 19:12:33,725 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 19:12:33,758 [INFO] [log_message] User input: 260
-2023-12-27 19:12:33,758 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 19:12:33,786 [INFO] [log_message] User input: 260
-2023-12-27 19:12:33,817 [INFO] [log_message] User input: 260
-2023-12-27 19:12:33,868 [INFO] [log_message] User input: 260
-2023-12-27 19:12:33,869 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 19:12:33,881 [INFO] [log_message] User input: 260
-2023-12-27 19:12:33,881 [ERROR] [log_message] Error updating screen: 'Registration' object has no attribute 'display'
-2023-12-27 19:12:33,930 [INFO] [log_message] User input: 260
-2023-12-27 19:12:33,930 [ERROR] [log_message] Error updating screen: 'Register' object has no attribute 'display'
-2023-12-27 19:12:33,939 [INFO] [log_message] User input: 260
-2023-12-27 19:12:33,970 [INFO] [log_message] User input: 260
-2023-12-27 19:12:33,970 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 19:12:33,999 [INFO] [log_message] User input: 260
-2023-12-27 19:12:34,000 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 19:12:34,033 [INFO] [log_message] User input: 260
-2023-12-27 19:12:34,064 [INFO] [log_message] User input: 260
-2023-12-27 19:12:34,092 [INFO] [log_message] User input: 260
-2023-12-27 19:12:34,092 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 19:12:34,647 [INFO] [log_message] User input: 261
-2023-12-27 19:12:34,953 [INFO] [log_message] User input: 261
-2023-12-27 19:12:35,127 [INFO] [log_message] User input: 261
-2023-12-27 19:12:35,127 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 19:12:35,368 [INFO] [log_message] User input: 261
-2023-12-27 19:12:35,368 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 19:12:35,552 [INFO] [log_message] User input: 261
-2023-12-27 19:12:36,364 [INFO] [log_message] User input: 10
-2023-12-27 19:12:36,364 [ERROR] [log_message] Error updating screen: Profile.process_input() missing 1 required positional argument: 'all_views'
-2023-12-27 19:12:37,151 [INFO] [log_message] User input: 261
-2023-12-27 19:12:37,151 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 19:12:37,377 [INFO] [log_message] User input: 261
-2023-12-27 19:12:37,377 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 19:12:37,575 [INFO] [log_message] User input: 261
-2023-12-27 19:12:37,759 [INFO] [log_message] User input: 261
-2023-12-27 19:12:37,760 [ERROR] [log_message] Error updating screen: 'Register' object has no attribute 'display'
-2023-12-27 19:12:37,943 [INFO] [log_message] User input: 261
-2023-12-27 19:12:37,943 [ERROR] [log_message] Error updating screen: 'Registration' object has no attribute 'display'
-2023-12-27 19:12:38,111 [INFO] [log_message] User input: 261
-2023-12-27 19:12:38,111 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 19:12:38,303 [INFO] [log_message] User input: 261
-2023-12-27 19:12:38,464 [INFO] [log_message] User input: 261
-2023-12-27 19:12:38,744 [INFO] [log_message] User input: 260
-2023-12-27 19:12:38,937 [INFO] [log_message] User input: 260
-2023-12-27 19:12:38,937 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 19:12:39,127 [INFO] [log_message] User input: 260
-2023-12-27 19:12:39,127 [ERROR] [log_message] Error updating screen: 'Registration' object has no attribute 'display'
-2023-12-27 19:12:39,303 [INFO] [log_message] User input: 260
-2023-12-27 19:12:39,304 [ERROR] [log_message] Error updating screen: 'Register' object has no attribute 'display'
-2023-12-27 19:12:39,463 [INFO] [log_message] User input: 260
-2023-12-27 19:12:39,607 [INFO] [log_message] User input: 260
-2023-12-27 19:12:39,607 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 19:12:39,775 [INFO] [log_message] User input: 260
-2023-12-27 19:12:39,775 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 19:12:40,022 [INFO] [log_message] User input: 260
-2023-12-27 19:12:40,535 [INFO] [log_message] User input: 261
-2023-12-27 19:12:40,535 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 19:12:41,035 [INFO] [log_message] User input: 10
-2023-12-27 19:12:41,656 [INFO] [log_message] User input: 261
-2023-12-27 19:12:41,657 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 19:12:41,864 [INFO] [log_message] User input: 261
-2023-12-27 19:12:41,864 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 19:12:42,030 [INFO] [log_message] User input: 261
-2023-12-27 19:12:42,030 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 19:12:42,183 [INFO] [log_message] User input: 261
-2023-12-27 19:12:42,184 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 19:12:42,368 [INFO] [log_message] User input: 261
-2023-12-27 19:12:42,728 [INFO] [log_message] User input: 261
-2023-12-27 19:12:43,048 [INFO] [log_message] User input: 261
-2023-12-27 19:12:43,048 [ERROR] [log_message] Error updating screen: 'Register' object has no attribute 'display'
-2023-12-27 19:12:43,606 [INFO] [log_message] User input: 260
-2023-12-27 19:12:43,607 [ERROR] [log_message] Error updating screen: 'Register' object has no attribute 'display'
-2023-12-27 19:12:44,611 [INFO] [log_message] User input: 261
-2023-12-27 19:12:45,488 [INFO] [log_message] User input: 260
-2023-12-27 19:12:45,488 [ERROR] [log_message] Error updating screen: 'Registration' object has no attribute 'display'
-2023-12-27 19:12:46,086 [INFO] [log_message] User input: 260
-2023-12-27 19:12:46,087 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 19:12:46,375 [INFO] [log_message] User input: 260
-2023-12-27 19:12:46,375 [ERROR] [log_message] Error updating screen: 'Register' object has no attribute 'display'
-2023-12-27 19:12:46,623 [INFO] [log_message] User input: 260
-2023-12-27 19:12:46,624 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 19:12:46,903 [INFO] [log_message] User input: 260
-2023-12-27 19:12:47,111 [INFO] [log_message] User input: 260
-2023-12-27 19:12:47,384 [INFO] [log_message] User input: 260
-2023-12-27 19:12:47,384 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 19:12:47,608 [INFO] [log_message] User input: 260
-2023-12-27 19:12:47,839 [INFO] [log_message] User input: 260
-2023-12-27 19:12:47,839 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 19:12:48,071 [INFO] [log_message] User input: 260
-2023-12-27 19:12:48,071 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 19:12:48,400 [INFO] [log_message] User input: 261
-2023-12-27 19:12:48,711 [INFO] [log_message] User input: 261
-2023-12-27 19:12:49,127 [INFO] [log_message] User input: 261
-2023-12-27 19:12:49,127 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 19:12:49,399 [INFO] [log_message] User input: 261
-2023-12-27 19:12:49,840 [INFO] [log_message] User input: 260
-2023-12-27 19:12:49,840 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 19:12:50,223 [INFO] [log_message] User input: 260
-2023-12-27 19:12:50,511 [INFO] [log_message] User input: 260
-2023-12-27 19:12:50,511 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 19:12:51,235 [INFO] [log_message] User input: 10
-2023-12-27 19:12:51,846 [INFO] [log_message] User input: 261
-2023-12-27 19:12:51,846 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 19:12:52,072 [INFO] [log_message] User input: 261
-2023-12-27 19:12:52,072 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 19:12:52,263 [INFO] [log_message] User input: 261
-2023-12-27 19:12:52,463 [INFO] [log_message] User input: 261
-2023-12-27 19:12:52,463 [ERROR] [log_message] Error updating screen: 'Register' object has no attribute 'display'
-2023-12-27 19:12:52,639 [INFO] [log_message] User input: 261
-2023-12-27 19:12:52,639 [ERROR] [log_message] Error updating screen: 'Registration' object has no attribute 'display'
-2023-12-27 19:12:52,816 [INFO] [log_message] User input: 261
-2023-12-27 19:12:52,817 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 19:12:52,969 [INFO] [log_message] User input: 261
-2023-12-27 19:12:53,104 [INFO] [log_message] User input: 261
-2023-12-27 19:12:53,543 [INFO] [log_message] User input: 261
-2023-12-27 19:12:53,544 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 19:12:54,164 [INFO] [log_message] User input: 10
-2023-12-27 19:12:54,487 [INFO] [log_message] User input: 261
-2023-12-27 19:12:54,488 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 19:12:54,679 [INFO] [log_message] User input: 261
-2023-12-27 19:12:54,679 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 19:12:54,832 [INFO] [log_message] User input: 261
-2023-12-27 19:12:54,976 [INFO] [log_message] User input: 261
-2023-12-27 19:12:54,976 [ERROR] [log_message] Error updating screen: 'Register' object has no attribute 'display'
-2023-12-27 19:12:55,575 [INFO] [log_message] User input: 260
-2023-12-27 19:12:55,876 [INFO] [log_message] User input: 10
-2023-12-27 19:12:56,543 [INFO] [log_message] User input: 261
-2023-12-27 19:12:56,720 [INFO] [log_message] User input: 261
-2023-12-27 19:12:56,720 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 19:12:57,023 [INFO] [log_message] User input: 260
-2023-12-27 19:12:57,023 [ERROR] [log_message] Error updating screen: 'Register' object has no attribute 'display'
-2023-12-27 19:12:57,440 [INFO] [log_message] User input: 260
-2023-12-27 19:12:57,936 [INFO] [log_message] User input: 260
-2023-12-27 19:12:58,287 [INFO] [log_message] User input: 260
-2023-12-27 19:12:58,662 [INFO] [log_message] User input: 260
-2023-12-27 19:12:58,663 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 19:12:59,071 [INFO] [log_message] User input: 260
-2023-12-27 19:12:59,071 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 19:12:59,856 [INFO] [log_message] User input: 261
-2023-12-27 19:12:59,856 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 19:13:00,119 [INFO] [log_message] User input: 261
-2023-12-27 19:13:00,607 [INFO] [log_message] User input: 260
-2023-12-27 19:13:00,608 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 19:13:01,071 [INFO] [log_message] User input: 260
-2023-12-27 19:13:01,072 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 19:13:01,351 [INFO] [log_message] User input: 260
-2023-12-27 19:13:01,351 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 19:13:01,575 [INFO] [log_message] User input: 260
-2023-12-27 19:13:01,576 [ERROR] [log_message] Error updating screen: 'Registration' object has no attribute 'display'
-2023-12-27 19:13:01,975 [INFO] [log_message] User input: 261
-2023-12-27 19:13:02,608 [INFO] [log_message] User input: 261
-2023-12-27 19:13:02,608 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 19:13:03,015 [INFO] [log_message] User input: 261
-2023-12-27 19:13:03,016 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 19:13:03,579 [INFO] [log_message] User input: 10
-2023-12-27 19:13:04,504 [INFO] [log_message] User input: 261
-2023-12-27 19:13:04,504 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 19:13:04,710 [INFO] [log_message] User input: 261
-2023-12-27 19:13:04,711 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 19:13:05,263 [INFO] [log_message] User input: 260
-2023-12-27 19:13:05,263 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 19:13:05,630 [INFO] [log_message] User input: 260
-2023-12-27 19:13:06,039 [INFO] [log_message] User input: 261
-2023-12-27 19:13:06,040 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 19:13:06,355 [INFO] [log_message] User input: 10
-2023-12-27 19:13:07,150 [INFO] [log_message] User input: 261
-2023-12-27 19:13:07,150 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 19:13:07,344 [INFO] [log_message] User input: 261
-2023-12-27 19:13:07,344 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 19:13:07,495 [INFO] [log_message] User input: 261
-2023-12-27 19:13:07,654 [INFO] [log_message] User input: 261
-2023-12-27 19:13:07,654 [ERROR] [log_message] Error updating screen: 'Register' object has no attribute 'display'
-2023-12-27 19:13:07,784 [INFO] [log_message] User input: 261
-2023-12-27 19:13:07,785 [ERROR] [log_message] Error updating screen: 'Registration' object has no attribute 'display'
-2023-12-27 19:13:07,935 [INFO] [log_message] User input: 261
-2023-12-27 19:13:07,936 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 19:13:08,078 [INFO] [log_message] User input: 261
-2023-12-27 19:13:08,975 [INFO] [log_message] User input: 260
-2023-12-27 19:13:08,976 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 19:13:09,328 [INFO] [log_message] User input: 260
-2023-12-27 19:13:09,328 [ERROR] [log_message] Error updating screen: 'Registration' object has no attribute 'display'
-2023-12-27 19:13:09,511 [INFO] [log_message] User input: 260
-2023-12-27 19:13:09,511 [ERROR] [log_message] Error updating screen: 'Register' object has no attribute 'display'
-2023-12-27 19:13:09,686 [INFO] [log_message] User input: 260
-2023-12-27 19:13:09,830 [INFO] [log_message] User input: 260
-2023-12-27 19:13:09,830 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 19:13:10,031 [INFO] [log_message] User input: 260
-2023-12-27 19:13:10,031 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 19:13:10,467 [INFO] [log_message] User input: 10
-2023-12-27 19:13:11,023 [INFO] [log_message] User input: 261
-2023-12-27 19:13:11,024 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 19:13:11,771 [INFO] [log_message] User input: 10
-2023-12-27 19:13:12,319 [INFO] [log_message] User input: 261
-2023-12-27 19:13:12,320 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 19:13:12,880 [INFO] [log_message] User input: 261
-2023-12-27 19:13:12,880 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 19:13:13,087 [INFO] [log_message] User input: 261
-2023-12-27 19:13:13,835 [INFO] [log_message] User input: 10
-2023-12-27 19:13:14,887 [INFO] [log_message] User input: 261
-2023-12-27 19:13:16,342 [INFO] [log_message] User input: 261
-2023-12-27 19:13:16,343 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 19:13:17,459 [INFO] [log_message] User input: 10
-2023-12-27 19:20:43,238 [INFO] [log_message] Entered Data: {'Username': 'splix', 'Password': '123'}
-2023-12-27 19:20:43,691 [INFO] [log_message] Login response: splix
-2023-12-27 19:20:43,691 [ERROR] [log_message] Error updating screen: Home.process_input() missing 1 required positional argument: 'all_views'
-2023-12-27 19:20:58,133 [INFO] [log_message] User input: 258
-2023-12-27 19:20:58,682 [INFO] [log_message] User input: 258
-2023-12-27 19:20:59,185 [INFO] [log_message] User input: 261
-2023-12-27 19:20:59,185 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 19:21:00,097 [INFO] [log_message] User input: 260
-2023-12-27 19:26:23,612 [INFO] [log_message] Entered Data: {'Username': 'pepe', 'Password': '123123', 'FullName': 'oaijfeaw', 'Email   ': 'fede@fede.comm'}
-2023-12-27 19:26:24,196 [INFO] [log_message] Register response: pepe
-2023-12-27 19:26:24,196 [ERROR] [log_message] Error updating screen: Home.process_input() missing 1 required positional argument: 'all_views'
-2023-12-27 19:26:45,439 [INFO] [log_message] User input: 261
-2023-12-27 19:26:45,439 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 19:27:40,200 [INFO] [log_message] User input: 261
-2023-12-27 19:27:40,201 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 19:27:40,551 [INFO] [log_message] User input: 260
-2023-12-27 19:27:40,551 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 19:27:40,777 [INFO] [log_message] User input: 260
-2023-12-27 19:27:41,305 [INFO] [log_message] User input: 261
-2023-12-27 19:27:41,305 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 19:27:41,527 [INFO] [log_message] User input: 261
-2023-12-27 19:27:41,527 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 19:27:41,958 [INFO] [log_message] User input: 261
-2023-12-27 19:27:42,215 [INFO] [log_message] User input: 261
-2023-12-27 19:27:42,216 [ERROR] [log_message] Error updating screen: 'Register' object has no attribute 'display'
-2023-12-27 19:27:42,430 [INFO] [log_message] User input: 261
-2023-12-27 19:27:42,431 [ERROR] [log_message] Error updating screen: 'Registration' object has no attribute 'display'
-2023-12-27 19:27:42,902 [INFO] [log_message] User input: 261
-2023-12-27 19:27:42,903 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 19:27:43,247 [INFO] [log_message] User input: 260
-2023-12-27 19:27:43,248 [ERROR] [log_message] Error updating screen: 'Registration' object has no attribute 'display'
-2023-12-27 19:27:43,494 [INFO] [log_message] User input: 260
-2023-12-27 19:27:43,495 [ERROR] [log_message] Error updating screen: 'Register' object has no attribute 'display'
-2023-12-27 19:27:43,694 [INFO] [log_message] User input: 260
-2023-12-27 19:27:43,895 [INFO] [log_message] User input: 260
-2023-12-27 19:27:43,896 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 19:27:44,046 [INFO] [log_message] User input: 260
-2023-12-27 19:27:44,046 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 19:27:44,207 [INFO] [log_message] User input: 260
-2023-12-27 19:27:44,608 [INFO] [log_message] User input: 260
-2023-12-27 19:27:44,919 [INFO] [log_message] User input: 261
-2023-12-27 19:27:45,183 [INFO] [log_message] User input: 261
-2023-12-27 19:27:45,183 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 19:27:45,367 [INFO] [log_message] User input: 261
-2023-12-27 19:27:45,367 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 19:27:45,839 [INFO] [log_message] User input: 260
-2023-12-27 19:27:45,839 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 19:27:46,214 [INFO] [log_message] User input: 261
-2023-12-27 19:27:46,215 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 19:27:46,563 [INFO] [log_message] User input: 10
-2023-12-27 19:27:46,563 [ERROR] [log_message] Error processing user input: 'Login' object has no attribute 'reset_index'
-2023-12-27 19:27:46,563 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 19:27:47,483 [INFO] [log_message] User input: 10
-2023-12-27 19:27:47,483 [ERROR] [log_message] Error processing user input: 'Login' object has no attribute 'reset_index'
-2023-12-27 19:27:47,483 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 19:27:47,928 [INFO] [log_message] User input: 260
-2023-12-27 19:27:47,929 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 19:27:48,150 [INFO] [log_message] User input: 260
-2023-12-27 19:27:48,312 [INFO] [log_message] User input: 260
-2023-12-27 19:27:48,799 [INFO] [log_message] User input: 261
-2023-12-27 19:27:49,043 [INFO] [log_message] User input: 261
-2023-12-27 19:27:49,044 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 19:27:49,419 [INFO] [log_message] User input: 10
-2023-12-27 19:27:49,895 [INFO] [log_message] User input: 261
-2023-12-27 19:27:49,895 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 19:27:50,129 [INFO] [log_message] User input: 261
-2023-12-27 19:27:50,130 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 19:27:50,351 [INFO] [log_message] User input: 261
-2023-12-27 19:27:50,550 [INFO] [log_message] User input: 261
-2023-12-27 19:27:50,551 [ERROR] [log_message] Error updating screen: 'Register' object has no attribute 'display'
-2023-12-27 19:27:50,928 [INFO] [log_message] User input: 260
-2023-12-27 19:27:51,145 [INFO] [log_message] User input: 260
-2023-12-27 19:27:51,145 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 19:27:51,295 [INFO] [log_message] User input: 260
-2023-12-27 19:27:51,295 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 19:27:51,667 [INFO] [log_message] User input: 10
-2023-12-27 19:27:51,891 [INFO] [log_message] User input: 10
-2023-12-27 19:27:51,891 [ERROR] [log_message] Error processing user input: 'Friends' object has no attribute 'reset_index'
-2023-12-27 19:27:52,431 [INFO] [log_message] User input: 261
-2023-12-27 19:27:52,432 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 19:27:52,803 [INFO] [log_message] User input: 10
-2023-12-27 19:27:53,327 [INFO] [log_message] User input: 261
-2023-12-27 19:27:53,328 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 19:28:29,898 [INFO] [log_message] Entered Data: {'Username': 'splix', 'Password': '123'}
-2023-12-27 19:28:30,356 [INFO] [log_message] Login response: splix
-2023-12-27 19:28:30,356 [ERROR] [log_message] Error updating screen: Home.process_input() missing 1 required positional argument: 'all_views'
-2023-12-27 19:32:40,456 [INFO] [log_message] Entered Data: {'Username': 'splix', 'Password': '123'}
-2023-12-27 19:32:40,887 [INFO] [log_message] Login response: splix
-2023-12-27 19:32:41,724 [INFO] [log_message] User input: 261
-2023-12-27 19:32:41,725 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 19:32:42,059 [INFO] [log_message] User input: 261
-2023-12-27 19:32:42,059 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 19:32:42,221 [INFO] [log_message] User input: 261
-2023-12-27 19:32:42,380 [INFO] [log_message] User input: 261
-2023-12-27 19:32:42,380 [ERROR] [log_message] Error updating screen: 'Register' object has no attribute 'display'
-2023-12-27 19:32:42,572 [INFO] [log_message] User input: 261
-2023-12-27 19:32:42,573 [ERROR] [log_message] Error updating screen: 'Registration' object has no attribute 'display'
-2023-12-27 19:32:42,749 [INFO] [log_message] User input: 261
-2023-12-27 19:32:42,749 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 19:32:42,924 [INFO] [log_message] User input: 261
-2023-12-27 19:32:43,187 [INFO] [log_message] User input: 260
-2023-12-27 19:32:43,188 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 19:32:43,356 [INFO] [log_message] User input: 260
-2023-12-27 19:32:43,356 [ERROR] [log_message] Error updating screen: 'Registration' object has no attribute 'display'
-2023-12-27 19:32:43,516 [INFO] [log_message] User input: 260
-2023-12-27 19:32:43,516 [ERROR] [log_message] Error updating screen: 'Register' object has no attribute 'display'
-2023-12-27 19:32:43,652 [INFO] [log_message] User input: 260
-2023-12-27 19:32:44,352 [INFO] [log_message] User input: 10
-2023-12-27 19:34:34,519 [INFO] [log_message] Entered Data: {'Username': 'splix', 'Password': '123'}
-2023-12-27 19:34:34,972 [INFO] [log_message] Login response: splix
-2023-12-27 19:34:35,708 [INFO] [log_message] User input: 261
-2023-12-27 19:34:35,709 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 19:34:35,867 [INFO] [log_message] User input: 261
-2023-12-27 19:34:35,867 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 19:34:36,050 [INFO] [log_message] User input: 261
-2023-12-27 19:34:36,237 [INFO] [log_message] User input: 261
-2023-12-27 19:34:36,238 [ERROR] [log_message] Error updating screen: 'Register' object has no attribute 'display'
-2023-12-27 19:34:36,389 [INFO] [log_message] User input: 261
-2023-12-27 19:34:36,389 [ERROR] [log_message] Error updating screen: 'Registration' object has no attribute 'display'
-2023-12-27 19:34:36,531 [INFO] [log_message] User input: 261
-2023-12-27 19:34:36,531 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 19:34:36,779 [INFO] [log_message] User input: 261
-2023-12-27 19:34:36,987 [INFO] [log_message] User input: 261
-2023-12-27 19:34:37,687 [INFO] [log_message] User input: 10
-2023-12-27 19:34:37,687 [ERROR] [log_message] Error processing user input: 'Friends' object has no attribute 'reset_index'
-2023-12-27 19:34:38,267 [INFO] [log_message] User input: 261
-2023-12-27 19:34:38,267 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 19:34:38,772 [INFO] [log_message] User input: 261
-2023-12-27 19:34:38,772 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 19:34:39,007 [INFO] [log_message] User input: 10
-2023-12-27 19:34:39,007 [ERROR] [log_message] Error processing user input: 'Login' object has no attribute 'reset_index'
-2023-12-27 19:34:39,008 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 19:34:39,684 [INFO] [log_message] User input: 261
-2023-12-27 19:34:40,595 [INFO] [log_message] User input: 260
-2023-12-27 19:34:40,596 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 19:34:40,823 [INFO] [log_message] User input: 10
-2023-12-27 19:34:40,824 [ERROR] [log_message] Error processing user input: 'Login' object has no attribute 'reset_index'
-2023-12-27 19:34:40,824 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 19:34:41,151 [INFO] [log_message] User input: 10
-2023-12-27 19:34:41,152 [ERROR] [log_message] Error processing user input: 'Login' object has no attribute 'reset_index'
-2023-12-27 19:34:41,152 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 19:34:41,524 [INFO] [log_message] User input: 261
-2023-12-27 19:34:42,043 [INFO] [log_message] User input: 261
-2023-12-27 19:34:42,043 [ERROR] [log_message] Error updating screen: 'Register' object has no attribute 'display'
-2023-12-27 19:34:42,288 [INFO] [log_message] User input: 10
-2023-12-27 19:34:42,288 [ERROR] [log_message] Error processing user input: 'Register' object has no attribute 'reset_index'
-2023-12-27 19:34:42,288 [ERROR] [log_message] Error updating screen: 'Register' object has no attribute 'display'
-2023-12-27 19:34:42,707 [INFO] [log_message] User input: 261
-2023-12-27 19:34:42,707 [ERROR] [log_message] Error updating screen: 'Registration' object has no attribute 'display'
-2023-12-27 19:34:42,915 [INFO] [log_message] User input: 261
-2023-12-27 19:34:42,915 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 19:34:43,207 [INFO] [log_message] User input: 10
-2023-12-27 19:34:43,208 [ERROR] [log_message] Error processing user input: 'SplashScreen' object has no attribute 'reset_index'
-2023-12-27 19:34:43,208 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 19:34:43,715 [INFO] [log_message] User input: 261
-2023-12-27 19:34:44,010 [INFO] [log_message] User input: 261
-2023-12-27 19:34:44,964 [INFO] [log_message] User input: 260
-2023-12-27 19:34:45,164 [INFO] [log_message] User input: 260
-2023-12-27 19:34:45,164 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 19:34:45,511 [INFO] [log_message] User input: 10
-2023-12-27 19:34:45,511 [ERROR] [log_message] Error processing user input: 'SplashScreen' object has no attribute 'reset_index'
-2023-12-27 19:34:45,512 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 19:34:45,696 [INFO] [log_message] User input: 10
-2023-12-27 19:34:45,696 [ERROR] [log_message] Error processing user input: 'SplashScreen' object has no attribute 'reset_index'
-2023-12-27 19:34:45,696 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 19:34:45,879 [INFO] [log_message] User input: 10
-2023-12-27 19:34:45,879 [ERROR] [log_message] Error processing user input: 'SplashScreen' object has no attribute 'reset_index'
-2023-12-27 19:34:45,879 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 19:34:46,047 [INFO] [log_message] User input: 10
-2023-12-27 19:34:46,047 [ERROR] [log_message] Error processing user input: 'SplashScreen' object has no attribute 'reset_index'
-2023-12-27 19:34:46,047 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 19:34:46,215 [INFO] [log_message] User input: 10
-2023-12-27 19:34:46,216 [ERROR] [log_message] Error processing user input: 'SplashScreen' object has no attribute 'reset_index'
-2023-12-27 19:34:46,216 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 19:34:46,431 [INFO] [log_message] User input: 10
-2023-12-27 19:34:46,432 [ERROR] [log_message] Error processing user input: 'SplashScreen' object has no attribute 'reset_index'
-2023-12-27 19:34:46,432 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 19:34:51,011 [INFO] [log_message] User input: 260
-2023-12-27 19:34:51,011 [ERROR] [log_message] Error updating screen: 'Registration' object has no attribute 'display'
-2023-12-27 19:34:51,171 [INFO] [log_message] User input: 260
-2023-12-27 19:34:51,171 [ERROR] [log_message] Error updating screen: 'Register' object has no attribute 'display'
-2023-12-27 19:34:51,323 [INFO] [log_message] User input: 260
-2023-12-27 19:34:51,475 [INFO] [log_message] User input: 260
-2023-12-27 19:34:51,475 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 19:34:51,587 [INFO] [log_message] User input: 260
-2023-12-27 19:34:51,587 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 19:34:52,015 [INFO] [log_message] User input: 10
-2023-12-27 19:34:52,539 [INFO] [log_message] User input: 261
-2023-12-27 19:34:52,540 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 19:34:53,039 [INFO] [log_message] User input: 261
-2023-12-27 19:34:53,040 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 19:34:53,070 [INFO] [log_message] User input: 261
-2023-12-27 19:34:53,101 [INFO] [log_message] User input: 261
-2023-12-27 19:34:53,101 [ERROR] [log_message] Error updating screen: 'Register' object has no attribute 'display'
-2023-12-27 19:34:53,131 [INFO] [log_message] User input: 261
-2023-12-27 19:34:53,131 [ERROR] [log_message] Error updating screen: 'Registration' object has no attribute 'display'
-2023-12-27 19:34:53,162 [INFO] [log_message] User input: 261
-2023-12-27 19:34:53,163 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 19:34:53,192 [INFO] [log_message] User input: 261
-2023-12-27 19:34:53,223 [INFO] [log_message] User input: 261
-2023-12-27 19:34:53,254 [INFO] [log_message] User input: 261
-2023-12-27 19:34:53,254 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 19:34:53,284 [INFO] [log_message] User input: 261
-2023-12-27 19:34:53,285 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 19:34:53,315 [INFO] [log_message] User input: 261
-2023-12-27 19:34:53,345 [INFO] [log_message] User input: 261
-2023-12-27 19:34:53,345 [ERROR] [log_message] Error updating screen: 'Register' object has no attribute 'display'
-2023-12-27 19:34:53,374 [INFO] [log_message] User input: 261
-2023-12-27 19:34:53,374 [ERROR] [log_message] Error updating screen: 'Registration' object has no attribute 'display'
-2023-12-27 19:34:54,155 [INFO] [log_message] User input: 261
-2023-12-27 19:34:54,155 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 19:34:54,349 [INFO] [log_message] User input: 261
-2023-12-27 19:34:54,811 [INFO] [log_message] User input: 260
-2023-12-27 19:34:54,811 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 19:34:55,039 [INFO] [log_message] User input: 10
-2023-12-27 19:34:55,040 [ERROR] [log_message] Error processing user input: 'SplashScreen' object has no attribute 'reset_index'
-2023-12-27 19:34:55,040 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 19:34:55,695 [INFO] [log_message] User input: 10
-2023-12-27 19:34:55,695 [ERROR] [log_message] Error processing user input: 'SplashScreen' object has no attribute 'reset_index'
-2023-12-27 19:34:55,696 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 19:34:55,887 [INFO] [log_message] User input: 10
-2023-12-27 19:34:55,887 [ERROR] [log_message] Error processing user input: 'SplashScreen' object has no attribute 'reset_index'
-2023-12-27 19:34:55,887 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 19:34:56,111 [INFO] [log_message] User input: 10
-2023-12-27 19:34:56,112 [ERROR] [log_message] Error processing user input: 'SplashScreen' object has no attribute 'reset_index'
-2023-12-27 19:34:56,112 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 19:34:56,639 [INFO] [log_message] User input: 10
-2023-12-27 19:34:56,639 [ERROR] [log_message] Error processing user input: 'SplashScreen' object has no attribute 'reset_index'
-2023-12-27 19:34:56,639 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 19:34:56,823 [INFO] [log_message] User input: 10
-2023-12-27 19:34:56,823 [ERROR] [log_message] Error processing user input: 'SplashScreen' object has no attribute 'reset_index'
-2023-12-27 19:34:56,823 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 19:34:57,024 [INFO] [log_message] User input: 10
-2023-12-27 19:34:57,025 [ERROR] [log_message] Error processing user input: 'SplashScreen' object has no attribute 'reset_index'
-2023-12-27 19:34:57,025 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 19:34:57,362 [INFO] [log_message] User input: 260
-2023-12-27 19:34:57,363 [ERROR] [log_message] Error updating screen: 'Registration' object has no attribute 'display'
-2023-12-27 19:34:57,663 [INFO] [log_message] User input: 10
-2023-12-27 19:34:57,664 [ERROR] [log_message] Error processing user input: 'Registration' object has no attribute 'reset_index'
-2023-12-27 19:34:57,664 [ERROR] [log_message] Error updating screen: 'Registration' object has no attribute 'display'
-2023-12-27 19:34:58,019 [INFO] [log_message] User input: 260
-2023-12-27 19:34:58,020 [ERROR] [log_message] Error updating screen: 'Register' object has no attribute 'display'
-2023-12-27 19:34:58,279 [INFO] [log_message] User input: 10
-2023-12-27 19:34:58,279 [ERROR] [log_message] Error processing user input: 'Register' object has no attribute 'reset_index'
-2023-12-27 19:34:58,279 [ERROR] [log_message] Error updating screen: 'Register' object has no attribute 'display'
-2023-12-27 19:34:58,580 [INFO] [log_message] User input: 260
-2023-12-27 19:34:58,834 [INFO] [log_message] User input: 10
-2023-12-27 19:35:00,828 [INFO] [log_message] User input: 261
-2023-12-27 19:35:00,829 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 19:35:01,095 [INFO] [log_message] User input: 10
-2023-12-27 19:35:02,079 [INFO] [log_message] User input: 10
-2023-12-27 19:35:02,079 [ERROR] [log_message] Error processing user input: 'Friends' object has no attribute 'reset_index'
-2023-12-27 19:35:02,079 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 19:35:03,015 [INFO] [log_message] User input: 10
-2023-12-27 19:35:03,922 [INFO] [log_message] User input: 261
-2023-12-27 19:35:03,923 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 19:35:04,679 [INFO] [log_message] User input: 10
-2023-12-27 19:35:05,155 [INFO] [log_message] User input: 261
-2023-12-27 19:35:05,156 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 19:35:05,656 [INFO] [log_message] User input: 261
-2023-12-27 19:35:05,656 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 19:35:05,690 [INFO] [log_message] User input: 261
-2023-12-27 19:35:05,691 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 19:35:05,725 [INFO] [log_message] User input: 261
-2023-12-27 19:35:05,726 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 19:35:05,765 [INFO] [log_message] User input: 261
-2023-12-27 19:35:05,801 [INFO] [log_message] User input: 261
-2023-12-27 19:35:05,833 [INFO] [log_message] User input: 261
-2023-12-27 19:35:05,834 [ERROR] [log_message] Error updating screen: 'Register' object has no attribute 'display'
-2023-12-27 19:35:05,865 [INFO] [log_message] User input: 261
-2023-12-27 19:35:05,866 [ERROR] [log_message] Error updating screen: 'Register' object has no attribute 'display'
-2023-12-27 19:35:05,899 [INFO] [log_message] User input: 261
-2023-12-27 19:35:05,899 [ERROR] [log_message] Error updating screen: 'Registration' object has no attribute 'display'
-2023-12-27 19:35:05,932 [INFO] [log_message] User input: 261
-2023-12-27 19:35:05,932 [ERROR] [log_message] Error updating screen: 'Registration' object has no attribute 'display'
-2023-12-27 19:35:06,387 [INFO] [log_message] User input: 261
-2023-12-27 19:35:06,387 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 19:35:06,703 [INFO] [log_message] User input: 10
-2023-12-27 19:35:06,703 [ERROR] [log_message] Error processing user input: 'SplashScreen' object has no attribute 'reset_index'
-2023-12-27 19:35:06,703 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 19:35:06,879 [INFO] [log_message] User input: 10
-2023-12-27 19:35:06,879 [ERROR] [log_message] Error processing user input: 'SplashScreen' object has no attribute 'reset_index'
-2023-12-27 19:35:06,879 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 19:35:07,087 [INFO] [log_message] User input: 10
-2023-12-27 19:35:07,087 [ERROR] [log_message] Error processing user input: 'SplashScreen' object has no attribute 'reset_index'
-2023-12-27 19:35:07,088 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 19:35:07,287 [INFO] [log_message] User input: 10
-2023-12-27 19:35:07,287 [ERROR] [log_message] Error processing user input: 'SplashScreen' object has no attribute 'reset_index'
-2023-12-27 19:35:07,287 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 19:36:17,574 [INFO] [log_message] User input: 10
-2023-12-27 19:36:17,574 [ERROR] [log_message] Error processing user input: 'SplashScreen' object has no attribute 'reset_index'
-2023-12-27 19:36:17,574 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 19:36:24,182 [INFO] [log_message] Entered Data: {'Username': 'splix', 'Password': '123'}
-2023-12-27 19:36:24,683 [INFO] [log_message] Login response: splix
-2023-12-27 19:36:25,451 [INFO] [log_message] User input: 261
-2023-12-27 19:36:25,452 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 19:36:25,803 [INFO] [log_message] User input: 261
-2023-12-27 19:36:25,803 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 19:36:25,986 [INFO] [log_message] User input: 261
-2023-12-27 19:36:26,289 [INFO] [log_message] User input: 261
-2023-12-27 19:36:26,290 [ERROR] [log_message] Error updating screen: 'Register' object has no attribute 'display'
-2023-12-27 19:36:26,420 [INFO] [log_message] User input: 261
-2023-12-27 19:36:26,420 [ERROR] [log_message] Error updating screen: 'Registration' object has no attribute 'display'
-2023-12-27 19:36:26,602 [INFO] [log_message] User input: 261
-2023-12-27 19:36:26,602 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 19:36:26,812 [INFO] [log_message] User input: 261
-2023-12-27 19:36:27,307 [INFO] [log_message] User input: 260
-2023-12-27 19:36:27,307 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 19:36:27,474 [INFO] [log_message] User input: 260
-2023-12-27 19:36:27,474 [ERROR] [log_message] Error updating screen: 'Registration' object has no attribute 'display'
-2023-12-27 19:36:27,619 [INFO] [log_message] User input: 260
-2023-12-27 19:36:27,619 [ERROR] [log_message] Error updating screen: 'Register' object has no attribute 'display'
-2023-12-27 19:36:27,771 [INFO] [log_message] User input: 260
-2023-12-27 19:36:28,171 [INFO] [log_message] User input: 260
-2023-12-27 19:36:28,172 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 19:36:28,394 [INFO] [log_message] User input: 260
-2023-12-27 19:36:28,395 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 19:36:28,642 [INFO] [log_message] User input: 260
-2023-12-27 19:36:29,315 [INFO] [log_message] User input: 261
-2023-12-27 19:36:29,316 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 19:36:29,507 [INFO] [log_message] User input: 261
-2023-12-27 19:36:29,507 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 19:36:29,690 [INFO] [log_message] User input: 261
-2023-12-27 19:36:29,890 [INFO] [log_message] User input: 261
-2023-12-27 19:36:29,890 [ERROR] [log_message] Error updating screen: 'Register' object has no attribute 'display'
-2023-12-27 19:36:30,082 [INFO] [log_message] User input: 261
-2023-12-27 19:36:30,082 [ERROR] [log_message] Error updating screen: 'Registration' object has no attribute 'display'
-2023-12-27 19:36:30,283 [INFO] [log_message] User input: 261
-2023-12-27 19:36:30,284 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 19:36:30,670 [INFO] [log_message] User input: 10
-2023-12-27 19:36:30,670 [ERROR] [log_message] Error processing user input: 'SplashScreen' object has no attribute 'reset_index'
-2023-12-27 19:36:30,671 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 19:36:31,310 [INFO] [log_message] User input: 10
-2023-12-27 19:36:31,310 [ERROR] [log_message] Error processing user input: 'SplashScreen' object has no attribute 'reset_index'
-2023-12-27 19:36:31,310 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 19:36:31,478 [INFO] [log_message] User input: 10
-2023-12-27 19:36:31,478 [ERROR] [log_message] Error processing user input: 'SplashScreen' object has no attribute 'reset_index'
-2023-12-27 19:36:31,479 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 19:36:31,746 [INFO] [log_message] User input: 260
-2023-12-27 19:36:31,746 [ERROR] [log_message] Error updating screen: 'Registration' object has no attribute 'display'
-2023-12-27 19:36:32,249 [INFO] [log_message] User input: 260
-2023-12-27 19:36:32,249 [ERROR] [log_message] Error updating screen: 'Register' object has no attribute 'display'
-2023-12-27 19:36:32,286 [INFO] [log_message] User input: 260
-2023-12-27 19:36:32,332 [INFO] [log_message] User input: 260
-2023-12-27 19:36:32,332 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 19:36:32,362 [INFO] [log_message] User input: 260
-2023-12-27 19:36:32,362 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 19:36:32,778 [INFO] [log_message] User input: 260
-2023-12-27 19:36:33,347 [INFO] [log_message] User input: 261
-2023-12-27 19:36:33,347 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 19:36:33,966 [INFO] [log_message] User input: 10
-2023-12-27 19:36:34,442 [INFO] [log_message] User input: 261
-2023-12-27 19:36:34,442 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 19:36:34,948 [INFO] [log_message] User input: 261
-2023-12-27 19:36:34,948 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 19:36:34,990 [INFO] [log_message] User input: 261
-2023-12-27 19:36:35,025 [INFO] [log_message] User input: 261
-2023-12-27 19:36:35,026 [ERROR] [log_message] Error updating screen: 'Register' object has no attribute 'display'
-2023-12-27 19:36:35,054 [INFO] [log_message] User input: 261
-2023-12-27 19:36:35,055 [ERROR] [log_message] Error updating screen: 'Registration' object has no attribute 'display'
-2023-12-27 19:36:35,085 [INFO] [log_message] User input: 261
-2023-12-27 19:36:35,085 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 19:36:35,118 [INFO] [log_message] User input: 261
-2023-12-27 19:36:35,148 [INFO] [log_message] User input: 261
-2023-12-27 19:36:35,179 [INFO] [log_message] User input: 261
-2023-12-27 19:36:35,179 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 19:36:35,209 [INFO] [log_message] User input: 261
-2023-12-27 19:36:35,209 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 19:36:35,240 [INFO] [log_message] User input: 261
-2023-12-27 19:36:35,270 [INFO] [log_message] User input: 261
-2023-12-27 19:36:35,270 [ERROR] [log_message] Error updating screen: 'Register' object has no attribute 'display'
-2023-12-27 19:36:35,530 [INFO] [log_message] User input: 260
-2023-12-27 19:36:35,763 [INFO] [log_message] User input: 260
-2023-12-27 19:36:35,764 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 19:36:35,947 [INFO] [log_message] User input: 260
-2023-12-27 19:36:35,947 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 19:36:36,130 [INFO] [log_message] User input: 260
-2023-12-27 19:36:36,425 [INFO] [log_message] User input: 260
-2023-12-27 19:36:36,810 [INFO] [log_message] User input: 260
-2023-12-27 19:36:36,810 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 19:36:37,142 [INFO] [log_message] User input: 10
-2023-12-27 19:36:37,142 [ERROR] [log_message] Error processing user input: 'SplashScreen' object has no attribute 'reset_index'
-2023-12-27 19:36:37,142 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 19:36:37,446 [INFO] [log_message] User input: 10
-2023-12-27 19:36:37,446 [ERROR] [log_message] Error processing user input: 'SplashScreen' object has no attribute 'reset_index'
-2023-12-27 19:36:37,447 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 19:36:37,630 [INFO] [log_message] User input: 10
-2023-12-27 19:36:37,630 [ERROR] [log_message] Error processing user input: 'SplashScreen' object has no attribute 'reset_index'
-2023-12-27 19:36:37,631 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 19:36:37,830 [INFO] [log_message] User input: 10
-2023-12-27 19:36:37,830 [ERROR] [log_message] Error processing user input: 'SplashScreen' object has no attribute 'reset_index'
-2023-12-27 19:36:37,830 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 19:36:38,030 [INFO] [log_message] User input: 10
-2023-12-27 19:36:38,030 [ERROR] [log_message] Error processing user input: 'SplashScreen' object has no attribute 'reset_index'
-2023-12-27 19:36:38,031 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 19:36:38,246 [INFO] [log_message] User input: 10
-2023-12-27 19:36:38,247 [ERROR] [log_message] Error processing user input: 'SplashScreen' object has no attribute 'reset_index'
-2023-12-27 19:36:38,247 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 19:36:38,502 [INFO] [log_message] User input: 10
-2023-12-27 19:36:38,502 [ERROR] [log_message] Error processing user input: 'SplashScreen' object has no attribute 'reset_index'
-2023-12-27 19:36:38,503 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 19:36:39,038 [INFO] [log_message] User input: 10
-2023-12-27 19:36:39,039 [ERROR] [log_message] Error processing user input: 'SplashScreen' object has no attribute 'reset_index'
-2023-12-27 19:36:39,039 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 19:36:39,742 [INFO] [log_message] User input: 10
-2023-12-27 19:36:39,742 [ERROR] [log_message] Error processing user input: 'SplashScreen' object has no attribute 'reset_index'
-2023-12-27 19:36:39,743 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 19:37:08,526 [INFO] [log_message] Entered Data: {'Username': 'splix', 'Password': '123'}
-2023-12-27 19:37:08,966 [INFO] [log_message] Login response: splix
-2023-12-27 19:37:09,577 [INFO] [log_message] User input: 261
-2023-12-27 19:37:09,578 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 19:37:09,793 [INFO] [log_message] User input: 261
-2023-12-27 19:37:09,794 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 19:37:09,986 [INFO] [log_message] User input: 261
-2023-12-27 19:37:10,146 [INFO] [log_message] User input: 261
-2023-12-27 19:37:10,147 [ERROR] [log_message] Error updating screen: 'Register' object has no attribute 'display'
-2023-12-27 19:37:10,298 [INFO] [log_message] User input: 261
-2023-12-27 19:37:10,298 [ERROR] [log_message] Error updating screen: 'Registration' object has no attribute 'display'
-2023-12-27 19:37:10,442 [INFO] [log_message] User input: 261
-2023-12-27 19:37:10,442 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 19:37:10,774 [INFO] [log_message] User input: 10
-2023-12-27 19:37:10,774 [ERROR] [log_message] Error processing user input: 'SplashScreen' object has no attribute 'reset_index'
-2023-12-27 19:39:00,757 [INFO] [log_message] Entered Data: {'Username': 'splix', 'Password': '123'}
-2023-12-27 19:39:01,190 [INFO] [log_message] Login response: splix
-2023-12-27 19:39:01,745 [INFO] [log_message] User input: 261
-2023-12-27 19:39:01,745 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 19:39:01,944 [INFO] [log_message] User input: 261
-2023-12-27 19:39:01,945 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 19:39:02,121 [INFO] [log_message] User input: 261
-2023-12-27 19:39:02,265 [INFO] [log_message] User input: 261
-2023-12-27 19:39:02,266 [ERROR] [log_message] Error updating screen: 'Register' object has no attribute 'display'
-2023-12-27 19:39:02,393 [INFO] [log_message] User input: 261
-2023-12-27 19:39:02,393 [ERROR] [log_message] Error updating screen: 'Registration' object has no attribute 'display'
-2023-12-27 19:39:02,545 [INFO] [log_message] User input: 261
-2023-12-27 19:39:02,546 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 19:39:02,705 [INFO] [log_message] User input: 261
-2023-12-27 19:39:03,096 [INFO] [log_message] User input: 260
-2023-12-27 19:39:03,097 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 19:39:03,296 [INFO] [log_message] User input: 260
-2023-12-27 19:39:03,297 [ERROR] [log_message] Error updating screen: 'Registration' object has no attribute 'display'
-2023-12-27 19:39:03,721 [INFO] [log_message] User input: 260
-2023-12-27 19:39:03,721 [ERROR] [log_message] Error updating screen: 'Register' object has no attribute 'display'
-2023-12-27 19:39:03,914 [INFO] [log_message] User input: 261
-2023-12-27 19:39:03,914 [ERROR] [log_message] Error updating screen: 'Registration' object has no attribute 'display'
-2023-12-27 19:39:04,074 [INFO] [log_message] User input: 261
-2023-12-27 19:39:04,074 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 19:39:04,397 [INFO] [log_message] User input: 10
-2023-12-27 19:39:04,397 [ERROR] [log_message] Error processing user input: 'SplashScreen' object has no attribute 'reset_index'
-2023-12-27 19:41:36,788 [INFO] [log_message] Entered Data: {'Username': 'splixjoijdad', 'Password': 'jofijawoeijf'}
-2023-12-27 19:41:36,811 [ERROR] [log_message] Login failed: {"status": "error", "message": "User not found"}
-2023-12-27 19:41:36,812 [INFO] [log_message] Login response: False
-2023-12-27 19:42:18,348 [INFO] [log_message] Entered Data: {'Username': 'splix', 'Password': 'aioefja'}
-2023-12-27 19:42:18,698 [ERROR] [log_message] Login failed: {"status": "error", "message": "Invalid credentials"}
-2023-12-27 19:42:18,698 [INFO] [log_message] Login response: False
-2023-12-27 19:42:23,236 [INFO] [log_message] Entered Data: {'Username': 'splix', 'Password': '123'}
-2023-12-27 19:42:23,755 [INFO] [log_message] Login response: splix
-2023-12-27 19:42:24,448 [INFO] [log_message] User input: 261
-2023-12-27 19:42:24,448 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 19:42:24,632 [INFO] [log_message] User input: 261
-2023-12-27 19:42:24,633 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 19:42:24,768 [INFO] [log_message] User input: 261
-2023-12-27 19:42:24,904 [INFO] [log_message] User input: 261
-2023-12-27 19:42:24,904 [ERROR] [log_message] Error updating screen: 'Register' object has no attribute 'display'
-2023-12-27 19:42:25,056 [INFO] [log_message] User input: 261
-2023-12-27 19:42:25,056 [ERROR] [log_message] Error updating screen: 'Registration' object has no attribute 'display'
-2023-12-27 19:42:25,288 [INFO] [log_message] User input: 261
-2023-12-27 19:42:25,289 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 19:42:25,851 [INFO] [log_message] User input: 10
-2023-12-27 19:42:25,852 [ERROR] [log_message] Error processing user input: 'SplashScreen' object has no attribute 'reset_index'
-2023-12-27 19:43:37,219 [INFO] [log_message] Entered Data: {'Username': 'splix', 'Password': '123'}
-2023-12-27 19:43:37,667 [INFO] [log_message] Login response: splix
-2023-12-27 19:43:38,263 [INFO] [log_message] User input: 261
-2023-12-27 19:43:38,264 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 19:43:38,448 [INFO] [log_message] User input: 261
-2023-12-27 19:43:38,448 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 19:43:38,592 [INFO] [log_message] User input: 261
-2023-12-27 19:43:38,743 [INFO] [log_message] User input: 261
-2023-12-27 19:43:38,743 [ERROR] [log_message] Error updating screen: 'Register' object has no attribute 'display'
-2023-12-27 19:43:38,896 [INFO] [log_message] User input: 261
-2023-12-27 19:43:38,896 [ERROR] [log_message] Error updating screen: 'Registration' object has no attribute 'display'
-2023-12-27 19:43:39,087 [INFO] [log_message] User input: 261
-2023-12-27 19:43:39,087 [ERROR] [log_message] Error updating screen: 'SplashScreen' object has no attribute 'display'
-2023-12-27 19:43:39,639 [INFO] [log_message] User input: 260
-2023-12-27 19:43:39,640 [ERROR] [log_message] Error updating screen: 'Registration' object has no attribute 'display'
-2023-12-27 19:43:39,810 [INFO] [log_message] User input: 260
-2023-12-27 19:43:39,810 [ERROR] [log_message] Error updating screen: 'Register' object has no attribute 'display'
-2023-12-27 19:43:39,967 [INFO] [log_message] User input: 260
-2023-12-27 19:43:40,119 [INFO] [log_message] User input: 260
-2023-12-27 19:43:40,119 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 19:43:40,515 [INFO] [log_message] User input: 10
-2023-12-27 19:43:40,515 [ERROR] [log_message] Error processing user input: 'Login' object has no attribute 'reset_index'
-2023-12-27 19:44:48,539 [INFO] [log_message] Entered Data: {'Username': 'splix ', 'Password': 'efjaoifjaw'}
-2023-12-27 19:44:48,564 [ERROR] [log_message] Login failed: {"status": "error", "message": "User not found"}
-2023-12-27 19:44:48,564 [INFO] [log_message] Login response: False
-2023-12-27 19:45:07,191 [INFO] [log_message] Entered Data: {'Username': 'oijfda', 'Password': 'joifawe'}
-2023-12-27 19:45:07,216 [ERROR] [log_message] Login failed: {"status": "error", "message": "User not found"}
-2023-12-27 19:45:07,217 [INFO] [log_message] Login response: False
-2023-12-27 19:45:11,115 [INFO] [log_message] Entered Data: {'Username': 'jfoiaewj', 'Password': 'ojifeaj'}
-2023-12-27 19:45:11,145 [ERROR] [log_message] Login failed: {"status": "error", "message": "User not found"}
-2023-12-27 19:45:11,145 [INFO] [log_message] Login response: False
-2023-12-27 19:45:15,243 [INFO] [log_message] Entered Data: {'Username': 'splix', 'Password': '123'}
-2023-12-27 19:45:15,669 [INFO] [log_message] Login response: splix
-2023-12-27 19:45:16,709 [INFO] [log_message] User input: 261
-2023-12-27 19:45:16,710 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 19:45:16,855 [INFO] [log_message] User input: 261
-2023-12-27 19:45:16,855 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 19:45:17,014 [INFO] [log_message] User input: 261
-2023-12-27 19:45:17,797 [INFO] [log_message] User input: 260
-2023-12-27 19:45:17,798 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 19:45:18,066 [INFO] [log_message] User input: 10
-2023-12-27 19:45:18,067 [ERROR] [log_message] Error processing user input: 'Login' object has no attribute 'reset_index'
-2023-12-27 19:45:54,898 [INFO] [log_message] Entered Data: {'Username': 'splix', 'Password': '123'}
-2023-12-27 19:45:55,437 [INFO] [log_message] Login response: splix
-2023-12-27 19:45:56,686 [INFO] [log_message] User input: 261
-2023-12-27 19:45:56,687 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 19:45:56,895 [INFO] [log_message] User input: 261
-2023-12-27 19:45:56,896 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 19:45:57,614 [INFO] [log_message] User input: 260
-2023-12-27 19:45:57,614 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 19:45:58,158 [INFO] [log_message] User input: 261
-2023-12-27 19:45:58,158 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 19:45:58,431 [INFO] [log_message] User input: 261
-2023-12-27 19:45:59,018 [INFO] [log_message] User input: 10
-2023-12-27 19:45:59,574 [INFO] [log_message] User input: 261
-2023-12-27 19:45:59,575 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 19:45:59,814 [INFO] [log_message] User input: 261
-2023-12-27 19:45:59,814 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 19:46:00,310 [INFO] [log_message] User input: 260
-2023-12-27 19:46:00,310 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 19:46:00,626 [INFO] [log_message] User input: 10
-2023-12-27 19:46:01,094 [INFO] [log_message] User input: 261
-2023-12-27 19:46:01,095 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 19:46:01,271 [INFO] [log_message] User input: 261
-2023-12-27 19:46:01,271 [ERROR] [log_message] Error updating screen: 'Home' object has no attribute 'display'
-2023-12-27 19:46:01,902 [INFO] [log_message] User input: 261
-2023-12-27 19:46:01,902 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
-2023-12-27 19:46:02,466 [INFO] [log_message] User input: 10
-2023-12-27 19:46:02,466 [ERROR] [log_message] Error processing user input: 'Login' object has no attribute 'reset_index'
-2023-12-27 19:46:05,066 [ERROR] [log_message] Error updating screen: 'Login' object has no attribute 'display'
+2023-12-28 13:30:18,265 [INFO] [log_message] Entered Data: {'Username': 'splix', 'Password': '123'}
+2023-12-28 13:30:18,576 [INFO] [log_message] Login response: splix
+2023-12-28 13:30:18,659 [INFO] [log_message] User stats: {'status': 'ok', 'data': {'id': 1, 'username': 'splix', 'ELO': 0, 'total_match_wins': 0, 'total_tournament_wins': 0, 'tournaments': [], 'matches': []}}
+2023-12-28 13:30:22,289 [INFO] [log_message] User input: 261
+2023-12-28 13:30:22,785 [INFO] [log_message] User input: 260
+2023-12-28 13:30:22,812 [INFO] [log_message] User stats: {'status': 'ok', 'data': {'id': 1, 'username': 'splix', 'ELO': 0, 'total_match_wins': 0, 'total_tournament_wins': 0, 'tournaments': [], 'matches': []}}
+2023-12-28 13:32:45,752 [INFO] [log_message] Entered Data: {'Username': 'splix', 'Password': '123'}
+2023-12-28 13:32:46,067 [INFO] [log_message] Login response: splix
+2023-12-28 13:32:46,152 [INFO] [log_message] User stats: {'status': 'ok', 'data': {'id': 1, 'username': 'splix', 'ELO': 0, 'total_match_wins': 0, 'total_tournament_wins': 0, 'tournaments': [], 'matches': []}}
+2023-12-28 13:32:46,867 [INFO] [log_message] User input: 261
+2023-12-28 13:32:46,900 [INFO] [log_message] User friends: {'status': 'error', 'message': 'User not found or has no friends'}
+2023-12-28 13:33:31,080 [INFO] [log_message] User input: 260
+2023-12-28 13:33:31,104 [INFO] [log_message] User stats: {'status': 'ok', 'data': {'id': 1, 'username': 'splix', 'ELO': 0, 'total_match_wins': 0, 'total_tournament_wins': 0, 'tournaments': [], 'matches': []}}
+2023-12-28 13:33:31,463 [INFO] [log_message] User input: 261
+2023-12-28 13:33:31,481 [INFO] [log_message] User friends: {'status': 'ok', 'data': [{'id': 2, 'username': 'fsalazar'}, {'id': 3, 'username': 'feder'}, {'id': 4, 'username': 'fede'}, {'id': 5, 'username': 'ihfieaf'}, {'id': 6, 'username': 'fedeeee'}]}
+2023-12-28 13:33:31,481 [ERROR] [log_message] Error updating screen: 'friends'
+2023-12-28 13:33:32,884 [INFO] [log_message] User input: 261
+2023-12-28 13:33:33,239 [INFO] [log_message] User input: 260
+2023-12-28 13:33:33,257 [INFO] [log_message] User friends: {'status': 'ok', 'data': [{'id': 2, 'username': 'fsalazar'}, {'id': 3, 'username': 'feder'}, {'id': 4, 'username': 'fede'}, {'id': 5, 'username': 'ihfieaf'}, {'id': 6, 'username': 'fedeeee'}]}
+2023-12-28 13:33:33,257 [ERROR] [log_message] Error updating screen: 'friends'
+2023-12-28 13:35:19,181 [INFO] [log_message] User input: 10
+2023-12-28 13:35:19,203 [INFO] [log_message] User stats: {'status': 'ok', 'data': {'id': 1, 'username': 'splix', 'ELO': 0, 'total_match_wins': 0, 'total_tournament_wins': 0, 'tournaments': [], 'matches': []}}
+2023-12-28 13:35:20,496 [INFO] [log_message] User input: 261
+2023-12-28 13:35:20,538 [INFO] [log_message] User friends: {'status': 'ok', 'data': [{'id': 2, 'username': 'fsalazar'}, {'id': 3, 'username': 'feder'}, {'id': 4, 'username': 'fede'}, {'id': 5, 'username': 'ihfieaf'}, {'id': 6, 'username': 'fedeeee'}]}
+2023-12-28 13:35:20,538 [ERROR] [log_message] Error updating screen: 'friends'
+2023-12-28 13:35:20,924 [INFO] [log_message] User input: 10
+2023-12-28 13:35:20,944 [INFO] [log_message] User stats: {'status': 'ok', 'data': {'id': 1, 'username': 'splix', 'ELO': 0, 'total_match_wins': 0, 'total_tournament_wins': 0, 'tournaments': [], 'matches': []}}
+2023-12-28 13:35:22,466 [INFO] [log_message] User input: 261
+2023-12-28 13:35:22,491 [INFO] [log_message] User friends: {'status': 'ok', 'data': [{'id': 2, 'username': 'fsalazar'}, {'id': 3, 'username': 'feder'}, {'id': 4, 'username': 'fede'}, {'id': 5, 'username': 'ihfieaf'}, {'id': 6, 'username': 'fedeeee'}]}
+2023-12-28 13:35:22,491 [ERROR] [log_message] Error updating screen: 'friends'
+2023-12-28 13:35:22,879 [INFO] [log_message] User input: 261
+2023-12-28 13:35:23,301 [INFO] [log_message] User input: 260
+2023-12-28 13:35:23,321 [INFO] [log_message] User friends: {'status': 'ok', 'data': [{'id': 2, 'username': 'fsalazar'}, {'id': 3, 'username': 'feder'}, {'id': 4, 'username': 'fede'}, {'id': 5, 'username': 'ihfieaf'}, {'id': 6, 'username': 'fedeeee'}]}
+2023-12-28 13:35:23,322 [ERROR] [log_message] Error updating screen: 'friends'
+2023-12-28 13:35:23,473 [INFO] [log_message] User input: 260
+2023-12-28 13:35:23,495 [INFO] [log_message] User stats: {'status': 'ok', 'data': {'id': 1, 'username': 'splix', 'ELO': 0, 'total_match_wins': 0, 'total_tournament_wins': 0, 'tournaments': [], 'matches': []}}
+2023-12-28 13:35:23,996 [INFO] [log_message] User input: 10
+2023-12-28 13:35:24,018 [INFO] [log_message] User stats: {'status': 'ok', 'data': {'id': 1, 'username': 'splix', 'ELO': 0, 'total_match_wins': 0, 'total_tournament_wins': 0, 'tournaments': [], 'matches': []}}
+2023-12-28 13:35:24,329 [INFO] [log_message] User input: 261
+2023-12-28 13:35:24,348 [INFO] [log_message] User friends: {'status': 'ok', 'data': [{'id': 2, 'username': 'fsalazar'}, {'id': 3, 'username': 'feder'}, {'id': 4, 'username': 'fede'}, {'id': 5, 'username': 'ihfieaf'}, {'id': 6, 'username': 'fedeeee'}]}
+2023-12-28 13:35:24,349 [ERROR] [log_message] Error updating screen: 'friends'
+2023-12-28 13:35:24,667 [INFO] [log_message] User input: 10
+2023-12-28 13:35:24,688 [INFO] [log_message] User stats: {'status': 'ok', 'data': {'id': 1, 'username': 'splix', 'ELO': 0, 'total_match_wins': 0, 'total_tournament_wins': 0, 'tournaments': [], 'matches': []}}
+2023-12-28 13:35:25,416 [INFO] [log_message] User input: 261
+2023-12-28 13:35:25,434 [INFO] [log_message] User friends: {'status': 'ok', 'data': [{'id': 2, 'username': 'fsalazar'}, {'id': 3, 'username': 'feder'}, {'id': 4, 'username': 'fede'}, {'id': 5, 'username': 'ihfieaf'}, {'id': 6, 'username': 'fedeeee'}]}
+2023-12-28 13:35:25,435 [ERROR] [log_message] Error updating screen: 'friends'
+2023-12-28 13:35:25,965 [INFO] [log_message] User input: 10
+2023-12-28 13:35:25,987 [INFO] [log_message] User stats: {'status': 'ok', 'data': {'id': 1, 'username': 'splix', 'ELO': 0, 'total_match_wins': 0, 'total_tournament_wins': 0, 'tournaments': [], 'matches': []}}
+2023-12-28 13:35:37,982 [INFO] [log_message] User input: 261
+2023-12-28 13:35:38,023 [INFO] [log_message] User friends: {'status': 'ok', 'data': [{'id': 2, 'username': 'fsalazar'}, {'id': 3, 'username': 'feder'}, {'id': 4, 'username': 'fede'}, {'id': 5, 'username': 'ihfieaf'}, {'id': 6, 'username': 'fedeeee'}]}
+2023-12-28 13:35:38,023 [ERROR] [log_message] Error updating screen: 'friends'
+2023-12-28 13:35:39,570 [INFO] [log_message] User input: 261
+2023-12-28 13:35:40,005 [INFO] [log_message] User input: 260
+2023-12-28 13:35:40,026 [INFO] [log_message] User friends: {'status': 'ok', 'data': [{'id': 2, 'username': 'fsalazar'}, {'id': 3, 'username': 'feder'}, {'id': 4, 'username': 'fede'}, {'id': 5, 'username': 'ihfieaf'}, {'id': 6, 'username': 'fedeeee'}]}
+2023-12-28 13:35:40,026 [ERROR] [log_message] Error updating screen: 'friends'
+2023-12-28 13:35:41,527 [INFO] [log_message] User input: 260
+2023-12-28 13:35:41,555 [INFO] [log_message] User stats: {'status': 'ok', 'data': {'id': 1, 'username': 'splix', 'ELO': 0, 'total_match_wins': 0, 'total_tournament_wins': 0, 'tournaments': [], 'matches': []}}
+2023-12-28 13:35:41,943 [INFO] [log_message] User input: 261
+2023-12-28 13:35:41,963 [INFO] [log_message] User friends: {'status': 'ok', 'data': [{'id': 2, 'username': 'fsalazar'}, {'id': 3, 'username': 'feder'}, {'id': 4, 'username': 'fede'}, {'id': 5, 'username': 'ihfieaf'}, {'id': 6, 'username': 'fedeeee'}]}
+2023-12-28 13:35:41,963 [ERROR] [log_message] Error updating screen: 'friends'
+2023-12-28 13:36:49,660 [INFO] [log_message] Entered Data: {'Username': 'splix', 'Password': '123'}
+2023-12-28 13:36:49,964 [INFO] [log_message] Login response: splix
+2023-12-28 13:36:50,031 [INFO] [log_message] User stats: {'status': 'ok', 'data': {'id': 1, 'username': 'splix', 'ELO': 0, 'total_match_wins': 0, 'total_tournament_wins': 0, 'tournaments': [], 'matches': []}}
+2023-12-28 13:36:50,659 [INFO] [log_message] User input: 261
+2023-12-28 13:36:50,679 [INFO] [log_message] User friends: {'status': 'ok', 'data': [{'id': 2, 'username': 'fsalazar'}, {'id': 3, 'username': 'feder'}, {'id': 4, 'username': 'fede'}, {'id': 5, 'username': 'ihfieaf'}, {'id': 6, 'username': 'fedeeee'}]}
+2023-12-28 13:36:50,679 [ERROR] [log_message] Error updating screen: 'friends'
+2023-12-28 13:36:51,920 [INFO] [log_message] User input: 261
+2023-12-28 13:36:52,317 [INFO] [log_message] User input: 260
+2023-12-28 13:36:52,335 [INFO] [log_message] User friends: {'status': 'ok', 'data': [{'id': 2, 'username': 'fsalazar'}, {'id': 3, 'username': 'feder'}, {'id': 4, 'username': 'fede'}, {'id': 5, 'username': 'ihfieaf'}, {'id': 6, 'username': 'fedeeee'}]}
+2023-12-28 13:36:52,336 [ERROR] [log_message] Error updating screen: 'friends'
+2023-12-28 13:36:53,497 [INFO] [log_message] User input: 260
+2023-12-28 13:36:53,516 [INFO] [log_message] User stats: {'status': 'ok', 'data': {'id': 1, 'username': 'splix', 'ELO': 0, 'total_match_wins': 0, 'total_tournament_wins': 0, 'tournaments': [], 'matches': []}}
+2023-12-28 13:36:54,010 [INFO] [log_message] User input: 261
+2023-12-28 13:36:54,030 [INFO] [log_message] User friends: {'status': 'ok', 'data': [{'id': 2, 'username': 'fsalazar'}, {'id': 3, 'username': 'feder'}, {'id': 4, 'username': 'fede'}, {'id': 5, 'username': 'ihfieaf'}, {'id': 6, 'username': 'fedeeee'}]}
+2023-12-28 13:36:54,031 [ERROR] [log_message] Error updating screen: 'friends'
+2023-12-28 13:36:54,835 [INFO] [log_message] User input: 260
+2023-12-28 13:36:54,855 [INFO] [log_message] User stats: {'status': 'ok', 'data': {'id': 1, 'username': 'splix', 'ELO': 0, 'total_match_wins': 0, 'total_tournament_wins': 0, 'tournaments': [], 'matches': []}}
+2023-12-28 13:37:20,650 [INFO] [log_message] Entered Data: {'Username': 'splix', 'Password': '123'}
+2023-12-28 13:37:20,947 [INFO] [log_message] Login response: splix
+2023-12-28 13:37:21,011 [INFO] [log_message] User stats: {'status': 'ok', 'data': {'id': 1, 'username': 'splix', 'ELO': 0, 'total_match_wins': 0, 'total_tournament_wins': 0, 'tournaments': [], 'matches': []}}
+2023-12-28 13:37:21,854 [INFO] [log_message] User input: 261
+2023-12-28 13:37:21,875 [INFO] [log_message] User friends: {'status': 'ok', 'data': [{'id': 2, 'username': 'fsalazar'}, {'id': 3, 'username': 'feder'}, {'id': 4, 'username': 'fede'}, {'id': 5, 'username': 'ihfieaf'}, {'id': 6, 'username': 'fedeeee'}]}
+2023-12-28 13:37:21,875 [ERROR] [log_message] Error updating screen: 'friends'
+2023-12-28 13:37:22,792 [INFO] [log_message] User input: 260
+2023-12-28 13:37:22,812 [INFO] [log_message] User stats: {'status': 'ok', 'data': {'id': 1, 'username': 'splix', 'ELO': 0, 'total_match_wins': 0, 'total_tournament_wins': 0, 'tournaments': [], 'matches': []}}
+2023-12-28 13:37:23,468 [INFO] [log_message] User input: 261
+2023-12-28 13:37:23,486 [INFO] [log_message] User friends: {'status': 'ok', 'data': [{'id': 2, 'username': 'fsalazar'}, {'id': 3, 'username': 'feder'}, {'id': 4, 'username': 'fede'}, {'id': 5, 'username': 'ihfieaf'}, {'id': 6, 'username': 'fedeeee'}]}
+2023-12-28 13:37:23,486 [ERROR] [log_message] Error updating screen: 'friends'
+2023-12-28 13:38:12,160 [INFO] [log_message] Entered Data: {'Username': 'splix', 'Password': '123'}
+2023-12-28 13:38:12,468 [INFO] [log_message] Login response: splix
+2023-12-28 13:38:12,534 [INFO] [log_message] User stats: {'status': 'ok', 'data': {'id': 1, 'username': 'splix', 'ELO': 0, 'total_match_wins': 0, 'total_tournament_wins': 0, 'tournaments': [], 'matches': []}}
+2023-12-28 13:38:12,973 [INFO] [log_message] User input: 261
+2023-12-28 13:38:12,992 [INFO] [log_message] User friends: {'status': 'ok', 'data': [{'id': 2, 'username': 'fsalazar'}, {'id': 3, 'username': 'feder'}, {'id': 4, 'username': 'fede'}, {'id': 5, 'username': 'ihfieaf'}, {'id': 6, 'username': 'fedeeee'}]}
+2023-12-28 13:38:12,992 [ERROR] [log_message] Error updating screen: 'friends'
+2023-12-28 13:38:13,531 [INFO] [log_message] User input: 261
+2023-12-28 13:38:13,935 [INFO] [log_message] User input: 260
+2023-12-28 13:38:13,965 [INFO] [log_message] User friends: {'status': 'ok', 'data': [{'id': 2, 'username': 'fsalazar'}, {'id': 3, 'username': 'feder'}, {'id': 4, 'username': 'fede'}, {'id': 5, 'username': 'ihfieaf'}, {'id': 6, 'username': 'fedeeee'}]}
+2023-12-28 13:38:13,965 [ERROR] [log_message] Error updating screen: 'friends'
+2023-12-28 13:38:14,111 [INFO] [log_message] User input: 260
+2023-12-28 13:38:14,131 [INFO] [log_message] User stats: {'status': 'ok', 'data': {'id': 1, 'username': 'splix', 'ELO': 0, 'total_match_wins': 0, 'total_tournament_wins': 0, 'tournaments': [], 'matches': []}}
+2023-12-28 13:38:14,784 [INFO] [log_message] User input: 261
+2023-12-28 13:38:14,810 [INFO] [log_message] User friends: {'status': 'ok', 'data': [{'id': 2, 'username': 'fsalazar'}, {'id': 3, 'username': 'feder'}, {'id': 4, 'username': 'fede'}, {'id': 5, 'username': 'ihfieaf'}, {'id': 6, 'username': 'fedeeee'}]}
+2023-12-28 13:38:14,811 [ERROR] [log_message] Error updating screen: 'friends'
+2023-12-28 13:38:15,217 [INFO] [log_message] User input: 260
+2023-12-28 13:38:15,237 [INFO] [log_message] User stats: {'status': 'ok', 'data': {'id': 1, 'username': 'splix', 'ELO': 0, 'total_match_wins': 0, 'total_tournament_wins': 0, 'tournaments': [], 'matches': []}}
+2023-12-28 13:38:15,535 [INFO] [log_message] User input: 261
+2023-12-28 13:38:15,553 [INFO] [log_message] User friends: {'status': 'ok', 'data': [{'id': 2, 'username': 'fsalazar'}, {'id': 3, 'username': 'feder'}, {'id': 4, 'username': 'fede'}, {'id': 5, 'username': 'ihfieaf'}, {'id': 6, 'username': 'fedeeee'}]}
+2023-12-28 13:38:15,553 [ERROR] [log_message] Error updating screen: 'friends'
+2023-12-28 13:38:16,321 [INFO] [log_message] User input: 260
+2023-12-28 13:38:16,341 [INFO] [log_message] User stats: {'status': 'ok', 'data': {'id': 1, 'username': 'splix', 'ELO': 0, 'total_match_wins': 0, 'total_tournament_wins': 0, 'tournaments': [], 'matches': []}}
+2023-12-28 13:38:19,299 [INFO] [log_message] User input: 261
+2023-12-28 13:38:19,318 [INFO] [log_message] User friends: {'status': 'ok', 'data': [{'id': 2, 'username': 'fsalazar'}, {'id': 3, 'username': 'feder'}, {'id': 4, 'username': 'fede'}, {'id': 5, 'username': 'ihfieaf'}, {'id': 6, 'username': 'fedeeee'}]}
+2023-12-28 13:38:19,318 [ERROR] [log_message] Error updating screen: 'friends'
+2023-12-28 13:39:17,116 [INFO] [log_message] User input: 10
+2023-12-28 13:39:17,159 [INFO] [log_message] User stats: {'status': 'ok', 'data': {'id': 1, 'username': 'splix', 'ELO': 0, 'total_match_wins': 0, 'total_tournament_wins': 0, 'tournaments': [], 'matches': []}}
+2023-12-28 13:39:17,654 [INFO] [log_message] User input: 261
+2023-12-28 13:39:17,691 [INFO] [log_message] User friends: {'status': 'ok', 'data': [{'id': 2, 'username': 'fsalazar'}, {'id': 3, 'username': 'feder'}, {'id': 4, 'username': 'fede'}, {'id': 5, 'username': 'ihfieaf'}, {'id': 6, 'username': 'fedeeee'}]}
+2023-12-28 13:39:17,691 [ERROR] [log_message] Error updating screen: 'friends'
+2023-12-28 13:39:18,477 [INFO] [log_message] User input: 10
+2023-12-28 13:39:18,503 [INFO] [log_message] User stats: {'status': 'ok', 'data': {'id': 1, 'username': 'splix', 'ELO': 0, 'total_match_wins': 0, 'total_tournament_wins': 0, 'tournaments': [], 'matches': []}}
+2023-12-28 13:39:20,465 [INFO] [log_message] User input: 261
+2023-12-28 13:39:20,497 [INFO] [log_message] User friends: {'status': 'ok', 'data': [{'id': 2, 'username': 'fsalazar'}, {'id': 3, 'username': 'feder'}, {'id': 4, 'username': 'fede'}, {'id': 5, 'username': 'ihfieaf'}, {'id': 6, 'username': 'fedeeee'}]}
+2023-12-28 13:39:20,497 [ERROR] [log_message] Error updating screen: 'friends'
+2023-12-28 13:39:21,961 [INFO] [log_message] User input: 261
+2023-12-28 13:39:22,666 [INFO] [log_message] User input: 261
+2023-12-28 13:39:23,207 [INFO] [log_message] User input: 260
+2023-12-28 13:39:23,416 [INFO] [log_message] User input: 260
+2023-12-28 13:39:23,435 [INFO] [log_message] User friends: {'status': 'ok', 'data': [{'id': 2, 'username': 'fsalazar'}, {'id': 3, 'username': 'feder'}, {'id': 4, 'username': 'fede'}, {'id': 5, 'username': 'ihfieaf'}, {'id': 6, 'username': 'fedeeee'}]}
+2023-12-28 13:39:23,435 [ERROR] [log_message] Error updating screen: 'friends'
+2023-12-28 13:39:23,884 [INFO] [log_message] User input: 260
+2023-12-28 13:39:23,904 [INFO] [log_message] User stats: {'status': 'ok', 'data': {'id': 1, 'username': 'splix', 'ELO': 0, 'total_match_wins': 0, 'total_tournament_wins': 0, 'tournaments': [], 'matches': []}}
+2023-12-28 13:40:09,366 [INFO] [log_message] User input: 261
+2023-12-28 13:40:09,385 [INFO] [log_message] User friends: {'status': 'ok', 'data': [{'id': 2, 'username': 'fsalazar'}, {'id': 3, 'username': 'feder'}, {'id': 4, 'username': 'fede'}, {'id': 5, 'username': 'ihfieaf'}, {'id': 6, 'username': 'fedeeee'}]}
+2023-12-28 13:40:09,391 [ERROR] [log_message] Error updating screen: 'friends'
+2023-12-28 13:40:10,646 [INFO] [log_message] User input: 10
+2023-12-28 13:40:10,674 [INFO] [log_message] User stats: {'status': 'ok', 'data': {'id': 1, 'username': 'splix', 'ELO': 0, 'total_match_wins': 0, 'total_tournament_wins': 0, 'tournaments': [], 'matches': []}}
+2023-12-28 13:40:23,142 [INFO] [log_message] User input: 261
+2023-12-28 13:40:23,174 [INFO] [log_message] User friends: {'status': 'ok', 'data': [{'id': 2, 'username': 'fsalazar'}, {'id': 3, 'username': 'feder'}, {'id': 4, 'username': 'fede'}, {'id': 5, 'username': 'ihfieaf'}, {'id': 6, 'username': 'fedeeee'}]}
+2023-12-28 13:40:23,174 [ERROR] [log_message] Error updating screen: 'friends'
+2023-12-28 13:41:01,464 [INFO] [log_message] Entered Data: {'Username': 'splix', 'Password': '123'}
+2023-12-28 13:41:01,774 [INFO] [log_message] Login response: splix
+2023-12-28 13:41:01,845 [INFO] [log_message] User stats: {'status': 'ok', 'data': {'id': 1, 'username': 'splix', 'ELO': 0, 'total_match_wins': 0, 'total_tournament_wins': 0, 'tournaments': [], 'matches': []}}
+2023-12-28 13:41:02,396 [INFO] [log_message] User input: 261
+2023-12-28 13:41:02,421 [INFO] [log_message] User friends: {'status': 'ok', 'data': [{'id': 2, 'username': 'fsalazar'}, {'id': 3, 'username': 'feder'}, {'id': 4, 'username': 'fede'}, {'id': 5, 'username': 'ihfieaf'}, {'id': 6, 'username': 'fedeeee'}]}
+2023-12-28 13:41:02,421 [ERROR] [log_message] Error displaying profile: 'friends'
+2023-12-28 13:41:03,990 [INFO] [log_message] User input: 261
+2023-12-28 13:41:05,008 [INFO] [log_message] User input: 261
+2023-12-28 13:41:05,396 [INFO] [log_message] User input: 260
+2023-12-28 13:41:05,649 [INFO] [log_message] User input: 260
+2023-12-28 13:41:05,696 [INFO] [log_message] User friends: {'status': 'ok', 'data': [{'id': 2, 'username': 'fsalazar'}, {'id': 3, 'username': 'feder'}, {'id': 4, 'username': 'fede'}, {'id': 5, 'username': 'ihfieaf'}, {'id': 6, 'username': 'fedeeee'}]}
+2023-12-28 13:41:05,696 [ERROR] [log_message] Error displaying profile: 'friends'
+2023-12-28 13:41:06,045 [INFO] [log_message] User input: 260
+2023-12-28 13:41:06,067 [INFO] [log_message] User stats: {'status': 'ok', 'data': {'id': 1, 'username': 'splix', 'ELO': 0, 'total_match_wins': 0, 'total_tournament_wins': 0, 'tournaments': [], 'matches': []}}
+2023-12-28 13:41:06,996 [INFO] [log_message] User input: 260
+2023-12-28 13:41:07,021 [INFO] [log_message] User stats: {'status': 'ok', 'data': {'id': 1, 'username': 'splix', 'ELO': 0, 'total_match_wins': 0, 'total_tournament_wins': 0, 'tournaments': [], 'matches': []}}
+2023-12-28 13:41:08,240 [INFO] [log_message] User input: 261
+2023-12-28 13:41:08,272 [INFO] [log_message] User friends: {'status': 'ok', 'data': [{'id': 2, 'username': 'fsalazar'}, {'id': 3, 'username': 'feder'}, {'id': 4, 'username': 'fede'}, {'id': 5, 'username': 'ihfieaf'}, {'id': 6, 'username': 'fedeeee'}]}
+2023-12-28 13:41:08,272 [ERROR] [log_message] Error displaying profile: 'friends'
+2023-12-28 13:41:08,670 [INFO] [log_message] User input: 260
+2023-12-28 13:41:08,690 [INFO] [log_message] User stats: {'status': 'ok', 'data': {'id': 1, 'username': 'splix', 'ELO': 0, 'total_match_wins': 0, 'total_tournament_wins': 0, 'tournaments': [], 'matches': []}}
+2023-12-28 13:41:09,047 [INFO] [log_message] User input: 261
+2023-12-28 13:41:09,065 [INFO] [log_message] User friends: {'status': 'ok', 'data': [{'id': 2, 'username': 'fsalazar'}, {'id': 3, 'username': 'feder'}, {'id': 4, 'username': 'fede'}, {'id': 5, 'username': 'ihfieaf'}, {'id': 6, 'username': 'fedeeee'}]}
+2023-12-28 13:41:09,065 [ERROR] [log_message] Error displaying profile: 'friends'
+2023-12-28 13:43:55,770 [INFO] [log_message] Entered Data: {'Username': 'splix', 'Password': '123'}
+2023-12-28 13:43:56,084 [INFO] [log_message] Login response: splix
+2023-12-28 13:43:56,152 [INFO] [log_message] User stats: {'status': 'ok', 'data': {'id': 1, 'username': 'splix', 'ELO': 0, 'total_match_wins': 0, 'total_tournament_wins': 0, 'tournaments': [], 'matches': []}}
+2023-12-28 13:43:56,770 [INFO] [log_message] User input: 261
+2023-12-28 13:43:56,792 [INFO] [log_message] User friends: {'status': 'ok', 'data': [{'id': 2, 'username': 'fsalazar'}, {'id': 3, 'username': 'feder'}, {'id': 4, 'username': 'fede'}, {'id': 5, 'username': 'ihfieaf'}, {'id': 6, 'username': 'fedeeee'}]}
+2023-12-28 13:43:57,840 [INFO] [log_message] User input: 261
+2023-12-28 13:43:58,157 [INFO] [log_message] User input: 260
+2023-12-28 13:43:58,178 [INFO] [log_message] User friends: {'status': 'ok', 'data': [{'id': 2, 'username': 'fsalazar'}, {'id': 3, 'username': 'feder'}, {'id': 4, 'username': 'fede'}, {'id': 5, 'username': 'ihfieaf'}, {'id': 6, 'username': 'fedeeee'}]}
+2023-12-28 13:43:58,688 [INFO] [log_message] User input: 260
+2023-12-28 13:43:58,726 [INFO] [log_message] User stats: {'status': 'ok', 'data': {'id': 1, 'username': 'splix', 'ELO': 0, 'total_match_wins': 0, 'total_tournament_wins': 0, 'tournaments': [], 'matches': []}}
+2023-12-28 13:43:59,147 [INFO] [log_message] User input: 261
+2023-12-28 13:43:59,169 [INFO] [log_message] User friends: {'status': 'ok', 'data': [{'id': 2, 'username': 'fsalazar'}, {'id': 3, 'username': 'feder'}, {'id': 4, 'username': 'fede'}, {'id': 5, 'username': 'ihfieaf'}, {'id': 6, 'username': 'fedeeee'}]}
+2023-12-28 13:44:01,121 [INFO] [log_message] User input: 260
+2023-12-28 13:44:01,144 [INFO] [log_message] User stats: {'status': 'ok', 'data': {'id': 1, 'username': 'splix', 'ELO': 0, 'total_match_wins': 0, 'total_tournament_wins': 0, 'tournaments': [], 'matches': []}}
+2023-12-28 13:44:01,585 [INFO] [log_message] User input: 261
+2023-12-28 13:44:01,606 [INFO] [log_message] User friends: {'status': 'ok', 'data': [{'id': 2, 'username': 'fsalazar'}, {'id': 3, 'username': 'feder'}, {'id': 4, 'username': 'fede'}, {'id': 5, 'username': 'ihfieaf'}, {'id': 6, 'username': 'fedeeee'}]}
+2023-12-28 13:44:43,768 [INFO] [log_message] Entered Data: {'Username': 'splix', 'Password': '123'}
+2023-12-28 13:44:44,075 [INFO] [log_message] Login response: splix
+2023-12-28 13:44:44,159 [INFO] [log_message] User stats: {'status': 'ok', 'data': {'id': 1, 'username': 'splix', 'ELO': 0, 'total_match_wins': 0, 'total_tournament_wins': 0, 'tournaments': [], 'matches': []}}
+2023-12-28 13:44:44,704 [INFO] [log_message] User input: 261
+2023-12-28 13:44:44,728 [INFO] [log_message] User friends: {'status': 'ok', 'data': [{'id': 2, 'username': 'fsalazar'}, {'id': 3, 'username': 'feder'}, {'id': 4, 'username': 'fede'}, {'id': 5, 'username': 'ihfieaf'}, {'id': 6, 'username': 'fedeeee'}]}
+2023-12-28 13:44:46,161 [INFO] [log_message] User input: 261
+2023-12-28 13:44:46,648 [INFO] [log_message] User input: 261
+2023-12-28 13:44:46,938 [INFO] [log_message] User input: 260
+2023-12-28 13:44:47,097 [INFO] [log_message] User input: 260
+2023-12-28 13:44:47,117 [INFO] [log_message] User friends: {'status': 'ok', 'data': [{'id': 2, 'username': 'fsalazar'}, {'id': 3, 'username': 'feder'}, {'id': 4, 'username': 'fede'}, {'id': 5, 'username': 'ihfieaf'}, {'id': 6, 'username': 'fedeeee'}]}
+2023-12-28 13:44:47,517 [INFO] [log_message] User input: 260
+2023-12-28 13:44:47,545 [INFO] [log_message] User stats: {'status': 'ok', 'data': {'id': 1, 'username': 'splix', 'ELO': 0, 'total_match_wins': 0, 'total_tournament_wins': 0, 'tournaments': [], 'matches': []}}
+2023-12-28 13:44:47,901 [INFO] [log_message] User input: 261
+2023-12-28 13:44:47,920 [INFO] [log_message] User friends: {'status': 'ok', 'data': [{'id': 2, 'username': 'fsalazar'}, {'id': 3, 'username': 'feder'}, {'id': 4, 'username': 'fede'}, {'id': 5, 'username': 'ihfieaf'}, {'id': 6, 'username': 'fedeeee'}]}
+2023-12-28 13:44:48,585 [INFO] [log_message] User input: 260
+2023-12-28 13:44:48,621 [INFO] [log_message] User stats: {'status': 'ok', 'data': {'id': 1, 'username': 'splix', 'ELO': 0, 'total_match_wins': 0, 'total_tournament_wins': 0, 'tournaments': [], 'matches': []}}
+2023-12-28 13:44:48,934 [INFO] [log_message] User input: 261
+2023-12-28 13:44:48,955 [INFO] [log_message] User friends: {'status': 'ok', 'data': [{'id': 2, 'username': 'fsalazar'}, {'id': 3, 'username': 'feder'}, {'id': 4, 'username': 'fede'}, {'id': 5, 'username': 'ihfieaf'}, {'id': 6, 'username': 'fedeeee'}]}
+2023-12-28 13:44:49,596 [INFO] [log_message] User input: 261
+2023-12-28 13:44:49,958 [INFO] [log_message] User input: 260
+2023-12-28 13:44:49,976 [INFO] [log_message] User friends: {'status': 'ok', 'data': [{'id': 2, 'username': 'fsalazar'}, {'id': 3, 'username': 'feder'}, {'id': 4, 'username': 'fede'}, {'id': 5, 'username': 'ihfieaf'}, {'id': 6, 'username': 'fedeeee'}]}
+2023-12-28 13:44:50,275 [INFO] [log_message] User input: 260
+2023-12-28 13:44:50,296 [INFO] [log_message] User stats: {'status': 'ok', 'data': {'id': 1, 'username': 'splix', 'ELO': 0, 'total_match_wins': 0, 'total_tournament_wins': 0, 'tournaments': [], 'matches': []}}
+2023-12-28 13:44:52,289 [INFO] [log_message] User input: 261
+2023-12-28 13:44:52,309 [INFO] [log_message] User friends: {'status': 'ok', 'data': [{'id': 2, 'username': 'fsalazar'}, {'id': 3, 'username': 'feder'}, {'id': 4, 'username': 'fede'}, {'id': 5, 'username': 'ihfieaf'}, {'id': 6, 'username': 'fedeeee'}]}
+2023-12-28 13:44:52,992 [INFO] [log_message] User input: 261
+2023-12-28 13:44:53,846 [INFO] [log_message] User input: 260
+2023-12-28 13:44:53,870 [INFO] [log_message] User friends: {'status': 'ok', 'data': [{'id': 2, 'username': 'fsalazar'}, {'id': 3, 'username': 'feder'}, {'id': 4, 'username': 'fede'}, {'id': 5, 'username': 'ihfieaf'}, {'id': 6, 'username': 'fedeeee'}]}
+2023-12-28 13:44:54,559 [INFO] [log_message] User input: 260
+2023-12-28 13:44:54,585 [INFO] [log_message] User stats: {'status': 'ok', 'data': {'id': 1, 'username': 'splix', 'ELO': 0, 'total_match_wins': 0, 'total_tournament_wins': 0, 'tournaments': [], 'matches': []}}
+2023-12-28 13:44:55,222 [INFO] [log_message] User input: 261
+2023-12-28 13:44:55,248 [INFO] [log_message] User friends: {'status': 'ok', 'data': [{'id': 2, 'username': 'fsalazar'}, {'id': 3, 'username': 'feder'}, {'id': 4, 'username': 'fede'}, {'id': 5, 'username': 'ihfieaf'}, {'id': 6, 'username': 'fedeeee'}]}
+2023-12-28 13:44:59,151 [INFO] [log_message] User input: 260
+2023-12-28 13:44:59,174 [INFO] [log_message] User stats: {'status': 'ok', 'data': {'id': 1, 'username': 'splix', 'ELO': 0, 'total_match_wins': 0, 'total_tournament_wins': 0, 'tournaments': [], 'matches': []}}
+2023-12-28 13:45:00,194 [INFO] [log_message] User input: 261
+2023-12-28 13:45:00,215 [INFO] [log_message] User friends: {'status': 'ok', 'data': [{'id': 2, 'username': 'fsalazar'}, {'id': 3, 'username': 'feder'}, {'id': 4, 'username': 'fede'}, {'id': 5, 'username': 'ihfieaf'}, {'id': 6, 'username': 'fedeeee'}]}
+2023-12-28 13:45:03,623 [INFO] [log_message] User input: 260
+2023-12-28 13:45:03,644 [INFO] [log_message] User stats: {'status': 'ok', 'data': {'id': 1, 'username': 'splix', 'ELO': 0, 'total_match_wins': 0, 'total_tournament_wins': 0, 'tournaments': [], 'matches': []}}

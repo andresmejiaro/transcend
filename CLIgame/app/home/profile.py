@@ -12,7 +12,7 @@ class Profile:
         self.ws = ws
         self.user_data = None
         self.views = None
-        self.current_view_index = 0
+        self.current_view_index = 0        
 
     async def get_user_input(self):
         try:
@@ -36,9 +36,9 @@ class Profile:
     def process_input(self, user_input):
         try:
             if user_input == "right":
-                self.current_view_index = (self.current_view_index + 1) % len(self.views)
+                self.current_view_index = min(self.current_view_index + 1, len(self.views) - 1)
             elif user_input == "left":
-                self.current_view_index = (self.current_view_index - 1) % len(self.views)
+                self.current_view_index = max(self.current_view_index - 1, 0)
             elif user_input == "enter":
                 current_view = self.views[self.current_view_index]["view"]
                 self.next_view = current_view
@@ -51,7 +51,9 @@ class Profile:
     def update_screen(self, all_views):
         try:
             if self.views is None:
-                self.views = all_views
+                allowed_view_names = ["Home", "Profile", "Friends", "Game"]  # Add view names you want to display
+                allowed_views = [view_data for view_data in all_views if view_data["name"] in allowed_view_names]
+                self.views = allowed_views
 
             self.stdscr.clear()
 
@@ -75,7 +77,9 @@ class Profile:
             log_message(f"Error updating screen: {e}", level=logging.ERROR)
 
     def get_next_view(self):
-        return self.next_view
+        next_view = self.next_view
+        self.next_view = None  # Reset next_view to None
+        return next_view
 
 # Preview of the Profile view
     def display(self):

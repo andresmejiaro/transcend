@@ -36,9 +36,9 @@ class Home:
     def process_input(self, user_input):
         try:
             if user_input == "right":
-                self.current_view_index = (self.current_view_index + 1) % len(self.views)
+                self.current_view_index = min(self.current_view_index + 1, len(self.views) - 1)
             elif user_input == "left":
-                self.current_view_index = (self.current_view_index - 1) % len(self.views)
+                self.current_view_index = max(self.current_view_index - 1, 0)
             elif user_input == "enter":
                 current_view = self.views[self.current_view_index]["view"]
                 self.next_view = current_view
@@ -51,7 +51,9 @@ class Home:
     def update_screen(self, all_views):
         try:
             if self.views is None:
-                self.views = all_views
+                allowed_view_names = ["Home", "Profile", "Friends", "Game"]  # Add view names you want to display
+                allowed_views = [view_data for view_data in all_views if view_data["name"] in allowed_view_names]
+                self.views = allowed_views
 
             self.stdscr.clear()
 
@@ -79,7 +81,22 @@ class Home:
             log_message(f"Error updating screen: {e}", level=logging.ERROR)
 
     def get_next_view(self):
-        return self.next_view
+        next_view = self.next_view
+        self.next_view = None  # Reset next_view to None
+        return next_view
+
+# Preview of the Profile view
+    def display(self):
+        # Display profile content
+        user_stats = self.http.get_user_stats()
+        log_message(f"User stats: {user_stats}", level=logging.INFO)
+        if user_stats and user_stats.get("status") == "ok":
+            self.stdscr.addstr(2, 2, f"Username: {user_stats['data']['username']}")
+            self.stdscr.addstr(3, 2, f"ELO: {user_stats['data']['ELO']}")
+            self.stdscr.addstr(4, 2, f"Total Match Wins: {user_stats['data']['total_match_wins']}")
+            self.stdscr.addstr(5, 2, f"Total Tournament Wins: {user_stats['data']['total_tournament_wins']}")
+            # Display more stats as needed
+        # Add more content as needed
 
 # Helper functions
     def reset_index(self):
