@@ -1,0 +1,26 @@
+Keypress received: 258
+Websocket message received: {"type": "user_joined", "data": {"client_id": "1", "lobby_name": "lobby", "online_users": {"2": "fsalazar", "1": "splix"}}}
+Keypress received: 259
+Keypress received: 259
+Keypress received: 261
+Keypress received: 258
+Keypress received: 260
+Keypress received: 261
+Keypress received: 259
+Websocket message received: {"type": "user_left", "data": {"client_id": "2", "lobby_name": "lobby", "online_users": {"1": "splix"}}}
+Keypress received: 260
+Websocket message received: {"type": "user_joined", "data": {"client_id": "2", "lobby_name": "lobby", "online_users": {"1": "splix", "2": "fsalazar"}}}
+Keypress received: 258
+Websocket message received: {"type": "user_left", "data": {"client_id": "2", "lobby_name": "lobby", "online_users": {"1": "splix"}}}
+Keypress received: 258
+Websocket message received: {"type": "user_joined", "data": {"client_id": "2", "lobby_name": "lobby", "online_users": {"1": "splix", "2": "fsalazar"}}}
+Keypress received: 258
+Websocket message received: {"type": "user_left", "data": {"client_id": "2", "lobby_name": "lobby", "online_users": {"1": "splix"}}}
+Keypress received: 260
+Websocket message received: {"type": "user_joined", "data": {"client_id": "2", "lobby_name": "lobby", "online_users": {"1": "splix", "2": "fsalazar"}}}
+Keypress received: 261
+Keypress received: 259
+Keypress received: 261
+Keypress received: 258
+Keypress received: 260
+Keypress received: 259
