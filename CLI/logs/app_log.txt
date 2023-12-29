@@ -1,0 +1,5 @@
+2023-12-29 17:54:37,653 [ERROR] [log_message] Error logging in: object NoneType can't be used in 'await' expression
+2023-12-29 17:54:50,571 [ERROR] [log_message] Error logging in: object NoneType can't be used in 'await' expression
+2023-12-29 17:56:23,689 [INFO] [log_message] Entered Data: {'Username': 'splix', 'Password': '123'}
+2023-12-29 17:56:23,978 [INFO] [log_message] Login response: splix
+2023-12-29 17:56:24,023 [ERROR] [log_message] An error occurred in App Main object NoneType can't be used in 'await' expression

@@ -2,12 +2,12 @@
 
 from utils.data_storage import load_data, save_data
 from utils.logger import log_message
+from utils.url_macros import *
 from datetime import datetime
 import logging
 import json
 import requests
 
-API_BASE_URL = "http://localhost:8000/api"
 DATA_DIR = "data"
 
 class http_api:
@@ -41,10 +41,8 @@ class http_api:
 # -----------------------------
 
 # API caller function
-    def make_api_call(self, method, endpoint, data=None):
+    def make_api_call(self, method, url, data=None):
         try:
-            url = API_BASE_URL + endpoint
-
             cookies = self.load_cookies()
             jwt_token = self.load_token()
 
@@ -95,10 +93,10 @@ class http_api:
 # Predifined Login/Register API calls
     def login(self, username, password):
         try:
-            login_url = f"{API_BASE_URL}/user/login/"
+            url = LOGIN
             data = {"username": username, "password": password}
 
-            response = self.session.post(login_url, json=data)
+            response = self.session.post(url, json=data)
 
             if response.status_code == 200:
                 json_response = response.json()
@@ -132,10 +130,10 @@ class http_api:
 
     def register(self, username, password, fullname, email):
         try:
-            register_url = f"{API_BASE_URL}/user/signup/"
+            url = REGISTER
             data = {"username": username, "password": password, "fullname": fullname, "email": email}
 
-            response = self.session.post(register_url, json=data)
+            response = self.session.post(url, json=data)
 
             if response.status_code == 200:
                 json_response = response.json()
@@ -160,9 +158,11 @@ class http_api:
                         self.save_client_info(self.client_id, username)
 
                         return username
+                    
             else:
                 log_message(f"Register failed: {response.text}", level=logging.ERROR)
                 return False
+            
         except Exception as e:
             log_message(f"Error registering: {e}", level=logging.ERROR)
             return False
@@ -171,8 +171,8 @@ class http_api:
 # Predifined API calls
     def get_client_id(self, username):
         try:
-            endpoint = f"/get_user_id/{username}/"
-            response = self.make_api_call("GET", endpoint)
+            url = GET_CLIENT_ID.format(username=username)
+            response = self.make_api_call("GET", url)
 
             if response.status_code == 200:
                 return response.json()["user_id"]
@@ -186,8 +186,8 @@ class http_api:
     def get_client_info(self):
         try:
             username = self.load_client_info()["username"]
-            endpoint = f"/user/info-me/{username}/"
-            response = self.make_api_call("GET", endpoint)
+            url = GET_CLIENT_INFO.format(username=username)
+            response = self.make_api_call("GET", url)
 
             if response.status_code == 200:
                 return response.json()
@@ -201,8 +201,8 @@ class http_api:
     def get_list_friends(self):
         try:
             client_id = self.load_client_info()["client_id"]
-            endpoint = f"/user/{client_id}/friendlist/"
-            response = self.make_api_call("GET", endpoint)
+            url = GET_LIST_FRIENDS.format(client_id=client_id)
+            response = self.make_api_call("GET", url)
 
             if response.status_code == 200:
                 return response.json()
@@ -218,10 +218,10 @@ class http_api:
             client_id = self.load_client_info()["client_id"]
             friend_id = self.get_client_id(friend_username)
 
-            endpoint = f"/user/{client_id}/addfriend/"
+            url = ADD_FRIEND.format(client_id=client_id)
             data = {"friend_id": friend_id}
 
-            response = self.make_api_call("POST", endpoint, data)
+            response = self.make_api_call("POST", url, data)
 
             if response.status_code == 200:
                 return response.json()
@@ -237,10 +237,10 @@ class http_api:
             client_id = self.load_client_info()["client_id"]
             friend_id = self.get_client_id(friend_username)
 
-            endpoint = f"/user/{client_id}/removefriend/"
+            url = REMOVE_FRIEND.format(client_id=client_id)
             data = {"friend_id": friend_id}
 
-            response = self.make_api_call("POST", endpoint, data)
+            response = self.make_api_call("POST", url, data)
 
             if response.status_code == 200:
                 return response.json()
@@ -254,8 +254,8 @@ class http_api:
     def get_user_stats(self):
         try:
             client_id = self.load_client_info()["client_id"]
-            endpoint = f"/user/{client_id}/stats/"
-            response = self.make_api_call("GET", endpoint)
+            url = GET_USER_STATS.format(client_id=client_id)
+            response = self.make_api_call("GET", url)
 
             if response.status_code == 200:
                 return response.json()

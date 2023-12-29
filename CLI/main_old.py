@@ -5,7 +5,7 @@ import curses
 import signal
 import atexit
 import logging
-from utils.init_views import initialize_views
+from utils.init_curses import initialize_views
 from utils.logger import initialize_logs_directory, initialize_logger
 from utils.data_storage import initialize_data_directory, save_data, load_data
 from utils.logger import log_message
