@@ -20,10 +20,9 @@ def initialize_views(stdscr, http, ws):
     game_view = Game(stdscr, http, ws)
 
     # You can add more views as needed
-
     return [
-            {"name": "Friends", "view": Friends(stdscr, http, ws)},
             {"name": "Home", "view": Home(stdscr, http, ws)},
+            {"name": "Friends", "view": Friends(stdscr, http, ws)},
             {"name": "Login", "view": Login(stdscr, http, ws)},
             {"name": "Profile", "view": Profile(stdscr, http, ws)},
             {"name": "Register", "view": Register(stdscr, http, ws)},
