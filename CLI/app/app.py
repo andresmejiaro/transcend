@@ -23,6 +23,7 @@ class CLIApp:
         self.api = http_api()
         self.recieve_message_lock = asyncio.Lock()
         self.send_message_lock = asyncio.Lock()
+        self.keyboard_input_lock = asyncio.Lock()
         
 
 # Lobby Websocket Task - Connect to the lobby websocket and send and receive messages throught the duration of the application
@@ -66,8 +67,12 @@ class CLIApp:
             while True:
                 key = self.stdscr.getch()
                 if key != curses.ERR:
-                    await keyboard_input_queue.put(key)
-                    log_message(f"Key pressed: {key}, added to queue", level=logging.DEBUG)
+                    # Convert the key code to the key name
+                    key_name = curses.keyname(key).decode('utf-8')
+
+                    async with self.keyboard_input_lock:
+                        await keyboard_input_queue.put(key_name)
+                        log_message(f"Key pressed: {key_name}, added to queue", level=logging.DEBUG)
 
                 await asyncio.sleep(0.1)
 
@@ -124,16 +129,18 @@ class CLIApp:
                 await asyncio.sleep(frame_delay)
 
         except asyncio.CancelledError:
-            # Catch the cancellation when leaving the view
-            pass
+            log_message("Main Loop Task cancelled", level=logging.DEBUG)
+            self.current_view.cleanup()
 
         except KeyboardInterrupt:
             # Catch the keyboard interrupt
             log_message("Keyboard interrupt detected. Exiting...")
+            self.current_view.cleanup()
             self.exit_status = 0
 
         except Exception as e:
             log_message(f"An error occurred in Main Loop Task: {e}", level=logging.ERROR)
+            self.current_view.cleanup()
             self.exit_status = 1
 # -------------------------------------
 
@@ -158,6 +165,7 @@ class CLIApp:
                     send_message_lock=self.send_message_lock,
                     receive_message_lock=self.recieve_message_lock,
                     keyboard_input_queue=keyboard_input_queue,
+                    keyboard_input_lock=self.keyboard_input_lock
                     )
 
                 # Create the task for sending and receiving messages to the lobby websocket and the main loop task

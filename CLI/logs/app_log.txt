@@ -1,137 +1,47 @@
-2023-12-30 15:32:13,453 [DEBUG] [log_message] Starting application
-2023-12-30 15:32:13,453 [DEBUG] [log_message] CLIApp initialized
-2023-12-30 15:32:14,458 [WARNING] [_run_once] Executing <Task pending name='Task-1' coro=<main() running at /home/splix/Desktop/last_spring/CLI/main.py:23> wait_for=<Future pending cb=[Task.task_wakeup()] created at /usr/lib/python3.10/asyncio/base_events.py:429> cb=[_run_until_complete_cb() at /usr/lib/python3.10/asyncio/base_events.py:184] created at /usr/lib/python3.10/asyncio/tasks.py:636> took 1.005 seconds
-2023-12-30 15:32:16,119 [INFO] [log_message] Entered Data: {'Username': 'splix', 'Password': '123'}
-2023-12-30 15:32:16,121 [DEBUG] [_new_conn] Starting new HTTP connection (1): localhost:8000
-2023-12-30 15:32:16,373 [DEBUG] [_make_request] http://localhost:8000 "POST /api/user/login/ HTTP/1.1" 200 241
-2023-12-30 15:32:16,453 [DEBUG] [_make_request] http://localhost:8000 "GET /api/get_user_id/splix/ HTTP/1.1" 200 35
-2023-12-30 15:32:16,454 [INFO] [log_message] Login response: splix
-2023-12-30 15:32:16,455 [WARNING] [_run_once] Executing <Task pending name='Task-1' coro=<main() running at /home/splix/Desktop/last_spring/CLI/main.py:23> wait_for=<Future pending cb=[Task.task_wakeup()] created at /usr/lib/python3.10/asyncio/base_events.py:429> cb=[_run_until_complete_cb() at /usr/lib/python3.10/asyncio/base_events.py:184] created at /usr/lib/python3.10/asyncio/tasks.py:636> took 0.336 seconds
-2023-12-30 15:32:16,494 [DEBUG] [_getaddrinfo_debug] Get address info localhost:8001, type=<SocketKind.SOCK_STREAM: 1>, flags=<AddressInfo.AI_ADDRCONFIG: 32>
-2023-12-30 15:32:16,495 [DEBUG] [_getaddrinfo_debug] Getting address info localhost:8001, type=<SocketKind.SOCK_STREAM: 1>, flags=<AddressInfo.AI_ADDRCONFIG: 32> took 0.104ms: [(<AddressFamily.AF_INET: 2>, <SocketKind.SOCK_STREAM: 1>, 6, '', ('127.0.0.1', 8001))]
-2023-12-30 15:32:16,499 [DEBUG] [create_connection] <asyncio.TransportSocket fd=8, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=6, laddr=('127.0.0.1', 44278), raddr=('127.0.0.1', 8001)> connected to 127.0.0.1:8001: (<_SelectorSocketTransport fd=8 read=polling write=<idle, bufsize=0>>, <aiohttp.client_proto.ResponseHandler object at 0x7f48604051e0>)
-2023-12-30 15:32:16,523 [DEBUG] [log_message] Received message: {"type": "user_joined", "data": {"client_id": "1", "lobby_name": "lobby", "online_users": {"1": "splix"}}}
-2023-12-30 15:32:18,538 [DEBUG] [log_message] Key pressed: 102, added to queue
-2023-12-30 15:32:18,539 [DEBUG] [log_message] Key released: 102, added to queue
-2023-12-30 15:32:19,047 [DEBUG] [log_message] Key pressed: 102, added to queue
-2023-12-30 15:32:19,047 [DEBUG] [log_message] Key released: 102, added to queue
-2023-12-30 15:32:19,070 [DEBUG] [log_message] Key pressed: 102, added to queue
-2023-12-30 15:32:19,070 [DEBUG] [log_message] Key released: 102, added to queue
-2023-12-30 15:32:19,104 [DEBUG] [log_message] Key pressed: 102, added to queue
-2023-12-30 15:32:19,104 [DEBUG] [log_message] Key released: 102, added to queue
-2023-12-30 15:32:19,138 [DEBUG] [log_message] Key pressed: 102, added to queue
-2023-12-30 15:32:19,138 [DEBUG] [log_message] Key released: 102, added to queue
-2023-12-30 15:32:19,173 [DEBUG] [log_message] Key pressed: 102, added to queue
-2023-12-30 15:32:19,174 [DEBUG] [log_message] Key released: 102, added to queue
-2023-12-30 15:32:19,197 [DEBUG] [log_message] Key pressed: 102, added to queue
-2023-12-30 15:32:19,197 [DEBUG] [log_message] Key released: 102, added to queue
-2023-12-30 15:32:19,231 [DEBUG] [log_message] Key pressed: 102, added to queue
-2023-12-30 15:32:19,231 [DEBUG] [log_message] Key released: 102, added to queue
-2023-12-30 15:32:19,273 [DEBUG] [log_message] Key pressed: 102, added to queue
-2023-12-30 15:32:19,273 [DEBUG] [log_message] Key released: 102, added to queue
-2023-12-30 15:32:19,296 [DEBUG] [log_message] Key pressed: 102, added to queue
-2023-12-30 15:32:19,296 [DEBUG] [log_message] Key released: 102, added to queue
-2023-12-30 15:32:19,318 [DEBUG] [log_message] Key pressed: 102, added to queue
-2023-12-30 15:32:19,319 [DEBUG] [log_message] Key released: 102, added to queue
-2023-12-30 15:32:19,352 [DEBUG] [log_message] Key pressed: 102, added to queue
-2023-12-30 15:32:19,352 [DEBUG] [log_message] Key released: 102, added to queue
-2023-12-30 15:32:19,386 [DEBUG] [log_message] Key pressed: 102, added to queue
-2023-12-30 15:32:19,386 [DEBUG] [log_message] Key released: 102, added to queue
-2023-12-30 15:32:19,410 [DEBUG] [log_message] Key pressed: 102, added to queue
-2023-12-30 15:32:19,410 [DEBUG] [log_message] Key released: 102, added to queue
-2023-12-30 15:32:19,444 [DEBUG] [log_message] Key pressed: 102, added to queue
-2023-12-30 15:32:19,444 [DEBUG] [log_message] Key released: 102, added to queue
-2023-12-30 15:32:19,478 [DEBUG] [log_message] Key pressed: 102, added to queue
-2023-12-30 15:32:19,478 [DEBUG] [log_message] Key released: 102, added to queue
-2023-12-30 15:32:19,512 [DEBUG] [log_message] Key pressed: 102, added to queue
-2023-12-30 15:32:19,512 [DEBUG] [log_message] Key released: 102, added to queue
-2023-12-30 15:32:19,534 [DEBUG] [log_message] Key pressed: 102, added to queue
-2023-12-30 15:32:19,534 [DEBUG] [log_message] Key released: 102, added to queue
-2023-12-30 15:32:19,570 [DEBUG] [log_message] Key pressed: 102, added to queue
-2023-12-30 15:32:19,570 [DEBUG] [log_message] Key released: 102, added to queue
-2023-12-30 15:32:19,607 [DEBUG] [log_message] Key pressed: 102, added to queue
-2023-12-30 15:32:19,608 [DEBUG] [log_message] Key released: 102, added to queue
-2023-12-30 15:32:19,633 [DEBUG] [log_message] Key pressed: 102, added to queue
-2023-12-30 15:32:19,633 [DEBUG] [log_message] Key released: 102, added to queue
-2023-12-30 15:38:04,339 [DEBUG] [log_message] Websocket task cancelled
-2023-12-30 15:38:04,359 [DEBUG] [close] Close <_UnixSelectorEventLoop running=False closed=False debug=True>
-2023-12-30 15:38:04,359 [DEBUG] [log_message] Keyboard interrupt detected. Exiting...
-2023-12-30 15:38:05,319 [DEBUG] [log_message] Starting application
-2023-12-30 15:38:05,319 [DEBUG] [log_message] CLIApp initialized
-2023-12-30 15:38:06,484 [WARNING] [_run_once] Executing <Task pending name='Task-1' coro=<main() running at /home/splix/Desktop/last_spring/CLI/main.py:23> wait_for=<Future pending cb=[Task.task_wakeup()] created at /usr/lib/python3.10/asyncio/base_events.py:429> cb=[_run_until_complete_cb() at /usr/lib/python3.10/asyncio/base_events.py:184] created at /usr/lib/python3.10/asyncio/tasks.py:636> took 1.165 seconds
-2023-12-30 15:38:08,764 [INFO] [log_message] Entered Data: {'Username': 'splix', 'Password': '123'}
-2023-12-30 15:38:08,765 [DEBUG] [_new_conn] Starting new HTTP connection (1): localhost:8000
-2023-12-30 15:38:08,992 [DEBUG] [_make_request] http://localhost:8000 "POST /api/user/login/ HTTP/1.1" 200 241
-2023-12-30 15:38:09,058 [DEBUG] [_make_request] http://localhost:8000 "GET /api/get_user_id/splix/ HTTP/1.1" 200 35
-2023-12-30 15:38:09,059 [INFO] [log_message] Login response: splix
-2023-12-30 15:38:09,060 [WARNING] [_run_once] Executing <Task pending name='Task-1' coro=<main() running at /home/splix/Desktop/last_spring/CLI/main.py:23> wait_for=<Future pending cb=[Task.task_wakeup()] created at /usr/lib/python3.10/asyncio/base_events.py:429> cb=[_run_until_complete_cb() at /usr/lib/python3.10/asyncio/base_events.py:184] created at /usr/lib/python3.10/asyncio/tasks.py:636> took 0.296 seconds
-2023-12-30 15:38:09,097 [DEBUG] [_getaddrinfo_debug] Get address info localhost:8001, type=<SocketKind.SOCK_STREAM: 1>, flags=<AddressInfo.AI_ADDRCONFIG: 32>
-2023-12-30 15:38:09,097 [DEBUG] [_getaddrinfo_debug] Getting address info localhost:8001, type=<SocketKind.SOCK_STREAM: 1>, flags=<AddressInfo.AI_ADDRCONFIG: 32> took 0.102ms: [(<AddressFamily.AF_INET: 2>, <SocketKind.SOCK_STREAM: 1>, 6, '', ('127.0.0.1', 8001))]
-2023-12-30 15:38:09,110 [DEBUG] [create_connection] <asyncio.TransportSocket fd=8, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=6, laddr=('127.0.0.1', 36650), raddr=('127.0.0.1', 8001)> connected to 127.0.0.1:8001: (<_SelectorSocketTransport fd=8 read=polling write=<idle, bufsize=0>>, <aiohttp.client_proto.ResponseHandler object at 0x7f94f5e04be0>)
-2023-12-30 15:38:09,168 [DEBUG] [log_message] Received message: {"type": "user_joined", "data": {"client_id": "1", "lobby_name": "lobby", "online_users": {"1": "splix"}}}
-2023-12-30 15:38:09,531 [DEBUG] [log_message] Key pressed: 261, added to queue
-2023-12-30 15:38:09,598 [ERROR] [log_message] Error in process_inputs: cannot unpack non-iterable int object
-2023-12-30 15:38:10,478 [DEBUG] [log_message] Key pressed: 260, added to queue
-2023-12-30 15:38:10,606 [ERROR] [log_message] Error in process_inputs: cannot unpack non-iterable int object
-2023-12-30 15:38:10,787 [DEBUG] [log_message] Key pressed: 258, added to queue
-2023-12-30 15:38:10,888 [DEBUG] [log_message] Key pressed: 258, added to queue
-2023-12-30 15:38:11,108 [ERROR] [log_message] Error in process_inputs: cannot unpack non-iterable int object
-2023-12-30 15:38:11,196 [DEBUG] [log_message] Key pressed: 258, added to queue
-2023-12-30 15:38:11,299 [DEBUG] [log_message] Key pressed: 260, added to queue
-2023-12-30 15:38:11,440 [DEBUG] [log_message] Key pressed: 258, added to queue
-2023-12-30 15:38:11,542 [DEBUG] [log_message] Key pressed: 260, added to queue
-2023-12-30 15:38:11,612 [ERROR] [log_message] Error in process_inputs: cannot unpack non-iterable int object
-2023-12-30 15:38:11,643 [DEBUG] [log_message] Key pressed: 258, added to queue
-2023-12-30 15:38:12,118 [ERROR] [log_message] Error in process_inputs: cannot unpack non-iterable int object
-2023-12-30 15:38:12,620 [ERROR] [log_message] Error in process_inputs: cannot unpack non-iterable int object
-2023-12-30 15:38:13,123 [ERROR] [log_message] Error in process_inputs: cannot unpack non-iterable int object
-2023-12-30 15:38:13,625 [ERROR] [log_message] Error in process_inputs: cannot unpack non-iterable int object
-2023-12-30 15:38:14,128 [ERROR] [log_message] Error in process_inputs: cannot unpack non-iterable int object
-2023-12-30 15:38:16,903 [DEBUG] [log_message] Websocket task cancelled
-2023-12-30 15:38:16,910 [DEBUG] [close] Close <_UnixSelectorEventLoop running=False closed=False debug=True>
-2023-12-30 15:38:16,911 [DEBUG] [log_message] Keyboard interrupt detected. Exiting...
-2023-12-30 15:38:18,399 [DEBUG] [log_message] Starting application
-2023-12-30 15:38:18,400 [DEBUG] [log_message] CLIApp initialized
-2023-12-30 15:38:18,902 [WARNING] [_run_once] Executing <Task pending name='Task-1' coro=<main() running at /home/splix/Desktop/last_spring/CLI/main.py:23> wait_for=<Future pending cb=[Task.task_wakeup()] created at /usr/lib/python3.10/asyncio/base_events.py:429> cb=[_run_until_complete_cb() at /usr/lib/python3.10/asyncio/base_events.py:184] created at /usr/lib/python3.10/asyncio/tasks.py:636> took 0.503 seconds
-2023-12-30 15:38:20,781 [INFO] [log_message] Entered Data: {'Username': 'splix', 'Password': '123'}
-2023-12-30 15:38:20,782 [DEBUG] [_new_conn] Starting new HTTP connection (1): localhost:8000
-2023-12-30 15:38:21,006 [DEBUG] [_make_request] http://localhost:8000 "POST /api/user/login/ HTTP/1.1" 200 241
-2023-12-30 15:38:21,070 [DEBUG] [_make_request] http://localhost:8000 "GET /api/get_user_id/splix/ HTTP/1.1" 200 35
-2023-12-30 15:38:21,070 [INFO] [log_message] Login response: splix
-2023-12-30 15:38:21,071 [WARNING] [_run_once] Executing <Task pending name='Task-1' coro=<main() running at /home/splix/Desktop/last_spring/CLI/main.py:23> wait_for=<Future pending cb=[Task.task_wakeup()] created at /usr/lib/python3.10/asyncio/base_events.py:429> cb=[_run_until_complete_cb() at /usr/lib/python3.10/asyncio/base_events.py:184] created at /usr/lib/python3.10/asyncio/tasks.py:636> took 0.291 seconds
-2023-12-30 15:38:21,110 [DEBUG] [_getaddrinfo_debug] Get address info localhost:8001, type=<SocketKind.SOCK_STREAM: 1>, flags=<AddressInfo.AI_ADDRCONFIG: 32>
-2023-12-30 15:38:21,110 [DEBUG] [_getaddrinfo_debug] Getting address info localhost:8001, type=<SocketKind.SOCK_STREAM: 1>, flags=<AddressInfo.AI_ADDRCONFIG: 32> took 0.144ms: [(<AddressFamily.AF_INET: 2>, <SocketKind.SOCK_STREAM: 1>, 6, '', ('127.0.0.1', 8001))]
-2023-12-30 15:38:21,113 [DEBUG] [create_connection] <asyncio.TransportSocket fd=8, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=6, laddr=('127.0.0.1', 49286), raddr=('127.0.0.1', 8001)> connected to 127.0.0.1:8001: (<_SelectorSocketTransport fd=8 read=polling write=<idle, bufsize=0>>, <aiohttp.client_proto.ResponseHandler object at 0x7f094ba04be0>)
-2023-12-30 15:38:21,136 [DEBUG] [log_message] Received message: {"type": "user_joined", "data": {"client_id": "1", "lobby_name": "lobby", "online_users": {"1": "splix"}}}
-2023-12-30 15:38:21,516 [DEBUG] [log_message] Key pressed: 261, added to queue
-2023-12-30 15:38:22,448 [DEBUG] [log_message] Key pressed: 260, added to queue
-2023-12-30 15:38:22,549 [DEBUG] [log_message] Key pressed: 258, added to queue
-2023-12-30 15:38:22,755 [DEBUG] [log_message] Key pressed: 261, added to queue
-2023-12-30 15:38:22,856 [DEBUG] [log_message] Key pressed: 259, added to queue
-2023-12-30 15:38:22,960 [DEBUG] [log_message] Key pressed: 260, added to queue
-2023-12-30 15:38:26,780 [DEBUG] [log_message] Key pressed: 258, added to queue
-2023-12-30 15:38:28,439 [DEBUG] [log_message] Key pressed: 260, added to queue
-2023-12-30 15:38:29,261 [DEBUG] [log_message] Key pressed: 261, added to queue
-2023-12-30 15:38:45,023 [DEBUG] [log_message] Websocket task cancelled
-2023-12-30 15:38:45,030 [DEBUG] [close] Close <_UnixSelectorEventLoop running=False closed=False debug=True>
-2023-12-30 15:38:45,030 [DEBUG] [log_message] Keyboard interrupt detected. Exiting...
-2023-12-30 15:43:52,190 [DEBUG] [log_message] Starting application
-2023-12-30 15:43:52,190 [DEBUG] [log_message] CLIApp initialized
-2023-12-30 15:43:52,695 [WARNING] [_run_once] Executing <Task pending name='Task-1' coro=<main() running at /home/splix/Desktop/last_spring/CLI/main.py:23> wait_for=<Future pending cb=[Task.task_wakeup()] created at /usr/lib/python3.10/asyncio/base_events.py:429> cb=[_run_until_complete_cb() at /usr/lib/python3.10/asyncio/base_events.py:184] created at /usr/lib/python3.10/asyncio/tasks.py:636> took 0.505 seconds
-2023-12-30 15:43:54,730 [INFO] [log_message] Entered Data: {'Username': 'splix', 'Password': '123'}
-2023-12-30 15:43:54,731 [DEBUG] [_new_conn] Starting new HTTP connection (1): localhost:8000
-2023-12-30 15:43:54,949 [DEBUG] [_make_request] http://localhost:8000 "POST /api/user/login/ HTTP/1.1" 200 241
-2023-12-30 15:43:55,029 [DEBUG] [_make_request] http://localhost:8000 "GET /api/get_user_id/splix/ HTTP/1.1" 200 35
-2023-12-30 15:43:55,029 [INFO] [log_message] Login response: splix
-2023-12-30 15:43:55,030 [WARNING] [_run_once] Executing <Task pending name='Task-1' coro=<main() running at /home/splix/Desktop/last_spring/CLI/main.py:23> wait_for=<Future pending cb=[Task.task_wakeup()] created at /usr/lib/python3.10/asyncio/base_events.py:429> cb=[_run_until_complete_cb() at /usr/lib/python3.10/asyncio/base_events.py:184] created at /usr/lib/python3.10/asyncio/tasks.py:636> took 0.300 seconds
-2023-12-30 15:43:55,068 [DEBUG] [_getaddrinfo_debug] Get address info localhost:8001, type=<SocketKind.SOCK_STREAM: 1>, flags=<AddressInfo.AI_ADDRCONFIG: 32>
-2023-12-30 15:43:55,069 [DEBUG] [_getaddrinfo_debug] Getting address info localhost:8001, type=<SocketKind.SOCK_STREAM: 1>, flags=<AddressInfo.AI_ADDRCONFIG: 32> took 0.108ms: [(<AddressFamily.AF_INET: 2>, <SocketKind.SOCK_STREAM: 1>, 6, '', ('127.0.0.1', 8001))]
-2023-12-30 15:43:55,071 [DEBUG] [create_connection] <asyncio.TransportSocket fd=8, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=6, laddr=('127.0.0.1', 35292), raddr=('127.0.0.1', 8001)> connected to 127.0.0.1:8001: (<_SelectorSocketTransport fd=8 read=polling write=<idle, bufsize=0>>, <aiohttp.client_proto.ResponseHandler object at 0x7ff6c7d10fa0>)
-2023-12-30 15:43:55,101 [DEBUG] [log_message] Received message: {"type": "user_joined", "data": {"client_id": "1", "lobby_name": "lobby", "online_users": {"1": "splix"}}}
-2023-12-30 15:43:55,475 [DEBUG] [log_message] Key pressed: 261, added to queue
-2023-12-30 15:43:55,889 [DEBUG] [log_message] Key pressed: 260, added to queue
-2023-12-30 15:43:56,511 [DEBUG] [log_message] Key pressed: 261, added to queue
-2023-12-30 15:43:56,714 [DEBUG] [log_message] Key pressed: 260, added to queue
-2023-12-30 15:43:57,795 [DEBUG] [log_message] Websocket task cancelled
-2023-12-30 15:43:57,799 [DEBUG] [close] Close <_UnixSelectorEventLoop running=False closed=False debug=True>
-2023-12-30 15:43:57,799 [DEBUG] [log_message] Keyboard interrupt detected. Exiting...
+2023-12-30 16:38:36,945 [DEBUG] [log_message] Starting application
+2023-12-30 16:38:36,946 [DEBUG] [log_message] CLIApp initialized
+2023-12-30 16:38:37,950 [WARNING] [_run_once] Executing <Task pending name='Task-1' coro=<main() running at /home/splix/Desktop/last_spring/CLI/main.py:23> wait_for=<Future pending cb=[Task.task_wakeup()] created at /usr/lib/python3.10/asyncio/base_events.py:429> cb=[_run_until_complete_cb() at /usr/lib/python3.10/asyncio/base_events.py:184] created at /usr/lib/python3.10/asyncio/tasks.py:636> took 1.004 seconds
+2023-12-30 16:38:39,926 [INFO] [log_message] Entered Data: {'Username': 'splix', 'Password': '123'}
+2023-12-30 16:38:39,928 [DEBUG] [_new_conn] Starting new HTTP connection (1): localhost:8000
+2023-12-30 16:38:40,172 [DEBUG] [_make_request] http://localhost:8000 "POST /api/user/login/ HTTP/1.1" 200 241
+2023-12-30 16:38:40,238 [DEBUG] [_make_request] http://localhost:8000 "GET /api/get_user_id/splix/ HTTP/1.1" 200 35
+2023-12-30 16:38:40,239 [INFO] [log_message] Login response: splix
+2023-12-30 16:38:40,240 [WARNING] [_run_once] Executing <Task pending name='Task-1' coro=<main() running at /home/splix/Desktop/last_spring/CLI/main.py:23> wait_for=<Future pending cb=[Task.task_wakeup()] created at /usr/lib/python3.10/asyncio/base_events.py:429> cb=[_run_until_complete_cb() at /usr/lib/python3.10/asyncio/base_events.py:184] created at /usr/lib/python3.10/asyncio/tasks.py:636> took 0.314 seconds
+2023-12-30 16:38:40,281 [DEBUG] [_getaddrinfo_debug] Get address info localhost:8001, type=<SocketKind.SOCK_STREAM: 1>, flags=<AddressInfo.AI_ADDRCONFIG: 32>
+2023-12-30 16:38:40,282 [DEBUG] [_getaddrinfo_debug] Getting address info localhost:8001, type=<SocketKind.SOCK_STREAM: 1>, flags=<AddressInfo.AI_ADDRCONFIG: 32> took 0.105ms: [(<AddressFamily.AF_INET: 2>, <SocketKind.SOCK_STREAM: 1>, 6, '', ('127.0.0.1', 8001))]
+2023-12-30 16:38:40,284 [DEBUG] [create_connection] <asyncio.TransportSocket fd=8, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=6, laddr=('127.0.0.1', 54034), raddr=('127.0.0.1', 8001)> connected to 127.0.0.1:8001: (<_SelectorSocketTransport fd=8 read=polling write=<idle, bufsize=0>>, <aiohttp.client_proto.ResponseHandler object at 0x7f983ee30580>)
+2023-12-30 16:38:40,313 [DEBUG] [log_message] Received message: {"type": "user_joined", "data": {"client_id": "1", "lobby_name": "lobby", "online_users": {"2": "fsalazar", "1": "splix"}}}
+2023-12-30 16:38:41,102 [DEBUG] [log_message] Key pressed: f, added to queue
+2023-12-30 16:38:41,284 [DEBUG] [log_message] Processing input: f
+2023-12-30 16:38:42,341 [DEBUG] [log_message] Key pressed: e, added to queue
+2023-12-30 16:38:42,797 [DEBUG] [log_message] Processing input: e
+2023-12-30 16:38:42,851 [DEBUG] [log_message] Key pressed: d, added to queue
+2023-12-30 16:38:43,300 [DEBUG] [log_message] Processing input: d
+2023-12-30 16:38:44,592 [DEBUG] [log_message] Key pressed: KEY_UP, added to queue
+2023-12-30 16:38:44,811 [DEBUG] [log_message] Processing input: KEY_UP
+2023-12-30 16:38:46,733 [DEBUG] [log_message] Key pressed: KEY_DOWN, added to queue
+2023-12-30 16:38:46,828 [DEBUG] [log_message] Processing input: KEY_DOWN
+2023-12-30 16:38:47,858 [DEBUG] [log_message] Key pressed: KEY_UP, added to queue
+2023-12-30 16:38:48,339 [DEBUG] [log_message] Processing input: KEY_UP
+2023-12-30 16:38:48,675 [DEBUG] [log_message] Key pressed: KEY_LEFT, added to queue
+2023-12-30 16:38:48,843 [DEBUG] [log_message] Processing input: KEY_LEFT
+2023-12-30 16:38:49,289 [DEBUG] [log_message] Key pressed: KEY_RIGHT, added to queue
+2023-12-30 16:38:49,368 [DEBUG] [log_message] Processing input: KEY_RIGHT
+2023-12-30 16:38:49,795 [DEBUG] [log_message] Key pressed: f, added to queue
+2023-12-30 16:38:49,870 [DEBUG] [log_message] Processing input: f
+2023-12-30 16:38:50,505 [DEBUG] [log_message] Key pressed: d, added to queue
+2023-12-30 16:38:50,815 [DEBUG] [log_message] Key pressed: a, added to queue
+2023-12-30 16:38:50,873 [DEBUG] [log_message] Processing input: d
+2023-12-30 16:38:51,022 [DEBUG] [log_message] Key pressed: d, added to queue
+2023-12-30 16:38:51,328 [DEBUG] [log_message] Key pressed: i, added to queue
+2023-12-30 16:38:51,375 [DEBUG] [log_message] Processing input: a
+2023-12-30 16:38:51,532 [DEBUG] [log_message] Key pressed: e, added to queue
+2023-12-30 16:38:51,735 [DEBUG] [log_message] Key pressed: k, added to queue
+2023-12-30 16:38:51,877 [DEBUG] [log_message] Processing input: d
+2023-12-30 16:38:51,943 [DEBUG] [log_message] Key pressed: d, added to queue
+2023-12-30 16:38:52,378 [DEBUG] [log_message] Processing input: i
+2023-12-30 16:38:52,880 [DEBUG] [log_message] Processing input: e
+2023-12-30 16:38:53,381 [DEBUG] [log_message] Processing input: k
+2023-12-30 16:38:53,884 [DEBUG] [log_message] Processing input: d
+2023-12-30 16:38:59,996 [DEBUG] [log_message] Key pressed: KEY_UP, added to queue
+2023-12-30 16:39:00,447 [DEBUG] [log_message] Processing input: KEY_UP
