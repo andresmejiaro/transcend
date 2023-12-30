@@ -1,5 +1,8 @@
+# app/function_views/splash_view.py
+
 import curses
 import time
+
 from utils.logger import log_message
 from utils.data_storage import load_texture
 import logging

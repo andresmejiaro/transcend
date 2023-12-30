@@ -535,3 +535,13 @@
 2023-12-30 19:40:56,802 [DEBUG] [log_message] Starting application
 2023-12-30 19:40:56,803 [DEBUG] [log_message] CLIApp initialized
 2023-12-30 19:41:05,830 [WARNING] [_run_once] Executing <Task pending name='Task-1' coro=<main() running at /home/splix/Desktop/new-sprint/CLI/main.py:23> wait_for=<Future pending cb=[Task.task_wakeup()] created at /usr/lib/python3.10/asyncio/base_events.py:429> cb=[_run_until_complete_cb() at /usr/lib/python3.10/asyncio/base_events.py:184] created at /usr/lib/python3.10/asyncio/tasks.py:636> took 9.028 seconds
+2023-12-30 19:41:43,515 [DEBUG] [close] Close <_UnixSelectorEventLoop running=False closed=False debug=True>
+2023-12-30 19:41:43,516 [DEBUG] [log_message] Keyboard interrupt detected. Exiting...
+2023-12-30 19:49:47,012 [DEBUG] [log_message] Starting application
+2023-12-30 19:49:47,012 [DEBUG] [log_message] CLIApp initialized
+2023-12-30 19:49:47,012 [ERROR] [log_message] Error displaying splash screen: print_animated_logo() missing 3 required positional arguments: 'max_y', 'max_x', and 'logo'
+2023-12-30 19:49:48,433 [INFO] [log_message] Keyboard interrupt detected. Exiting...
+2023-12-30 19:49:48,434 [DEBUG] [close] Close <_UnixSelectorEventLoop running=False closed=False debug=True>
+2023-12-30 19:57:05,752 [DEBUG] [log_message] Starting application
+2023-12-30 19:57:05,753 [DEBUG] [log_message] CLIApp initialized
+2023-12-30 19:57:08,765 [WARNING] [_run_once] Executing <Task pending name='Task-1' coro=<main() running at /home/splix/Desktop/new-sprint/CLI/main.py:23> wait_for=<Future pending cb=[Task.task_wakeup()] created at /usr/lib/python3.10/asyncio/base_events.py:429> cb=[_run_until_complete_cb() at /usr/lib/python3.10/asyncio/base_events.py:184] created at /usr/lib/python3.10/asyncio/tasks.py:636> took 3.013 seconds
