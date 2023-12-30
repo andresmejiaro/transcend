@@ -23,6 +23,7 @@ class CLIApp:
         self.api = http_api()
         self.recieve_message_lock = asyncio.Lock()
         self.send_message_lock = asyncio.Lock()
+        
 
 # Lobby Websocket Task - Connect to the lobby websocket and send and receive messages throught the duration of the application
     async def lobby_websocket_send_and_receive_task(self, stdscr, messages_receive_queue, messages_send_queue):
@@ -59,6 +60,25 @@ class CLIApp:
                     log_message(f"Websocket task error: {e}", level=logging.ERROR)
                     raise
 
+# Keyboard Input Task - Get keyboard input and put it in the keyboard input queue
+    async def keyboard_input_task(self, keyboard_input_queue):
+        try:
+            while True:
+                key = self.stdscr.getch()
+                if key != curses.ERR:
+                    await keyboard_input_queue.put(key)
+                    log_message(f"Key pressed: {key}, added to queue", level=logging.DEBUG)
+
+                await asyncio.sleep(0.1)
+
+        except asyncio.CancelledError:
+            # Catch the cancellation when leaving the view
+            pass
+
+        except Exception as e:
+            log_message(f"An error occurred in Keyboard Input Task: {e}", level=logging.ERROR)
+            self.exit_status = 1
+
 # Login Method
     async def login(self):
         try:
@@ -93,6 +113,8 @@ class CLIApp:
 
                 await self.current_view.process_lobby_recv_message()
 
+                await self.current_view.process_inputs()
+
                 next_view = await self.current_view.get_next_view()
 
                 if next_view is not None:
@@ -126,6 +148,7 @@ class CLIApp:
             if self.logged_in:
                 messages_receive_queue = asyncio.Queue()
                 messages_send_queue = asyncio.Queue()
+                keyboard_input_queue = asyncio.Queue()
 
                 # Create an instance of HomePage with parameters
                 self.current_view = HomePage(
@@ -133,18 +156,21 @@ class CLIApp:
                     messages_send_queue=messages_send_queue,
                     messages_receive_queue=messages_receive_queue,
                     send_message_lock=self.send_message_lock,
-                    receive_message_lock=self.recieve_message_lock)
+                    receive_message_lock=self.recieve_message_lock,
+                    keyboard_input_queue=keyboard_input_queue,
+                    )
 
                 # Create the task for sending and receiving messages to the lobby websocket and the main loop task
                 lobby_websocket_task = asyncio.create_task(self.lobby_websocket_send_and_receive_task(self.stdscr, messages_receive_queue, messages_send_queue))
                 main_loop_task = asyncio.create_task(self.run_main_loop())
+                keyboard_input_task = asyncio.create_task(self.keyboard_input_task(keyboard_input_queue))
                 
                 # Keep list of tasks that are running so they can be cancelled when exiting
-                self.tasks = [lobby_websocket_task, main_loop_task]
+                self.tasks = [lobby_websocket_task, main_loop_task, keyboard_input_task]
 
                 # Use asyncio.gather to run tasks concurrently and wait for them to complete
                 # For temporary websocket connections inside the main loop we will handle withing the main loop eg(pong game, chat rooms, etc)
-                await asyncio.gather(lobby_websocket_task, main_loop_task)
+                await asyncio.gather(lobby_websocket_task, main_loop_task, keyboard_input_task)
 
         except asyncio.CancelledError:
             # Catch the cancellation when leaving the view

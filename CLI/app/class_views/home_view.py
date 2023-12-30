@@ -8,33 +8,33 @@ import time
 from utils.logger import log_message
 
 class HomePage():
-    def __init__(self, stdscr, messages_send_queue, messages_receive_queue, send_message_lock, receive_message_lock):
+    def __init__(self, stdscr, messages_send_queue, messages_receive_queue, send_message_lock, receive_message_lock, keyboard_input_queue):
         self.stdscr = stdscr
+
         self.messages_send_queue = messages_send_queue
         self.messages_receive_queue = messages_receive_queue
+        self.keyboard_input_queue = keyboard_input_queue
+
         self.send_message_lock = send_message_lock
         self.receive_message_lock = receive_message_lock
+
         self.last_frame_time = time.time()
 
-    async def get_user_input(self):
+    async def process_inputs(self):
         try:
-            key = self.stdscr.getch()
-            log_message(f"Key pressed: {key}", level=logging.DEBUG)
-            if key:
-                return key
+            # We receive keyboard input from the keyboard_input_queue so we can process it
+            if self.keyboard_input_queue.empty():
+                return
             
-
-        except Exception as e:
-            log_message(f"Error in get_user_input: {e}", level=logging.ERROR)
-            return None
-
-    async def process_inputs(self, user_input):
-        try:
-            if user_input == -1:
-                log_message("No key pressed", level=logging.DEBUG)
+            # Get the keyboard input
+            input = await self.keyboard_input_queue.get()
             
+            # For now just display the input on the screen
+            self.stdscr.addstr(6, 0, str(input))  # Ensure input is converted to a string before display
+        
         except Exception as e:
             log_message(f"Error in process_inputs: {e}", level=logging.ERROR)
+
 
     async def get_send_message_queue(self):
         return self.messages_send_queue
