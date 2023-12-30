@@ -101,6 +101,7 @@ Entails specific decisions regarding the server's implementation in a Dockerized
 - **docker-compose.yml:** Specifies the services and configurations for Docker Compose.
 
 ### Installation
+???
 1. Clone the repository.
 2. Navigate to the project directory.
 3. Run `npm install` to install dependencies.
@@ -126,6 +127,8 @@ Explica cómo se gestionan las partidas multijugador, la sincronización entre j
 
 ## Tournament
 Si está implementado, describe cómo se estructuran los torneos, cómo los jugadores participan, las reglas, etc.
+
+![Tournament_diagram](https://github.com/andresmejiaro/transcend/blob/readme_documentation/attach-files/Tournament%20diagram.png)
 
 ## AI
 Explica la implementación del modo de juego contra la IA, cómo se diseñó y qué estrategias sigue la IA.
