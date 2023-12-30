@@ -15,6 +15,20 @@ def initialize_curses(stdscr):
     curses.noecho()
     # Enable keypad mode
     stdscr.keypad(True)
+    # Allow for color
+    curses.start_color()
+
+    # Define color pairs
+    curses.init_pair(1, curses.COLOR_WHITE, curses.COLOR_BLACK)  # Example: White text on black background
+    curses.init_pair(2, curses.COLOR_BLACK, curses.COLOR_WHITE)  # Example: Black text on white background
+    curses.init_pair(3, curses.COLOR_RED, curses.COLOR_BLACK)    # Example: Red text on black background
+    curses.init_pair(4, curses.COLOR_GREEN, curses.COLOR_BLACK)  # Example: Green text on black background
+    curses.init_pair(5, curses.COLOR_YELLOW, curses.COLOR_BLACK) # Example: Yellow text on black background
+    curses.init_pair(6, curses.COLOR_BLUE, curses.COLOR_BLACK)   # Example: Blue text on black background
+    curses.init_pair(7, curses.COLOR_MAGENTA, curses.COLOR_BLACK)# Example: Magenta text on black background
+
+    # Set a default color pair
+    stdscr.attron(curses.color_pair(1))
 
 def cleanup_curses(stdscr):
     # Make the cursor visible before cleanup
@@ -31,3 +45,4 @@ def cleanup_curses(stdscr):
     stdscr.clear()
     # Refresh the screen
     stdscr.refresh()
+

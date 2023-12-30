@@ -15,15 +15,16 @@ from app.class_views.home_view import HomePage
 
 class CLIApp:
     def __init__(self, stdscr):
-        self.stdscr = stdscr
-        self.current_view = None
-        self.exit_status = 0
+        self.stdscr = stdscr        # The curses screen object
+        self.current_view = None    # The current view being displayed
+        self.exit_status = 0    
         self.logged_in = False
-        self.tasks = []
+        self.tasks = []             # List of tasks that are running
         self.api = http_api()
         self.recieve_message_lock = asyncio.Lock()
         self.send_message_lock = asyncio.Lock()
         self.keyboard_input_lock = asyncio.Lock()
+        self.frame_rate = 10
         
 
 # Lobby Websocket Task - Connect to the lobby websocket and send and receive messages throught the duration of the application
@@ -109,10 +110,6 @@ class CLIApp:
 # Main Loop Task - Run the main loop of the application
     async def run_main_loop(self):
         try:
-            # Set the frame delay
-            frame_rate = 2
-            frame_delay = 1 / frame_rate
-
             while True:
                 await self.current_view.update_screen()
 
@@ -126,25 +123,25 @@ class CLIApp:
                     self.current_view = next_view
                     continue
 
-                await asyncio.sleep(frame_delay)
+                await asyncio.sleep(self.set_frame_rate(self.frame_rate))
 
         except asyncio.CancelledError:
             log_message("Main Loop Task cancelled", level=logging.DEBUG)
-            self.current_view.cleanup()
+            await self.current_view.cleanup()
 
         except KeyboardInterrupt:
             # Catch the keyboard interrupt
             log_message("Keyboard interrupt detected. Exiting...")
-            self.current_view.cleanup()
+            await self.current_view.cleanup()
             self.exit_status = 0
 
         except Exception as e:
             log_message(f"An error occurred in Main Loop Task: {e}", level=logging.ERROR)
-            self.current_view.cleanup()
+            await self.current_view.cleanup()
             self.exit_status = 1
 # -------------------------------------
 
-# Entry Point - Run the application
+# Entry Point - Initializes the application and runs the main loop
     async def run(self):
         try:
             display_splash_screen(self.stdscr)
@@ -200,3 +197,8 @@ class CLIApp:
 
             return self.exit_status
 # -------------------------------------
+
+# Helper Methods
+    def set_frame_rate(self, frame_rate):
+        frame_delay = 1 / frame_rate
+        return frame_delay
