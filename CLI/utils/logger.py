@@ -15,7 +15,7 @@ def initialize_logger():
 
     logging.basicConfig(
         filename=log_file_path,
-        level=logging.INFO,
+        level=logging.DEBUG,
         format="%(asctime)s [%(levelname)s] [%(funcName)s] %(message)s",
     )
 

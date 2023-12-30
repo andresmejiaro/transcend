@@ -2,8 +2,7 @@
 
 import curses
 
-def intialize_curses(stdscr):
-    # Initialize Curses
+def initialize_curses(stdscr):
     # Clear the screen
     stdscr.clear()
     # Hide the cursor
@@ -14,22 +13,20 @@ def intialize_curses(stdscr):
     stdscr.nodelay(True)
     # Don't echo keyboard input
     curses.noecho()
-    # Enable color mode    
-    curses.start_color()
-    # Use default colors
-    curses.use_default_colors()
     # Enable keypad mode
     stdscr.keypad(True)
 
 def cleanup_curses(stdscr):
+    # Make the cursor visible before cleanup
+    curses.curs_set(1)
     # Clean up the terminal settings
     curses.nocbreak()
+    # Make getch() blocking
+    stdscr.nodelay(False)
     # Enable echo
     curses.echo()
     # Disable keypad mode
     stdscr.keypad(False)
-    # Make the cursor visible before cleanup
-    curses.curs_set(1)
     # Clear the screen
     stdscr.clear()
     # Refresh the screen

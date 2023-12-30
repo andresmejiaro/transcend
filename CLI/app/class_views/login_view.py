@@ -25,7 +25,7 @@ class Login:
 
                 if key == curses.KEY_ENTER or key in [10, 13]:
                     return "enter"
-                elif key == 27:  # ESC key
+                elif key == curses.KEY_EXIT or key == 27:
                     return None
                 elif key == curses.KEY_BACKSPACE:
                     return "backspace"
@@ -97,7 +97,7 @@ class Login:
             while self.logged_in is False:
                 user_input = await self.get_user_input()
                 if user_input is None:
-                    return False
+                    return None
                 else:
                     self.process_input(user_input)
                     self.update_screen()

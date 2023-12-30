@@ -1,5 +1,27 @@
-2023-12-29 17:54:37,653 [ERROR] [log_message] Error logging in: object NoneType can't be used in 'await' expression
-2023-12-29 17:54:50,571 [ERROR] [log_message] Error logging in: object NoneType can't be used in 'await' expression
-2023-12-29 17:56:23,689 [INFO] [log_message] Entered Data: {'Username': 'splix', 'Password': '123'}
-2023-12-29 17:56:23,978 [INFO] [log_message] Login response: splix
-2023-12-29 17:56:24,023 [ERROR] [log_message] An error occurred in App Main object NoneType can't be used in 'await' expression
+2023-12-30 13:49:38,278 [INFO] [log_message] Entered Data: {'Username': 'splix', 'Password': '123'}
+2023-12-30 13:49:38,726 [INFO] [log_message] Login response: splix
+2023-12-30 13:49:38,795 [ERROR] [log_message] Websocket task error: expect bytes or str, got WSMessage
+2023-12-30 13:49:38,797 [ERROR] [log_message] An error occurred in App Main expect bytes or str, got WSMessage
+2023-12-30 13:49:56,056 [INFO] [log_message] Entered Data: {'Username': 'splix', 'Password': '123'}
+2023-12-30 13:49:56,474 [INFO] [log_message] Login response: splix
+2023-12-30 13:51:46,613 [WARNING] [_run_once] Executing <Task pending name='Task-1' coro=<main() running at /home/splix/Desktop/new-sprint/CLI/main.py:23> wait_for=<Future pending cb=[Task.task_wakeup()] created at /usr/lib/python3.10/asyncio/base_events.py:429> cb=[_run_until_complete_cb() at /usr/lib/python3.10/asyncio/base_events.py:184] created at /usr/lib/python3.10/asyncio/tasks.py:636> took 0.505 seconds
+2023-12-30 13:51:48,625 [INFO] [log_message] Entered Data: {'Username': 'splix', 'Password': '123'}
+2023-12-30 13:51:49,002 [INFO] [log_message] Login response: splix
+2023-12-30 13:51:49,005 [WARNING] [_run_once] Executing <Task pending name='Task-1' coro=<main() running at /home/splix/Desktop/new-sprint/CLI/main.py:23> wait_for=<Future pending cb=[Task.task_wakeup()] created at /usr/lib/python3.10/asyncio/base_events.py:429> cb=[_run_until_complete_cb() at /usr/lib/python3.10/asyncio/base_events.py:184] created at /usr/lib/python3.10/asyncio/tasks.py:636> took 0.381 seconds
+2023-12-30 13:54:31,331 [DEBUG] [log_message] Starting application
+2023-12-30 13:54:31,331 [DEBUG] [log_message] CLIApp initialized
+2023-12-30 13:54:31,836 [WARNING] [_run_once] Executing <Task pending name='Task-1' coro=<main() running at /home/splix/Desktop/new-sprint/CLI/main.py:23> wait_for=<Future pending cb=[Task.task_wakeup()] created at /usr/lib/python3.10/asyncio/base_events.py:429> cb=[_run_until_complete_cb() at /usr/lib/python3.10/asyncio/base_events.py:184] created at /usr/lib/python3.10/asyncio/tasks.py:636> took 0.505 seconds
+2023-12-30 13:54:35,169 [INFO] [log_message] Entered Data: {'Username': 'splix', 'Password': '123'}
+2023-12-30 13:54:35,173 [DEBUG] [_new_conn] Starting new HTTP connection (1): localhost:8000
+2023-12-30 13:54:35,581 [DEBUG] [_make_request] http://localhost:8000 "POST /api/user/login/ HTTP/1.1" 200 241
+2023-12-30 13:54:35,649 [DEBUG] [_make_request] http://localhost:8000 "GET /api/get_user_id/splix/ HTTP/1.1" 200 35
+2023-12-30 13:54:35,650 [INFO] [log_message] Login response: splix
+2023-12-30 13:54:35,650 [WARNING] [_run_once] Executing <Task pending name='Task-1' coro=<main() running at /home/splix/Desktop/new-sprint/CLI/main.py:23> wait_for=<Future pending cb=[Task.task_wakeup()] created at /usr/lib/python3.10/asyncio/base_events.py:429> cb=[_run_until_complete_cb() at /usr/lib/python3.10/asyncio/base_events.py:184] created at /usr/lib/python3.10/asyncio/tasks.py:636> took 0.481 seconds
+2023-12-30 13:54:35,693 [DEBUG] [_getaddrinfo_debug] Get address info localhost:8001, type=<SocketKind.SOCK_STREAM: 1>, flags=<AddressInfo.AI_ADDRCONFIG: 32>
+2023-12-30 13:54:35,693 [DEBUG] [_getaddrinfo_debug] Getting address info localhost:8001, type=<SocketKind.SOCK_STREAM: 1>, flags=<AddressInfo.AI_ADDRCONFIG: 32> took 0.121ms: [(<AddressFamily.AF_INET: 2>, <SocketKind.SOCK_STREAM: 1>, 6, '', ('127.0.0.1', 8001))]
+2023-12-30 13:54:35,696 [DEBUG] [create_connection] <asyncio.TransportSocket fd=8, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=6, laddr=('127.0.0.1', 45982), raddr=('127.0.0.1', 8001)> connected to 127.0.0.1:8001: (<_SelectorSocketTransport fd=8 read=polling write=<idle, bufsize=0>>, <aiohttp.client_proto.ResponseHandler object at 0x7f9f65c04820>)
+2023-12-30 13:54:35,729 [DEBUG] [log_message] Received message: {"type": "user_joined", "data": {"client_id": "1", "lobby_name": "lobby", "online_users": {"2": "fsalazar", "1": "splix"}}}
+2023-12-30 13:54:51,823 [DEBUG] [log_message] Received message: {"type": "user_left", "data": {"client_id": "2", "lobby_name": "lobby", "online_users": {"1": "splix"}}}
+2023-12-30 13:54:52,825 [DEBUG] [log_message] Received message: {"type": "user_joined", "data": {"client_id": "2", "lobby_name": "lobby", "online_users": {"1": "splix", "2": "fsalazar"}}}
+2023-12-30 13:55:03,085 [DEBUG] [_read_ready__on_eof] <_SelectorSocketTransport fd=8 read=polling write=<idle, bufsize=0>> received EOF
+2023-12-30 13:55:03,086 [DEBUG] [log_message] Websocket task completed

@@ -7,26 +7,39 @@ class BaseView(ABC):
         self.stdscr = stdscr
 
     @abstractmethod
-    def update_screen(self):
-        """Update the screen based on the view's logic."""
+    async def get_user_input(self):
+        """Get user input for the view."""
         pass
 
     @abstractmethod
-    def process_input(self):
+    async def process_inputs(self, user_input):
         """Process user input for the view."""
         pass
 
     @abstractmethod
-    def get_next_view(self):
+    async def get_send_message_queue(self):
+        """Get the send message queue for the view."""
+        pass
+
+    @abstractmethod
+    async def process_lobby_recv_message(self, message):
+        """Process a message received from the lobby."""
+        pass
+
+    @abstractmethod
+    async def update_screen(self):
+        """Update the screen based on the view's logic."""
+        pass
+
+    @abstractmethod
+    async def get_next_view(self):
         """
         Check conditions and return the next view to switch to.
         Return None if no switch is needed.
         """
         pass
 
-    async def run_async(self):
-        """
-        An optional asynchronous entry point for views.
-        Implement this method if a view needs to perform async operations.
-        """
+    @abstractmethod
+    async def cleanup(self):
+        """Cleanup the view."""
         pass
