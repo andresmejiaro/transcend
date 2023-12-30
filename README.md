@@ -26,14 +26,12 @@ user interface and real-time multiplayer online games!
 - [Arquitecture](#arquitecture)
 - [Installation](#installation)
 - [Web](#web)
-- [Chat](#chat)
 - [Game](#game)
-- [Multiplayer](#multiplayer)
+- [Chat](#chat)
 - [Tournament](#tournament)	
 - [AI](#ai)
 - [Database](#database)
 - [Concepts](#concepts)
-- [Contribution](#contribution)
 
 ## Description
 
@@ -111,8 +109,6 @@ Entails specific decisions regarding the server's implementation in a Dockerized
 
 sdgzdg
 
-## Chat
-Describe la implementación del chat en tiempo real, las tecnologías utilizadas (por ejemplo, WebSockets), cómo los usuarios se comunican entre sí, etc.
 
 ## Game
 
@@ -120,7 +116,9 @@ Describe la implementación del chat en tiempo real, las tecnologías utilizadas
 
 Detalla cómo se implementó el juego de Pong, los controles, la lógica del juego, etc.
 
-## Multiplayer
+
+## Chat
+Describe la implementación del chat en tiempo real, las tecnologías utilizadas (por ejemplo, WebSockets), cómo los usuarios se comunican entre sí, etc.## Multiplayer
 Explica cómo se gestionan las partidas multijugador, la sincronización entre jugadores, etc.
 
 ## Tournament
