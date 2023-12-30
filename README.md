@@ -114,6 +114,8 @@ Entails specific decisions regarding the server's implementation in a Dockerized
 4. Interact with friends, other users or the evil IA in real-time gameplay.
 
 ## Web
+
+![Game_menus](https://github.com/andresmejiaro/transcend/blob/readme_documentation/attach-files/MENUS.gif)
 sdgzdg
 
 ## Chat
