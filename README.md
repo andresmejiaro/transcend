@@ -137,7 +137,13 @@ Esquema de la base de datos: Describe las tablas (en caso de bases de datos rela
 Seguridad y gestión de datos: Si se implementan medidas de seguridad, como cifrado de contraseñas, y cómo se manejan los datos de los usuarios.
 
 ## Concepts
+
+???
+
 términos o tecnologías clave utilizadas en el proyecto.
+Metodologias y paginas de apoyo.
+
+
 asgiref==3.7.2
 
 asttokens==2.4.1
