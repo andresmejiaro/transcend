@@ -9,9 +9,10 @@ from utils.logger import log_message
 from utils.data_storage import load_data, load_texture, load_gif, save_data
 from utils.url_macros import LOBBY_URI_TEMPLATE
 from network.http_api import http_api
-from app.function_views.splash_view import display_splash_screen
 from app.class_views.login_view import Login
 from app.class_views.home_view import HomePage
+
+from app.class_views.splash_view import SplashView
 
 class CLIApp:
     def __init__(self, stdscr):
@@ -26,7 +27,6 @@ class CLIApp:
         self.keyboard_input_lock = asyncio.Lock()
         self.frame_rate = 10
         
-
 # Lobby Websocket Task - Connect to the lobby websocket and send and receive messages throught the duration of the application
     async def lobby_websocket_send_and_receive_task(self, stdscr, messages_receive_queue, messages_send_queue):
         async with aiohttp.ClientSession() as session:
@@ -85,7 +85,7 @@ class CLIApp:
             log_message(f"An error occurred in Keyboard Input Task: {e}", level=logging.ERROR)
             self.exit_status = 1
 
-# Login Method
+# Splash and Login Method
     async def login(self):
         try:
             login_view = Login(self.stdscr, self.api)
@@ -104,6 +104,15 @@ class CLIApp:
 
         except Exception as e:
             log_message(f"Error logging in: {e}", level=logging.ERROR)
+            return False
+
+    async def splash(self):
+        try:
+            splash_view = SplashView(self.stdscr)
+            await splash_view.display_splash_screen()
+
+        except Exception as e:
+            log_message(f"Error displaying splash screen: {e}", level=logging.ERROR)
             return False
 # -------------------------------------
 
@@ -144,8 +153,7 @@ class CLIApp:
 # Entry Point - Initializes the application and runs the main loop
     async def run(self):
         try:
-            display_splash_screen(self.stdscr)
-
+            await self.splash()
             await self.login()
 
             # Create the queues for sending and receiving messages to the lobby websocket

@@ -39,8 +39,8 @@ class Widget:
             row = self.rows // 2 - logo_height // 2
             col = self.cols // 2 - logo_width // 2
 
-            for frame in logo:
-                self.stdscr.addstr(row, col, frame)
+            for frame_line in logo:
+                self.stdscr.addstr(row, col, frame_line)
                 row += 1
 
             # Adjust the delay to achieve the desired frame rate
@@ -49,12 +49,12 @@ class Widget:
         except Exception as e:
             log_message(f"Error printing animated logo: {e}", level=logging.ERROR)
 
-    def print_message_under_logo(self, message):
+    def print_message_under_logo(self, message, logo):
         try:
-            message_row = self.rows // 2 + 2
+            message_row = self.rows // 2 + len(logo) + 2
             message_col = self.cols // 2 - len(message) // 2
 
-            self.stdscr.addstr(message_row, message_col, message, curses.color_pair(3) | curses.A_BOLD)
+            self.stdscr.addstr(message_row, message_col, message)
 
         except Exception as e:
             log_message(f"Error printing message under logo: {e}", level=logging.ERROR)
@@ -69,3 +69,19 @@ class Widget:
 
         except Exception as e:
             log_message(f"Error printing frame rate: {e}", level=logging.ERROR)
+
+    def print_input_prompt(self, prompt, input_string, index):
+        try:
+            prompt_row = self.rows // 2 + len(self.logo) + 2 + index  # Add spacing and index
+            prompt_col = self.cols // 2 - len(prompt) // 2
+
+            # Set the background color to highlight the current input field
+            if index == self.current_input_index:
+                self.stdscr.addstr(prompt_row, prompt_col, prompt, curses.A_REVERSE)
+                self.stdscr.addstr(prompt_row, prompt_col + len(prompt), input_string, curses.A_REVERSE)
+            else:
+                self.stdscr.addstr(prompt_row, prompt_col, prompt)
+                self.stdscr.addstr(prompt_row, prompt_col + len(prompt), input_string)
+
+        except Exception as e:
+            log_message(f"Error printing input prompt: {e}", level=logging.ERROR)

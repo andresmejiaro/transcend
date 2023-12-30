@@ -1,547 +1,143 @@
-2023-12-30 19:06:29,615 [INFO] [log_message] Keyboard interrupt detected. Exiting...
-2023-12-30 19:06:29,615 [WARNING] [_run_once] Executing <Task finished name='Task-1' coro=<main() done, defined at /home/splix/Desktop/new-sprint/CLI/main.py:13> result=0 created at /usr/lib/python3.10/asyncio/tasks.py:636> took 186.565 seconds
-2023-12-30 19:06:29,616 [DEBUG] [close] Close <_UnixSelectorEventLoop running=False closed=False debug=True>
-2023-12-30 19:06:52,613 [DEBUG] [log_message] Starting application
-2023-12-30 19:06:52,614 [DEBUG] [log_message] CLIApp initialized
-2023-12-30 19:06:54,022 [INFO] [log_message] Keyboard interrupt detected. Exiting...
-2023-12-30 19:06:54,022 [WARNING] [_run_once] Executing <Task finished name='Task-1' coro=<main() done, defined at /home/splix/Desktop/new-sprint/CLI/main.py:13> result=0 created at /usr/lib/python3.10/asyncio/tasks.py:636> took 1.409 seconds
-2023-12-30 19:06:54,023 [DEBUG] [close] Close <_UnixSelectorEventLoop running=False closed=False debug=True>
-2023-12-30 19:07:05,360 [DEBUG] [log_message] Starting application
-2023-12-30 19:07:05,360 [DEBUG] [log_message] CLIApp initialized
-2023-12-30 19:07:15,048 [INFO] [log_message] Keyboard interrupt detected. Exiting...
-2023-12-30 19:07:15,049 [WARNING] [_run_once] Executing <Task finished name='Task-1' coro=<main() done, defined at /home/splix/Desktop/new-sprint/CLI/main.py:13> result=0 created at /usr/lib/python3.10/asyncio/tasks.py:636> took 9.689 seconds
-2023-12-30 19:07:15,050 [DEBUG] [close] Close <_UnixSelectorEventLoop running=False closed=False debug=True>
-2023-12-30 19:07:17,282 [DEBUG] [log_message] Starting application
-2023-12-30 19:07:17,282 [DEBUG] [log_message] CLIApp initialized
-2023-12-30 19:08:29,965 [INFO] [log_message] Keyboard interrupt detected. Exiting...
-2023-12-30 19:08:29,966 [WARNING] [_run_once] Executing <Task finished name='Task-1' coro=<main() done, defined at /home/splix/Desktop/new-sprint/CLI/main.py:13> result=0 created at /usr/lib/python3.10/asyncio/tasks.py:636> took 72.684 seconds
-2023-12-30 19:08:29,966 [DEBUG] [close] Close <_UnixSelectorEventLoop running=False closed=False debug=True>
-2023-12-30 19:08:30,786 [DEBUG] [log_message] Starting application
-2023-12-30 19:08:30,786 [DEBUG] [log_message] CLIApp initialized
-2023-12-30 19:08:39,029 [INFO] [log_message] Keyboard interrupt detected. Exiting...
-2023-12-30 19:08:39,030 [WARNING] [_run_once] Executing <Task finished name='Task-1' coro=<main() done, defined at /home/splix/Desktop/new-sprint/CLI/main.py:13> result=0 created at /usr/lib/python3.10/asyncio/tasks.py:636> took 8.244 seconds
-2023-12-30 19:08:39,031 [DEBUG] [close] Close <_UnixSelectorEventLoop running=False closed=False debug=True>
-2023-12-30 19:09:02,203 [DEBUG] [log_message] Starting application
-2023-12-30 19:09:02,204 [DEBUG] [log_message] CLIApp initialized
-2023-12-30 19:09:03,085 [INFO] [log_message] Keyboard interrupt detected. Exiting...
-2023-12-30 19:09:03,086 [WARNING] [_run_once] Executing <Task finished name='Task-1' coro=<main() done, defined at /home/splix/Desktop/new-sprint/CLI/main.py:13> result=0 created at /usr/lib/python3.10/asyncio/tasks.py:636> took 0.883 seconds
-2023-12-30 19:09:03,087 [DEBUG] [close] Close <_UnixSelectorEventLoop running=False closed=False debug=True>
-2023-12-30 19:09:12,932 [DEBUG] [log_message] Starting application
-2023-12-30 19:09:12,932 [DEBUG] [log_message] CLIApp initialized
-2023-12-30 19:09:27,814 [INFO] [log_message] Keyboard interrupt detected. Exiting...
-2023-12-30 19:09:27,814 [WARNING] [_run_once] Executing <Task finished name='Task-1' coro=<main() done, defined at /home/splix/Desktop/new-sprint/CLI/main.py:13> result=0 created at /usr/lib/python3.10/asyncio/tasks.py:636> took 14.883 seconds
-2023-12-30 19:09:27,815 [DEBUG] [close] Close <_UnixSelectorEventLoop running=False closed=False debug=True>
-2023-12-30 19:10:05,157 [DEBUG] [log_message] Starting application
-2023-12-30 19:10:05,157 [DEBUG] [log_message] CLIApp initialized
-2023-12-30 19:10:06,548 [INFO] [log_message] Keyboard interrupt detected. Exiting...
-2023-12-30 19:10:06,549 [WARNING] [_run_once] Executing <Task finished name='Task-1' coro=<main() done, defined at /home/splix/Desktop/new-sprint/CLI/main.py:13> result=0 created at /usr/lib/python3.10/asyncio/tasks.py:636> took 1.392 seconds
-2023-12-30 19:10:06,550 [DEBUG] [close] Close <_UnixSelectorEventLoop running=False closed=False debug=True>
-2023-12-30 19:10:12,751 [DEBUG] [log_message] Starting application
-2023-12-30 19:10:12,751 [DEBUG] [log_message] CLIApp initialized
-2023-12-30 19:10:14,256 [ERROR] [log_message] An error occurred in App Main object NoneType can't be used in 'await' expression
-2023-12-30 19:10:14,256 [WARNING] [_run_once] Executing <Task finished name='Task-1' coro=<main() done, defined at /home/splix/Desktop/new-sprint/CLI/main.py:13> result=1 created at /usr/lib/python3.10/asyncio/tasks.py:636> took 1.505 seconds
-2023-12-30 19:10:14,257 [DEBUG] [close] Close <_UnixSelectorEventLoop running=False closed=False debug=True>
-2023-12-30 19:10:16,673 [DEBUG] [log_message] Starting application
-2023-12-30 19:10:16,673 [DEBUG] [log_message] CLIApp initialized
-2023-12-30 19:10:19,681 [ERROR] [log_message] An error occurred in App Main object NoneType can't be used in 'await' expression
-2023-12-30 19:10:19,682 [WARNING] [_run_once] Executing <Task finished name='Task-1' coro=<main() done, defined at /home/splix/Desktop/new-sprint/CLI/main.py:13> result=1 created at /usr/lib/python3.10/asyncio/tasks.py:636> took 3.009 seconds
-2023-12-30 19:10:19,683 [DEBUG] [close] Close <_UnixSelectorEventLoop running=False closed=False debug=True>
-2023-12-30 19:11:13,498 [DEBUG] [log_message] Starting application
-2023-12-30 19:11:13,498 [DEBUG] [log_message] CLIApp initialized
-2023-12-30 19:11:14,000 [WARNING] [_run_once] Executing <Task pending name='Task-1' coro=<main() running at /home/splix/Desktop/new-sprint/CLI/main.py:23> wait_for=<Future pending cb=[Task.task_wakeup()] created at /usr/lib/python3.10/asyncio/base_events.py:429> cb=[_run_until_complete_cb() at /usr/lib/python3.10/asyncio/base_events.py:184] created at /usr/lib/python3.10/asyncio/tasks.py:636> took 0.503 seconds
-2023-12-30 19:11:15,597 [DEBUG] [close] Close <_UnixSelectorEventLoop running=False closed=False debug=True>
-2023-12-30 19:11:15,598 [DEBUG] [log_message] Keyboard interrupt detected. Exiting...
-2023-12-30 19:11:16,563 [DEBUG] [log_message] Starting application
-2023-12-30 19:11:16,564 [DEBUG] [log_message] CLIApp initialized
-2023-12-30 19:11:19,579 [WARNING] [_run_once] Executing <Task pending name='Task-1' coro=<main() running at /home/splix/Desktop/new-sprint/CLI/main.py:23> wait_for=<Future pending cb=[Task.task_wakeup()] created at /usr/lib/python3.10/asyncio/base_events.py:429> cb=[_run_until_complete_cb() at /usr/lib/python3.10/asyncio/base_events.py:184] created at /usr/lib/python3.10/asyncio/tasks.py:636> took 3.016 seconds
-2023-12-30 19:11:21,038 [DEBUG] [close] Close <_UnixSelectorEventLoop running=False closed=False debug=True>
-2023-12-30 19:11:21,038 [DEBUG] [log_message] Keyboard interrupt detected. Exiting...
-2023-12-30 19:12:31,460 [DEBUG] [log_message] Starting application
-2023-12-30 19:12:31,460 [DEBUG] [log_message] CLIApp initialized
-2023-12-30 19:12:44,496 [WARNING] [_run_once] Executing <Task pending name='Task-1' coro=<main() running at /home/splix/Desktop/new-sprint/CLI/main.py:23> wait_for=<Future pending cb=[Task.task_wakeup()] created at /usr/lib/python3.10/asyncio/base_events.py:429> cb=[_run_until_complete_cb() at /usr/lib/python3.10/asyncio/base_events.py:184] created at /usr/lib/python3.10/asyncio/tasks.py:636> took 13.036 seconds
-2023-12-30 19:12:46,877 [DEBUG] [close] Close <_UnixSelectorEventLoop running=False closed=False debug=True>
-2023-12-30 19:12:46,877 [DEBUG] [log_message] Keyboard interrupt detected. Exiting...
-2023-12-30 19:12:48,301 [DEBUG] [log_message] Starting application
-2023-12-30 19:12:48,301 [DEBUG] [log_message] CLIApp initialized
-2023-12-30 19:12:53,796 [INFO] [log_message] Keyboard interrupt detected. Exiting...
-2023-12-30 19:12:53,796 [WARNING] [_run_once] Executing <Task finished name='Task-1' coro=<main() done, defined at /home/splix/Desktop/new-sprint/CLI/main.py:13> result=0 created at /usr/lib/python3.10/asyncio/tasks.py:636> took 5.495 seconds
-2023-12-30 19:12:53,797 [DEBUG] [close] Close <_UnixSelectorEventLoop running=False closed=False debug=True>
-2023-12-30 19:13:22,969 [DEBUG] [log_message] Starting application
-2023-12-30 19:13:22,970 [DEBUG] [log_message] CLIApp initialized
-2023-12-30 19:13:36,521 [WARNING] [_run_once] Executing <Task pending name='Task-1' coro=<main() running at /home/splix/Desktop/new-sprint/CLI/main.py:23> wait_for=<Future pending cb=[Task.task_wakeup()] created at /usr/lib/python3.10/asyncio/base_events.py:429> cb=[_run_until_complete_cb() at /usr/lib/python3.10/asyncio/base_events.py:184] created at /usr/lib/python3.10/asyncio/tasks.py:636> took 13.552 seconds
-2023-12-30 19:13:49,307 [INFO] [log_message] Entered Data: {'Username': 'splix', 'Password': '123'}
-2023-12-30 19:13:49,308 [DEBUG] [_new_conn] Starting new HTTP connection (1): localhost:8000
-2023-12-30 19:13:49,614 [DEBUG] [_make_request] http://localhost:8000 "POST /api/user/login/ HTTP/1.1" 200 241
-2023-12-30 19:13:49,686 [DEBUG] [_make_request] http://localhost:8000 "GET /api/get_user_id/splix/ HTTP/1.1" 200 35
-2023-12-30 19:13:49,686 [INFO] [log_message] Login response: splix
-2023-12-30 19:13:49,687 [WARNING] [_run_once] Executing <Task pending name='Task-1' coro=<main() running at /home/splix/Desktop/new-sprint/CLI/main.py:23> wait_for=<Future pending cb=[Task.task_wakeup()] created at /usr/lib/python3.10/asyncio/base_events.py:429> cb=[_run_until_complete_cb() at /usr/lib/python3.10/asyncio/base_events.py:184] created at /usr/lib/python3.10/asyncio/tasks.py:636> took 0.380 seconds
-2023-12-30 19:13:49,727 [DEBUG] [_getaddrinfo_debug] Get address info localhost:8001, type=<SocketKind.SOCK_STREAM: 1>, flags=<AddressInfo.AI_ADDRCONFIG: 32>
-2023-12-30 19:13:49,728 [DEBUG] [_getaddrinfo_debug] Getting address info localhost:8001, type=<SocketKind.SOCK_STREAM: 1>, flags=<AddressInfo.AI_ADDRCONFIG: 32> took 0.380ms: [(<AddressFamily.AF_INET: 2>, <SocketKind.SOCK_STREAM: 1>, 6, '', ('127.0.0.1', 8001))]
-2023-12-30 19:13:49,731 [DEBUG] [create_connection] <asyncio.TransportSocket fd=8, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=6, laddr=('127.0.0.1', 43278), raddr=('127.0.0.1', 8001)> connected to 127.0.0.1:8001: (<_SelectorSocketTransport fd=8 read=polling write=<idle, bufsize=0>>, <aiohttp.client_proto.ResponseHandler object at 0x7f09739fd5a0>)
-2023-12-30 19:13:49,761 [DEBUG] [log_message] Received message: {"type": "user_joined", "data": {"client_id": "1", "lobby_name": "lobby", "online_users": {"1": "splix"}}}
-2023-12-30 19:13:51,195 [DEBUG] [log_message] Main Loop Task cancelled
-2023-12-30 19:13:51,195 [DEBUG] [log_message] Websocket task cancelled
-2023-12-30 19:13:51,200 [DEBUG] [close] Close <_UnixSelectorEventLoop running=False closed=False debug=True>
-2023-12-30 19:13:51,200 [DEBUG] [log_message] Keyboard interrupt detected. Exiting...
-2023-12-30 19:15:04,589 [DEBUG] [log_message] Starting application
-2023-12-30 19:15:04,589 [DEBUG] [log_message] CLIApp initialized
-2023-12-30 19:15:20,026 [INFO] [log_message] Keyboard interrupt detected. Exiting...
-2023-12-30 19:15:20,027 [WARNING] [_run_once] Executing <Task finished name='Task-1' coro=<main() done, defined at /home/splix/Desktop/new-sprint/CLI/main.py:13> result=0 created at /usr/lib/python3.10/asyncio/tasks.py:636> took 15.438 seconds
-2023-12-30 19:15:20,028 [DEBUG] [close] Close <_UnixSelectorEventLoop running=False closed=False debug=True>
-2023-12-30 19:15:24,628 [DEBUG] [log_message] Starting application
-2023-12-30 19:15:24,628 [DEBUG] [log_message] CLIApp initialized
-2023-12-30 19:15:25,129 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:15:25,633 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:15:26,136 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:15:26,638 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:15:27,141 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:15:27,644 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:15:28,147 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:15:28,648 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:15:29,149 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:15:29,653 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:15:30,154 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:15:30,658 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:15:31,160 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:15:31,661 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:15:32,164 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:15:32,666 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:15:33,168 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:15:33,671 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:15:34,173 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:15:34,676 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:15:35,178 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:15:35,679 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:15:36,188 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:15:36,692 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:15:37,195 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:15:37,696 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:15:38,198 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:15:38,704 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:15:39,205 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:15:39,708 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:15:40,215 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:15:40,718 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:15:41,220 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:15:41,723 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:15:42,226 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:15:42,730 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:15:43,232 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:15:43,735 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:15:44,237 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:15:44,739 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:15:45,242 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:15:45,744 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:15:46,247 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:15:46,748 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:15:47,250 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:15:47,753 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:15:48,255 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:15:48,757 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:15:49,260 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:15:49,762 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:15:50,266 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:15:50,770 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:15:51,271 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:15:51,774 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:15:51,994 [INFO] [log_message] Keyboard interrupt detected. Exiting...
-2023-12-30 19:15:51,994 [WARNING] [_run_once] Executing <Task finished name='Task-1' coro=<main() done, defined at /home/splix/Desktop/new-sprint/CLI/main.py:13> result=0 created at /usr/lib/python3.10/asyncio/tasks.py:636> took 27.367 seconds
-2023-12-30 19:15:51,995 [DEBUG] [close] Close <_UnixSelectorEventLoop running=False closed=False debug=True>
-2023-12-30 19:15:53,159 [DEBUG] [log_message] Starting application
-2023-12-30 19:15:53,159 [DEBUG] [log_message] CLIApp initialized
-2023-12-30 19:15:53,662 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:15:54,166 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:15:54,668 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:15:55,175 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:15:55,677 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:15:56,180 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:15:56,683 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:15:57,187 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:15:57,690 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:15:58,195 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:15:58,696 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:15:59,198 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:15:59,701 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:16:00,203 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:16:00,705 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:16:01,208 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:16:01,710 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:16:02,212 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:16:02,715 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:16:03,218 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:16:03,720 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:16:04,222 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:16:04,725 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:16:05,228 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:16:05,730 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:16:06,232 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:16:06,734 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:16:07,236 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:16:07,738 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:16:08,241 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:16:08,744 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:16:09,245 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:16:09,747 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:16:09,751 [WARNING] [_run_once] Executing <Task pending name='Task-1' coro=<main() running at /home/splix/Desktop/new-sprint/CLI/main.py:23> wait_for=<Future pending cb=[Task.task_wakeup()] created at /usr/lib/python3.10/asyncio/base_events.py:429> cb=[_run_until_complete_cb() at /usr/lib/python3.10/asyncio/base_events.py:184] created at /usr/lib/python3.10/asyncio/tasks.py:636> took 16.592 seconds
-2023-12-30 19:16:10,587 [DEBUG] [close] Close <_UnixSelectorEventLoop running=False closed=False debug=True>
-2023-12-30 19:16:10,587 [DEBUG] [log_message] Keyboard interrupt detected. Exiting...
-2023-12-30 19:16:11,596 [DEBUG] [log_message] Starting application
-2023-12-30 19:16:11,596 [DEBUG] [log_message] CLIApp initialized
-2023-12-30 19:16:12,098 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:16:12,602 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:16:13,108 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:16:13,612 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:16:14,116 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:16:14,629 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:16:15,134 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:16:15,644 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:16:15,658 [WARNING] [_run_once] Executing <Task pending name='Task-1' coro=<main() running at /home/splix/Desktop/new-sprint/CLI/main.py:23> wait_for=<Future pending cb=[Task.task_wakeup()] created at /usr/lib/python3.10/asyncio/base_events.py:429> cb=[_run_until_complete_cb() at /usr/lib/python3.10/asyncio/base_events.py:184] created at /usr/lib/python3.10/asyncio/tasks.py:636> took 4.062 seconds
-2023-12-30 19:16:16,926 [ERROR] [log_message] Error updating screen: addwstr() returned ERR
-2023-12-30 19:17:16,315 [DEBUG] [close] Close <_UnixSelectorEventLoop running=False closed=False debug=True>
-2023-12-30 19:17:16,315 [DEBUG] [log_message] Keyboard interrupt detected. Exiting...
-2023-12-30 19:17:17,058 [DEBUG] [log_message] Starting application
-2023-12-30 19:17:17,058 [DEBUG] [log_message] CLIApp initialized
-2023-12-30 19:17:19,673 [INFO] [log_message] Keyboard interrupt detected. Exiting...
-2023-12-30 19:17:19,673 [WARNING] [_run_once] Executing <Task finished name='Task-1' coro=<main() done, defined at /home/splix/Desktop/new-sprint/CLI/main.py:13> result=0 created at /usr/lib/python3.10/asyncio/tasks.py:636> took 2.615 seconds
-2023-12-30 19:17:19,674 [DEBUG] [close] Close <_UnixSelectorEventLoop running=False closed=False debug=True>
-2023-12-30 19:17:24,900 [DEBUG] [log_message] Starting application
-2023-12-30 19:17:24,900 [DEBUG] [log_message] CLIApp initialized
-2023-12-30 19:17:25,402 [ERROR] [log_message] Error printing border around screen: add_wch() returned ERR
-2023-12-30 19:17:25,905 [ERROR] [log_message] Error printing border around screen: add_wch() returned ERR
-2023-12-30 19:17:26,408 [ERROR] [log_message] Error printing border around screen: add_wch() returned ERR
-2023-12-30 19:17:26,914 [ERROR] [log_message] Error printing border around screen: add_wch() returned ERR
-2023-12-30 19:17:27,417 [ERROR] [log_message] Error printing border around screen: add_wch() returned ERR
-2023-12-30 19:17:27,919 [ERROR] [log_message] Error printing border around screen: add_wch() returned ERR
-2023-12-30 19:17:28,423 [ERROR] [log_message] Error printing border around screen: add_wch() returned ERR
-2023-12-30 19:17:28,926 [ERROR] [log_message] Error printing border around screen: add_wch() returned ERR
-2023-12-30 19:17:29,429 [ERROR] [log_message] Error printing border around screen: add_wch() returned ERR
-2023-12-30 19:17:29,932 [ERROR] [log_message] Error printing border around screen: add_wch() returned ERR
-2023-12-30 19:17:30,435 [ERROR] [log_message] Error printing border around screen: add_wch() returned ERR
-2023-12-30 19:17:30,922 [INFO] [log_message] Keyboard interrupt detected. Exiting...
-2023-12-30 19:17:30,923 [WARNING] [_run_once] Executing <Task finished name='Task-1' coro=<main() done, defined at /home/splix/Desktop/new-sprint/CLI/main.py:13> result=0 created at /usr/lib/python3.10/asyncio/tasks.py:636> took 6.023 seconds
-2023-12-30 19:17:30,924 [DEBUG] [close] Close <_UnixSelectorEventLoop running=False closed=False debug=True>
-2023-12-30 19:17:48,690 [DEBUG] [log_message] Starting application
-2023-12-30 19:17:48,690 [DEBUG] [log_message] CLIApp initialized
-2023-12-30 19:17:49,193 [ERROR] [log_message] Error printing border around screen: add_wch() returned ERR
-2023-12-30 19:17:49,697 [ERROR] [log_message] Error printing border around screen: add_wch() returned ERR
-2023-12-30 19:17:50,201 [ERROR] [log_message] Error printing border around screen: add_wch() returned ERR
-2023-12-30 19:17:50,712 [ERROR] [log_message] Error printing border around screen: add_wch() returned ERR
-2023-12-30 19:17:51,215 [ERROR] [log_message] Error printing border around screen: add_wch() returned ERR
-2023-12-30 19:17:51,718 [ERROR] [log_message] Error printing border around screen: add_wch() returned ERR
-2023-12-30 19:17:52,203 [INFO] [log_message] Keyboard interrupt detected. Exiting...
-2023-12-30 19:17:52,204 [WARNING] [_run_once] Executing <Task finished name='Task-1' coro=<main() done, defined at /home/splix/Desktop/new-sprint/CLI/main.py:13> result=0 created at /usr/lib/python3.10/asyncio/tasks.py:636> took 3.514 seconds
-2023-12-30 19:17:52,205 [DEBUG] [close] Close <_UnixSelectorEventLoop running=False closed=False debug=True>
-2023-12-30 19:18:20,608 [DEBUG] [log_message] Starting application
-2023-12-30 19:18:20,608 [DEBUG] [log_message] CLIApp initialized
-2023-12-30 19:18:21,109 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:18:21,612 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:18:22,113 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:18:22,617 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:18:23,120 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:18:23,624 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:18:24,127 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:18:24,630 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:18:25,136 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:18:25,410 [INFO] [log_message] Keyboard interrupt detected. Exiting...
-2023-12-30 19:18:25,410 [WARNING] [_run_once] Executing <Task finished name='Task-1' coro=<main() done, defined at /home/splix/Desktop/new-sprint/CLI/main.py:13> result=0 created at /usr/lib/python3.10/asyncio/tasks.py:636> took 4.802 seconds
-2023-12-30 19:18:25,411 [DEBUG] [close] Close <_UnixSelectorEventLoop running=False closed=False debug=True>
-2023-12-30 19:18:49,204 [DEBUG] [log_message] Starting application
-2023-12-30 19:18:49,204 [DEBUG] [log_message] CLIApp initialized
-2023-12-30 19:18:49,706 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:18:50,207 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:18:50,709 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:18:51,211 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:18:51,714 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:18:52,215 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:18:52,717 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:18:53,219 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:18:53,715 [INFO] [log_message] Keyboard interrupt detected. Exiting...
-2023-12-30 19:18:53,717 [WARNING] [_run_once] Executing <Task finished name='Task-1' coro=<main() done, defined at /home/splix/Desktop/new-sprint/CLI/main.py:13> result=0 created at /usr/lib/python3.10/asyncio/tasks.py:636> took 4.513 seconds
-2023-12-30 19:18:53,719 [DEBUG] [close] Close <_UnixSelectorEventLoop running=False closed=False debug=True>
-2023-12-30 19:19:18,702 [DEBUG] [log_message] Starting application
-2023-12-30 19:19:18,702 [DEBUG] [log_message] CLIApp initialized
-2023-12-30 19:19:19,206 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:19:19,707 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:19:20,209 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:19:20,712 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:19:21,214 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:19:21,716 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:19:22,219 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:19:22,720 [ERROR] [log_message] Error printing border around screen: addwstr() returned ERR
-2023-12-30 19:19:22,955 [INFO] [log_message] Keyboard interrupt detected. Exiting...
-2023-12-30 19:19:22,956 [WARNING] [_run_once] Executing <Task finished name='Task-1' coro=<main() done, defined at /home/splix/Desktop/new-sprint/CLI/main.py:13> result=0 created at /usr/lib/python3.10/asyncio/tasks.py:636> took 4.255 seconds
-2023-12-30 19:19:22,959 [DEBUG] [close] Close <_UnixSelectorEventLoop running=False closed=False debug=True>
-2023-12-30 19:19:53,084 [DEBUG] [log_message] Starting application
-2023-12-30 19:19:53,084 [DEBUG] [log_message] CLIApp initialized
-2023-12-30 19:20:59,976 [INFO] [log_message] Keyboard interrupt detected. Exiting...
-2023-12-30 19:20:59,977 [WARNING] [_run_once] Executing <Task finished name='Task-1' coro=<main() done, defined at /home/splix/Desktop/new-sprint/CLI/main.py:13> result=0 created at /usr/lib/python3.10/asyncio/tasks.py:636> took 66.893 seconds
-2023-12-30 19:20:59,979 [DEBUG] [close] Close <_UnixSelectorEventLoop running=False closed=False debug=True>
-2023-12-30 19:21:01,009 [DEBUG] [log_message] Starting application
-2023-12-30 19:21:01,010 [DEBUG] [log_message] CLIApp initialized
-2023-12-30 19:21:33,976 [INFO] [log_message] Keyboard interrupt detected. Exiting...
-2023-12-30 19:21:33,976 [WARNING] [_run_once] Executing <Task finished name='Task-1' coro=<main() done, defined at /home/splix/Desktop/new-sprint/CLI/main.py:13> result=0 created at /usr/lib/python3.10/asyncio/tasks.py:636> took 32.967 seconds
-2023-12-30 19:21:33,977 [DEBUG] [close] Close <_UnixSelectorEventLoop running=False closed=False debug=True>
-2023-12-30 19:21:35,991 [DEBUG] [log_message] Starting application
-2023-12-30 19:21:35,992 [DEBUG] [log_message] CLIApp initialized
-2023-12-30 19:22:36,778 [INFO] [log_message] Keyboard interrupt detected. Exiting...
-2023-12-30 19:22:36,779 [WARNING] [_run_once] Executing <Task finished name='Task-1' coro=<main() done, defined at /home/splix/Desktop/new-sprint/CLI/main.py:13> result=0 created at /usr/lib/python3.10/asyncio/tasks.py:636> took 60.788 seconds
-2023-12-30 19:22:36,780 [DEBUG] [close] Close <_UnixSelectorEventLoop running=False closed=False debug=True>
-2023-12-30 19:22:38,875 [DEBUG] [log_message] Starting application
-2023-12-30 19:22:38,875 [DEBUG] [log_message] CLIApp initialized
-2023-12-30 19:22:45,399 [ERROR] [log_message] Error updating screen: addwstr() returned ERR
-2023-12-30 19:22:45,401 [WARNING] [_run_once] Executing <Task pending name='Task-1' coro=<main() running at /home/splix/Desktop/new-sprint/CLI/main.py:23> wait_for=<Future pending cb=[Task.task_wakeup()] created at /usr/lib/python3.10/asyncio/base_events.py:429> cb=[_run_until_complete_cb() at /usr/lib/python3.10/asyncio/base_events.py:184] created at /usr/lib/python3.10/asyncio/tasks.py:636> took 6.526 seconds
-2023-12-30 19:22:47,832 [DEBUG] [close] Close <_UnixSelectorEventLoop running=False closed=False debug=True>
-2023-12-30 19:22:47,832 [DEBUG] [log_message] Keyboard interrupt detected. Exiting...
-2023-12-30 19:22:49,024 [DEBUG] [log_message] Starting application
-2023-12-30 19:22:49,025 [DEBUG] [log_message] CLIApp initialized
-2023-12-30 19:23:01,640 [INFO] [log_message] Keyboard interrupt detected. Exiting...
-2023-12-30 19:23:01,643 [WARNING] [_run_once] Executing <Task finished name='Task-1' coro=<main() done, defined at /home/splix/Desktop/new-sprint/CLI/main.py:13> result=0 created at /usr/lib/python3.10/asyncio/tasks.py:636> took 12.619 seconds
-2023-12-30 19:23:01,644 [DEBUG] [close] Close <_UnixSelectorEventLoop running=False closed=False debug=True>
-2023-12-30 19:23:02,553 [DEBUG] [log_message] Starting application
-2023-12-30 19:23:02,554 [DEBUG] [log_message] CLIApp initialized
-2023-12-30 19:25:59,933 [INFO] [log_message] Keyboard interrupt detected. Exiting...
-2023-12-30 19:25:59,935 [WARNING] [_run_once] Executing <Task finished name='Task-1' coro=<main() done, defined at /home/splix/Desktop/new-sprint/CLI/main.py:13> result=0 created at /usr/lib/python3.10/asyncio/tasks.py:636> took 177.381 seconds
-2023-12-30 19:25:59,936 [DEBUG] [close] Close <_UnixSelectorEventLoop running=False closed=False debug=True>
-2023-12-30 19:27:54,627 [DEBUG] [log_message] Starting application
-2023-12-30 19:27:54,627 [DEBUG] [log_message] CLIApp initialized
-2023-12-30 19:27:54,627 [ERROR] [log_message] Error displaying splash screen: name 'logo_frames' is not defined
-2023-12-30 19:28:41,447 [DEBUG] [close] Close <_UnixSelectorEventLoop running=False closed=False debug=True>
-2023-12-30 19:28:41,447 [DEBUG] [log_message] Keyboard interrupt detected. Exiting...
-2023-12-30 19:28:43,440 [DEBUG] [log_message] Starting application
-2023-12-30 19:28:43,440 [DEBUG] [log_message] CLIApp initialized
-2023-12-30 19:28:43,441 [ERROR] [log_message] Error loading logo frames: [Errno 2] No such file or directory: '/home/splix/Desktop/new-sprint/CLI/app/function_views/textures'
-2023-12-30 19:28:43,441 [ERROR] [log_message] Error displaying splash screen: local variable 'current_logo_frame' referenced before assignment
-2023-12-30 19:29:39,227 [DEBUG] [close] Close <_UnixSelectorEventLoop running=False closed=False debug=True>
-2023-12-30 19:29:39,227 [DEBUG] [log_message] Keyboard interrupt detected. Exiting...
-2023-12-30 19:29:40,098 [DEBUG] [log_message] Starting application
-2023-12-30 19:29:40,098 [DEBUG] [log_message] CLIApp initialized
-2023-12-30 19:29:40,098 [ERROR] [log_message] Error loading logo frames: [Errno 2] No such file or directory: '/home/splix/Desktop/new-sprint/CLI/app/function_views/textures'
-2023-12-30 19:29:40,098 [ERROR] [log_message] Error displaying splash screen: list index out of range
-2023-12-30 19:30:33,405 [DEBUG] [close] Close <_UnixSelectorEventLoop running=False closed=False debug=True>
-2023-12-30 19:30:33,406 [DEBUG] [log_message] Keyboard interrupt detected. Exiting...
-2023-12-30 19:30:34,485 [DEBUG] [log_message] Starting application
-2023-12-30 19:30:34,485 [DEBUG] [log_message] CLIApp initialized
-2023-12-30 19:30:34,485 [ERROR] [log_message] Error loading logo frames: [Errno 2] No such file or directory: '/home/splix/Desktop/new-sprint/CLI/app/function_views/textures'
-2023-12-30 19:30:34,485 [ERROR] [log_message] Error displaying splash screen: 'NoneType' object is not subscriptable
-2023-12-30 19:31:21,980 [DEBUG] [close] Close <_UnixSelectorEventLoop running=False closed=False debug=True>
-2023-12-30 19:31:21,981 [DEBUG] [log_message] Keyboard interrupt detected. Exiting...
-2023-12-30 19:31:23,024 [DEBUG] [log_message] Starting application
-2023-12-30 19:31:23,024 [DEBUG] [log_message] CLIApp initialized
-2023-12-30 19:31:23,024 [ERROR] [log_message] Error loading logo frames: [Errno 2] No such file or directory: '/home/splix/Desktop/new-sprint/CLI/app/function_views/textures/textures'
-2023-12-30 19:31:23,024 [ERROR] [log_message] Error displaying splash screen: 'NoneType' object is not subscriptable
-2023-12-30 19:31:50,342 [DEBUG] [close] Close <_UnixSelectorEventLoop running=False closed=False debug=True>
-2023-12-30 19:31:50,342 [DEBUG] [log_message] Keyboard interrupt detected. Exiting...
-2023-12-30 19:31:51,464 [DEBUG] [log_message] Starting application
-2023-12-30 19:31:51,464 [DEBUG] [log_message] CLIApp initialized
-2023-12-30 19:31:51,464 [ERROR] [log_message] Error loading logo frames: [Errno 2] No such file or directory: '/home/splix/Desktop/new-sprint/CLI/app/function_views/textures/textures'
-2023-12-30 19:31:51,464 [ERROR] [log_message] Error displaying splash screen: 'NoneType' object is not subscriptable
-2023-12-30 19:31:51,464 [ERROR] [log_message] Error updating screen: object of type 'NoneType' has no len()
-2023-12-30 19:32:09,908 [DEBUG] [close] Close <_UnixSelectorEventLoop running=False closed=False debug=True>
-2023-12-30 19:32:09,908 [DEBUG] [log_message] Keyboard interrupt detected. Exiting...
-2023-12-30 19:32:11,225 [DEBUG] [log_message] Starting application
-2023-12-30 19:32:11,226 [DEBUG] [log_message] CLIApp initialized
-2023-12-30 19:32:11,226 [ERROR] [log_message] Error printing logo: object of type 'NoneType' has no len()
-2023-12-30 19:32:11,727 [ERROR] [log_message] Error printing logo: object of type 'NoneType' has no len()
-2023-12-30 19:32:12,228 [ERROR] [log_message] Error printing logo: object of type 'NoneType' has no len()
-2023-12-30 19:32:12,729 [ERROR] [log_message] Error printing logo: object of type 'NoneType' has no len()
-2023-12-30 19:32:13,231 [ERROR] [log_message] Error printing logo: object of type 'NoneType' has no len()
-2023-12-30 19:32:13,732 [ERROR] [log_message] Error printing logo: object of type 'NoneType' has no len()
-2023-12-30 19:32:14,233 [ERROR] [log_message] Error printing logo: object of type 'NoneType' has no len()
-2023-12-30 19:32:14,735 [ERROR] [log_message] Error printing logo: object of type 'NoneType' has no len()
-2023-12-30 19:32:15,235 [ERROR] [log_message] Error printing logo: object of type 'NoneType' has no len()
-2023-12-30 19:32:15,737 [ERROR] [log_message] Error printing logo: object of type 'NoneType' has no len()
-2023-12-30 19:32:16,238 [ERROR] [log_message] Error printing logo: object of type 'NoneType' has no len()
-2023-12-30 19:32:16,740 [ERROR] [log_message] Error printing logo: object of type 'NoneType' has no len()
-2023-12-30 19:32:17,241 [ERROR] [log_message] Error printing logo: object of type 'NoneType' has no len()
-2023-12-30 19:32:17,742 [ERROR] [log_message] Error printing logo: object of type 'NoneType' has no len()
-2023-12-30 19:32:18,243 [ERROR] [log_message] Error printing logo: object of type 'NoneType' has no len()
-2023-12-30 19:32:18,747 [ERROR] [log_message] Error printing logo: object of type 'NoneType' has no len()
-2023-12-30 19:32:19,248 [ERROR] [log_message] Error printing logo: object of type 'NoneType' has no len()
-2023-12-30 19:32:19,750 [ERROR] [log_message] Error printing logo: object of type 'NoneType' has no len()
-2023-12-30 19:32:38,481 [DEBUG] [log_message] Starting application
-2023-12-30 19:32:38,481 [DEBUG] [log_message] CLIApp initialized
-2023-12-30 19:32:38,481 [ERROR] [log_message] Error printing logo: object of type 'NoneType' has no len()
-2023-12-30 19:32:38,982 [ERROR] [log_message] Error printing logo: object of type 'NoneType' has no len()
-2023-12-30 19:32:39,483 [ERROR] [log_message] Error printing logo: object of type 'NoneType' has no len()
-2023-12-30 19:32:39,984 [ERROR] [log_message] Error printing logo: object of type 'NoneType' has no len()
-2023-12-30 19:32:40,485 [ERROR] [log_message] Error printing logo: object of type 'NoneType' has no len()
-2023-12-30 19:32:40,986 [ERROR] [log_message] Error printing logo: object of type 'NoneType' has no len()
-2023-12-30 19:32:41,487 [ERROR] [log_message] Error printing logo: object of type 'NoneType' has no len()
-2023-12-30 19:32:41,988 [ERROR] [log_message] Error printing logo: object of type 'NoneType' has no len()
-2023-12-30 19:32:42,489 [ERROR] [log_message] Error printing logo: object of type 'NoneType' has no len()
-2023-12-30 19:32:42,991 [ERROR] [log_message] Error printing logo: object of type 'NoneType' has no len()
-2023-12-30 19:32:43,492 [ERROR] [log_message] Error printing logo: object of type 'NoneType' has no len()
-2023-12-30 19:32:43,994 [ERROR] [log_message] Error printing logo: object of type 'NoneType' has no len()
-2023-12-30 19:32:44,495 [ERROR] [log_message] Error printing logo: object of type 'NoneType' has no len()
-2023-12-30 19:32:44,996 [ERROR] [log_message] Error printing logo: object of type 'NoneType' has no len()
-2023-12-30 19:32:45,498 [ERROR] [log_message] Error printing logo: object of type 'NoneType' has no len()
-2023-12-30 19:32:45,999 [ERROR] [log_message] Error printing logo: object of type 'NoneType' has no len()
-2023-12-30 19:32:46,500 [ERROR] [log_message] Error printing logo: object of type 'NoneType' has no len()
-2023-12-30 19:32:47,002 [ERROR] [log_message] Error printing logo: object of type 'NoneType' has no len()
-2023-12-30 19:32:47,503 [ERROR] [log_message] Error printing logo: object of type 'NoneType' has no len()
-2023-12-30 19:32:48,005 [ERROR] [log_message] Error printing logo: object of type 'NoneType' has no len()
-2023-12-30 19:32:48,506 [ERROR] [log_message] Error printing logo: object of type 'NoneType' has no len()
-2023-12-30 19:32:49,007 [ERROR] [log_message] Error printing logo: object of type 'NoneType' has no len()
-2023-12-30 19:32:49,508 [ERROR] [log_message] Error printing logo: object of type 'NoneType' has no len()
-2023-12-30 19:32:50,009 [ERROR] [log_message] Error printing logo: object of type 'NoneType' has no len()
-2023-12-30 19:32:50,512 [ERROR] [log_message] Error printing logo: object of type 'NoneType' has no len()
-2023-12-30 19:32:51,013 [ERROR] [log_message] Error printing logo: object of type 'NoneType' has no len()
-2023-12-30 19:32:51,514 [ERROR] [log_message] Error printing logo: object of type 'NoneType' has no len()
-2023-12-30 19:32:52,015 [ERROR] [log_message] Error printing logo: object of type 'NoneType' has no len()
-2023-12-30 19:32:52,516 [ERROR] [log_message] Error printing logo: object of type 'NoneType' has no len()
-2023-12-30 19:32:53,017 [ERROR] [log_message] Error printing logo: object of type 'NoneType' has no len()
-2023-12-30 19:32:53,523 [ERROR] [log_message] Error printing logo: object of type 'NoneType' has no len()
-2023-12-30 19:32:54,024 [ERROR] [log_message] Error printing logo: object of type 'NoneType' has no len()
-2023-12-30 19:32:54,525 [ERROR] [log_message] Error printing logo: object of type 'NoneType' has no len()
-2023-12-30 19:32:55,026 [ERROR] [log_message] Error printing logo: object of type 'NoneType' has no len()
-2023-12-30 19:32:55,534 [ERROR] [log_message] Error printing logo: object of type 'NoneType' has no len()
-2023-12-30 19:32:56,036 [ERROR] [log_message] Error printing logo: object of type 'NoneType' has no len()
-2023-12-30 19:32:56,537 [ERROR] [log_message] Error printing logo: object of type 'NoneType' has no len()
-2023-12-30 19:32:57,038 [ERROR] [log_message] Error printing logo: object of type 'NoneType' has no len()
-2023-12-30 19:32:57,539 [ERROR] [log_message] Error printing logo: object of type 'NoneType' has no len()
-2023-12-30 19:32:58,041 [ERROR] [log_message] Error printing logo: object of type 'NoneType' has no len()
-2023-12-30 19:32:58,548 [ERROR] [log_message] Error printing logo: object of type 'NoneType' has no len()
-2023-12-30 19:32:59,050 [ERROR] [log_message] Error printing logo: object of type 'NoneType' has no len()
-2023-12-30 19:32:59,552 [ERROR] [log_message] Error printing logo: object of type 'NoneType' has no len()
-2023-12-30 19:33:00,053 [ERROR] [log_message] Error printing logo: object of type 'NoneType' has no len()
-2023-12-30 19:33:00,554 [ERROR] [log_message] Error printing logo: object of type 'NoneType' has no len()
-2023-12-30 19:33:01,055 [ERROR] [log_message] Error printing logo: object of type 'NoneType' has no len()
-2023-12-30 19:33:01,230 [INFO] [log_message] Keyboard interrupt detected. Exiting...
-2023-12-30 19:33:01,230 [WARNING] [_run_once] Executing <Task finished name='Task-1' coro=<main() done, defined at /home/splix/Desktop/new-sprint/CLI/main.py:13> result=0 created at /usr/lib/python3.10/asyncio/tasks.py:636> took 22.749 seconds
-2023-12-30 19:33:01,231 [DEBUG] [close] Close <_UnixSelectorEventLoop running=False closed=False debug=True>
-2023-12-30 19:33:02,634 [DEBUG] [log_message] Starting application
-2023-12-30 19:33:02,635 [DEBUG] [log_message] CLIApp initialized
-2023-12-30 19:33:33,775 [INFO] [log_message] Keyboard interrupt detected. Exiting...
-2023-12-30 19:33:33,776 [WARNING] [_run_once] Executing <Task finished name='Task-1' coro=<main() done, defined at /home/splix/Desktop/new-sprint/CLI/main.py:13> result=0 created at /usr/lib/python3.10/asyncio/tasks.py:636> took 31.142 seconds
-2023-12-30 19:33:33,777 [DEBUG] [close] Close <_UnixSelectorEventLoop running=False closed=False debug=True>
-2023-12-30 19:33:35,719 [DEBUG] [log_message] Starting application
-2023-12-30 19:33:35,720 [DEBUG] [log_message] CLIApp initialized
-2023-12-30 19:33:45,761 [WARNING] [_run_once] Executing <Task pending name='Task-1' coro=<main() running at /home/splix/Desktop/new-sprint/CLI/main.py:23> wait_for=<Future pending cb=[Task.task_wakeup()] created at /usr/lib/python3.10/asyncio/base_events.py:429> cb=[_run_until_complete_cb() at /usr/lib/python3.10/asyncio/base_events.py:184] created at /usr/lib/python3.10/asyncio/tasks.py:636> took 10.041 seconds
-2023-12-30 19:33:47,515 [DEBUG] [close] Close <_UnixSelectorEventLoop running=False closed=False debug=True>
-2023-12-30 19:33:47,516 [DEBUG] [log_message] Keyboard interrupt detected. Exiting...
-2023-12-30 19:33:48,309 [DEBUG] [log_message] Starting application
-2023-12-30 19:33:48,309 [DEBUG] [log_message] CLIApp initialized
-2023-12-30 19:34:08,411 [INFO] [log_message] Keyboard interrupt detected. Exiting...
-2023-12-30 19:34:08,412 [WARNING] [_run_once] Executing <Task finished name='Task-1' coro=<main() done, defined at /home/splix/Desktop/new-sprint/CLI/main.py:13> result=0 created at /usr/lib/python3.10/asyncio/tasks.py:636> took 20.103 seconds
-2023-12-30 19:34:08,412 [DEBUG] [close] Close <_UnixSelectorEventLoop running=False closed=False debug=True>
-2023-12-30 19:34:28,037 [DEBUG] [log_message] Starting application
-2023-12-30 19:34:28,038 [DEBUG] [log_message] CLIApp initialized
-2023-12-30 19:34:34,561 [ERROR] [log_message] Error updating screen: addwstr() returned ERR
-2023-12-30 19:34:34,563 [WARNING] [_run_once] Executing <Task pending name='Task-1' coro=<main() running at /home/splix/Desktop/new-sprint/CLI/main.py:23> wait_for=<Future pending cb=[Task.task_wakeup()] created at /usr/lib/python3.10/asyncio/base_events.py:429> cb=[_run_until_complete_cb() at /usr/lib/python3.10/asyncio/base_events.py:184] created at /usr/lib/python3.10/asyncio/tasks.py:636> took 6.526 seconds
-2023-12-30 19:34:35,278 [ERROR] [log_message] Error updating screen: addwstr() returned ERR
-2023-12-30 19:34:45,017 [DEBUG] [close] Close <_UnixSelectorEventLoop running=False closed=False debug=True>
-2023-12-30 19:34:45,018 [DEBUG] [log_message] Keyboard interrupt detected. Exiting...
-2023-12-30 19:34:47,276 [DEBUG] [log_message] Starting application
-2023-12-30 19:34:47,276 [DEBUG] [log_message] CLIApp initialized
-2023-12-30 19:35:01,696 [INFO] [log_message] Keyboard interrupt detected. Exiting...
-2023-12-30 19:35:01,697 [WARNING] [_run_once] Executing <Task finished name='Task-1' coro=<main() done, defined at /home/splix/Desktop/new-sprint/CLI/main.py:13> result=0 created at /usr/lib/python3.10/asyncio/tasks.py:636> took 14.422 seconds
-2023-12-30 19:35:01,699 [DEBUG] [close] Close <_UnixSelectorEventLoop running=False closed=False debug=True>
-2023-12-30 19:35:02,627 [DEBUG] [log_message] Starting application
-2023-12-30 19:35:02,628 [DEBUG] [log_message] CLIApp initialized
-2023-12-30 19:35:05,637 [ERROR] [log_message] Error updating screen: addwstr() returned ERR
-2023-12-30 19:35:05,640 [WARNING] [_run_once] Executing <Task pending name='Task-1' coro=<main() running at /home/splix/Desktop/new-sprint/CLI/main.py:23> wait_for=<Future pending cb=[Task.task_wakeup()] created at /usr/lib/python3.10/asyncio/base_events.py:429> cb=[_run_until_complete_cb() at /usr/lib/python3.10/asyncio/base_events.py:184] created at /usr/lib/python3.10/asyncio/tasks.py:636> took 3.013 seconds
-2023-12-30 19:35:05,743 [ERROR] [log_message] Error updating screen: addwstr() returned ERR
-2023-12-30 19:35:05,786 [ERROR] [log_message] Error updating screen: addwstr() returned ERR
-2023-12-30 19:35:05,831 [ERROR] [log_message] Error updating screen: addwstr() returned ERR
-2023-12-30 19:35:05,970 [ERROR] [log_message] Error updating screen: addwstr() returned ERR
-2023-12-30 19:35:06,111 [ERROR] [log_message] Error updating screen: addwstr() returned ERR
-2023-12-30 19:35:22,257 [ERROR] [log_message] Error updating screen: addwstr() returned ERR
-2023-12-30 19:37:13,768 [DEBUG] [close] Close <_UnixSelectorEventLoop running=False closed=False debug=True>
-2023-12-30 19:37:13,768 [DEBUG] [log_message] Keyboard interrupt detected. Exiting...
-2023-12-30 19:37:15,289 [DEBUG] [log_message] Starting application
-2023-12-30 19:37:15,289 [DEBUG] [log_message] CLIApp initialized
-2023-12-30 19:37:17,298 [WARNING] [_run_once] Executing <Task pending name='Task-1' coro=<main() running at /home/splix/Desktop/new-sprint/CLI/main.py:23> wait_for=<Future pending cb=[Task.task_wakeup()] created at /usr/lib/python3.10/asyncio/base_events.py:429> cb=[_run_until_complete_cb() at /usr/lib/python3.10/asyncio/base_events.py:184] created at /usr/lib/python3.10/asyncio/tasks.py:636> took 2.009 seconds
-2023-12-30 19:37:20,592 [DEBUG] [close] Close <_UnixSelectorEventLoop running=False closed=False debug=True>
-2023-12-30 19:37:20,593 [DEBUG] [log_message] Keyboard interrupt detected. Exiting...
-2023-12-30 19:37:27,864 [DEBUG] [log_message] Starting application
-2023-12-30 19:37:27,864 [DEBUG] [log_message] CLIApp initialized
-2023-12-30 19:37:38,151 [INFO] [log_message] Keyboard interrupt detected. Exiting...
-2023-12-30 19:37:38,152 [WARNING] [_run_once] Executing <Task finished name='Task-1' coro=<main() done, defined at /home/splix/Desktop/new-sprint/CLI/main.py:13> result=0 created at /usr/lib/python3.10/asyncio/tasks.py:636> took 10.288 seconds
-2023-12-30 19:37:38,153 [DEBUG] [close] Close <_UnixSelectorEventLoop running=False closed=False debug=True>
-2023-12-30 19:37:39,612 [DEBUG] [log_message] Starting application
-2023-12-30 19:37:39,612 [DEBUG] [log_message] CLIApp initialized
-2023-12-30 19:37:40,740 [INFO] [log_message] Keyboard interrupt detected. Exiting...
-2023-12-30 19:37:40,741 [WARNING] [_run_once] Executing <Task finished name='Task-1' coro=<main() done, defined at /home/splix/Desktop/new-sprint/CLI/main.py:13> result=0 created at /usr/lib/python3.10/asyncio/tasks.py:636> took 1.129 seconds
-2023-12-30 19:37:40,743 [DEBUG] [close] Close <_UnixSelectorEventLoop running=False closed=False debug=True>
-2023-12-30 19:37:44,887 [DEBUG] [log_message] Starting application
-2023-12-30 19:37:44,887 [DEBUG] [log_message] CLIApp initialized
-2023-12-30 19:37:46,557 [INFO] [log_message] Keyboard interrupt detected. Exiting...
-2023-12-30 19:37:46,558 [WARNING] [_run_once] Executing <Task finished name='Task-1' coro=<main() done, defined at /home/splix/Desktop/new-sprint/CLI/main.py:13> result=0 created at /usr/lib/python3.10/asyncio/tasks.py:636> took 1.671 seconds
-2023-12-30 19:37:46,560 [DEBUG] [close] Close <_UnixSelectorEventLoop running=False closed=False debug=True>
-2023-12-30 19:38:05,127 [DEBUG] [log_message] Starting application
-2023-12-30 19:38:05,127 [DEBUG] [log_message] CLIApp initialized
-2023-12-30 19:38:06,142 [INFO] [log_message] Keyboard interrupt detected. Exiting...
-2023-12-30 19:38:06,143 [WARNING] [_run_once] Executing <Task finished name='Task-1' coro=<main() done, defined at /home/splix/Desktop/new-sprint/CLI/main.py:13> result=0 created at /usr/lib/python3.10/asyncio/tasks.py:636> took 1.016 seconds
-2023-12-30 19:38:06,144 [DEBUG] [close] Close <_UnixSelectorEventLoop running=False closed=False debug=True>
-2023-12-30 19:38:36,590 [DEBUG] [log_message] Starting application
-2023-12-30 19:38:36,591 [DEBUG] [log_message] CLIApp initialized
-2023-12-30 19:38:44,630 [INFO] [log_message] Keyboard interrupt detected. Exiting...
-2023-12-30 19:38:44,631 [WARNING] [_run_once] Executing <Task finished name='Task-1' coro=<main() done, defined at /home/splix/Desktop/new-sprint/CLI/main.py:13> result=0 created at /usr/lib/python3.10/asyncio/tasks.py:636> took 8.040 seconds
-2023-12-30 19:38:44,631 [DEBUG] [close] Close <_UnixSelectorEventLoop running=False closed=False debug=True>
-2023-12-30 19:38:46,080 [DEBUG] [log_message] Starting application
-2023-12-30 19:38:46,081 [DEBUG] [log_message] CLIApp initialized
-2023-12-30 19:38:46,806 [INFO] [log_message] Keyboard interrupt detected. Exiting...
-2023-12-30 19:38:46,807 [WARNING] [_run_once] Executing <Task finished name='Task-1' coro=<main() done, defined at /home/splix/Desktop/new-sprint/CLI/main.py:13> result=0 created at /usr/lib/python3.10/asyncio/tasks.py:636> took 0.727 seconds
-2023-12-30 19:38:46,808 [DEBUG] [close] Close <_UnixSelectorEventLoop running=False closed=False debug=True>
-2023-12-30 19:38:50,600 [DEBUG] [log_message] Starting application
-2023-12-30 19:38:50,601 [DEBUG] [log_message] CLIApp initialized
-2023-12-30 19:38:53,113 [WARNING] [_run_once] Executing <Task pending name='Task-1' coro=<main() running at /home/splix/Desktop/new-sprint/CLI/main.py:23> wait_for=<Future pending cb=[Task.task_wakeup()] created at /usr/lib/python3.10/asyncio/base_events.py:429> cb=[_run_until_complete_cb() at /usr/lib/python3.10/asyncio/base_events.py:184] created at /usr/lib/python3.10/asyncio/tasks.py:636> took 2.513 seconds
-2023-12-30 19:38:54,927 [DEBUG] [close] Close <_UnixSelectorEventLoop running=False closed=False debug=True>
-2023-12-30 19:38:54,928 [DEBUG] [log_message] Keyboard interrupt detected. Exiting...
-2023-12-30 19:38:56,904 [DEBUG] [log_message] Starting application
-2023-12-30 19:38:56,905 [DEBUG] [log_message] CLIApp initialized
-2023-12-30 19:39:01,919 [ERROR] [log_message] Error updating screen: addwstr() returned ERR
-2023-12-30 19:39:01,921 [WARNING] [_run_once] Executing <Task pending name='Task-1' coro=<main() running at /home/splix/Desktop/new-sprint/CLI/main.py:23> wait_for=<Future pending cb=[Task.task_wakeup()] created at /usr/lib/python3.10/asyncio/base_events.py:429> cb=[_run_until_complete_cb() at /usr/lib/python3.10/asyncio/base_events.py:184] created at /usr/lib/python3.10/asyncio/tasks.py:636> took 5.016 seconds
-2023-12-30 19:39:02,023 [ERROR] [log_message] Error updating screen: addwstr() returned ERR
-2023-12-30 19:39:02,059 [ERROR] [log_message] Error updating screen: addwstr() returned ERR
-2023-12-30 19:39:04,225 [ERROR] [log_message] Error updating screen: addwstr() returned ERR
-2023-12-30 19:39:04,879 [DEBUG] [close] Close <_UnixSelectorEventLoop running=False closed=False debug=True>
-2023-12-30 19:39:04,880 [DEBUG] [log_message] Keyboard interrupt detected. Exiting...
-2023-12-30 19:39:05,890 [DEBUG] [log_message] Starting application
-2023-12-30 19:39:05,891 [DEBUG] [log_message] CLIApp initialized
-2023-12-30 19:39:47,246 [INFO] [log_message] Keyboard interrupt detected. Exiting...
-2023-12-30 19:39:47,246 [WARNING] [_run_once] Executing <Task finished name='Task-1' coro=<main() done, defined at /home/splix/Desktop/new-sprint/CLI/main.py:13> result=0 created at /usr/lib/python3.10/asyncio/tasks.py:636> took 41.356 seconds
-2023-12-30 19:39:47,247 [DEBUG] [close] Close <_UnixSelectorEventLoop running=False closed=False debug=True>
-2023-12-30 19:39:48,353 [DEBUG] [log_message] Starting application
-2023-12-30 19:39:48,353 [DEBUG] [log_message] CLIApp initialized
-2023-12-30 19:40:06,380 [INFO] [log_message] Keyboard interrupt detected. Exiting...
-2023-12-30 19:40:06,380 [WARNING] [_run_once] Executing <Task finished name='Task-1' coro=<main() done, defined at /home/splix/Desktop/new-sprint/CLI/main.py:13> result=0 created at /usr/lib/python3.10/asyncio/tasks.py:636> took 18.028 seconds
-2023-12-30 19:40:06,381 [DEBUG] [close] Close <_UnixSelectorEventLoop running=False closed=False debug=True>
-2023-12-30 19:40:07,311 [DEBUG] [log_message] Starting application
-2023-12-30 19:40:07,311 [DEBUG] [log_message] CLIApp initialized
-2023-12-30 19:40:11,940 [WARNING] [_run_once] Executing <Task pending name='Task-1' coro=<main() running at /home/splix/Desktop/new-sprint/CLI/main.py:23> wait_for=<Future pending cb=[Task.task_wakeup()] created at /usr/lib/python3.10/asyncio/base_events.py:429> cb=[_run_until_complete_cb() at /usr/lib/python3.10/asyncio/base_events.py:184] created at /usr/lib/python3.10/asyncio/tasks.py:636> took 4.630 seconds
-2023-12-30 19:40:14,266 [ERROR] [log_message] Error updating screen: addwstr() returned ERR
-2023-12-30 19:40:14,302 [ERROR] [log_message] Error updating screen: addwstr() returned ERR
-2023-12-30 19:40:14,339 [ERROR] [log_message] Error updating screen: addwstr() returned ERR
-2023-12-30 19:40:14,477 [ERROR] [log_message] Error updating screen: addwstr() returned ERR
-2023-12-30 19:40:14,513 [ERROR] [log_message] Error updating screen: addwstr() returned ERR
-2023-12-30 19:40:15,047 [DEBUG] [close] Close <_UnixSelectorEventLoop running=False closed=False debug=True>
-2023-12-30 19:40:15,048 [DEBUG] [log_message] Keyboard interrupt detected. Exiting...
-2023-12-30 19:40:16,247 [DEBUG] [log_message] Starting application
-2023-12-30 19:40:16,248 [DEBUG] [log_message] CLIApp initialized
-2023-12-30 19:40:21,833 [WARNING] [_run_once] Executing <Task pending name='Task-1' coro=<main() running at /home/splix/Desktop/new-sprint/CLI/main.py:23> wait_for=<Future pending cb=[Task.task_wakeup()] created at /usr/lib/python3.10/asyncio/base_events.py:429> cb=[_run_until_complete_cb() at /usr/lib/python3.10/asyncio/base_events.py:184] created at /usr/lib/python3.10/asyncio/tasks.py:636> took 5.585 seconds
-2023-12-30 19:40:22,903 [DEBUG] [close] Close <_UnixSelectorEventLoop running=False closed=False debug=True>
-2023-12-30 19:40:22,903 [DEBUG] [log_message] Keyboard interrupt detected. Exiting...
-2023-12-30 19:40:24,075 [DEBUG] [log_message] Starting application
-2023-12-30 19:40:24,075 [DEBUG] [log_message] CLIApp initialized
-2023-12-30 19:40:50,253 [INFO] [log_message] Keyboard interrupt detected. Exiting...
-2023-12-30 19:40:50,254 [WARNING] [_run_once] Executing <Task finished name='Task-1' coro=<main() done, defined at /home/splix/Desktop/new-sprint/CLI/main.py:13> result=0 created at /usr/lib/python3.10/asyncio/tasks.py:636> took 26.179 seconds
-2023-12-30 19:40:50,255 [DEBUG] [close] Close <_UnixSelectorEventLoop running=False closed=False debug=True>
-2023-12-30 19:40:51,134 [DEBUG] [log_message] Starting application
-2023-12-30 19:40:51,134 [DEBUG] [log_message] CLIApp initialized
-2023-12-30 19:40:56,006 [INFO] [log_message] Keyboard interrupt detected. Exiting...
-2023-12-30 19:40:56,008 [WARNING] [_run_once] Executing <Task finished name='Task-1' coro=<main() done, defined at /home/splix/Desktop/new-sprint/CLI/main.py:13> result=0 created at /usr/lib/python3.10/asyncio/tasks.py:636> took 4.874 seconds
-2023-12-30 19:40:56,009 [DEBUG] [close] Close <_UnixSelectorEventLoop running=False closed=False debug=True>
-2023-12-30 19:40:56,802 [DEBUG] [log_message] Starting application
-2023-12-30 19:40:56,803 [DEBUG] [log_message] CLIApp initialized
-2023-12-30 19:41:05,830 [WARNING] [_run_once] Executing <Task pending name='Task-1' coro=<main() running at /home/splix/Desktop/new-sprint/CLI/main.py:23> wait_for=<Future pending cb=[Task.task_wakeup()] created at /usr/lib/python3.10/asyncio/base_events.py:429> cb=[_run_until_complete_cb() at /usr/lib/python3.10/asyncio/base_events.py:184] created at /usr/lib/python3.10/asyncio/tasks.py:636> took 9.028 seconds
-2023-12-30 19:41:43,515 [DEBUG] [close] Close <_UnixSelectorEventLoop running=False closed=False debug=True>
-2023-12-30 19:41:43,516 [DEBUG] [log_message] Keyboard interrupt detected. Exiting...
-2023-12-30 19:49:47,012 [DEBUG] [log_message] Starting application
-2023-12-30 19:49:47,012 [DEBUG] [log_message] CLIApp initialized
-2023-12-30 19:49:47,012 [ERROR] [log_message] Error displaying splash screen: print_animated_logo() missing 3 required positional arguments: 'max_y', 'max_x', and 'logo'
-2023-12-30 19:49:48,433 [INFO] [log_message] Keyboard interrupt detected. Exiting...
-2023-12-30 19:49:48,434 [DEBUG] [close] Close <_UnixSelectorEventLoop running=False closed=False debug=True>
-2023-12-30 19:57:05,752 [DEBUG] [log_message] Starting application
-2023-12-30 19:57:05,753 [DEBUG] [log_message] CLIApp initialized
-2023-12-30 19:57:08,765 [WARNING] [_run_once] Executing <Task pending name='Task-1' coro=<main() running at /home/splix/Desktop/new-sprint/CLI/main.py:23> wait_for=<Future pending cb=[Task.task_wakeup()] created at /usr/lib/python3.10/asyncio/base_events.py:429> cb=[_run_until_complete_cb() at /usr/lib/python3.10/asyncio/base_events.py:184] created at /usr/lib/python3.10/asyncio/tasks.py:636> took 3.013 seconds
+2023-12-30 20:10:52,105 [DEBUG] [log_message] Starting application
+2023-12-30 20:10:52,106 [DEBUG] [log_message] CLIApp initialized
+2023-12-30 20:10:52,106 [ERROR] [log_message] Error printing message under logo: addwstr() returned ERR
+2023-12-30 20:10:53,107 [ERROR] [log_message] Error printing message under logo: addwstr() returned ERR
+2023-12-30 20:10:54,108 [ERROR] [log_message] Error printing message under logo: addwstr() returned ERR
+2023-12-30 20:10:55,110 [ERROR] [log_message] Error printing message under logo: addwstr() returned ERR
+2023-12-30 20:10:55,845 [INFO] [log_message] Keyboard interrupt detected. Exiting...
+2023-12-30 20:10:55,845 [WARNING] [_run_once] Executing <Task finished name='Task-1' coro=<main() done, defined at /home/splix/Desktop/new-sprint/CLI/main.py:13> result=0 created at /usr/lib/python3.10/asyncio/tasks.py:636> took 3.740 seconds
+2023-12-30 20:10:55,846 [DEBUG] [close] Close <_UnixSelectorEventLoop running=False closed=False debug=True>
+2023-12-30 20:12:07,068 [DEBUG] [log_message] Starting application
+2023-12-30 20:12:07,068 [DEBUG] [log_message] CLIApp initialized
+2023-12-30 20:12:07,068 [ERROR] [log_message] Error printing message under logo: addwstr() returned ERR
+2023-12-30 20:12:08,071 [ERROR] [log_message] Error printing message under logo: addwstr() returned ERR
+2023-12-30 20:12:09,078 [ERROR] [log_message] Error printing message under logo: addwstr() returned ERR
+2023-12-30 20:12:10,080 [ERROR] [log_message] Error printing message under logo: addwstr() returned ERR
+2023-12-30 20:12:11,082 [ERROR] [log_message] Error printing message under logo: addwstr() returned ERR
+2023-12-30 20:12:11,357 [INFO] [log_message] Keyboard interrupt detected. Exiting...
+2023-12-30 20:12:11,358 [WARNING] [_run_once] Executing <Task finished name='Task-1' coro=<main() done, defined at /home/splix/Desktop/new-sprint/CLI/main.py:13> result=0 created at /usr/lib/python3.10/asyncio/tasks.py:636> took 4.291 seconds
+2023-12-30 20:12:11,360 [DEBUG] [close] Close <_UnixSelectorEventLoop running=False closed=False debug=True>
+2023-12-30 20:12:58,314 [DEBUG] [log_message] Starting application
+2023-12-30 20:12:58,315 [DEBUG] [log_message] CLIApp initialized
+2023-12-30 20:12:58,315 [ERROR] [log_message] Error printing message under logo: addwstr() returned ERR
+2023-12-30 20:12:59,319 [ERROR] [log_message] Error printing message under logo: addwstr() returned ERR
+2023-12-30 20:13:00,322 [ERROR] [log_message] Error printing message under logo: addwstr() returned ERR
+2023-12-30 20:13:01,323 [ERROR] [log_message] Error printing message under logo: addwstr() returned ERR
+2023-12-30 20:13:02,325 [ERROR] [log_message] Error printing message under logo: addwstr() returned ERR
+2023-12-30 20:13:02,419 [INFO] [log_message] Keyboard interrupt detected. Exiting...
+2023-12-30 20:13:02,420 [WARNING] [_run_once] Executing <Task finished name='Task-1' coro=<main() done, defined at /home/splix/Desktop/new-sprint/CLI/main.py:13> result=0 created at /usr/lib/python3.10/asyncio/tasks.py:636> took 4.106 seconds
+2023-12-30 20:13:02,420 [DEBUG] [close] Close <_UnixSelectorEventLoop running=False closed=False debug=True>
+2023-12-30 20:14:32,519 [DEBUG] [log_message] Starting application
+2023-12-30 20:14:32,519 [DEBUG] [log_message] CLIApp initialized
+2023-12-30 20:14:32,520 [ERROR] [log_message] Error printing message under logo: addwstr() returned ERR
+2023-12-30 20:14:33,523 [ERROR] [log_message] Error printing message under logo: addwstr() returned ERR
+2023-12-30 20:14:34,525 [ERROR] [log_message] Error printing message under logo: addwstr() returned ERR
+2023-12-30 20:14:34,924 [INFO] [log_message] Keyboard interrupt detected. Exiting...
+2023-12-30 20:14:34,925 [WARNING] [_run_once] Executing <Task finished name='Task-1' coro=<main() done, defined at /home/splix/Desktop/new-sprint/CLI/main.py:13> result=0 created at /usr/lib/python3.10/asyncio/tasks.py:636> took 2.406 seconds
+2023-12-30 20:14:34,926 [DEBUG] [close] Close <_UnixSelectorEventLoop running=False closed=False debug=True>
+2023-12-30 20:15:19,751 [DEBUG] [log_message] Starting application
+2023-12-30 20:15:19,751 [DEBUG] [log_message] CLIApp initialized
+2023-12-30 20:15:19,751 [ERROR] [log_message] Error printing message under logo: addnwstr() returned ERR
+2023-12-30 20:15:20,754 [ERROR] [log_message] Error printing message under logo: addnwstr() returned ERR
+2023-12-30 20:15:21,756 [ERROR] [log_message] Error printing message under logo: addnwstr() returned ERR
+2023-12-30 20:15:22,758 [ERROR] [log_message] Error printing message under logo: addnwstr() returned ERR
+2023-12-30 20:15:23,760 [ERROR] [log_message] Error printing message under logo: addnwstr() returned ERR
+2023-12-30 20:15:24,763 [ERROR] [log_message] Error printing message under logo: addnwstr() returned ERR
+2023-12-30 20:15:25,764 [ERROR] [log_message] Error printing message under logo: addnwstr() returned ERR
+2023-12-30 20:15:26,767 [ERROR] [log_message] Error printing message under logo: addnwstr() returned ERR
+2023-12-30 20:15:27,769 [ERROR] [log_message] Error printing message under logo: addnwstr() returned ERR
+2023-12-30 20:15:28,770 [ERROR] [log_message] Error printing message under logo: addnwstr() returned ERR
+2023-12-30 20:15:29,773 [ERROR] [log_message] Error printing message under logo: addnwstr() returned ERR
+2023-12-30 20:15:30,776 [ERROR] [log_message] Error printing message under logo: addnwstr() returned ERR
+2023-12-30 20:15:31,658 [INFO] [log_message] Keyboard interrupt detected. Exiting...
+2023-12-30 20:15:31,659 [WARNING] [_run_once] Executing <Task finished name='Task-1' coro=<main() done, defined at /home/splix/Desktop/new-sprint/CLI/main.py:13> result=0 created at /usr/lib/python3.10/asyncio/tasks.py:636> took 11.908 seconds
+2023-12-30 20:15:31,660 [DEBUG] [close] Close <_UnixSelectorEventLoop running=False closed=False debug=True>
+2023-12-30 20:15:49,560 [DEBUG] [log_message] Starting application
+2023-12-30 20:15:49,560 [DEBUG] [log_message] CLIApp initialized
+2023-12-30 20:15:49,560 [ERROR] [log_message] Error printing message under logo: addwstr() returned ERR
+2023-12-30 20:15:50,562 [ERROR] [log_message] Error printing message under logo: addwstr() returned ERR
+2023-12-30 20:15:51,564 [ERROR] [log_message] Error printing message under logo: addwstr() returned ERR
+2023-12-30 20:15:52,566 [ERROR] [log_message] Error printing message under logo: addwstr() returned ERR
+2023-12-30 20:15:53,569 [ERROR] [log_message] Error printing message under logo: addwstr() returned ERR
+2023-12-30 20:15:54,572 [ERROR] [log_message] Error printing message under logo: addwstr() returned ERR
+2023-12-30 20:15:55,202 [INFO] [log_message] Keyboard interrupt detected. Exiting...
+2023-12-30 20:15:55,203 [WARNING] [_run_once] Executing <Task finished name='Task-1' coro=<main() done, defined at /home/splix/Desktop/new-sprint/CLI/main.py:13> result=0 created at /usr/lib/python3.10/asyncio/tasks.py:636> took 5.643 seconds
+2023-12-30 20:15:55,204 [DEBUG] [close] Close <_UnixSelectorEventLoop running=False closed=False debug=True>
+2023-12-30 20:16:28,340 [DEBUG] [log_message] Starting application
+2023-12-30 20:16:28,340 [DEBUG] [log_message] CLIApp initialized
+2023-12-30 20:16:29,450 [INFO] [log_message] Keyboard interrupt detected. Exiting...
+2023-12-30 20:16:29,450 [WARNING] [_run_once] Executing <Task finished name='Task-1' coro=<main() done, defined at /home/splix/Desktop/new-sprint/CLI/main.py:13> result=0 created at /usr/lib/python3.10/asyncio/tasks.py:636> took 1.111 seconds
+2023-12-30 20:16:29,451 [DEBUG] [close] Close <_UnixSelectorEventLoop running=False closed=False debug=True>
+2023-12-30 20:16:32,167 [DEBUG] [log_message] Starting application
+2023-12-30 20:16:32,167 [DEBUG] [log_message] CLIApp initialized
+2023-12-30 20:17:57,072 [INFO] [log_message] Keyboard interrupt detected. Exiting...
+2023-12-30 20:17:57,072 [WARNING] [_run_once] Executing <Task finished name='Task-1' coro=<main() done, defined at /home/splix/Desktop/new-sprint/CLI/main.py:13> result=0 created at /usr/lib/python3.10/asyncio/tasks.py:636> took 84.906 seconds
+2023-12-30 20:17:57,074 [DEBUG] [close] Close <_UnixSelectorEventLoop running=False closed=False debug=True>
+2023-12-30 20:17:58,270 [DEBUG] [log_message] Starting application
+2023-12-30 20:17:58,270 [DEBUG] [log_message] CLIApp initialized
+2023-12-30 20:18:00,779 [ERROR] [log_message] Error displaying splash screen: object NoneType can't be used in 'await' expression
+2023-12-30 20:18:00,781 [WARNING] [_run_once] Executing <Task pending name='Task-1' coro=<main() running at /home/splix/Desktop/new-sprint/CLI/main.py:23> wait_for=<Future pending cb=[Task.task_wakeup()] created at /usr/lib/python3.10/asyncio/base_events.py:429> cb=[_run_until_complete_cb() at /usr/lib/python3.10/asyncio/base_events.py:184] created at /usr/lib/python3.10/asyncio/tasks.py:636> took 2.511 seconds
+2023-12-30 20:18:01,385 [DEBUG] [close] Close <_UnixSelectorEventLoop running=False closed=False debug=True>
+2023-12-30 20:18:01,385 [DEBUG] [log_message] Keyboard interrupt detected. Exiting...
+2023-12-30 20:18:48,204 [DEBUG] [log_message] Starting application
+2023-12-30 20:18:48,205 [DEBUG] [log_message] CLIApp initialized
+2023-12-30 20:19:31,567 [INFO] [log_message] Keyboard interrupt detected. Exiting...
+2023-12-30 20:19:31,567 [WARNING] [_run_once] Executing <Task finished name='Task-1' coro=<main() done, defined at /home/splix/Desktop/new-sprint/CLI/main.py:13> result=0 created at /usr/lib/python3.10/asyncio/tasks.py:636> took 43.363 seconds
+2023-12-30 20:19:31,568 [DEBUG] [close] Close <_UnixSelectorEventLoop running=False closed=False debug=True>
+2023-12-30 20:19:32,471 [DEBUG] [log_message] Starting application
+2023-12-30 20:19:32,471 [DEBUG] [log_message] CLIApp initialized
+2023-12-30 20:19:44,087 [INFO] [log_message] Keyboard interrupt detected. Exiting...
+2023-12-30 20:19:44,088 [WARNING] [_run_once] Executing <Task finished name='Task-1' coro=<main() done, defined at /home/splix/Desktop/new-sprint/CLI/main.py:13> result=0 created at /usr/lib/python3.10/asyncio/tasks.py:636> took 11.617 seconds
+2023-12-30 20:19:44,089 [DEBUG] [close] Close <_UnixSelectorEventLoop running=False closed=False debug=True>
+2023-12-30 20:20:03,320 [DEBUG] [log_message] Starting application
+2023-12-30 20:20:03,320 [DEBUG] [log_message] CLIApp initialized
+2023-12-30 20:20:39,446 [ERROR] [log_message] Error displaying splash screen: object NoneType can't be used in 'await' expression
+2023-12-30 20:20:39,448 [WARNING] [_run_once] Executing <Task pending name='Task-1' coro=<main() running at /home/splix/Desktop/new-sprint/CLI/main.py:23> wait_for=<Future pending cb=[Task.task_wakeup()] created at /usr/lib/python3.10/asyncio/base_events.py:429> cb=[_run_until_complete_cb() at /usr/lib/python3.10/asyncio/base_events.py:184] created at /usr/lib/python3.10/asyncio/tasks.py:636> took 36.128 seconds
+2023-12-30 20:20:40,407 [DEBUG] [close] Close <_UnixSelectorEventLoop running=False closed=False debug=True>
+2023-12-30 20:20:40,407 [DEBUG] [log_message] Keyboard interrupt detected. Exiting...
+2023-12-30 20:20:57,133 [DEBUG] [log_message] Starting application
+2023-12-30 20:20:57,133 [DEBUG] [log_message] CLIApp initialized
+2023-12-30 20:21:00,642 [ERROR] [log_message] Error displaying splash screen: object NoneType can't be used in 'await' expression
+2023-12-30 20:21:00,643 [ERROR] [log_message] Error updating screen: addwstr() returned ERR
+2023-12-30 20:21:00,645 [WARNING] [_run_once] Executing <Task pending name='Task-1' coro=<main() running at /home/splix/Desktop/new-sprint/CLI/main.py:23> wait_for=<Future pending cb=[Task.task_wakeup()] created at /usr/lib/python3.10/asyncio/base_events.py:429> cb=[_run_until_complete_cb() at /usr/lib/python3.10/asyncio/base_events.py:184] created at /usr/lib/python3.10/asyncio/tasks.py:636> took 3.512 seconds
+2023-12-30 20:21:00,746 [ERROR] [log_message] Error updating screen: addwstr() returned ERR
+2023-12-30 20:21:00,782 [ERROR] [log_message] Error updating screen: addwstr() returned ERR
+2023-12-30 20:21:00,819 [ERROR] [log_message] Error updating screen: addwstr() returned ERR
+2023-12-30 20:21:00,855 [ERROR] [log_message] Error updating screen: addwstr() returned ERR
+2023-12-30 20:21:00,891 [ERROR] [log_message] Error updating screen: addwstr() returned ERR
+2023-12-30 20:21:02,754 [ERROR] [log_message] Error updating screen: addwstr() returned ERR
+2023-12-30 20:21:02,790 [ERROR] [log_message] Error updating screen: addwstr() returned ERR
+2023-12-30 20:21:05,239 [DEBUG] [close] Close <_UnixSelectorEventLoop running=False closed=False debug=True>
+2023-12-30 20:21:05,239 [DEBUG] [log_message] Keyboard interrupt detected. Exiting...
+2023-12-30 20:21:06,366 [DEBUG] [log_message] Starting application
+2023-12-30 20:21:06,366 [DEBUG] [log_message] CLIApp initialized
+2023-12-30 20:23:10,298 [ERROR] [log_message] Error displaying splash screen: object NoneType can't be used in 'await' expression
+2023-12-30 20:23:10,300 [WARNING] [_run_once] Executing <Task pending name='Task-1' coro=<main() running at /home/splix/Desktop/new-sprint/CLI/main.py:23> wait_for=<Future pending cb=[Task.task_wakeup()] created at /usr/lib/python3.10/asyncio/base_events.py:429> cb=[_run_until_complete_cb() at /usr/lib/python3.10/asyncio/base_events.py:184] created at /usr/lib/python3.10/asyncio/tasks.py:636> took 123.934 seconds
+2023-12-30 20:23:10,446 [DEBUG] [close] Close <_UnixSelectorEventLoop running=False closed=False debug=True>
+2023-12-30 20:23:10,446 [DEBUG] [log_message] Keyboard interrupt detected. Exiting...
+2023-12-30 20:23:11,552 [DEBUG] [log_message] Starting application
+2023-12-30 20:23:11,552 [DEBUG] [log_message] CLIApp initialized
+2023-12-30 20:23:15,064 [ERROR] [log_message] Error displaying splash screen: object NoneType can't be used in 'await' expression
+2023-12-30 20:23:15,067 [WARNING] [_run_once] Executing <Task pending name='Task-1' coro=<main() running at /home/splix/Desktop/new-sprint/CLI/main.py:23> wait_for=<Future pending cb=[Task.task_wakeup()] created at /usr/lib/python3.10/asyncio/base_events.py:429> cb=[_run_until_complete_cb() at /usr/lib/python3.10/asyncio/base_events.py:184] created at /usr/lib/python3.10/asyncio/tasks.py:636> took 3.515 seconds
+2023-12-30 20:23:15,750 [DEBUG] [close] Close <_UnixSelectorEventLoop running=False closed=False debug=True>
+2023-12-30 20:23:15,750 [DEBUG] [log_message] Keyboard interrupt detected. Exiting...
+2023-12-30 20:26:38,075 [DEBUG] [log_message] Starting application
+2023-12-30 20:26:38,075 [DEBUG] [log_message] CLIApp initialized
+2023-12-30 20:26:40,080 [ERROR] [log_message] Error displaying splash screen: object NoneType can't be used in 'await' expression
+2023-12-30 20:26:40,081 [WARNING] [_run_once] Executing <Task pending name='Task-1' coro=<main() running at /home/splix/Desktop/new-sprint/CLI/main.py:23> wait_for=<Future pending cb=[Task.task_wakeup()] created at /usr/lib/python3.10/asyncio/base_events.py:429> cb=[_run_until_complete_cb() at /usr/lib/python3.10/asyncio/base_events.py:184] created at /usr/lib/python3.10/asyncio/tasks.py:636> took 2.006 seconds
+2023-12-30 21:30:00,259 [DEBUG] [close] Close <_UnixSelectorEventLoop running=False closed=False debug=True>
+2023-12-30 21:30:00,260 [DEBUG] [log_message] Keyboard interrupt detected. Exiting...
+2023-12-30 21:30:01,935 [DEBUG] [log_message] Starting application
+2023-12-30 21:30:01,935 [DEBUG] [log_message] CLIApp initialized
+2023-12-30 21:30:12,972 [ERROR] [log_message] Error displaying splash screen: object NoneType can't be used in 'await' expression
+2023-12-30 21:30:12,975 [WARNING] [_run_once] Executing <Task pending name='Task-1' coro=<main() running at /home/splix/Desktop/new-sprint/CLI/main.py:23> wait_for=<Future pending cb=[Task.task_wakeup()] created at /usr/lib/python3.10/asyncio/base_events.py:429> cb=[_run_until_complete_cb() at /usr/lib/python3.10/asyncio/base_events.py:184] created at /usr/lib/python3.10/asyncio/tasks.py:636> took 11.041 seconds
+2023-12-30 21:30:16,509 [INFO] [log_message] Entered Data: {'Username': 'splix', 'Password': '123'}
+2023-12-30 21:30:16,510 [DEBUG] [_new_conn] Starting new HTTP connection (1): localhost:8000
+2023-12-30 21:30:16,837 [DEBUG] [_make_request] http://localhost:8000 "POST /api/user/login/ HTTP/1.1" 200 241
+2023-12-30 21:30:16,915 [DEBUG] [_make_request] http://localhost:8000 "GET /api/get_user_id/splix/ HTTP/1.1" 200 35
+2023-12-30 21:30:16,916 [INFO] [log_message] Login response: splix
+2023-12-30 21:30:16,917 [WARNING] [_run_once] Executing <Task pending name='Task-1' coro=<main() running at /home/splix/Desktop/new-sprint/CLI/main.py:23> wait_for=<Future pending cb=[Task.task_wakeup()] created at /usr/lib/python3.10/asyncio/base_events.py:429> cb=[_run_until_complete_cb() at /usr/lib/python3.10/asyncio/base_events.py:184] created at /usr/lib/python3.10/asyncio/tasks.py:636> took 0.408 seconds
+2023-12-30 21:30:16,965 [DEBUG] [_getaddrinfo_debug] Get address info localhost:8001, type=<SocketKind.SOCK_STREAM: 1>, flags=<AddressInfo.AI_ADDRCONFIG: 32>
+2023-12-30 21:30:16,966 [DEBUG] [_getaddrinfo_debug] Getting address info localhost:8001, type=<SocketKind.SOCK_STREAM: 1>, flags=<AddressInfo.AI_ADDRCONFIG: 32> took 0.326ms: [(<AddressFamily.AF_INET: 2>, <SocketKind.SOCK_STREAM: 1>, 6, '', ('127.0.0.1', 8001))]
+2023-12-30 21:30:16,972 [DEBUG] [create_connection] <asyncio.TransportSocket fd=8, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=6, laddr=('127.0.0.1', 54690), raddr=('127.0.0.1', 8001)> connected to 127.0.0.1:8001: (<_SelectorSocketTransport fd=8 read=polling write=<idle, bufsize=0>>, <aiohttp.client_proto.ResponseHandler object at 0x7fbca860d1e0>)
+2023-12-30 21:30:17,009 [DEBUG] [log_message] Received message: {"type": "user_joined", "data": {"client_id": "1", "lobby_name": "lobby", "online_users": {"1": "splix"}}}
