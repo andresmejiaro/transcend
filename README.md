@@ -59,15 +59,11 @@ Ft_trascendence is an ambitious project that endeavors to create an immersive we
 
 ## Arquitecture
 
-![Arquitectura de Trascendence](https://github.com/andresmejiaro/transcend/blob/readme_documentation/attach-files/Arquitecture_trascendence.png)
-
-
 ### Project Structure Overview
 
 The project comprises various folders and files, each serving a distinct purpose:
 
-![estructure]()
-
+![Arquitectura de Trascendence](https://github.com/andresmejiaro/transcend/blob/readme_documentation/attach-files/Arquitecture_trascendence.png)
 
 The project structure segregates functionalities and components, dividing them into backend, frontend, testing, AI implementation, and configurations. Each directory contains specific updates and functionalities based on recent commits, aiming to enhance the overall user experience, server logic, and game functionalities.
 
@@ -119,6 +115,9 @@ sdgzdg
 Describe la implementación del chat en tiempo real, las tecnologías utilizadas (por ejemplo, WebSockets), cómo los usuarios se comunican entre sí, etc.
 
 ## Game
+
+![GAME_DESIGN](https://github.com/andresmejiaro/transcend/blob/readme_documentation/attach-files/DESIGN.gif)
+
 Detalla cómo se implementó el juego de Pong, los controles, la lógica del juego, etc.
 
 ## Multiplayer
