@@ -59,6 +59,9 @@ Ft_trascendence is an ambitious project that endeavors to create an immersive we
 
 ## Arquitecture
 
+![Arquitectura de Trascendence](https://github.com/andresmejiaro/transcend/blob/readme_documentation/attach-files/Arquitecture_trascendence.png)
+
+
 ### Project Structure Overview
 
 The project comprises various folders and files, each serving a distinct purpose:
