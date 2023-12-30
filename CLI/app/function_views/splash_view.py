@@ -1,73 +1,125 @@
-# app/function_views/splash_view.py
-
+import curses
+import time
 from utils.logger import log_message
 from utils.data_storage import load_texture
 import logging
-import curses
-import time
 
 def display_splash_screen(stdscr):
     try:
-        current_frame = 1
+        last_frame_time = time.time()  # Initialize last_frame_time
 
-        # Calculate the delay to achieve 60 FPS
+        # Load logo frames
+        logo_frames = [load_texture('logo.txt'), load_texture('logo2.txt')]
+        current_logo_frame = 0
+
         frame_rate = 2
-        frame_delay = 1 / frame_rate
 
         while True:
             stdscr.clear()
 
             # Get the terminal size
-            rows, cols = stdscr.getmaxyx()
+            rows, cols = get_terminal_size(stdscr)
 
             if rows < 24 or cols < 80:
-                stdscr.addstr(0, 0, "Terminal size is too small")
+                print_screen_too_small(stdscr, rows, cols)
+                stdscr.refresh()
+                continue
+                
+            # Print the logo
+            print_logo(stdscr, rows, cols, logo_frames[current_logo_frame])
 
-            else:
-                # Load Logo frames
-                logo_frame_1 = load_texture("logo.txt")
-                logo_frame_2 = load_texture("logo2.txt")
+            # Print frame rate
+            print_frame_rate(stdscr, rows, cols, last_frame_time)
 
-                # Display the logo centered on the screen
-                if current_frame == 1 and logo_frame_1:
-                    logo = logo_frame_1
-                elif current_frame == 2 and logo_frame_2:
-                    logo = logo_frame_2
-                else:
-                    # Handle a case where both frames are not available
-                    stdscr.addstr(0, 0, "Error loading logo frames")
-                    stdscr.refresh()
-                    break  # Exit the loop in case of an error
+            # Print header
+            print_header(stdscr, rows, cols)
 
-                logo_row = max(0, (rows - len(logo)) // 2)
-                col = max(0, (cols - len(logo[0])) // 2)
-                for i, line in enumerate(logo):
-                    stdscr.addstr(logo_row + i, col, line)
-
-                # Display a static message right under the logo
-                message = "Welcome to the Game!\nPress Enter to start..."
-                text_row = logo_row + len(logo) + 1  # Add 1 for spacing
-                col = max(0, (cols - len(message.splitlines()[0])) // 2)
-                for i, line in enumerate(message.splitlines()):
-                    stdscr.addstr(text_row + i, col, line)
+            # Print message under logo
+            print_message_under_logo(stdscr, rows, cols, "Press any key to continue...")
 
             # Refresh the screen
             stdscr.refresh()
 
-            # Adjust the delay to achieve the desired frame rate
-            time.sleep(frame_delay)
+            # Animation delay
+            print_animated_logo(frame_rate)
 
-            # Toggle between frames
-            current_frame = 1 if current_frame == 2 else 2
+            # Switch to the next logo frame
+            current_logo_frame = (current_logo_frame + 1) % len(logo_frames)
 
-            # Wait for the user to press any key
+            # Check for user input
             user_input = stdscr.getch()
-
-            if user_input == curses.KEY_RESIZE:
-                # Handle terminal resize by redrawing the splash screen
-                continue
-            elif user_input != -1:
+            if user_input != curses.ERR:
                 break  # Break the loop when any key is pressed
 
     except Exception as e:
         log_message(f"Error displaying splash screen: {e}", level=logging.ERROR)
+
+# Helper methods (unchanged)
+def get_terminal_size(stdscr):
+    rows, cols = stdscr.getmaxyx()
+    return rows, cols
+# --------------------------------------------
+
+# Widget methods
+def print_screen_too_small(stdscr, max_y, max_x):
+    try:
+        stdscr.addstr(0, 0, "Terminal is too small, please resize the terminal to at least 80x24.", curses.color_pair(3))
+
+    except Exception as e:
+        log_message(f"Error printing screen too small message: {e}", level=logging.ERROR)
+
+def print_header(stdscr, max_y, max_x):
+    try:
+        header = "Welcome to Pong!"
+        row, col = 1, max_x // 2 - len(header) // 2
+        stdscr.addstr(row, col, header)
+
+    except Exception as e:
+        log_message(f"Error printing header: {e}", level=logging.ERROR)
+
+def print_frame_rate(stdscr, max_y, max_x, last_frame_time):
+    try:
+        current_time = time.time()
+        frame_rate = 1 / (current_time - last_frame_time)
+        last_frame_time = current_time
+
+        stdscr.addstr(0, max_x - 21, f"Frame Rate: {frame_rate:.2f} FPS", curses.color_pair(3) | curses.A_DIM | curses.A_BOLD)
+
+    except Exception as e:
+        log_message(f"Error printing frame rate: {e}", level=logging.ERROR)
+
+def print_logo(stdscr, max_y, max_x, logo):
+    try:
+        logo_height = len(logo)
+        logo_width = len(logo[0])
+
+        row = max_y // 2 - logo_height // 2
+        col = max_x // 2 - logo_width // 2
+
+        for frame in logo:
+            stdscr.addstr(row, col, frame)
+            row += 1
+
+    except Exception as e:
+        log_message(f"Error printing logo: {e}", level=logging.ERROR)
+
+def print_animated_logo(frame_rate):
+    try:
+        # Adjust the delay to achieve the desired frame rate
+        time.sleep(1 / frame_rate)
+
+    except Exception as e:
+        log_message(f"Error during animation delay: {e}", level=logging.ERROR)
+
+def print_message_under_logo(stdscr, max_y, max_x, message):
+    try:
+        row, col = max_y - 2, max_x // 2 - len(message) // 2
+        stdscr.addstr(row, col, message, curses.color_pair(4) | curses.A_BLINK)
+
+    except Exception as e:
+        log_message(f"Error printing message under logo: {e}", level=logging.ERROR)
+
+# --------------------------------------------
+
+
+
