@@ -88,17 +88,13 @@ Entails specific decisions regarding the server's implementation in a Dockerized
 
   The `manage.py` script is Django's command-line tool used for administrative tasks. It configures the Django environment, executes management commands, and serves as the entry point for interacting with the Django project via the command line, facilitating tasks like database operations, server startup, and project management.
 
-- **Frontend:** Manages the client-side interface and user experience. Recent updates involve improvements associated with lobby WebSocket and online status.
+- **Frontend:** Single Page Applications (SPAs) operate by dynamically updating content on a single web page without requiring full page reloads. They utilize JavaScript to fetch data from the server, update the DOM, and manage user interactions seamlessly. Effective SPAs manage routing, allowing users to navigate within the app without causing full-page reloads, enhancing the user experience. Moreover, robust user authentication and identification play a pivotal role in SPAs, ensuring secure access to features, data, and resources. Proper authentication implementations enhance data security, privacy, and user trust by confirming the identity of individuals accessing the application, thereby safeguarding sensitive information and functionality.
 
 - **Nginx:** Includes configurations and updates related to the NGINX web server, particularly in merging the develop branch.
 
   Within the Nginx configuration, settings for port 3000, typically used for Node.js applications or frontend services, might be established. Additionally, SSL/TLS configurations could be defined to ensure secure communication over HTTPS for enhanced data encryption and security measures. These SSL settings are crucial for encrypting data transmitted between clients and the server, particularly when dealing with sensitive information.
 
-- **Python-pong:** Incorporates features related to the AI option within the Pong game, added recently.
-
-- **Makefile:** Manages compilation and build operations. Recent fixes include cleaning functionalities.
-
-- **docker-compose.yml:** Specifies the services and configurations for Docker Compose.
+- **Python-pong:** This Python code implements a Pong game using the curses library for the Command Line Interface (CLI). It incorporates a primary loop allowing players to control paddles using designated keys. The code utilizes the curses module for the user interface, providing functionalities such as displaying the game screen and managing keyboard events for player control. Additionally, it enables interaction with a web server through HTTP requests and employs JSON files to record the game states at specific time intervals.
 
 ### Installation
 ???
@@ -116,6 +112,7 @@ Entails specific decisions regarding the server's implementation in a Dockerized
 ## Web
 
 ![Game_menus](https://github.com/andresmejiaro/transcend/blob/readme_documentation/attach-files/MENUS.gif)
+
 sdgzdg
 
 ## Chat
@@ -136,9 +133,9 @@ Si está implementado, describe cómo se estructuran los torneos, cómo los juga
 Explica la implementación del modo de juego contra la IA, cómo se diseñó y qué estrategias sigue la IA.
 
 ## Database
-Detalla la estructura de la base de datos utilizada para almacenar la información de los usuarios, partidas, registros, etc. Puedes incluir:
 
-Tipo de base de datos: Si es relacional o no relacional.
+PostgreSQL is a relational database management system (RDBMS) known for supporting complex SQL queries, making it suitable for applications requiring high data integrity and reliability. Highly scalable, it accommodates multiple users and offers advanced features like indexes, foreign keys, stored procedures, functions, and support for ACID transactions (Atomicity, Consistency, Isolation, Durability).
+
 Esquema de la base de datos: Describe las tablas (en caso de bases de datos relacionales), colecciones (en caso de bases de datos no relacionales), y cómo están relacionadas entre sí.
 Seguridad y gestión de datos: Si se implementan medidas de seguridad, como cifrado de contraseñas, y cómo se manejan los datos de los usuarios.
 
