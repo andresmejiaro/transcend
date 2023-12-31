@@ -14,50 +14,47 @@ class Widget:
     def update_terminal_size(self):
         self.rows, self.cols = self.stdscr.getmaxyx()
 
-    def print_screen_too_small(self):
-        try:
-            self.stdscr.clear()
-            self.stdscr.addstr(0, 0, "Screen too small!", curses.color_pair(3) | curses.A_BOLD)
-            self.stdscr.refresh()
+    def _clear_screen(self):
+        self.stdscr.clear()
 
-        except Exception as e:
-            log_message(f"Error printing screen too small message: {e}", level=logging.ERROR)
+    def _refresh_screen(self):
+        self.stdscr.refresh()
+
+    def _addstr(self, row, col, text, attr=0):
+        try:
+            self.stdscr.addstr(row, col, text, attr)
+            
+        except curses.error as e:
+            log_message(f"Error adding string at ({row}, {col}): {e}", level=logging.ERROR)
+
+    def print_screen_too_small(self):
+        self._clear_screen()
+        self._addstr(0, 0, "Screen too small!", curses.color_pair(3) | curses.A_BOLD)
+        self._refresh_screen()
 
     def print_header(self, header):
-        try:
-            row, col = 1, self.cols // 2 - len(header) // 2
-            self.stdscr.addstr(row, col, header)
-
-        except Exception as e:
-            log_message(f"Error printing header: {e}", level=logging.ERROR)
+        col = self.cols // 2 - len(header) // 2
+        self._addstr(1, col, header)
 
     def print_animated_logo(self, logo, frame_rate):
-        try:
-            logo_height = len(logo)
-            logo_width = len(logo[0])
+        logo_height = len(logo)
+        logo_width = len(logo[0])
 
-            row = self.rows // 2 - logo_height // 2
-            col = self.cols // 2 - logo_width // 2
+        row = self.rows // 2 - logo_height // 2
+        col = self.cols // 2 - logo_width // 2
 
-            for frame_line in logo:
-                self.stdscr.addstr(row, col, frame_line)
-                row += 1
+        for frame_line in logo:
+            self._addstr(row, col, frame_line)
+            row += 1
 
-            # Adjust the delay to achieve the desired frame rate
-            time.sleep(1 / frame_rate)
-
-        except Exception as e:
-            log_message(f"Error printing animated logo: {e}", level=logging.ERROR)
+        time.sleep(1 / frame_rate)
 
     def print_message_under_logo(self, message, logo):
-        try:
-            message_row = self.rows // 2 + len(logo) + 2
-            message_col = self.cols // 2 - len(message) // 2
+        message_row = self.rows // 2 + len(logo) + 2
+        message_col = self.cols // 2 - len(message) // 2
 
-            self.stdscr.addstr(message_row, message_col, message)
-
-        except Exception as e:
-            log_message(f"Error printing message under logo: {e}", level=logging.ERROR)
+        if message_row < self.rows and message_col < self.cols:
+            self._addstr(message_row, message_col, message)
 
     def print_frame_rate(self):
         try:
@@ -65,7 +62,7 @@ class Widget:
             frame_rate = 1 / (current_time - self.last_frame_time)
             self.last_frame_time = current_time
 
-            self.stdscr.addstr(0, self.cols - 21, f"Frame Rate: {frame_rate:.2f} FPS", curses.color_pair(3) | curses.A_DIM | curses.A_BOLD)
+            self._addstr(0, self.cols - 21, f"Frame Rate: {frame_rate:.2f} FPS", curses.color_pair(3) | curses.A_DIM | curses.A_BOLD)
 
         except Exception as e:
             log_message(f"Error printing frame rate: {e}", level=logging.ERROR)
@@ -77,11 +74,11 @@ class Widget:
 
             # Set the background color to highlight the current input field
             if index == self.current_input_index:
-                self.stdscr.addstr(prompt_row, prompt_col, prompt, curses.A_REVERSE)
-                self.stdscr.addstr(prompt_row, prompt_col + len(prompt), input_string, curses.A_REVERSE)
+                self._addstr(prompt_row, prompt_col, prompt, curses.A_REVERSE)
+                self._addstr(prompt_row, prompt_col + len(prompt), input_string, curses.A_REVERSE)
             else:
-                self.stdscr.addstr(prompt_row, prompt_col, prompt)
-                self.stdscr.addstr(prompt_row, prompt_col + len(prompt), input_string)
+                self._addstr(prompt_row, prompt_col, prompt)
+                self._addstr(prompt_row, prompt_col + len(prompt), input_string)
 
         except Exception as e:
             log_message(f"Error printing input prompt: {e}", level=logging.ERROR)

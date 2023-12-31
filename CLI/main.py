@@ -4,46 +4,95 @@ import sys
 import logging
 import asyncio
 import curses
+import click
+import json
+import sqlite3
+from getpass import getpass
+from cryptography.fernet import Fernet
 
 from app.app import CLIApp
-from utils.data_storage import initialize_data_directory
-from utils.init_curses import initialize_curses, cleanup_curses
-from utils.logger import initialize_logs_directory, initialize_logger, log_message
+from utils.logger import log_message
+from utils.config_manager import ConfigurationManager
+from utils.file_manager import FileManager
 
-async def main(stdscr):
+async def main(stdscr, username, password):
+    exit_status = 0
     try:
-        initialize_data_directory()
-        initialize_logs_directory()
-        initialize_logger()
-        initialize_curses(stdscr)
+        config_manager = ConfigurationManager()
+        file_manager = FileManager()
 
-        log_message("Starting application", level=logging.DEBUG)
-        cli = CLIApp(stdscr)
-        log_message("CLIApp initialized", level=logging.DEBUG)
-        exit_status = await cli.run()
+        file_manager.save_data("user.json", {"username": username, "password": password})
 
-    except KeyboardInterrupt:
-        log_message("Keyboard interrupt detected. Exiting...")
-        exit_status = 0
+        config_manager.load_configuration_file(stdscr)
 
-    except Exception as e:
-        log_message("An error occurred:", level=logging.ERROR)
-        logging.exception(e)
+        try:
+            app = CLIApp(stdscr)
+            await app.run()
+
+        except Exception as e:
+            log_message(f'Error starting the App: {e}', logging.ERROR)
+            exit_status = 1
+
+            
+    except KeyError:
+        log_message('KeyError in main.', logging.ERROR)
         exit_status = 1
 
+    except Exception as e:
+        log_message(f'Error in main: {e}', logging.ERROR)
+        exit_status = 1
+
+    except KeyboardInterrupt:
+        log_message('Keyboard interrupt detected.')
+        exit_status = 0
+
     finally:
-        cleanup_curses(stdscr)
+        # cleanup_curses(stdscr)
+        print('Exiting finally block.')
         return exit_status
 
-if __name__ == "__main__":
+
+# Boot Launch   
+def run_main_with_username_password(username, password):
     try:
-        exit_status = curses.wrapper(lambda stdscr: asyncio.run(main(stdscr), debug=True))
+        print('Curses and Asyncio Wrapper Launch.')
+
+        loop = asyncio.get_event_loop()
+        loop.set_debug(True)
+
+        exit_status = curses.wrapper(lambda stdscr: loop.run_until_complete(main(stdscr, username, password)))
+        
+        loop.close()
+
+        log_message(f'Exit Status: {exit_status}', logging.INFO)
+        return exit_status
+    
     except KeyboardInterrupt:
-        log_message("Keyboard interrupt detected. Exiting...", level=logging.DEBUG)
+        log_message('Keyboard interrupt detected.')
         exit_status = 0
+        return exit_status
+    
     except Exception as e:
-        log_message("An error occurred:", level=logging.ERROR)
-        logging.exception(e)
+        log_message(f'Boot Launch {e}')
         exit_status = 1
-    finally:
+        return exit_status
+
+
+# click CLI, commented out during development
+# @click.command()
+# @click.option('--username', prompt='Enter your username', help='Username')
+# @click.option('--password', prompt='Enter your password', help='Password')
+
+def cli():
+    username = 'splix'
+    password = '123'
+    try:
+        exit_status = run_main_with_username_password(username, password)
         sys.exit(exit_status)
+        
+    except Exception as e:
+        print(f'Boot Launch {e}')
+        sys.exit(exit_status)
+        
+if __name__ == "__main__":
+    cli()

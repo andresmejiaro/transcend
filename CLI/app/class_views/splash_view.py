@@ -4,17 +4,19 @@ import curses
 import logging
 
 from app.widgets.widgets import Widget
-from utils.data_storage import load_texture
 from utils.logger import log_message
+from utils.file_manager import FileManager
 
 class SplashView(Widget):
     def __init__(self, stdscr):
         super().__init__(stdscr)
+        self.file_manager = FileManager()
+
 
     def display_splash_screen(self):
         try:
             # Load logo frames
-            logo_frames = [load_texture('logo.txt'), load_texture('logo2.txt')]
+            logo_frames = [self.file_manager.load_texture('logo.txt'), self.file_manager.load_texture('logo2.txt')]
 
             current_logo_frame = 0
 
@@ -48,6 +50,9 @@ class SplashView(Widget):
 
                 # Switch to the next logo frame
                 current_logo_frame = (current_logo_frame + 1) % len(logo_frames)
+
+                # Refresh the screen
+                self.stdscr.refresh()
 
                 # Check for user input
                 user_input = self.stdscr.getch()

@@ -1,82 +1,44 @@
 # APIclient.py
 
-from utils.data_storage import load_data, save_data
-from utils.logger import log_message
-from utils.url_macros import *
-from datetime import datetime
 import logging
 import json
 import requests
 
-DATA_DIR = "data"
+from utils.logger import log_message
+from utils.url_macros import LOGIN, REGISTER, GET_CLIENT_ID, GET_CLIENT_INFO, GET_LIST_FRIENDS, ADD_FRIEND, REMOVE_FRIEND, GET_USER_STATS
+from utils.file_manager import FileManager
+from datetime import datetime
 
 class http_api:
     def __init__(self):
         self.session = requests.Session()
+        self.file_manager = FileManager()
         self.client_id = None
 
     def close_session(self):
         self.session.close()
 
-# Save/Load data using save_data and load_data
+# Save/Load data using FileManager
     def save_cookies(self, csrf_token, expires_datetime):
         cookies_dict = {"csrftoken": csrf_token, "expiry": expires_datetime.strftime("%a, %d %b %Y %H:%M:%S %Z")}
-        save_data("cookies.json", cookies_dict)
+        self.file_manager.save_data("cookies.json", cookies_dict)
 
     def save_token(self, token):
-        save_data("token.json", token)
+        self.file_manager.save_data("token.json", token)
 
     def save_client_info(self, client_id, username):
         client_info = {"client_id": client_id, "username": username}
-        save_data("client_info.json", client_info)
+        self.file_manager.save_data("client_info.json", client_info)
 
     def load_cookies(self):
-        return load_data("cookies.json")
+        return self.file_manager.load_data("cookies.json")
 
     def load_token(self):
-        return load_data("token.json")
+        return self.file_manager.load_data("token.json")
 
     def load_client_info(self):
-        return load_data("client_info.json")
-# -----------------------------
+        return self.file_manager.load_data("client_info.json")
 
-# API caller function
-    def make_api_call(self, method, url, data=None):
-        try:
-            cookies = self.load_cookies()
-            jwt_token = self.load_token()
-
-            headers = {}
-            if self.is_cookies_valid(cookies):
-                headers = {
-                    "Content-Type": "application/json",
-                    "Authorization": f"Bearer {jwt_token['token']}",
-                }
-            else:
-                # Refresh cookies and token if either is not valid
-                print("Cookies or token not valid. Log in again please...")
-
-            if data and isinstance(data, dict):
-                json_data = json.dumps(data)
-            else:
-                json_data = data
-
-            response = self.session.request(method, url, headers=headers, data=json_data, cookies=cookies)
-
-            return response
-        
-        except requests.exceptions.ConnectionError:
-            log_message("Connection error.", level=logging.ERROR)
-            return None
-        
-        except requests.exceptions.HTTPError as e:
-            log_message(f"HTTP error: {e}", level=logging.ERROR)
-            return None
-        
-        except requests.exceptions.Timeout:
-            log_message("Request timed out.", level=logging.ERROR)
-            return None
-        
     def is_cookies_valid(self, cookies):
         try:
             if cookies and 'expiry' in cookies:
@@ -89,41 +51,81 @@ class http_api:
             log_message(f"Error checking if cookies are valid: {e}", level=logging.ERROR)
             return False
 # -----------------------------
+
+# API caller function
+    def make_api_call(self, method, url, data=None):
+        try:
+            cookies = self.load_cookies()
+            jwt_token = self.load_token()
+            headers = self._get_request_headers(cookies, jwt_token)
+
+            if data and isinstance(data, dict):
+                json_data = json.dumps(data)
+            else:
+                json_data = data
+
+            response = self.session.request(method, url, headers=headers, data=json_data, cookies=cookies)
+
+            return response
+        
+        except (requests.exceptions.ConnectionError, requests.exceptions.HTTPError, requests.exceptions.Timeout) as e:
+            log_message(f"Error during API call: {e}", level=logging.ERROR)
+            return None
+        
+    def _get_request_headers(self, cookies, jwt_token):
+        headers = {}
+        if self.is_cookies_valid(cookies):
+            headers = {
+                "Content-Type": "application/json",
+                "Authorization": f"Bearer {jwt_token['token']}",
+                }
+        else:
+            print("Cookies or token not valid. Log in again, please...")
+
+        return headers
+
+    def _parse_response(self, response):
+        try:
+            if response.status_code == 200:
+                return response.json()
+            else:
+                log_message(f"Error in API response: {response.text}", level=logging.ERROR)
+                return False
+        except json.JSONDecodeError as e:
+            log_message(f"Error decoding JSON response: {e}", level=logging.ERROR)
+            return False
+
+    def _handle_successful_login(self, response, username):
+        jwt_token = response.json().get("token")
+        cookies_dict = response.headers.get('Set-Cookie')
+
+        if cookies_dict and jwt_token:
+            expires_str = cookies_dict.split('expires=')[1].split(';')[0].strip()
+            expires_datetime = datetime.strptime(expires_str, "%a, %d %b %Y %H:%M:%S %Z")
+            csrf_token = cookies_dict.split('csrftoken=')[1].split(';')[0].strip()
+
+            self.save_cookies(csrf_token, expires_datetime)
+            self.save_token({'token': jwt_token})
+
+            self.client_id = self.get_client_id(username)
+            self.save_client_info(self.client_id, username)
+# -----------------------------
     
 # Predifined Login/Register API calls
     def login(self, username, password):
         try:
             url = LOGIN
             data = {"username": username, "password": password}
+            response = self.make_api_call("POST", url, data)
 
-            response = self.session.post(url, json=data)
-
-            if response.status_code == 200:
-                json_response = response.json()
-                if json_response['status'] == 'ok':
-
-                    jwt_token = json_response.get("token")
-                    cookies_dict = response.headers.get('Set-Cookie')
-
-                    if cookies_dict and jwt_token:
-                        # Parse the expiration time from the 'Set-Cookie' header
-                        expires_str = cookies_dict.split('expires=')[1].split(';')[0].strip()   
-                        # Convert the expiration time to a datetime object
-                        expires_datetime = datetime.strptime(expires_str, "%a, %d %b %Y %H:%M:%S %Z")
-                        # Get the CSRF token from the 'Set-Cookie' header
-                        csrf_token = cookies_dict.split('csrftoken=')[1].split(';')[0].strip()
-
-                        # Save only the expiration date in a format for easy comparison
-                        self.save_cookies(csrf_token, expires_datetime)
-                        self.save_token({'token': jwt_token})
-
-                        self.client_id = self.get_client_id(username)
-                        self.save_client_info(self.client_id, username)
-
-                        return username
+            json_response = self._parse_response(response)
+            if response.status_code == 200 and json_response and json_response.get('status') == 'ok':
+                self._handle_successful_login(response, username)
+                return username
             else:
                 log_message(f"Login failed: {response.text}", level=logging.ERROR)
                 return False
+
         except Exception as e:
             log_message(f"Error logging in: {e}", level=logging.ERROR)
             return False
@@ -132,33 +134,14 @@ class http_api:
         try:
             url = REGISTER
             data = {"username": username, "password": password, "fullname": fullname, "email": email}
+            response = self.make_api_call("POST", url, data)
 
-            response = self.session.post(url, json=data)
+            json_response = self._parse_response(response)
 
-            if response.status_code == 200:
-                json_response = response.json()
-                if json_response['status'] == 'ok':
-
-                    jwt_token = json_response.get("token")
-                    cookies_dict = response.headers.get('Set-Cookie')
-
-                    if cookies_dict and jwt_token:
-                        # Parse the expiration time from the 'Set-Cookie' header
-                        expires_str = cookies_dict.split('expires=')[1].split(';')[0].strip()   
-                        # Convert the expiration time to a datetime object
-                        expires_datetime = datetime.strptime(expires_str, "%a, %d %b %Y %H:%M:%S %Z")
-                        # Get the CSRF token from the 'Set-Cookie' header
-                        csrf_token = cookies_dict.split('csrftoken=')[1].split(';')[0].strip()
-
-                        # Save only the expiration date in a format for easy comparison
-                        self.save_cookies(csrf_token, expires_datetime)
-                        self.save_token({'token': jwt_token})
-
-                        self.client_id = self.get_client_id(username)
-                        self.save_client_info(self.client_id, username)
-
-                        return username
-                    
+            if response.status_code == 200 and json_response and json_response.get('status') == 'ok':
+                self._handle_successful_login(response, username)
+                return username
+             
             else:
                 log_message(f"Register failed: {response.text}", level=logging.ERROR)
                 return False

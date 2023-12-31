@@ -8,17 +8,19 @@ import json
 from utils.logger import log_message
 
 class HomePage():
-    def __init__(self, stdscr, messages_send_queue, messages_receive_queue, send_message_lock, receive_message_lock, keyboard_input_queue, keyboard_input_lock):
+    def __init__(self, stdscr, lobby_ws_data, keyboard_input_data):
         self.stdscr = stdscr
 
         # Queues and locks for sending and receiving messages
-        self.messages_send_queue = messages_send_queue
-        self.messages_receive_queue = messages_receive_queue
-        self.keyboard_input_queue = keyboard_input_queue
-        self.send_message_lock = send_message_lock
-        self.receive_message_lock = receive_message_lock
-        self.keyboard_input_lock = keyboard_input_lock
+        self.messages_send_queue = lobby_ws_data["messages_send_queue"]
+        self.messages_send_lock = lobby_ws_data["messages_send_lock"]
+        self.messages_receive_queue = lobby_ws_data["messages_receive_queue"]
+        self.receive_message_lock = lobby_ws_data["messages_receive_lock"]
 
+        # Queue and lock for keyboard input
+        self.keyboard_input_queue = keyboard_input_data["keyboard_input_queue"]
+        self.keyboard_input_lock = keyboard_input_data["keyboard_input_lock"]
+        
         # Frame rate timing
         self.last_frame_time = time.time()
 

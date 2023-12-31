@@ -1,20 +1,23 @@
 # app/function_views/login_view.py
 
-from utils.logger import log_message
-from utils.data_storage import load_texture
 import logging
 import curses
 import time
 import asyncio
 
+from utils.logger import log_message
+from utils.file_manager import FileManager
+from network.http_api import http_api
+
 class Login:
-    def __init__(self, stdscr, http):
+    def __init__(self, stdscr):
         self.stdscr = stdscr
-        self.logo = load_texture("logo.txt")
+        self.file_manager = FileManager()
+        self.logo = self.file_manager.load_texture("logo.txt")
         self.inputs = [{"name": "Username", "value": ""}, {"name": "Password", "value": ""}]
         self.current_input_index = 0
         self.error_message = None
-        self.http = http
+        self.http = http_api()
         self.logged_in = False
 
 # Input Processing
