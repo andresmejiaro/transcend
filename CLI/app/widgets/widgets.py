@@ -12,7 +12,10 @@ class Widget:
         self.update_terminal_size()
 
     def update_terminal_size(self):
-        self.rows, self.cols = self.stdscr.getmaxyx()
+        try:
+            self.rows, self.cols = self.stdscr.getmaxyx()
+        except Exception as e:
+            log_message(f"Error getting terminal size: {e}", level=logging.ERROR)
 
     def _clear_screen(self):
         self.stdscr.clear()
@@ -27,9 +30,9 @@ class Widget:
         except curses.error as e:
             log_message(f"Error adding string at ({row}, {col}): {e}", level=logging.ERROR)
 
-    def print_screen_too_small(self):
+    def print_screen_too_small(self, size_required=(30, 80)):
         self._clear_screen()
-        self._addstr(0, 0, "Screen too small!", curses.color_pair(3) | curses.A_BOLD)
+        self._addstr(0, 0, f"Screen too small! Please resize to at least {size_required[0]} rows and {size_required[1]} columns.", curses.color_pair(3) | curses.A_BLINK)
         self._refresh_screen()
 
     def print_header(self, header):
@@ -49,12 +52,11 @@ class Widget:
 
         time.sleep(1 / frame_rate)
 
-    def print_message_under_logo(self, message, logo):
-        message_row = self.rows // 2 + len(logo) + 2
-        message_col = self.cols // 2 - len(message) // 2
-
-        if message_row < self.rows and message_col < self.cols:
-            self._addstr(message_row, message_col, message)
+    def print_message_bottom(self, message):
+        # Print message 1 row above the bottom of the screen
+        row = self.rows - 2
+        col = self.cols // 2 - len(message) // 2
+        self._addstr(row, col, message)
 
     def print_frame_rate(self):
         try:
@@ -67,18 +69,12 @@ class Widget:
         except Exception as e:
             log_message(f"Error printing frame rate: {e}", level=logging.ERROR)
 
-    def print_input_prompt(self, prompt, input_string, index):
+    def print_current_time(self):
         try:
-            prompt_row = self.rows // 2 + len(self.logo) + 2 + index  # Add spacing and index
-            prompt_col = self.cols // 2 - len(prompt) // 2
-
-            # Set the background color to highlight the current input field
-            if index == self.current_input_index:
-                self._addstr(prompt_row, prompt_col, prompt, curses.A_REVERSE)
-                self._addstr(prompt_row, prompt_col + len(prompt), input_string, curses.A_REVERSE)
-            else:
-                self._addstr(prompt_row, prompt_col, prompt)
-                self._addstr(prompt_row, prompt_col + len(prompt), input_string)
+            current_time = time.strftime("%H:%M:%S")
+            self._addstr(0, self.cols - 22, f"Current Time: {current_time}", curses.color_pair(3) | curses.A_DIM | curses.A_BOLD)
 
         except Exception as e:
-            log_message(f"Error printing input prompt: {e}", level=logging.ERROR)
+            log_message(f"Error printing current time: {e}", level=logging.ERROR)
+
+

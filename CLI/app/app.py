@@ -10,7 +10,8 @@ from utils.url_macros import LOBBY_URI_TEMPLATE
 from utils.file_manager import FileManager
 from utils.task_manager import TaskManager
 
-from network.http_api import http_api
+from UI.UI_controller import UIController
+
 from app.class_views.login_view import Login
 from app.class_views.home_view import HomePage
 from app.class_views.splash_view import SplashView
@@ -23,9 +24,10 @@ class CLIApp:
         self.logged_in = False      # The logged in status of the application
         self.file_manager = FileManager()   # The file manager object - Used to load and save data to files
         self.task_manager = TaskManager()   # The task manager object - Used to create and manage tasks
+        self.ui_controller = UIController(self.stdscr)   # The UI controller object - Used to control the UI
 
         # Adjust App Frame Rate - Adjust the frame rate of the application
-        self.frame_rate = 10
+        self.frame_rate = 30
 
 # Essential App Tasks - These tasks are essential to the application and will be created and started in the main loop
     # Lobby Websocket Task - Connect to the lobby websocket and send and receive messages throught the duration of the application
@@ -92,11 +94,7 @@ class CLIApp:
         try:
             log_message("Main Loop Task started", level=logging.DEBUG)
             while True:
-                await self.current_view.update_screen()
-
-                await self.current_view.process_lobby_recv_message()
-
-                await self.current_view.process_inputs()
+                await self.current_view.run()
 
                 next_view = await self.current_view.get_next_view()
 
@@ -121,7 +119,6 @@ class CLIApp:
             await self.current_view.cleanup()
             self.exit_status = 1
 # -------------------------------------
-
 
 # Entry Point - Initializes tasks and runs the main loop, additionaly tasks will be created and started and stopped as needed in the main loop
     async def run(self):
@@ -177,7 +174,6 @@ class CLIApp:
             await self.task_manager.stop_all_tasks()
             return self.exit_status
 # -------------------------------------
-
 
 # Helper Methods
     # Set Frame Rate - Set the frame rate of the application

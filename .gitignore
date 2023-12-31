@@ -20,6 +20,7 @@ backend/server/media/avatars/
 # Ignore the virtual environment directory
 venv/
 django_venv/
+CLI/venv/
 
 # Ignore files created by IDEs/editors
 .vscode/

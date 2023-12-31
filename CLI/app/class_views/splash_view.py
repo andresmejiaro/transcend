@@ -3,8 +3,8 @@
 import curses
 import logging
 
-from app.widgets.widgets import Widget
 from utils.logger import log_message
+from app.widgets.widgets import Widget
 from utils.file_manager import FileManager
 
 class SplashView(Widget):
@@ -28,19 +28,19 @@ class SplashView(Widget):
                 # Get the terminal size
                 self.update_terminal_size()
 
-                if self.rows < 24 or self.cols < 80:
+                if self.rows < 30 or self.cols < 80:
                     self.print_screen_too_small()
-                    self.stdscr.refresh()
                     continue
             
                 # Print frame rate
-                self.print_frame_rate()
+                # self.print_frame_rate()
+                self.print_current_time()
 
                 # Print header
                 self.print_header("Welcome to Pong!")
 
                 # Print message under logo
-                self.print_message_under_logo("Press any key to continue...", logo_frames[current_logo_frame])
+                self.print_message_bottom("Press any key to continue...")
 
                 # Animation delay
                 self.print_animated_logo(logo_frames[current_logo_frame], frame_rate)

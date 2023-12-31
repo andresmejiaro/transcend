@@ -6,19 +6,21 @@ import time
 import asyncio
 
 from utils.logger import log_message
-from utils.file_manager import FileManager
 from network.http_api import http_api
+from app.widgets.widgets import Widget
+from utils.file_manager import FileManager
 
-class Login:
+class Login(Widget):
     def __init__(self, stdscr):
-        self.stdscr = stdscr
+        super().__init__(stdscr)
+        self.http = http_api()
         self.file_manager = FileManager()
+        self.logged_in = False
+
         self.logo = self.file_manager.load_texture("logo.txt")
         self.inputs = [{"name": "Username", "value": ""}, {"name": "Password", "value": ""}]
         self.current_input_index = 0
         self.error_message = None
-        self.http = http_api()
-        self.logged_in = False
 
 # Input Processing
     async def get_user_input(self):

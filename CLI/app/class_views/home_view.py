@@ -6,21 +6,21 @@ import time
 import json
 
 from utils.logger import log_message
+from utils.url_macros import LOBBY_URI_TEMPLATE
+from utils.file_manager import FileManager
+from utils.task_manager import TaskManager
+from app.widgets.widgets import Widget
 
-class HomePage():
+class HomePage(Widget):
     def __init__(self, stdscr, lobby_ws_data, keyboard_input_data):
-        self.stdscr = stdscr
+        super().__init__(stdscr)
 
-        # Queues and locks for sending and receiving messages
-        self.messages_send_queue = lobby_ws_data["messages_send_queue"]
-        self.messages_send_lock = lobby_ws_data["messages_send_lock"]
-        self.messages_receive_queue = lobby_ws_data["messages_receive_queue"]
-        self.receive_message_lock = lobby_ws_data["messages_receive_lock"]
+        self.file_manager = FileManager()
+        self.task_manager = TaskManager()
 
-        # Queue and lock for keyboard input
-        self.keyboard_input_queue = keyboard_input_data["keyboard_input_queue"]
-        self.keyboard_input_lock = keyboard_input_data["keyboard_input_lock"]
-        
+        # Shared data between Tasks (Queues and Locks)
+        self.list_of_shared_data = {"lobby": lobby_ws_data, "keyboard": keyboard_input_data}
+
         # Frame rate timing
         self.last_frame_time = time.time()
 
@@ -29,6 +29,16 @@ class HomePage():
 
         # Online users
         self.online_users = {}
+
+# Entrypoing Method
+    async def run(self):
+        try:
+            await self.update_screen()
+            await self.process_lobby_inputs()
+            await self.process_keyboard_inputs()
+
+        except Exception as e:
+            log_message(f"Error in run: {e}", level=logging.ERROR)
 
 # Core View Methods, these are called from app.py and updated based on the current view 
     
@@ -60,43 +70,55 @@ class HomePage():
             log_message(f"Error in update_screen: {e}", level=logging.ERROR)
 
     # Process received messages from the lobby ws
-    async def process_lobby_recv_message(self):
+    async def process_lobby_inputs(self):
         try:
             # First check if there are any messages in the queue
-            if self.messages_receive_queue.empty():
+            if self.list_of_shared_data["lobby"]["messages_receive_queue"].empty():
                 return
 
             # If there are messages, process them
-            async with self.receive_message_lock:
-                while not self.messages_receive_queue.empty():
-                    message = await self.messages_receive_queue.get()
+            async with self.list_of_shared_data["lobby"]["messages_receive_lock"]:
+                while not self.list_of_shared_data["lobby"]["messages_receive_queue"].empty():
+                    message = await self.list_of_shared_data["lobby"]["messages_receive_queue"].get()
                     self.update_online_users(message)
 
         except Exception as e:
-            log_message(f"Error in process_lobby_recv_message: {e}", level=logging.ERROR)
+            log_message(f"Error in process_lobby_inputs: {e}", level=logging.ERROR)
         
     # Process keyboard input
-    async def process_inputs(self):
+    async def process_keyboard_inputs(self):
         try:
             # We receive keyboard input from the keyboard_input_queue so we can process it
-            if self.keyboard_input_queue.empty():
+            if self.list_of_shared_data["keyboard"]["keyboard_input_queue"].empty():
                 return
             
             # Acquire the lock before accessing the queue
-            async with self.keyboard_input_lock:
+            async with self.list_of_shared_data["keyboard"]["keyboard_input_lock"]:
                 # Get the keyboard input
-                input_data = await self.keyboard_input_queue.get()
+                input_data = await self.list_of_shared_data["keyboard"]["keyboard_input_queue"].get()
                 log_message(f'Processing input: {input_data}', level=logging.DEBUG)
                 
                 # For now just display the input on the screen
                 self.stdscr.addstr(6, 0, str(input_data))  # Ensure input is converted to a string before display
         
         except Exception as e:
-            log_message(f"Error in process_inputs: {e}", level=logging.ERROR)
+            log_message(f"Error in process_keyboard_inputs: {e}", level=logging.ERROR)
 
     # When the view is changed, this method is called to set the next view           
     async def get_next_view(self):
         return self.next_view
+
+    # Send messages to the lobby ws
+    async def send_message(self):
+        try:
+            message = {"command": "list_of_users"}
+            message = json.dumps(message)
+            # Acquire the lock before accessing the queue
+            async with self.list_of_shared_data["lobby"]["messages_send_lock"]:
+                await self.list_of_shared_data["lobby"]["messages_send_queue"].put(message)
+
+        except Exception as e:
+            log_message(f"Error in send_message: {e}", level=logging.ERROR)
 
     # Cleanup resources if needed, called when exiting the view
     async def cleanup(self):
@@ -158,7 +180,6 @@ class HomePage():
             log_message(f"Error printing screen too small message: {e}", level=logging.ERROR)
 
 # -------------------------------------
-
 
 # Lobby Processing Methods
     def update_online_users(self, message):
