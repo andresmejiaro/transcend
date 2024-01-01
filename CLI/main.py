@@ -27,7 +27,7 @@ async def main(stdscr, username, password):
 
         try:
             app = CLIApp(stdscr)
-            await app.run()
+            await app.start()
 
         except Exception as e:
             log_message(f'Error starting the App: {e}', logging.ERROR)

@@ -73,13 +73,13 @@ class HomePage(Widget):
     async def process_lobby_inputs(self):
         try:
             # First check if there are any messages in the queue
-            if self.list_of_shared_data["lobby"]["messages_receive_queue"].empty():
+            if self.list_of_shared_data["lobby"]["receive_queue"].empty():
                 return
 
             # If there are messages, process them
-            async with self.list_of_shared_data["lobby"]["messages_receive_lock"]:
-                while not self.list_of_shared_data["lobby"]["messages_receive_queue"].empty():
-                    message = await self.list_of_shared_data["lobby"]["messages_receive_queue"].get()
+            async with self.list_of_shared_data["lobby"]["receive_lock"]:
+                while not self.list_of_shared_data["lobby"]["receive_queue"].empty():
+                    message = await self.list_of_shared_data["lobby"]["receive_queue"].get()
                     self.update_online_users(message)
 
         except Exception as e:
@@ -88,14 +88,14 @@ class HomePage(Widget):
     # Process keyboard input
     async def process_keyboard_inputs(self):
         try:
-            # We receive keyboard input from the keyboard_input_queue so we can process it
-            if self.list_of_shared_data["keyboard"]["keyboard_input_queue"].empty():
+            # We receive keyboard input from the receive_queue so we can process it
+            if self.list_of_shared_data["keyboard"]["receive_queue"].empty():
                 return
             
             # Acquire the lock before accessing the queue
-            async with self.list_of_shared_data["keyboard"]["keyboard_input_lock"]:
+            async with self.list_of_shared_data["keyboard"]["receive_lock"]:
                 # Get the keyboard input
-                input_data = await self.list_of_shared_data["keyboard"]["keyboard_input_queue"].get()
+                input_data = await self.list_of_shared_data["keyboard"]["receive_queue"].get()
                 log_message(f'Processing input: {input_data}', level=logging.DEBUG)
                 
                 # For now just display the input on the screen
@@ -114,8 +114,8 @@ class HomePage(Widget):
             message = {"command": "list_of_users"}
             message = json.dumps(message)
             # Acquire the lock before accessing the queue
-            async with self.list_of_shared_data["lobby"]["messages_send_lock"]:
-                await self.list_of_shared_data["lobby"]["messages_send_queue"].put(message)
+            async with self.list_of_shared_data["lobby"]["send_lock"]:
+                await self.list_of_shared_data["lobby"]["send_queue"].put(message)
 
         except Exception as e:
             log_message(f"Error in send_message: {e}", level=logging.ERROR)
