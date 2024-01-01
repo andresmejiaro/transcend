@@ -9,44 +9,74 @@ from utils.logger import log_message
 from network.http_api import http_api
 from app.widgets.widgets import Widget
 from utils.file_manager import FileManager
+from utils.task_manager import TaskManager
+# Next View
+from app.class_views.home_view import HomePage
 
 class Login(Widget):
-    def __init__(self, stdscr):
+    def __init__(self, stdscr, ui_controller):
         super().__init__(stdscr)
         self.http = http_api()
         self.file_manager = FileManager()
+        self.task_manager = TaskManager()
+        self.ui_controller = ui_controller
         self.logged_in = False
 
         self.logo = self.file_manager.load_texture("logo.txt")
         self.inputs = [{"name": "Username", "value": ""}, {"name": "Password", "value": ""}]
         self.current_input_index = 0
         self.error_message = None
-
-# Input Processing
-    async def get_user_input(self):
+        self.next_view = None
+    
+    def __str__(self):
+        # Return a string representing the current view
+        return "login"
+ 
+# Screen Updating
+    async def draw(self):
         try:
-            while True:
-                key = self.stdscr.getch()
+            self._clear_screen()
 
-                if key == curses.KEY_ENTER or key in [10, 13]:
-                    return "enter"
-                elif key == curses.KEY_EXIT or key == 27:
-                    return None
-                elif key == curses.KEY_BACKSPACE:
-                    return "backspace"
-                elif key != -1:  # Ignore special keys with value -1
-                    return key
-                
-                await asyncio.sleep(0.1)
+            self.update_terminal_size()
+
+            if self.rows < 30 or self.cols < 120:
+                self.print_screen_too_small()
+                return
+            
+            self.print_header("Login")
+            self.print_current_time()
+
+            if self.logo:
+                self.print_logo_centered(self.file_manager.load_texture("logo.txt"))
+
+            user_input = await self.ui_controller.handle_keyboard_input_directly()
+
+            if user_input:
+                log_message(f"User input: {user_input}", level=logging.DEBUG)
+                self.process_input(user_input)
+
+            for i, input_data in enumerate(self.inputs):
+                prompt = f"{input_data['name']}: "
+                input_string = '*' * len(input_data['value'])
+                if i == self.current_input_index:
+                    # Highlight the current input field
+                    prompt = f"{prompt}"
+                self.display_prompt(prompt, input_string, i)
+
+            self._refresh_screen()
 
         except Exception as e:
-            log_message(f"Error getting user input: {e}", level=logging.ERROR)
-            return None
+            log_message(f"Error updating screen: {e}", level=logging.ERROR)
 
+    def get_next_view(self):
+        return self.next_view
+# -----------------------------
+
+# Input Processing
     def process_input(self, user_input):
         current_input = self.inputs[self.current_input_index]
 
-        if user_input == "enter":
+        if user_input == 10:
             if not current_input["value"]:
                 self.error_message = f"{current_input['name']} cannot be empty!"
             else:
@@ -59,71 +89,20 @@ class Login(Widget):
                         self.error_message = None
                     else:
                         self.logged_in = True
+                        self.next_view = HomePage(self.stdscr, self.ui_controller)
                         return True
                 else:
                     self.error_message = None  # Clear any previous error messages
-        elif user_input == "backspace":
+        elif user_input == 263:
             current_input["value"] = current_input["value"][:-1]
         elif user_input and isinstance(user_input, int):
             # Only append if it's a printable character
             if 32 <= user_input <= 126:
                 current_input["value"] += chr(user_input)
 # -----------------------------
-                
-# Screen Updating
-    def update_screen(self):
-        try:
-            self.stdscr.clear()
 
-            if self.logo:
-                self.display_logo()
 
-            for i, input_data in enumerate(self.inputs):
-                prompt = f"{input_data['name']}: "
-                input_string = '*' * len(input_data['value'])
-                if i == self.current_input_index:
-                    # Highlight the current input field
-                    prompt = f"{prompt}"
-                self.display_prompt(prompt, input_string, i)
-
-            self.stdscr.refresh()
-
-        except Exception as e:
-            log_message(f"Error updating screen: {e}", level=logging.ERROR)
-# -----------------------------
-
-# Main Loop    
-    async def run(self):
-        try:
-            self.update_screen()
-            frame_rate = 30
-            frame_delay = 1 / frame_rate
-
-            while self.logged_in is False:
-                user_input = await self.get_user_input()
-                if user_input is None:
-                    return None
-                else:
-                    self.process_input(user_input)
-                    self.update_screen()
-
-                await asyncio.sleep(frame_delay)
-
-            return True
-
-        except Exception as e:
-            log_message(f"Error running login view: {e}", level=logging.ERROR)
-            return False
-# -----------------------------
-
-# Display Helper Methods
-    def display_logo(self):
-        rows, cols = self.stdscr.getmaxyx()
-        logo_row = max(0, (rows - len(self.logo)) // 2)
-        col = max(0, (cols - len(self.logo[0])) // 2)
-        for i, line in enumerate(self.logo):
-            self.stdscr.addstr(logo_row + i, col, line)
-
+# View Specific Methods
     def display_prompt(self, prompt, input_string, index):
         rows, cols = self.stdscr.getmaxyx()
         logo_row = max(0, (rows - len(self.logo)) // 2)
@@ -160,7 +139,6 @@ class Login(Widget):
         log_message(f"Entered Data: {entered_data}")
 
         response = self.http.login(entered_data["Username"], entered_data["Password"])
-
         log_message(f"Login response: {response}")
 
         if response:

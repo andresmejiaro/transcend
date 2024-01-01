@@ -1,9 +1,77 @@
-2024-01-01 01:02:01,251 [INFO] [log_message] Logger initialized.
-2024-01-01 01:02:01,253 [DEBUG] [log_message] Launching UI
-2024-01-01 01:02:01,255 [DEBUG] [log_message] Connecting to websocket: ws://localhost:8001/ws/lobby2/?client_id=1
-2024-01-01 01:02:01,256 [DEBUG] [log_message] Keyboard Input Task started
-2024-01-01 01:02:01,257 [DEBUG] [_getaddrinfo_debug] Get address info localhost:8001, type=<SocketKind.SOCK_STREAM: 1>, flags=<AddressInfo.AI_ADDRCONFIG: 32>
-2024-01-01 01:02:01,258 [DEBUG] [_getaddrinfo_debug] Getting address info localhost:8001, type=<SocketKind.SOCK_STREAM: 1>, flags=<AddressInfo.AI_ADDRCONFIG: 32> took 0.204ms: [(<AddressFamily.AF_INET: 2>, <SocketKind.SOCK_STREAM: 1>, 6, '', ('127.0.0.1', 8001))]
-2024-01-01 01:02:01,262 [DEBUG] [create_connection] <asyncio.TransportSocket fd=7, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=6, laddr=('127.0.0.1', 49364), raddr=('127.0.0.1', 8001)> connected to 127.0.0.1:8001: (<_SelectorSocketTransport fd=7 read=polling write=<idle, bufsize=0>>, <aiohttp.client_proto.ResponseHandler object at 0x7f1c51f9bbe0>)
-2024-01-01 01:02:01,303 [DEBUG] [log_message] Received message: {"type": "user_joined", "data": {"client_id": "1", "lobby_name": "lobby", "online_users": {"1": "splix"}}}
-2024-01-01 01:02:03,947 [INFO] [log_message] Keyboard interrupt detected.
+2024-01-01 19:23:59,958 [INFO] [log_message] Keyboard interrupt detected.
+2024-01-01 19:24:00,981 [INFO] [log_message] Logger initialized.
+2024-01-01 19:24:00,982 [DEBUG] [log_message] Adding shared data: lobby
+2024-01-01 19:24:00,983 [DEBUG] [log_message] Shared data added: {'lobby': {'receive_queue': <Queue at 0x7f85a913ff10 maxsize=0>, 'send_queue': <Queue at 0x7f85a913f6a0 maxsize=0>, 'receive_lock': <asyncio.locks.Lock object at 0x7f85a913f4c0 [unlocked]>, 'send_lock': <asyncio.locks.Lock object at 0x7f85a913f460 [unlocked]>}}
+2024-01-01 19:24:00,983 [DEBUG] [log_message] Adding shared data: keyboard
+2024-01-01 19:24:00,983 [DEBUG] [log_message] Shared data added: {'lobby': {'receive_queue': <Queue at 0x7f85a913ff10 maxsize=0>, 'send_queue': <Queue at 0x7f85a913f6a0 maxsize=0>, 'receive_lock': <asyncio.locks.Lock object at 0x7f85a913f4c0 [unlocked]>, 'send_lock': <asyncio.locks.Lock object at 0x7f85a913f460 [unlocked]>}, 'keyboard': {'receive_queue': <Queue at 0x7f85a913f2e0 maxsize=0>, 'receive_lock': <asyncio.locks.Lock object at 0x7f85a913f370 [unlocked]>}}
+2024-01-01 19:24:00,983 [DEBUG] [log_message] Launching UI
+2024-01-01 19:24:00,986 [DEBUG] [log_message] Connecting to websocket: ws://localhost:8001/ws/lobby2/?client_id=1
+2024-01-01 19:24:00,989 [DEBUG] [log_message] Keyboard Input Task started
+2024-01-01 19:24:00,989 [DEBUG] [log_message] Received key: 92
+2024-01-01 19:24:00,991 [DEBUG] [_getaddrinfo_debug] Get address info localhost:8001, type=<SocketKind.SOCK_STREAM: 1>, flags=<AddressInfo.AI_ADDRCONFIG: 32>
+2024-01-01 19:24:00,991 [DEBUG] [_getaddrinfo_debug] Getting address info localhost:8001, type=<SocketKind.SOCK_STREAM: 1>, flags=<AddressInfo.AI_ADDRCONFIG: 32> took 0.370ms: [(<AddressFamily.AF_INET: 2>, <SocketKind.SOCK_STREAM: 1>, 6, '', ('127.0.0.1', 8001))]
+2024-01-01 19:24:00,996 [DEBUG] [create_connection] <asyncio.TransportSocket fd=7, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=6, laddr=('127.0.0.1', 35734), raddr=('127.0.0.1', 8001)> connected to 127.0.0.1:8001: (<_SelectorSocketTransport fd=7 read=polling write=<idle, bufsize=0>>, <aiohttp.client_proto.ResponseHandler object at 0x7f85a91d6560>)
+2024-01-01 19:24:01,027 [DEBUG] [log_message] Received message: {"type": "user_joined", "data": {"client_id": "1", "lobby_name": "lobby", "online_users": {"1": "splix"}}}
+2024-01-01 19:24:01,702 [DEBUG] [log_message] Received key: 32
+2024-01-01 19:24:01,804 [DEBUG] [log_message] Splash screen user input: 32
+2024-01-01 19:24:02,013 [DEBUG] [log_message] Received key: 115
+2024-01-01 19:24:02,113 [DEBUG] [log_message] User input: 115
+2024-01-01 19:24:02,221 [DEBUG] [log_message] Received key: 112
+2024-01-01 19:24:02,322 [DEBUG] [log_message] User input: 112
+2024-01-01 19:24:02,425 [DEBUG] [log_message] Received key: 108
+2024-01-01 19:24:02,526 [DEBUG] [log_message] User input: 108
+2024-01-01 19:24:02,529 [DEBUG] [log_message] Received key: 105
+2024-01-01 19:24:02,631 [DEBUG] [log_message] User input: 105
+2024-01-01 19:24:02,633 [DEBUG] [log_message] Received key: 120
+2024-01-01 19:24:02,735 [DEBUG] [log_message] User input: 120
+2024-01-01 19:24:02,840 [DEBUG] [log_message] Received key: 10
+2024-01-01 19:24:02,942 [DEBUG] [log_message] User input: 10
+2024-01-01 19:24:03,047 [DEBUG] [log_message] Received key: 49
+2024-01-01 19:24:03,149 [DEBUG] [log_message] User input: 49
+2024-01-01 19:24:03,151 [DEBUG] [log_message] Received key: 50
+2024-01-01 19:24:03,254 [DEBUG] [log_message] User input: 50
+2024-01-01 19:24:03,255 [DEBUG] [log_message] Received key: 51
+2024-01-01 19:24:03,356 [DEBUG] [log_message] User input: 51
+2024-01-01 19:24:03,358 [DEBUG] [log_message] Received key: 10
+2024-01-01 19:24:03,459 [DEBUG] [log_message] User input: 10
+2024-01-01 19:24:03,459 [INFO] [log_message] Entered Data: {'Username': 'splix', 'Password': '123'}
+2024-01-01 19:24:03,465 [DEBUG] [_new_conn] Starting new HTTP connection (1): localhost:8000
+2024-01-01 19:24:03,841 [DEBUG] [_make_request] http://localhost:8000 "POST /api/user/login/ HTTP/1.1" 200 241
+2024-01-01 19:24:03,920 [DEBUG] [_make_request] http://localhost:8000 "GET /api/get_user_id/splix/ HTTP/1.1" 200 35
+2024-01-01 19:24:03,921 [INFO] [log_message] Login response: splix
+2024-01-01 19:24:03,922 [WARNING] [_run_once] Executing <Task pending name='Task-1' coro=<main() running at /home/splix/Desktop/new-sprint/CLI/main.py:30> wait_for=<Future pending cb=[Task.task_wakeup()] created at /usr/lib/python3.10/asyncio/base_events.py:429> cb=[_run_until_complete_cb() at /usr/lib/python3.10/asyncio/base_events.py:184] created at /usr/lib/python3.10/asyncio/tasks.py:636> took 0.464 seconds
+2024-01-01 19:24:04,025 [DEBUG] [log_message] Processing input from lobby
+2024-01-01 19:24:04,025 [DEBUG] [log_message] Input data: {"type": "user_joined", "data": {"client_id": "1", "lobby_name": "lobby", "online_users": {"1": "splix"}}}
+2024-01-01 19:24:04,025 [DEBUG] [log_message] Handling input from lobby
+2024-01-01 19:24:04,025 [DEBUG] [log_message] Lobby Input from UI Controller: {"type": "user_joined", "data": {"client_id": "1", "lobby_name": "lobby", "online_users": {"1": "splix"}}}
+2024-01-01 19:24:04,025 [DEBUG] [log_message] User input: {'task_name': 'lobby', 'data': '{"type": "user_joined", "data": {"client_id": "1", "lobby_name": "lobby", "online_users": {"1": "splix"}}}'}
+2024-01-01 19:24:04,025 [DEBUG] [log_message] Lobby Input from UI Controller: {"type": "user_joined", "data": {"client_id": "1", "lobby_name": "lobby", "online_users": {"1": "splix"}}}
+2024-01-01 19:24:12,337 [DEBUG] [log_message] Received message: {"type": "user_joined", "data": {"client_id": "2", "lobby_name": "lobby", "online_users": {"1": "splix", "2": "fsalazar"}}}
+2024-01-01 19:24:12,417 [DEBUG] [log_message] Processing input from lobby
+2024-01-01 19:24:12,418 [DEBUG] [log_message] Input data: {"type": "user_joined", "data": {"client_id": "2", "lobby_name": "lobby", "online_users": {"1": "splix", "2": "fsalazar"}}}
+2024-01-01 19:24:12,418 [DEBUG] [log_message] Handling input from lobby
+2024-01-01 19:24:12,418 [DEBUG] [log_message] Lobby Input from UI Controller: {"type": "user_joined", "data": {"client_id": "2", "lobby_name": "lobby", "online_users": {"1": "splix", "2": "fsalazar"}}}
+2024-01-01 19:24:12,418 [DEBUG] [log_message] User input: {'task_name': 'lobby', 'data': '{"type": "user_joined", "data": {"client_id": "2", "lobby_name": "lobby", "online_users": {"1": "splix", "2": "fsalazar"}}}'}
+2024-01-01 19:24:12,418 [DEBUG] [log_message] Lobby Input from UI Controller: {"type": "user_joined", "data": {"client_id": "2", "lobby_name": "lobby", "online_users": {"1": "splix", "2": "fsalazar"}}}
+2024-01-01 19:24:14,006 [DEBUG] [log_message] Received message: {"type": "user_left", "data": {"client_id": "2", "lobby_name": "lobby", "online_users": {"1": "splix"}}}
+2024-01-01 19:24:14,054 [DEBUG] [log_message] Processing input from lobby
+2024-01-01 19:24:14,054 [DEBUG] [log_message] Input data: {"type": "user_left", "data": {"client_id": "2", "lobby_name": "lobby", "online_users": {"1": "splix"}}}
+2024-01-01 19:24:14,054 [DEBUG] [log_message] Handling input from lobby
+2024-01-01 19:24:14,054 [DEBUG] [log_message] Lobby Input from UI Controller: {"type": "user_left", "data": {"client_id": "2", "lobby_name": "lobby", "online_users": {"1": "splix"}}}
+2024-01-01 19:24:14,055 [DEBUG] [log_message] User input: {'task_name': 'lobby', 'data': '{"type": "user_left", "data": {"client_id": "2", "lobby_name": "lobby", "online_users": {"1": "splix"}}}'}
+2024-01-01 19:24:14,055 [DEBUG] [log_message] Lobby Input from UI Controller: {"type": "user_left", "data": {"client_id": "2", "lobby_name": "lobby", "online_users": {"1": "splix"}}}
+2024-01-01 19:24:15,008 [DEBUG] [log_message] Received message: {"type": "user_joined", "data": {"client_id": "2", "lobby_name": "lobby", "online_users": {"1": "splix", "2": "fsalazar"}}}
+2024-01-01 19:24:15,075 [DEBUG] [log_message] Processing input from lobby
+2024-01-01 19:24:15,075 [DEBUG] [log_message] Input data: {"type": "user_joined", "data": {"client_id": "2", "lobby_name": "lobby", "online_users": {"1": "splix", "2": "fsalazar"}}}
+2024-01-01 19:24:15,075 [DEBUG] [log_message] Handling input from lobby
+2024-01-01 19:24:15,075 [DEBUG] [log_message] Lobby Input from UI Controller: {"type": "user_joined", "data": {"client_id": "2", "lobby_name": "lobby", "online_users": {"1": "splix", "2": "fsalazar"}}}
+2024-01-01 19:24:15,076 [DEBUG] [log_message] User input: {'task_name': 'lobby', 'data': '{"type": "user_joined", "data": {"client_id": "2", "lobby_name": "lobby", "online_users": {"1": "splix", "2": "fsalazar"}}}'}
+2024-01-01 19:24:15,076 [DEBUG] [log_message] Lobby Input from UI Controller: {"type": "user_joined", "data": {"client_id": "2", "lobby_name": "lobby", "online_users": {"1": "splix", "2": "fsalazar"}}}
+2024-01-01 19:24:17,309 [DEBUG] [log_message] Received message: {"type": "user_left", "data": {"client_id": "2", "lobby_name": "lobby", "online_users": {"1": "splix"}}}
+2024-01-01 19:24:17,321 [DEBUG] [log_message] Processing input from lobby
+2024-01-01 19:24:17,321 [DEBUG] [log_message] Input data: {"type": "user_left", "data": {"client_id": "2", "lobby_name": "lobby", "online_users": {"1": "splix"}}}
+2024-01-01 19:24:17,321 [DEBUG] [log_message] Handling input from lobby
+2024-01-01 19:24:17,321 [DEBUG] [log_message] Lobby Input from UI Controller: {"type": "user_left", "data": {"client_id": "2", "lobby_name": "lobby", "online_users": {"1": "splix"}}}
+2024-01-01 19:24:17,321 [DEBUG] [log_message] User input: {'task_name': 'lobby', 'data': '{"type": "user_left", "data": {"client_id": "2", "lobby_name": "lobby", "online_users": {"1": "splix"}}}'}
+2024-01-01 19:24:17,321 [DEBUG] [log_message] Lobby Input from UI Controller: {"type": "user_left", "data": {"client_id": "2", "lobby_name": "lobby", "online_users": {"1": "splix"}}}
+2024-01-01 19:24:19,759 [INFO] [log_message] Keyboard interrupt detected.

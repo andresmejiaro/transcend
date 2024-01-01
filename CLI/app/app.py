@@ -4,6 +4,7 @@ import logging
 import asyncio
 import curses
 import aiohttp
+import time
 
 from utils.logger import log_message
 from utils.url_macros import LOBBY_URI_TEMPLATE
@@ -24,7 +25,7 @@ class CLIApp:
         self.task_manager = TaskManager()   # The task manager object - Used to create and manage tasks
 
         # Adjust App Frame Rate - Adjust the frame rate of the application
-        self.frame_rate = 30
+        self.frame_rate = 10
 
 # Essential App Tasks - These tasks are essential to the application and will be created and started in the main loop
     # Lobby Websocket Task - Connect to the lobby websocket and send and receive messages throught the duration of the application
@@ -71,10 +72,11 @@ class CLIApp:
                 key = self.stdscr.getch()
                 if key != curses.ERR:
                     # Convert the key code to the key name
-                    key_name = curses.keyname(key).decode('utf-8')
+                    # key_name = curses.keyname(key).decode('utf-8')
 
                     async with data["receive_lock"]:
-                        await data["receive_queue"].put(key_name)
+                        await data["receive_queue"].put(key)
+                        log_message(f"Received key: {key}", level=logging.DEBUG)
 
                 await asyncio.sleep(0.1)
 
@@ -87,20 +89,21 @@ class CLIApp:
             self.exit_status = 1
 
     # Main Loop Task - Run the main loop of the application
-    async def run_ui_controller(self):
+    async def launch_UI(self):
         try:
             log_message("Launching UI", level=logging.DEBUG)
-            self.ui_view = SplashView(self.stdscr)
+            # Start the UI with the splash screen
+            self.ui_view = SplashView(self.stdscr, self.ui_controller)
             while True:
-                self.ui_view.run()
+                await self.ui_view.draw()
 
                 next_view = self.ui_view.get_next_view()
+                
+                await asyncio.sleep(self.set_frame_rate(self.frame_rate))
 
                 if next_view is not None:
                     self.ui_view = next_view
                     continue
-
-                await asyncio.sleep(self.set_frame_rate(self.frame_rate))
 
         except asyncio.CancelledError:
             log_message("UI Task cancelled", level=logging.DEBUG)
@@ -119,12 +122,8 @@ class CLIApp:
 # -------------------------------------
 
 # Entry Point - Initializes tasks and runs the main loop, additionaly tasks will be created and started and stopped as needed in the main loop
-
     async def start(self):
         try:
-            # await self.splash()
-            # await self.login()
-
             # Create ws lobby task using the task_manager
             lobby_ws_data = {
                 "receive_queue": asyncio.Queue(),
@@ -142,25 +141,22 @@ class CLIApp:
             self.task_manager.create_task(task_name="keyboard", task_func=self.keyboard_input_task, data=keyboard_input_data)
 
             # Create the current view
-            self.ui_view = UIController(
+            self.ui_controller = UIController(
                 stdscr=self.stdscr,
-                lobby_ws_data=lobby_ws_data,
-                keyboard_input_data=keyboard_input_data
+                # lobby_ws_data=lobby_ws_data,
+                # keyboard_input_data=keyboard_input_data
             )
 
-            # Start all tasks
-            self.task_manager.start_all_tasks()
-            
-            # Start an app task (assuming run_ui_controller is a coroutine function)
-            await self.run_ui_controller()
+            self.ui_controller.add_shared_data("lobby", lobby_ws_data)
+            self.ui_controller.add_shared_data("keyboard", keyboard_input_data)
 
-            # Start all tasks (including app_task) in a loop
-            while self.task_manager.is_running():
-                current_view = self.ui_view.get_current_view()  # Adjust this method based on your implementation
-                sleep_time = self.get_sleep_time_for_view(current_view)
-                
-                await asyncio.sleep(sleep_time)
-                self.task_manager.start_all_tasks()
+
+            # Start all tasks
+            await asyncio.gather(
+                self.task_manager.start_task_by_name("lobby"),
+                self.task_manager.start_task_by_name("keyboard"),
+                await self.launch_UI(),
+            )
 
         except aiohttp.ClientError as e:
             log_message(f"An error occurred in App Main: {e}", level=logging.ERROR)
@@ -187,55 +183,4 @@ class CLIApp:
     def set_frame_rate(self, frame_rate):
         frame_delay = 1 / frame_rate
         return frame_delay
-
-    # Rate Limiting - Adjust the sleep time based on the current view for rate limiting
-    # Rate limiting is used to prevent the application from using too much CPU
-    def get_sleep_time_for_view(self, current_view):
-        # Define sleep times based on different views or states
-        if current_view == "game":
-            return 0.01  # Full speed during the game
-        elif current_view == "menu":
-            return 0.1  # Slower during menu
-        elif current_view == "lobby":
-            return 0.1
-        elif current_view == "login":
-            return 0.1
-        elif current_view == "splash":
-            return 0.1
-        else:
-            return 0.05  # Default sleep time for other views
-
-
-# -------------------------------------
-
-# # View Methods - Basic view methods for displaying the splash screen and login screen
-#     # Login Method
-#     async def login(self):
-#         try:
-#             login_view = Login(self.stdscr)
-#             while True:
-#                 login_status = await login_view.run()
-
-#                 if login_status is True:
-#                     self.logged_in = True
-#                     break
-#                 elif login_status is False:
-#                     continue
-#                 elif login_status is None:
-#                     break
-#                 else:
-#                     continue
-
-#         except Exception as e:
-#             log_message(f"Error logging in: {e}", level=logging.ERROR)
-#             return False
-#     # Splash Method
-#     async def splash(self):
-#         try:
-#             splash_view = SplashView(self.stdscr)
-#             splash_view.display_splash_screen()
-
-#         except Exception as e:
-#             log_message(f"Error displaying splash screen: {e}", level=logging.ERROR)
-#             return False
 # # -------------------------------------

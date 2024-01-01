@@ -14,77 +14,52 @@ from utils.file_manager import FileManager
 from utils.logger import log_message
 
 class UIController:
-    def __init__(self, stdscr, lobby_ws_data, keyboard_input_data):
+    def __init__(self, stdscr):
         self.stdscr = stdscr
         self.file_manager = FileManager()
         self.task_manager = TaskManager()
-        self.ui_data = UIData()
 
         # Shared data between Tasks (Queues and Locks)
-        self.list_of_shared_data = {
-            "lobby": lobby_ws_data,
-            "keyboard": keyboard_input_data}
-        
+        self.list_of_shared_data = {}
+
         self.input_handlers = {
             "lobby": self.handle_lobby_input,
-            "keyboard": self.handle_keyboard_input,
+            "keyboard": self.handle_keyboard_input
         }
-
-        # Frame rate timing
-        self.last_frame_time = time.time()
-
-        # Next view to be displayed
-        self.next_view = None
-
-        # self.nav_bar = NavBar(self.stdscr)
-        # self.main_content = MainContent(self.stdscr)
-        # self.input_bar = InputBar(self.stdscr)
-
-# Entrypoing Method
-    async def run(self):
-        try:
-            await self.update_screen()
-            await self.process_inputs()
-
-        except Exception as e:
-            log_message(f"Error in run: {e}", level=logging.ERROR)
-
-# Update Screen Methods
-    def update_screen(self):
-        # Display NavBar
-        # self.nav_bar.display()
-
-        # # Display Main Content
-        # self.main_content.display()
-
-        # # Display Input Bar
-        # self.input_bar.display()
-
-        # # Update the screen
-        # self.stdscr.refresh()
-        pass
-
 
 # Process Input Methods
     async def check_and_process_inputs(self):
         try:
-            while True:
-                for shared_data_name, shared_data in self.list_of_shared_data.items():
-                    if not shared_data["receive_queue"].empty():
-                        input_data = shared_data["receive_queue"].get()
-                        await self.handle_input(shared_data_name, input_data)
+            for shared_data_name, shared_data in self.list_of_shared_data.items():
+                try:
+                    # Try to get an item from the queue
+                    input_data = shared_data["receive_queue"].get_nowait()
 
-                await asyncio.sleep(0.015)
+                    # If successful, process the input
+                    log_message(f"Processing input from {shared_data_name}", level=logging.DEBUG)
+                    log_message(f"Input data: {input_data}", level=logging.DEBUG)
+                    processed_inputs = await self.handle_input(shared_data_name, input_data)
 
-        except asyncio.CancelledError:
-            log_message("UI Task cancelled", level=logging.DEBUG)
+                    # If the input was processed, return it
+                    if processed_inputs:
+                        return processed_inputs
+
+                except asyncio.QueueEmpty:
+                    # Queue is empty, continue to the next shared_data
+                    pass
+                    
+        except Exception as e:
+            log_message(f"Error in check_and_process_inputs: {e}", level=logging.ERROR)
+
 
     async def handle_input(self, data_source, input_data):
         try:
             handler = self.input_handlers.get(data_source)
 
             if handler:
-                await handler(input_data)
+                log_message(f"Handling input from {data_source}", level=logging.DEBUG)
+                processed_inputs = await handler(input_data)
+                return processed_inputs
             else:
                 log_message(f"Unknown data source: {data_source}", level=logging.WARNING)
 
@@ -93,20 +68,54 @@ class UIController:
 
 
 
+# Auto Update Methods
+    async def handle_lobby_input(self, lobby_input):
+        try:
+            # Here we format the message so the specific view can process it
+            log_message(f"Lobby Input from UI Controller: {lobby_input}", level=logging.DEBUG)
+            # We will format the info in a dictionary with the following format:
+            # {"task_name": "lobby", "message": lobby_input}
+            return {"task_name": "lobby", "data": lobby_input}
+        
+        except Exception as e:
+            log_message(f"Error in handle_lobby_input: {e}", level=logging.ERROR)
 
 
-    def handle_lobby_input(self, lobby_input):
-        # Your logic to process input from the lobby WebSocket
-        # Example: Assuming lobby_input is a dictionary with a "message" key
-        message = lobby_input.get("message")
-        if message:
-            # Process the message
-            print(f"Lobby Message: {message}")
+    async def handle_keyboard_input(self, keyboard_input):
+        try:
+            # Here we format the message so the specific view can process it
+            log_message(f"Keyboard Input from UI Controller: {keyboard_input}", level=logging.DEBUG)
+            # We will format the info in a dictionary with the following format:
+            return {"task_name": "keyboard", "data": keyboard_input}
+        
+        except Exception as e:
+            log_message(f"Error in handle_keyboard_input: {e}", level=logging.ERROR)
+# ---------------------------------------------
 
-    def handle_keyboard_input(self, keyboard_input):
-        # Your logic to process input from the keyboard
-        # Example: Assuming keyboard_input is a string
-        print(f"Keyboard Input: {keyboard_input}")
-        # Perform actions based on the keyboard input
+# Use to handle keyboard input directly from the UI Controller without processing all other inputs for use with no ws views
+    async def handle_keyboard_input_directly(self):
+        try:
+            # We receive keyboard input from the receive_queue so we can process it
+            if self.list_of_shared_data["keyboard"]["receive_queue"].empty():
+                return None
+            
+            # Acquire the lock before accessing the queue
+            async with self.list_of_shared_data["keyboard"]["receive_lock"]:
+                # Get the keyboard input
+                input_data = await self.list_of_shared_data["keyboard"]["receive_queue"].get()
+                return input_data
+        
+        except Exception as e:
+            log_message(f"Error in handle_keyboard_input: {e}", level=logging.ERROR)
 
 
+# Shared Data Methods
+    def add_shared_data(self, name, shared_data):
+        log_message(f"Adding shared data: {name}", level=logging.DEBUG)
+        self.list_of_shared_data[name] = shared_data
+        log_message(f"Shared data added: {self.list_of_shared_data}", level=logging.DEBUG)
+
+    def remove_shared_data(self, name):
+        del self.list_of_shared_data[name]
+
+        
