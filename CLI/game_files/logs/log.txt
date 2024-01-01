@@ -75,3 +75,698 @@
 2024-01-01 19:24:17,321 [DEBUG] [log_message] User input: {'task_name': 'lobby', 'data': '{"type": "user_left", "data": {"client_id": "2", "lobby_name": "lobby", "online_users": {"1": "splix"}}}'}
 2024-01-01 19:24:17,321 [DEBUG] [log_message] Lobby Input from UI Controller: {"type": "user_left", "data": {"client_id": "2", "lobby_name": "lobby", "online_users": {"1": "splix"}}}
 2024-01-01 19:24:19,759 [INFO] [log_message] Keyboard interrupt detected.
+2024-01-01 20:05:04,457 [INFO] [log_message] Logger initialized.
+2024-01-01 20:05:04,458 [DEBUG] [log_message] Adding shared data: lobby
+2024-01-01 20:05:04,459 [DEBUG] [log_message] Shared data added: {'lobby': {'receive_queue': <Queue at 0x7fa4cbd3bfd0 maxsize=0>, 'send_queue': <Queue at 0x7fa4cbd3b5b0 maxsize=0>, 'receive_lock': <asyncio.locks.Lock object at 0x7fa4cbd3b4c0 [unlocked]>, 'send_lock': <asyncio.locks.Lock object at 0x7fa4cbd3b460 [unlocked]>}}
+2024-01-01 20:05:04,459 [DEBUG] [log_message] Adding shared data: keyboard
+2024-01-01 20:05:04,459 [DEBUG] [log_message] Shared data added: {'lobby': {'receive_queue': <Queue at 0x7fa4cbd3bfd0 maxsize=0>, 'send_queue': <Queue at 0x7fa4cbd3b5b0 maxsize=0>, 'receive_lock': <asyncio.locks.Lock object at 0x7fa4cbd3b4c0 [unlocked]>, 'send_lock': <asyncio.locks.Lock object at 0x7fa4cbd3b460 [unlocked]>}, 'keyboard': {'receive_queue': <Queue at 0x7fa4cbd3b2e0 maxsize=0>, 'receive_lock': <asyncio.locks.Lock object at 0x7fa4cbd3b370 [unlocked]>}}
+2024-01-01 20:05:04,459 [DEBUG] [log_message] Launching UI
+2024-01-01 20:05:04,462 [DEBUG] [log_message] Connecting to websocket: ws://localhost:8001/ws/lobby2/?client_id=1
+2024-01-01 20:05:04,464 [DEBUG] [log_message] Keyboard Input Task started
+2024-01-01 20:05:04,465 [DEBUG] [_getaddrinfo_debug] Get address info localhost:8001, type=<SocketKind.SOCK_STREAM: 1>, flags=<AddressInfo.AI_ADDRCONFIG: 32>
+2024-01-01 20:05:04,466 [DEBUG] [_getaddrinfo_debug] Getting address info localhost:8001, type=<SocketKind.SOCK_STREAM: 1>, flags=<AddressInfo.AI_ADDRCONFIG: 32> took 0.253ms: [(<AddressFamily.AF_INET: 2>, <SocketKind.SOCK_STREAM: 1>, 6, '', ('127.0.0.1', 8001))]
+2024-01-01 20:05:05,280 [DEBUG] [log_message] Received key: 32
+2024-01-01 20:05:05,381 [DEBUG] [log_message] Splash screen user input: 32
+2024-01-01 20:05:06,507 [DEBUG] [log_message] Received key: 115
+2024-01-01 20:05:06,608 [DEBUG] [log_message] User input: 115
+2024-01-01 20:05:06,609 [DEBUG] [log_message] Received key: 112
+2024-01-01 20:05:06,712 [DEBUG] [log_message] User input: 112
+2024-01-01 20:05:06,817 [DEBUG] [log_message] Received key: 108
+2024-01-01 20:05:06,918 [DEBUG] [log_message] User input: 108
+2024-01-01 20:05:06,919 [DEBUG] [log_message] Received key: 105
+2024-01-01 20:05:07,021 [DEBUG] [log_message] User input: 105
+2024-01-01 20:05:07,023 [DEBUG] [log_message] Received key: 120
+2024-01-01 20:05:07,125 [DEBUG] [log_message] User input: 120
+2024-01-01 20:05:07,433 [DEBUG] [log_message] Received key: 10
+2024-01-01 20:05:07,535 [DEBUG] [log_message] User input: 10
+2024-01-01 20:05:07,740 [DEBUG] [log_message] Received key: 49
+2024-01-01 20:05:07,842 [DEBUG] [log_message] User input: 49
+2024-01-01 20:05:07,844 [DEBUG] [log_message] Received key: 50
+2024-01-01 20:05:07,945 [DEBUG] [log_message] User input: 50
+2024-01-01 20:05:07,946 [DEBUG] [log_message] Received key: 51
+2024-01-01 20:05:08,048 [DEBUG] [log_message] User input: 51
+2024-01-01 20:05:08,049 [DEBUG] [log_message] Received key: 10
+2024-01-01 20:05:08,151 [DEBUG] [log_message] User input: 10
+2024-01-01 20:05:08,151 [INFO] [log_message] Entered Data: {'Username': 'splix', 'Password': '123'}
+2024-01-01 20:05:08,156 [DEBUG] [_new_conn] Starting new HTTP connection (1): localhost:8000
+2024-01-01 20:05:08,156 [ERROR] [log_message] Error during API call: HTTPConnectionPool(host='localhost', port=8000): Max retries exceeded with url: /api/user/login/ (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7fa4cbd3a1d0>: Failed to establish a new connection: [Errno 111] Connection refused'))
+2024-01-01 20:05:08,156 [ERROR] [log_message] Error logging in: 'NoneType' object has no attribute 'status_code'
+2024-01-01 20:05:08,156 [INFO] [log_message] Login response: False
+2024-01-01 20:05:10,160 [WARNING] [_run_once] Executing <Task pending name='Task-1' coro=<main() running at /home/splix/Desktop/new-sprint/CLI/main.py:30> wait_for=<Future pending cb=[Task.task_wakeup()] created at /usr/lib/python3.10/asyncio/base_events.py:429> cb=[_run_until_complete_cb() at /usr/lib/python3.10/asyncio/base_events.py:184] created at /usr/lib/python3.10/asyncio/tasks.py:636> took 2.009 seconds
+2024-01-01 20:05:43,520 [INFO] [log_message] Keyboard interrupt detected.
+2024-01-01 20:06:20,187 [INFO] [log_message] Logger initialized.
+2024-01-01 20:06:20,188 [DEBUG] [log_message] Adding shared data: lobby
+2024-01-01 20:06:20,188 [DEBUG] [log_message] Shared data added: {'lobby': {'receive_queue': <Queue at 0x7f4625b158d0 maxsize=0>, 'send_queue': <Queue at 0x7f4625b159c0 maxsize=0>, 'receive_lock': <asyncio.locks.Lock object at 0x7f4625b15ab0 [unlocked]>, 'send_lock': <asyncio.locks.Lock object at 0x7f4625b15b10 [unlocked]>}}
+2024-01-01 20:06:20,188 [DEBUG] [log_message] Adding shared data: keyboard
+2024-01-01 20:06:20,188 [DEBUG] [log_message] Shared data added: {'lobby': {'receive_queue': <Queue at 0x7f4625b158d0 maxsize=0>, 'send_queue': <Queue at 0x7f4625b159c0 maxsize=0>, 'receive_lock': <asyncio.locks.Lock object at 0x7f4625b15ab0 [unlocked]>, 'send_lock': <asyncio.locks.Lock object at 0x7f4625b15b10 [unlocked]>}, 'keyboard': {'receive_queue': <Queue at 0x7f4625b15c90 maxsize=0>, 'receive_lock': <asyncio.locks.Lock object at 0x7f4625b15c00 [unlocked]>}}
+2024-01-01 20:06:20,188 [DEBUG] [log_message] Launching UI
+2024-01-01 20:06:20,190 [DEBUG] [log_message] Connecting to websocket: ws://localhost:8001/ws/lobby2/?client_id=1
+2024-01-01 20:06:20,191 [DEBUG] [log_message] Keyboard Input Task started
+2024-01-01 20:06:20,192 [DEBUG] [_getaddrinfo_debug] Get address info localhost:8001, type=<SocketKind.SOCK_STREAM: 1>, flags=<AddressInfo.AI_ADDRCONFIG: 32>
+2024-01-01 20:06:20,193 [DEBUG] [_getaddrinfo_debug] Getting address info localhost:8001, type=<SocketKind.SOCK_STREAM: 1>, flags=<AddressInfo.AI_ADDRCONFIG: 32> took 0.311ms: [(<AddressFamily.AF_INET: 2>, <SocketKind.SOCK_STREAM: 1>, 6, '', ('127.0.0.1', 8001))]
+2024-01-01 20:06:20,197 [DEBUG] [create_connection] <asyncio.TransportSocket fd=7, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=6, laddr=('127.0.0.1', 33686), raddr=('127.0.0.1', 8001)> connected to 127.0.0.1:8001: (<_SelectorSocketTransport fd=7 read=polling write=<idle, bufsize=0>>, <aiohttp.client_proto.ResponseHandler object at 0x7f4625bca9e0>)
+2024-01-01 20:06:20,372 [DEBUG] [log_message] Received message: {"type": "user_joined", "data": {"client_id": "1", "lobby_name": "lobby", "online_users": {"1": "splix"}}}
+2024-01-01 20:06:21,114 [DEBUG] [log_message] Received key: 32
+2024-01-01 20:06:21,216 [DEBUG] [log_message] Splash screen user input: 32
+2024-01-01 20:06:21,628 [DEBUG] [log_message] Received key: 115
+2024-01-01 20:06:21,729 [DEBUG] [log_message] User input: 115
+2024-01-01 20:06:21,730 [DEBUG] [log_message] Received key: 112
+2024-01-01 20:06:21,831 [DEBUG] [log_message] User input: 112
+2024-01-01 20:06:21,933 [DEBUG] [log_message] Received key: 108
+2024-01-01 20:06:22,036 [DEBUG] [log_message] User input: 108
+2024-01-01 20:06:22,037 [DEBUG] [log_message] Received key: 105
+2024-01-01 20:06:22,140 [DEBUG] [log_message] User input: 105
+2024-01-01 20:06:22,140 [DEBUG] [log_message] Received key: 120
+2024-01-01 20:06:22,242 [DEBUG] [log_message] User input: 120
+2024-01-01 20:06:22,345 [DEBUG] [log_message] Received key: 10
+2024-01-01 20:06:22,447 [DEBUG] [log_message] User input: 10
+2024-01-01 20:06:22,550 [DEBUG] [log_message] Received key: 49
+2024-01-01 20:06:22,651 [DEBUG] [log_message] User input: 49
+2024-01-01 20:06:22,652 [DEBUG] [log_message] Received key: 50
+2024-01-01 20:06:22,756 [DEBUG] [log_message] User input: 50
+2024-01-01 20:06:22,757 [DEBUG] [log_message] Received key: 51
+2024-01-01 20:06:22,859 [DEBUG] [log_message] User input: 51
+2024-01-01 20:06:22,963 [DEBUG] [log_message] Received key: 10
+2024-01-01 20:06:23,067 [DEBUG] [log_message] User input: 10
+2024-01-01 20:06:23,067 [INFO] [log_message] Entered Data: {'Username': 'splix', 'Password': '123'}
+2024-01-01 20:06:23,072 [DEBUG] [_new_conn] Starting new HTTP connection (1): localhost:8000
+2024-01-01 20:06:23,458 [DEBUG] [_make_request] http://localhost:8000 "POST /api/user/login/ HTTP/1.1" 200 241
+2024-01-01 20:06:23,549 [DEBUG] [_make_request] http://localhost:8000 "GET /api/get_user_id/splix/ HTTP/1.1" 200 35
+2024-01-01 20:06:23,550 [INFO] [log_message] Login response: splix
+2024-01-01 20:06:23,552 [WARNING] [_run_once] Executing <Task pending name='Task-1' coro=<main() running at /home/splix/Desktop/new-sprint/CLI/main.py:30> wait_for=<Future pending cb=[Task.task_wakeup()] created at /usr/lib/python3.10/asyncio/base_events.py:429> cb=[_run_until_complete_cb() at /usr/lib/python3.10/asyncio/base_events.py:184] created at /usr/lib/python3.10/asyncio/tasks.py:636> took 0.485 seconds
+2024-01-01 20:06:23,653 [DEBUG] [log_message] Processing input from lobby
+2024-01-01 20:06:23,653 [DEBUG] [log_message] Input data: {"type": "user_joined", "data": {"client_id": "1", "lobby_name": "lobby", "online_users": {"1": "splix"}}}
+2024-01-01 20:06:23,653 [DEBUG] [log_message] Handling input from lobby
+2024-01-01 20:06:23,653 [DEBUG] [log_message] Lobby Input from UI Controller: {"type": "user_joined", "data": {"client_id": "1", "lobby_name": "lobby", "online_users": {"1": "splix"}}}
+2024-01-01 20:06:23,653 [DEBUG] [log_message] User input: {'task_name': 'lobby', 'data': '{"type": "user_joined", "data": {"client_id": "1", "lobby_name": "lobby", "online_users": {"1": "splix"}}}'}
+2024-01-01 20:06:23,653 [DEBUG] [log_message] Lobby Input from UI Controller: {"type": "user_joined", "data": {"client_id": "1", "lobby_name": "lobby", "online_users": {"1": "splix"}}}
+2024-01-01 20:12:45,197 [INFO] [log_message] Keyboard interrupt detected.
+2024-01-01 20:12:46,091 [INFO] [log_message] Logger initialized.
+2024-01-01 20:12:46,092 [DEBUG] [log_message] Adding shared data: lobby
+2024-01-01 20:12:46,093 [DEBUG] [log_message] Shared data added: {'lobby': {'receive_queue': <Queue at 0x7fde1173bf40 maxsize=0>, 'send_queue': <Queue at 0x7fde1173b6a0 maxsize=0>, 'receive_lock': <asyncio.locks.Lock object at 0x7fde1173b4c0 [unlocked]>, 'send_lock': <asyncio.locks.Lock object at 0x7fde1173b460 [unlocked]>}}
+2024-01-01 20:12:46,093 [DEBUG] [log_message] Adding shared data: keyboard
+2024-01-01 20:12:46,093 [DEBUG] [log_message] Shared data added: {'lobby': {'receive_queue': <Queue at 0x7fde1173bf40 maxsize=0>, 'send_queue': <Queue at 0x7fde1173b6a0 maxsize=0>, 'receive_lock': <asyncio.locks.Lock object at 0x7fde1173b4c0 [unlocked]>, 'send_lock': <asyncio.locks.Lock object at 0x7fde1173b460 [unlocked]>}, 'keyboard': {'receive_queue': <Queue at 0x7fde1173b2e0 maxsize=0>, 'receive_lock': <asyncio.locks.Lock object at 0x7fde1173b370 [unlocked]>}}
+2024-01-01 20:12:46,093 [DEBUG] [log_message] Launching UI
+2024-01-01 20:12:46,094 [DEBUG] [log_message] Connecting to websocket: ws://localhost:8001/ws/lobby2/?client_id=1
+2024-01-01 20:12:46,096 [DEBUG] [log_message] Keyboard Input Task started
+2024-01-01 20:12:46,097 [DEBUG] [_getaddrinfo_debug] Get address info localhost:8001, type=<SocketKind.SOCK_STREAM: 1>, flags=<AddressInfo.AI_ADDRCONFIG: 32>
+2024-01-01 20:12:46,097 [DEBUG] [_getaddrinfo_debug] Getting address info localhost:8001, type=<SocketKind.SOCK_STREAM: 1>, flags=<AddressInfo.AI_ADDRCONFIG: 32> took 0.208ms: [(<AddressFamily.AF_INET: 2>, <SocketKind.SOCK_STREAM: 1>, 6, '', ('127.0.0.1', 8001))]
+2024-01-01 20:12:46,101 [DEBUG] [create_connection] <asyncio.TransportSocket fd=7, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=6, laddr=('127.0.0.1', 45252), raddr=('127.0.0.1', 8001)> connected to 127.0.0.1:8001: (<_SelectorSocketTransport fd=7 read=polling write=<idle, bufsize=0>>, <aiohttp.client_proto.ResponseHandler object at 0x7fde117d2500>)
+2024-01-01 20:12:46,129 [DEBUG] [log_message] Received message: {"type": "user_joined", "data": {"client_id": "1", "lobby_name": "lobby", "online_users": {"1": "splix"}}}
+2024-01-01 20:12:46,813 [DEBUG] [log_message] Received key: 10
+2024-01-01 20:12:47,120 [DEBUG] [log_message] Received key: 32
+2024-01-01 20:12:47,221 [DEBUG] [log_message] Splash screen user input: 32
+2024-01-01 20:12:48,041 [DEBUG] [log_message] Received key: 115
+2024-01-01 20:12:48,142 [DEBUG] [log_message] User input: 115
+2024-01-01 20:12:48,144 [DEBUG] [log_message] Received key: 112
+2024-01-01 20:12:48,245 [DEBUG] [log_message] User input: 112
+2024-01-01 20:12:48,348 [DEBUG] [log_message] Received key: 108
+2024-01-01 20:12:48,453 [DEBUG] [log_message] User input: 108
+2024-01-01 20:12:48,455 [DEBUG] [log_message] Received key: 105
+2024-01-01 20:12:48,556 [DEBUG] [log_message] User input: 105
+2024-01-01 20:12:48,557 [DEBUG] [log_message] Received key: 120
+2024-01-01 20:12:48,658 [DEBUG] [log_message] User input: 120
+2024-01-01 20:12:48,865 [DEBUG] [log_message] Received key: 10
+2024-01-01 20:12:48,966 [DEBUG] [log_message] User input: 10
+2024-01-01 20:12:49,275 [DEBUG] [log_message] Received key: 49
+2024-01-01 20:12:49,378 [DEBUG] [log_message] User input: 49
+2024-01-01 20:12:49,379 [DEBUG] [log_message] Received key: 50
+2024-01-01 20:12:49,481 [DEBUG] [log_message] User input: 50
+2024-01-01 20:12:49,482 [DEBUG] [log_message] Received key: 51
+2024-01-01 20:12:49,585 [DEBUG] [log_message] User input: 51
+2024-01-01 20:12:49,586 [DEBUG] [log_message] Received key: 10
+2024-01-01 20:12:49,688 [DEBUG] [log_message] User input: 10
+2024-01-01 20:12:49,688 [INFO] [log_message] Entered Data: {'Username': 'splix', 'Password': '123'}
+2024-01-01 20:12:49,694 [DEBUG] [_new_conn] Starting new HTTP connection (1): localhost:8000
+2024-01-01 20:12:50,043 [DEBUG] [_make_request] http://localhost:8000 "POST /api/user/login/ HTTP/1.1" 200 241
+2024-01-01 20:12:50,120 [DEBUG] [_make_request] http://localhost:8000 "GET /api/get_user_id/splix/ HTTP/1.1" 200 35
+2024-01-01 20:12:50,121 [INFO] [log_message] Login response: splix
+2024-01-01 20:12:50,122 [WARNING] [_run_once] Executing <Task pending name='Task-1' coro=<main() running at /home/splix/Desktop/new-sprint/CLI/main.py:30> wait_for=<Future pending cb=[Task.task_wakeup()] created at /usr/lib/python3.10/asyncio/base_events.py:429> cb=[_run_until_complete_cb() at /usr/lib/python3.10/asyncio/base_events.py:184] created at /usr/lib/python3.10/asyncio/tasks.py:636> took 0.434 seconds
+2024-01-01 20:12:50,224 [DEBUG] [log_message] Processing input from lobby
+2024-01-01 20:12:50,225 [DEBUG] [log_message] Input data: {"type": "user_joined", "data": {"client_id": "1", "lobby_name": "lobby", "online_users": {"1": "splix"}}}
+2024-01-01 20:12:50,225 [DEBUG] [log_message] Handling input from lobby
+2024-01-01 20:12:50,225 [DEBUG] [log_message] Lobby Input from UI Controller: {"type": "user_joined", "data": {"client_id": "1", "lobby_name": "lobby", "online_users": {"1": "splix"}}}
+2024-01-01 20:12:50,225 [DEBUG] [log_message] User input: {'task_name': 'lobby', 'data': '{"type": "user_joined", "data": {"client_id": "1", "lobby_name": "lobby", "online_users": {"1": "splix"}}}'}
+2024-01-01 20:12:50,225 [DEBUG] [log_message] Lobby Input from UI Controller: {"type": "user_joined", "data": {"client_id": "1", "lobby_name": "lobby", "online_users": {"1": "splix"}}}
+2024-01-01 20:13:01,392 [DEBUG] [log_message] Received message: {"type": "user_joined", "data": {"client_id": "2", "lobby_name": "lobby", "online_users": {"1": "splix", "2": "fsalazar"}}}
+2024-01-01 20:13:01,482 [DEBUG] [log_message] Processing input from lobby
+2024-01-01 20:13:01,482 [DEBUG] [log_message] Input data: {"type": "user_joined", "data": {"client_id": "2", "lobby_name": "lobby", "online_users": {"1": "splix", "2": "fsalazar"}}}
+2024-01-01 20:13:01,482 [DEBUG] [log_message] Handling input from lobby
+2024-01-01 20:13:01,482 [DEBUG] [log_message] Lobby Input from UI Controller: {"type": "user_joined", "data": {"client_id": "2", "lobby_name": "lobby", "online_users": {"1": "splix", "2": "fsalazar"}}}
+2024-01-01 20:13:01,482 [DEBUG] [log_message] User input: {'task_name': 'lobby', 'data': '{"type": "user_joined", "data": {"client_id": "2", "lobby_name": "lobby", "online_users": {"1": "splix", "2": "fsalazar"}}}'}
+2024-01-01 20:13:01,482 [DEBUG] [log_message] Lobby Input from UI Controller: {"type": "user_joined", "data": {"client_id": "2", "lobby_name": "lobby", "online_users": {"1": "splix", "2": "fsalazar"}}}
+2024-01-01 20:13:03,597 [DEBUG] [log_message] Received message: {"type": "user_left", "data": {"client_id": "2", "lobby_name": "lobby", "online_users": {"1": "splix"}}}
+2024-01-01 20:13:03,636 [DEBUG] [log_message] Processing input from lobby
+2024-01-01 20:13:03,636 [DEBUG] [log_message] Input data: {"type": "user_left", "data": {"client_id": "2", "lobby_name": "lobby", "online_users": {"1": "splix"}}}
+2024-01-01 20:13:03,636 [DEBUG] [log_message] Handling input from lobby
+2024-01-01 20:13:03,636 [DEBUG] [log_message] Lobby Input from UI Controller: {"type": "user_left", "data": {"client_id": "2", "lobby_name": "lobby", "online_users": {"1": "splix"}}}
+2024-01-01 20:13:03,636 [DEBUG] [log_message] User input: {'task_name': 'lobby', 'data': '{"type": "user_left", "data": {"client_id": "2", "lobby_name": "lobby", "online_users": {"1": "splix"}}}'}
+2024-01-01 20:13:03,636 [DEBUG] [log_message] Lobby Input from UI Controller: {"type": "user_left", "data": {"client_id": "2", "lobby_name": "lobby", "online_users": {"1": "splix"}}}
+2024-01-01 20:13:09,985 [DEBUG] [log_message] Received key: 410
+2024-01-01 20:13:10,086 [DEBUG] [log_message] Processing input from keyboard
+2024-01-01 20:13:10,086 [DEBUG] [log_message] Input data: 410
+2024-01-01 20:13:10,087 [DEBUG] [log_message] Handling input from keyboard
+2024-01-01 20:13:10,087 [DEBUG] [log_message] Keyboard Input from UI Controller: 410
+2024-01-01 20:13:10,087 [DEBUG] [log_message] User input: {'task_name': 'keyboard', 'data': 410}
+2024-01-01 20:13:10,087 [DEBUG] [log_message] Keyboard Input from UI Controller: 410
+2024-01-01 20:13:10,088 [DEBUG] [log_message] Received key: 410
+2024-01-01 20:13:10,189 [DEBUG] [log_message] Processing input from keyboard
+2024-01-01 20:13:10,189 [DEBUG] [log_message] Input data: 410
+2024-01-01 20:13:10,189 [DEBUG] [log_message] Handling input from keyboard
+2024-01-01 20:13:10,189 [DEBUG] [log_message] Keyboard Input from UI Controller: 410
+2024-01-01 20:13:10,189 [DEBUG] [log_message] User input: {'task_name': 'keyboard', 'data': 410}
+2024-01-01 20:13:10,189 [DEBUG] [log_message] Keyboard Input from UI Controller: 410
+2024-01-01 20:13:50,312 [INFO] [log_message] Keyboard interrupt detected.
+2024-01-01 20:13:51,142 [INFO] [log_message] Logger initialized.
+2024-01-01 20:13:51,144 [DEBUG] [log_message] Adding shared data: lobby
+2024-01-01 20:13:51,144 [DEBUG] [log_message] Shared data added: {'lobby': {'receive_queue': <Queue at 0x7f16c673bfa0 maxsize=0>, 'send_queue': <Queue at 0x7f16c673b5b0 maxsize=0>, 'receive_lock': <asyncio.locks.Lock object at 0x7f16c673b4c0 [unlocked]>, 'send_lock': <asyncio.locks.Lock object at 0x7f16c673b460 [unlocked]>}}
+2024-01-01 20:13:51,144 [DEBUG] [log_message] Adding shared data: keyboard
+2024-01-01 20:13:51,144 [DEBUG] [log_message] Shared data added: {'lobby': {'receive_queue': <Queue at 0x7f16c673bfa0 maxsize=0>, 'send_queue': <Queue at 0x7f16c673b5b0 maxsize=0>, 'receive_lock': <asyncio.locks.Lock object at 0x7f16c673b4c0 [unlocked]>, 'send_lock': <asyncio.locks.Lock object at 0x7f16c673b460 [unlocked]>}, 'keyboard': {'receive_queue': <Queue at 0x7f16c673b2e0 maxsize=0>, 'receive_lock': <asyncio.locks.Lock object at 0x7f16c673b370 [unlocked]>}}
+2024-01-01 20:13:51,144 [DEBUG] [log_message] Launching UI
+2024-01-01 20:13:51,146 [DEBUG] [log_message] Connecting to websocket: ws://localhost:8001/ws/lobby2/?client_id=1
+2024-01-01 20:13:51,154 [DEBUG] [log_message] Keyboard Input Task started
+2024-01-01 20:13:51,156 [DEBUG] [_getaddrinfo_debug] Get address info localhost:8001, type=<SocketKind.SOCK_STREAM: 1>, flags=<AddressInfo.AI_ADDRCONFIG: 32>
+2024-01-01 20:13:51,157 [DEBUG] [_getaddrinfo_debug] Getting address info localhost:8001, type=<SocketKind.SOCK_STREAM: 1>, flags=<AddressInfo.AI_ADDRCONFIG: 32> took 0.361ms: [(<AddressFamily.AF_INET: 2>, <SocketKind.SOCK_STREAM: 1>, 6, '', ('127.0.0.1', 8001))]
+2024-01-01 20:13:51,161 [DEBUG] [create_connection] <asyncio.TransportSocket fd=7, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=6, laddr=('127.0.0.1', 41532), raddr=('127.0.0.1', 8001)> connected to 127.0.0.1:8001: (<_SelectorSocketTransport fd=7 read=polling write=<idle, bufsize=0>>, <aiohttp.client_proto.ResponseHandler object at 0x7f16c67d2500>)
+2024-01-01 20:13:51,206 [DEBUG] [log_message] Received message: {"type": "user_joined", "data": {"client_id": "1", "lobby_name": "lobby", "online_users": {"1": "splix"}}}
+2024-01-01 20:13:54,735 [DEBUG] [log_message] Received key: 410
+2024-01-01 20:13:56,570 [DEBUG] [log_message] Received key: 410
+2024-01-01 20:13:56,673 [DEBUG] [log_message] Received key: 410
+2024-01-01 20:13:57,691 [DEBUG] [log_message] Received key: 410
+2024-01-01 20:13:58,821 [DEBUG] [log_message] Received key: 32
+2024-01-01 20:13:58,925 [DEBUG] [log_message] Splash screen user input: 32
+2024-01-01 20:14:00,056 [DEBUG] [log_message] Received key: 115
+2024-01-01 20:14:00,157 [DEBUG] [log_message] User input: 115
+2024-01-01 20:14:00,261 [DEBUG] [log_message] Received key: 112
+2024-01-01 20:14:00,363 [DEBUG] [log_message] User input: 112
+2024-01-01 20:14:00,466 [DEBUG] [log_message] Received key: 108
+2024-01-01 20:14:00,569 [DEBUG] [log_message] User input: 108
+2024-01-01 20:14:00,571 [DEBUG] [log_message] Received key: 105
+2024-01-01 20:14:00,672 [DEBUG] [log_message] User input: 105
+2024-01-01 20:14:00,673 [DEBUG] [log_message] Received key: 120
+2024-01-01 20:14:00,774 [DEBUG] [log_message] User input: 120
+2024-01-01 20:14:01,085 [DEBUG] [log_message] Received key: 263
+2024-01-01 20:14:01,186 [DEBUG] [log_message] User input: 263
+2024-01-01 20:14:01,187 [DEBUG] [log_message] Received key: 263
+2024-01-01 20:14:01,289 [DEBUG] [log_message] User input: 263
+2024-01-01 20:14:01,290 [DEBUG] [log_message] Received key: 263
+2024-01-01 20:14:01,392 [DEBUG] [log_message] User input: 263
+2024-01-01 20:14:01,497 [DEBUG] [log_message] Received key: 263
+2024-01-01 20:14:01,598 [DEBUG] [log_message] User input: 263
+2024-01-01 20:14:01,600 [DEBUG] [log_message] Received key: 263
+2024-01-01 20:14:01,701 [DEBUG] [log_message] User input: 263
+2024-01-01 20:14:01,704 [DEBUG] [log_message] Received key: 263
+2024-01-01 20:14:01,805 [DEBUG] [log_message] User input: 263
+2024-01-01 20:14:01,806 [DEBUG] [log_message] Received key: 263
+2024-01-01 20:14:01,907 [DEBUG] [log_message] User input: 263
+2024-01-01 20:14:02,215 [DEBUG] [log_message] Received key: 115
+2024-01-01 20:14:02,317 [DEBUG] [log_message] User input: 115
+2024-01-01 20:14:02,625 [DEBUG] [log_message] Received key: 112
+2024-01-01 20:14:02,726 [DEBUG] [log_message] User input: 112
+2024-01-01 20:14:02,830 [DEBUG] [log_message] Received key: 108
+2024-01-01 20:14:02,931 [DEBUG] [log_message] User input: 108
+2024-01-01 20:14:02,936 [DEBUG] [log_message] Received key: 105
+2024-01-01 20:14:03,038 [DEBUG] [log_message] User input: 105
+2024-01-01 20:14:03,040 [DEBUG] [log_message] Received key: 120
+2024-01-01 20:14:03,142 [DEBUG] [log_message] User input: 120
+2024-01-01 20:14:03,665 [DEBUG] [log_message] Received key: 10
+2024-01-01 20:14:03,767 [DEBUG] [log_message] User input: 10
+2024-01-01 20:14:03,972 [DEBUG] [log_message] Received key: 49
+2024-01-01 20:14:04,073 [DEBUG] [log_message] User input: 49
+2024-01-01 20:14:04,074 [DEBUG] [log_message] Received key: 50
+2024-01-01 20:14:04,176 [DEBUG] [log_message] User input: 50
+2024-01-01 20:14:04,177 [DEBUG] [log_message] Received key: 51
+2024-01-01 20:14:04,279 [DEBUG] [log_message] User input: 51
+2024-01-01 20:14:04,384 [DEBUG] [log_message] Received key: 10
+2024-01-01 20:14:04,485 [DEBUG] [log_message] User input: 10
+2024-01-01 20:14:04,486 [INFO] [log_message] Entered Data: {'Username': 'splix', 'Password': '123'}
+2024-01-01 20:14:04,491 [DEBUG] [_new_conn] Starting new HTTP connection (1): localhost:8000
+2024-01-01 20:14:04,865 [DEBUG] [_make_request] http://localhost:8000 "POST /api/user/login/ HTTP/1.1" 200 241
+2024-01-01 20:14:04,953 [DEBUG] [_make_request] http://localhost:8000 "GET /api/get_user_id/splix/ HTTP/1.1" 200 35
+2024-01-01 20:14:04,954 [INFO] [log_message] Login response: splix
+2024-01-01 20:14:04,955 [WARNING] [_run_once] Executing <Task pending name='Task-1' coro=<main() running at /home/splix/Desktop/new-sprint/CLI/main.py:30> wait_for=<Future pending cb=[Task.task_wakeup()] created at /usr/lib/python3.10/asyncio/base_events.py:429> cb=[_run_until_complete_cb() at /usr/lib/python3.10/asyncio/base_events.py:184] created at /usr/lib/python3.10/asyncio/tasks.py:636> took 0.470 seconds
+2024-01-01 20:14:05,056 [DEBUG] [log_message] Processing input from lobby
+2024-01-01 20:14:05,057 [DEBUG] [log_message] Input data: {"type": "user_joined", "data": {"client_id": "1", "lobby_name": "lobby", "online_users": {"1": "splix"}}}
+2024-01-01 20:14:05,057 [DEBUG] [log_message] Handling input from lobby
+2024-01-01 20:14:05,057 [DEBUG] [log_message] Lobby Input from UI Controller: {"type": "user_joined", "data": {"client_id": "1", "lobby_name": "lobby", "online_users": {"1": "splix"}}}
+2024-01-01 20:14:05,057 [DEBUG] [log_message] User input: {'task_name': 'lobby', 'data': '{"type": "user_joined", "data": {"client_id": "1", "lobby_name": "lobby", "online_users": {"1": "splix"}}}'}
+2024-01-01 20:14:05,057 [DEBUG] [log_message] Lobby Input from UI Controller: {"type": "user_joined", "data": {"client_id": "1", "lobby_name": "lobby", "online_users": {"1": "splix"}}}
+2024-01-01 20:14:08,732 [DEBUG] [log_message] Received key: 410
+2024-01-01 20:14:08,835 [DEBUG] [log_message] Received key: 410
+2024-01-01 20:14:10,365 [DEBUG] [log_message] Received key: 410
+2024-01-01 20:14:11,590 [DEBUG] [log_message] Received key: 410
+2024-01-01 20:14:11,693 [DEBUG] [log_message] Processing input from keyboard
+2024-01-01 20:14:11,694 [DEBUG] [log_message] Input data: 410
+2024-01-01 20:14:11,694 [DEBUG] [log_message] Handling input from keyboard
+2024-01-01 20:14:11,694 [DEBUG] [log_message] Keyboard Input from UI Controller: 410
+2024-01-01 20:14:11,694 [DEBUG] [log_message] User input: {'task_name': 'keyboard', 'data': 410}
+2024-01-01 20:14:11,694 [DEBUG] [log_message] Keyboard Input from UI Controller: 410
+2024-01-01 20:14:11,796 [DEBUG] [log_message] Processing input from keyboard
+2024-01-01 20:14:11,796 [DEBUG] [log_message] Input data: 410
+2024-01-01 20:14:11,796 [DEBUG] [log_message] Handling input from keyboard
+2024-01-01 20:14:11,796 [DEBUG] [log_message] Keyboard Input from UI Controller: 410
+2024-01-01 20:14:11,796 [DEBUG] [log_message] User input: {'task_name': 'keyboard', 'data': 410}
+2024-01-01 20:14:11,796 [DEBUG] [log_message] Keyboard Input from UI Controller: 410
+2024-01-01 20:14:11,900 [DEBUG] [log_message] Processing input from keyboard
+2024-01-01 20:14:11,900 [DEBUG] [log_message] Input data: 410
+2024-01-01 20:14:11,900 [DEBUG] [log_message] Handling input from keyboard
+2024-01-01 20:14:11,900 [DEBUG] [log_message] Keyboard Input from UI Controller: 410
+2024-01-01 20:14:11,900 [DEBUG] [log_message] User input: {'task_name': 'keyboard', 'data': 410}
+2024-01-01 20:14:11,900 [DEBUG] [log_message] Keyboard Input from UI Controller: 410
+2024-01-01 20:14:12,003 [DEBUG] [log_message] Processing input from keyboard
+2024-01-01 20:14:12,003 [DEBUG] [log_message] Input data: 410
+2024-01-01 20:14:12,003 [DEBUG] [log_message] Handling input from keyboard
+2024-01-01 20:14:12,003 [DEBUG] [log_message] Keyboard Input from UI Controller: 410
+2024-01-01 20:14:12,003 [DEBUG] [log_message] User input: {'task_name': 'keyboard', 'data': 410}
+2024-01-01 20:14:12,003 [DEBUG] [log_message] Keyboard Input from UI Controller: 410
+2024-01-01 20:14:13,537 [DEBUG] [log_message] Received key: 258
+2024-01-01 20:14:13,638 [DEBUG] [log_message] Processing input from keyboard
+2024-01-01 20:14:13,638 [DEBUG] [log_message] Input data: 258
+2024-01-01 20:14:13,638 [DEBUG] [log_message] Handling input from keyboard
+2024-01-01 20:14:13,638 [DEBUG] [log_message] Keyboard Input from UI Controller: 258
+2024-01-01 20:14:13,638 [DEBUG] [log_message] User input: {'task_name': 'keyboard', 'data': 258}
+2024-01-01 20:14:13,638 [DEBUG] [log_message] Keyboard Input from UI Controller: 258
+2024-01-01 20:14:13,639 [DEBUG] [log_message] Received key: 258
+2024-01-01 20:14:13,740 [DEBUG] [log_message] Processing input from keyboard
+2024-01-01 20:14:13,741 [DEBUG] [log_message] Input data: 258
+2024-01-01 20:14:13,741 [DEBUG] [log_message] Handling input from keyboard
+2024-01-01 20:14:13,741 [DEBUG] [log_message] Keyboard Input from UI Controller: 258
+2024-01-01 20:14:13,741 [DEBUG] [log_message] User input: {'task_name': 'keyboard', 'data': 258}
+2024-01-01 20:14:13,741 [DEBUG] [log_message] Keyboard Input from UI Controller: 258
+2024-01-01 20:14:13,743 [DEBUG] [log_message] Received key: 258
+2024-01-01 20:14:13,845 [DEBUG] [log_message] Processing input from keyboard
+2024-01-01 20:14:13,845 [DEBUG] [log_message] Input data: 258
+2024-01-01 20:14:13,845 [DEBUG] [log_message] Handling input from keyboard
+2024-01-01 20:14:13,845 [DEBUG] [log_message] Keyboard Input from UI Controller: 258
+2024-01-01 20:14:13,845 [DEBUG] [log_message] User input: {'task_name': 'keyboard', 'data': 258}
+2024-01-01 20:14:13,845 [DEBUG] [log_message] Keyboard Input from UI Controller: 258
+2024-01-01 20:14:13,846 [DEBUG] [log_message] Received key: 258
+2024-01-01 20:14:13,948 [DEBUG] [log_message] Processing input from keyboard
+2024-01-01 20:14:13,948 [DEBUG] [log_message] Input data: 258
+2024-01-01 20:14:13,948 [DEBUG] [log_message] Handling input from keyboard
+2024-01-01 20:14:13,948 [DEBUG] [log_message] Keyboard Input from UI Controller: 258
+2024-01-01 20:14:13,948 [DEBUG] [log_message] User input: {'task_name': 'keyboard', 'data': 258}
+2024-01-01 20:14:13,948 [DEBUG] [log_message] Keyboard Input from UI Controller: 258
+2024-01-01 20:14:13,950 [DEBUG] [log_message] Received key: 258
+2024-01-01 20:14:14,051 [DEBUG] [log_message] Processing input from keyboard
+2024-01-01 20:14:14,051 [DEBUG] [log_message] Input data: 258
+2024-01-01 20:14:14,051 [DEBUG] [log_message] Handling input from keyboard
+2024-01-01 20:14:14,051 [DEBUG] [log_message] Keyboard Input from UI Controller: 258
+2024-01-01 20:14:14,051 [DEBUG] [log_message] User input: {'task_name': 'keyboard', 'data': 258}
+2024-01-01 20:14:14,051 [DEBUG] [log_message] Keyboard Input from UI Controller: 258
+2024-01-01 20:14:14,052 [DEBUG] [log_message] Received key: 258
+2024-01-01 20:14:14,153 [DEBUG] [log_message] Processing input from keyboard
+2024-01-01 20:14:14,153 [DEBUG] [log_message] Input data: 258
+2024-01-01 20:14:14,153 [DEBUG] [log_message] Handling input from keyboard
+2024-01-01 20:14:14,153 [DEBUG] [log_message] Keyboard Input from UI Controller: 258
+2024-01-01 20:14:14,153 [DEBUG] [log_message] User input: {'task_name': 'keyboard', 'data': 258}
+2024-01-01 20:14:14,153 [DEBUG] [log_message] Keyboard Input from UI Controller: 258
+2024-01-01 20:14:14,154 [DEBUG] [log_message] Received key: 258
+2024-01-01 20:14:14,255 [DEBUG] [log_message] Processing input from keyboard
+2024-01-01 20:14:14,255 [DEBUG] [log_message] Input data: 258
+2024-01-01 20:14:14,256 [DEBUG] [log_message] Handling input from keyboard
+2024-01-01 20:14:14,256 [DEBUG] [log_message] Keyboard Input from UI Controller: 258
+2024-01-01 20:14:14,256 [DEBUG] [log_message] User input: {'task_name': 'keyboard', 'data': 258}
+2024-01-01 20:14:14,256 [DEBUG] [log_message] Keyboard Input from UI Controller: 258
+2024-01-01 20:14:14,257 [DEBUG] [log_message] Received key: 258
+2024-01-01 20:14:14,358 [DEBUG] [log_message] Processing input from keyboard
+2024-01-01 20:14:14,358 [DEBUG] [log_message] Input data: 258
+2024-01-01 20:14:14,358 [DEBUG] [log_message] Handling input from keyboard
+2024-01-01 20:14:14,358 [DEBUG] [log_message] Keyboard Input from UI Controller: 258
+2024-01-01 20:14:14,358 [DEBUG] [log_message] User input: {'task_name': 'keyboard', 'data': 258}
+2024-01-01 20:14:14,358 [DEBUG] [log_message] Keyboard Input from UI Controller: 258
+2024-01-01 20:14:14,359 [DEBUG] [log_message] Received key: 258
+2024-01-01 20:14:14,461 [DEBUG] [log_message] Processing input from keyboard
+2024-01-01 20:14:14,461 [DEBUG] [log_message] Input data: 258
+2024-01-01 20:14:14,461 [DEBUG] [log_message] Handling input from keyboard
+2024-01-01 20:14:14,462 [DEBUG] [log_message] Keyboard Input from UI Controller: 258
+2024-01-01 20:14:14,462 [DEBUG] [log_message] User input: {'task_name': 'keyboard', 'data': 258}
+2024-01-01 20:14:14,462 [DEBUG] [log_message] Keyboard Input from UI Controller: 258
+2024-01-01 20:14:14,463 [DEBUG] [log_message] Received key: 259
+2024-01-01 20:14:14,564 [DEBUG] [log_message] Processing input from keyboard
+2024-01-01 20:14:14,564 [DEBUG] [log_message] Input data: 259
+2024-01-01 20:14:14,564 [DEBUG] [log_message] Handling input from keyboard
+2024-01-01 20:14:14,564 [DEBUG] [log_message] Keyboard Input from UI Controller: 259
+2024-01-01 20:14:14,564 [DEBUG] [log_message] User input: {'task_name': 'keyboard', 'data': 259}
+2024-01-01 20:14:14,564 [DEBUG] [log_message] Keyboard Input from UI Controller: 259
+2024-01-01 20:14:14,565 [DEBUG] [log_message] Received key: 259
+2024-01-01 20:14:14,667 [DEBUG] [log_message] Processing input from keyboard
+2024-01-01 20:14:14,667 [DEBUG] [log_message] Input data: 259
+2024-01-01 20:14:14,667 [DEBUG] [log_message] Handling input from keyboard
+2024-01-01 20:14:14,667 [DEBUG] [log_message] Keyboard Input from UI Controller: 259
+2024-01-01 20:14:14,667 [DEBUG] [log_message] User input: {'task_name': 'keyboard', 'data': 259}
+2024-01-01 20:14:14,667 [DEBUG] [log_message] Keyboard Input from UI Controller: 259
+2024-01-01 20:14:14,668 [DEBUG] [log_message] Received key: 259
+2024-01-01 20:14:14,770 [DEBUG] [log_message] Processing input from keyboard
+2024-01-01 20:14:14,770 [DEBUG] [log_message] Input data: 259
+2024-01-01 20:14:14,770 [DEBUG] [log_message] Handling input from keyboard
+2024-01-01 20:14:14,770 [DEBUG] [log_message] Keyboard Input from UI Controller: 259
+2024-01-01 20:14:14,770 [DEBUG] [log_message] User input: {'task_name': 'keyboard', 'data': 259}
+2024-01-01 20:14:14,770 [DEBUG] [log_message] Keyboard Input from UI Controller: 259
+2024-01-01 20:14:14,771 [DEBUG] [log_message] Received key: 259
+2024-01-01 20:14:14,872 [DEBUG] [log_message] Processing input from keyboard
+2024-01-01 20:14:14,873 [DEBUG] [log_message] Input data: 259
+2024-01-01 20:14:14,873 [DEBUG] [log_message] Handling input from keyboard
+2024-01-01 20:14:14,873 [DEBUG] [log_message] Keyboard Input from UI Controller: 259
+2024-01-01 20:14:14,873 [DEBUG] [log_message] User input: {'task_name': 'keyboard', 'data': 259}
+2024-01-01 20:14:14,873 [DEBUG] [log_message] Keyboard Input from UI Controller: 259
+2024-01-01 20:14:14,874 [DEBUG] [log_message] Received key: 259
+2024-01-01 20:14:14,976 [DEBUG] [log_message] Processing input from keyboard
+2024-01-01 20:14:14,976 [DEBUG] [log_message] Input data: 259
+2024-01-01 20:14:14,976 [DEBUG] [log_message] Handling input from keyboard
+2024-01-01 20:14:14,976 [DEBUG] [log_message] Keyboard Input from UI Controller: 259
+2024-01-01 20:14:14,976 [DEBUG] [log_message] User input: {'task_name': 'keyboard', 'data': 259}
+2024-01-01 20:14:14,976 [DEBUG] [log_message] Keyboard Input from UI Controller: 259
+2024-01-01 20:14:14,977 [DEBUG] [log_message] Received key: 259
+2024-01-01 20:14:15,081 [DEBUG] [log_message] Processing input from keyboard
+2024-01-01 20:14:15,081 [DEBUG] [log_message] Input data: 259
+2024-01-01 20:14:15,081 [DEBUG] [log_message] Handling input from keyboard
+2024-01-01 20:14:15,081 [DEBUG] [log_message] Keyboard Input from UI Controller: 259
+2024-01-01 20:14:15,081 [DEBUG] [log_message] User input: {'task_name': 'keyboard', 'data': 259}
+2024-01-01 20:14:15,081 [DEBUG] [log_message] Keyboard Input from UI Controller: 259
+2024-01-01 20:14:15,082 [DEBUG] [log_message] Received key: 259
+2024-01-01 20:14:15,184 [DEBUG] [log_message] Processing input from keyboard
+2024-01-01 20:14:15,184 [DEBUG] [log_message] Input data: 259
+2024-01-01 20:14:15,184 [DEBUG] [log_message] Handling input from keyboard
+2024-01-01 20:14:15,184 [DEBUG] [log_message] Keyboard Input from UI Controller: 259
+2024-01-01 20:14:15,184 [DEBUG] [log_message] User input: {'task_name': 'keyboard', 'data': 259}
+2024-01-01 20:14:15,184 [DEBUG] [log_message] Keyboard Input from UI Controller: 259
+2024-01-01 20:14:15,185 [DEBUG] [log_message] Received key: 259
+2024-01-01 20:14:15,286 [DEBUG] [log_message] Processing input from keyboard
+2024-01-01 20:14:15,286 [DEBUG] [log_message] Input data: 259
+2024-01-01 20:14:15,286 [DEBUG] [log_message] Handling input from keyboard
+2024-01-01 20:14:15,286 [DEBUG] [log_message] Keyboard Input from UI Controller: 259
+2024-01-01 20:14:15,294 [DEBUG] [log_message] User input: {'task_name': 'keyboard', 'data': 259}
+2024-01-01 20:14:15,294 [DEBUG] [log_message] Keyboard Input from UI Controller: 259
+2024-01-01 20:14:15,295 [DEBUG] [log_message] Received key: 259
+2024-01-01 20:14:15,400 [DEBUG] [log_message] Processing input from keyboard
+2024-01-01 20:14:15,400 [DEBUG] [log_message] Input data: 259
+2024-01-01 20:14:15,400 [DEBUG] [log_message] Handling input from keyboard
+2024-01-01 20:14:15,400 [DEBUG] [log_message] Keyboard Input from UI Controller: 259
+2024-01-01 20:14:15,400 [DEBUG] [log_message] User input: {'task_name': 'keyboard', 'data': 259}
+2024-01-01 20:14:15,400 [DEBUG] [log_message] Keyboard Input from UI Controller: 259
+2024-01-01 20:14:15,401 [DEBUG] [log_message] Received key: 259
+2024-01-01 20:14:15,503 [DEBUG] [log_message] Processing input from keyboard
+2024-01-01 20:14:15,503 [DEBUG] [log_message] Input data: 259
+2024-01-01 20:14:15,503 [DEBUG] [log_message] Handling input from keyboard
+2024-01-01 20:14:15,503 [DEBUG] [log_message] Keyboard Input from UI Controller: 259
+2024-01-01 20:14:15,503 [DEBUG] [log_message] User input: {'task_name': 'keyboard', 'data': 259}
+2024-01-01 20:14:15,503 [DEBUG] [log_message] Keyboard Input from UI Controller: 259
+2024-01-01 20:14:15,504 [DEBUG] [log_message] Received key: 259
+2024-01-01 20:14:15,606 [DEBUG] [log_message] Processing input from keyboard
+2024-01-01 20:14:15,606 [DEBUG] [log_message] Input data: 259
+2024-01-01 20:14:15,606 [DEBUG] [log_message] Handling input from keyboard
+2024-01-01 20:14:15,606 [DEBUG] [log_message] Keyboard Input from UI Controller: 259
+2024-01-01 20:14:15,607 [DEBUG] [log_message] User input: {'task_name': 'keyboard', 'data': 259}
+2024-01-01 20:14:15,607 [DEBUG] [log_message] Keyboard Input from UI Controller: 259
+2024-01-01 20:14:15,607 [DEBUG] [log_message] Received key: 259
+2024-01-01 20:14:15,709 [DEBUG] [log_message] Processing input from keyboard
+2024-01-01 20:14:15,709 [DEBUG] [log_message] Input data: 259
+2024-01-01 20:14:15,709 [DEBUG] [log_message] Handling input from keyboard
+2024-01-01 20:14:15,709 [DEBUG] [log_message] Keyboard Input from UI Controller: 259
+2024-01-01 20:14:15,709 [DEBUG] [log_message] User input: {'task_name': 'keyboard', 'data': 259}
+2024-01-01 20:14:15,709 [DEBUG] [log_message] Keyboard Input from UI Controller: 259
+2024-01-01 20:14:15,710 [DEBUG] [log_message] Received key: 259
+2024-01-01 20:14:15,812 [DEBUG] [log_message] Processing input from keyboard
+2024-01-01 20:14:15,812 [DEBUG] [log_message] Input data: 259
+2024-01-01 20:14:15,812 [DEBUG] [log_message] Handling input from keyboard
+2024-01-01 20:14:15,812 [DEBUG] [log_message] Keyboard Input from UI Controller: 259
+2024-01-01 20:14:15,812 [DEBUG] [log_message] User input: {'task_name': 'keyboard', 'data': 259}
+2024-01-01 20:14:15,813 [DEBUG] [log_message] Keyboard Input from UI Controller: 259
+2024-01-01 20:14:15,814 [DEBUG] [log_message] Received key: 259
+2024-01-01 20:14:15,916 [DEBUG] [log_message] Processing input from keyboard
+2024-01-01 20:14:15,916 [DEBUG] [log_message] Input data: 259
+2024-01-01 20:14:15,916 [DEBUG] [log_message] Handling input from keyboard
+2024-01-01 20:14:15,916 [DEBUG] [log_message] Keyboard Input from UI Controller: 259
+2024-01-01 20:14:15,916 [DEBUG] [log_message] User input: {'task_name': 'keyboard', 'data': 259}
+2024-01-01 20:14:15,916 [DEBUG] [log_message] Keyboard Input from UI Controller: 259
+2024-01-01 20:14:15,917 [DEBUG] [log_message] Received key: 259
+2024-01-01 20:14:16,019 [DEBUG] [log_message] Processing input from keyboard
+2024-01-01 20:14:16,019 [DEBUG] [log_message] Input data: 259
+2024-01-01 20:14:16,020 [DEBUG] [log_message] Handling input from keyboard
+2024-01-01 20:14:16,020 [DEBUG] [log_message] Keyboard Input from UI Controller: 259
+2024-01-01 20:14:16,020 [DEBUG] [log_message] User input: {'task_name': 'keyboard', 'data': 259}
+2024-01-01 20:14:16,020 [DEBUG] [log_message] Keyboard Input from UI Controller: 259
+2024-01-01 20:14:16,021 [DEBUG] [log_message] Received key: 259
+2024-01-01 20:14:16,123 [DEBUG] [log_message] Processing input from keyboard
+2024-01-01 20:14:16,123 [DEBUG] [log_message] Input data: 259
+2024-01-01 20:14:16,124 [DEBUG] [log_message] Handling input from keyboard
+2024-01-01 20:14:16,124 [DEBUG] [log_message] Keyboard Input from UI Controller: 259
+2024-01-01 20:14:16,124 [DEBUG] [log_message] User input: {'task_name': 'keyboard', 'data': 259}
+2024-01-01 20:14:16,124 [DEBUG] [log_message] Keyboard Input from UI Controller: 259
+2024-01-01 20:14:16,126 [DEBUG] [log_message] Received key: 259
+2024-01-01 20:14:16,227 [DEBUG] [log_message] Processing input from keyboard
+2024-01-01 20:14:16,227 [DEBUG] [log_message] Input data: 259
+2024-01-01 20:14:16,227 [DEBUG] [log_message] Handling input from keyboard
+2024-01-01 20:14:16,227 [DEBUG] [log_message] Keyboard Input from UI Controller: 259
+2024-01-01 20:14:16,227 [DEBUG] [log_message] User input: {'task_name': 'keyboard', 'data': 259}
+2024-01-01 20:14:16,227 [DEBUG] [log_message] Keyboard Input from UI Controller: 259
+2024-01-01 20:14:16,232 [DEBUG] [log_message] Received key: 259
+2024-01-01 20:14:16,328 [DEBUG] [log_message] Processing input from keyboard
+2024-01-01 20:14:16,328 [DEBUG] [log_message] Input data: 259
+2024-01-01 20:14:16,328 [DEBUG] [log_message] Handling input from keyboard
+2024-01-01 20:14:16,328 [DEBUG] [log_message] Keyboard Input from UI Controller: 259
+2024-01-01 20:14:16,328 [DEBUG] [log_message] User input: {'task_name': 'keyboard', 'data': 259}
+2024-01-01 20:14:16,329 [DEBUG] [log_message] Keyboard Input from UI Controller: 259
+2024-01-01 20:14:16,335 [DEBUG] [log_message] Received key: 259
+2024-01-01 20:14:16,431 [DEBUG] [log_message] Processing input from keyboard
+2024-01-01 20:14:16,431 [DEBUG] [log_message] Input data: 259
+2024-01-01 20:14:16,431 [DEBUG] [log_message] Handling input from keyboard
+2024-01-01 20:14:16,431 [DEBUG] [log_message] Keyboard Input from UI Controller: 259
+2024-01-01 20:14:16,431 [DEBUG] [log_message] User input: {'task_name': 'keyboard', 'data': 259}
+2024-01-01 20:14:16,431 [DEBUG] [log_message] Keyboard Input from UI Controller: 259
+2024-01-01 20:14:16,436 [DEBUG] [log_message] Received key: 259
+2024-01-01 20:14:16,534 [DEBUG] [log_message] Processing input from keyboard
+2024-01-01 20:14:16,534 [DEBUG] [log_message] Input data: 259
+2024-01-01 20:14:16,534 [DEBUG] [log_message] Handling input from keyboard
+2024-01-01 20:14:16,534 [DEBUG] [log_message] Keyboard Input from UI Controller: 259
+2024-01-01 20:14:16,534 [DEBUG] [log_message] User input: {'task_name': 'keyboard', 'data': 259}
+2024-01-01 20:14:16,534 [DEBUG] [log_message] Keyboard Input from UI Controller: 259
+2024-01-01 20:14:16,538 [DEBUG] [log_message] Received key: 259
+2024-01-01 20:14:16,637 [DEBUG] [log_message] Processing input from keyboard
+2024-01-01 20:14:16,637 [DEBUG] [log_message] Input data: 259
+2024-01-01 20:14:16,637 [DEBUG] [log_message] Handling input from keyboard
+2024-01-01 20:14:16,637 [DEBUG] [log_message] Keyboard Input from UI Controller: 259
+2024-01-01 20:14:16,637 [DEBUG] [log_message] User input: {'task_name': 'keyboard', 'data': 259}
+2024-01-01 20:14:16,637 [DEBUG] [log_message] Keyboard Input from UI Controller: 259
+2024-01-01 20:14:16,639 [DEBUG] [log_message] Received key: 97
+2024-01-01 20:14:16,739 [DEBUG] [log_message] Processing input from keyboard
+2024-01-01 20:14:16,739 [DEBUG] [log_message] Input data: 97
+2024-01-01 20:14:16,739 [DEBUG] [log_message] Handling input from keyboard
+2024-01-01 20:14:16,739 [DEBUG] [log_message] Keyboard Input from UI Controller: 97
+2024-01-01 20:14:16,739 [DEBUG] [log_message] User input: {'task_name': 'keyboard', 'data': 97}
+2024-01-01 20:14:16,739 [DEBUG] [log_message] Keyboard Input from UI Controller: 97
+2024-01-01 20:14:16,740 [DEBUG] [log_message] Received key: 115
+2024-01-01 20:14:16,844 [DEBUG] [log_message] Processing input from keyboard
+2024-01-01 20:14:16,844 [DEBUG] [log_message] Input data: 115
+2024-01-01 20:14:16,844 [DEBUG] [log_message] Handling input from keyboard
+2024-01-01 20:14:16,844 [DEBUG] [log_message] Keyboard Input from UI Controller: 115
+2024-01-01 20:14:16,844 [DEBUG] [log_message] User input: {'task_name': 'keyboard', 'data': 115}
+2024-01-01 20:14:16,844 [DEBUG] [log_message] Keyboard Input from UI Controller: 115
+2024-01-01 20:14:16,847 [DEBUG] [log_message] Received key: 100
+2024-01-01 20:14:16,947 [DEBUG] [log_message] Processing input from keyboard
+2024-01-01 20:14:16,948 [DEBUG] [log_message] Input data: 100
+2024-01-01 20:14:16,948 [DEBUG] [log_message] Handling input from keyboard
+2024-01-01 20:14:16,948 [DEBUG] [log_message] Keyboard Input from UI Controller: 100
+2024-01-01 20:14:16,948 [DEBUG] [log_message] User input: {'task_name': 'keyboard', 'data': 100}
+2024-01-01 20:14:16,948 [DEBUG] [log_message] Keyboard Input from UI Controller: 100
+2024-01-01 20:14:16,948 [DEBUG] [log_message] Received key: 97
+2024-01-01 20:14:17,049 [DEBUG] [log_message] Processing input from keyboard
+2024-01-01 20:14:17,050 [DEBUG] [log_message] Input data: 97
+2024-01-01 20:14:17,050 [DEBUG] [log_message] Handling input from keyboard
+2024-01-01 20:14:17,050 [DEBUG] [log_message] Keyboard Input from UI Controller: 97
+2024-01-01 20:14:17,050 [DEBUG] [log_message] User input: {'task_name': 'keyboard', 'data': 97}
+2024-01-01 20:14:17,050 [DEBUG] [log_message] Keyboard Input from UI Controller: 97
+2024-01-01 20:14:17,051 [DEBUG] [log_message] Received key: 115
+2024-01-01 20:14:17,153 [DEBUG] [log_message] Processing input from keyboard
+2024-01-01 20:14:17,153 [DEBUG] [log_message] Input data: 115
+2024-01-01 20:14:17,153 [DEBUG] [log_message] Handling input from keyboard
+2024-01-01 20:14:17,153 [DEBUG] [log_message] Keyboard Input from UI Controller: 115
+2024-01-01 20:14:17,153 [DEBUG] [log_message] User input: {'task_name': 'keyboard', 'data': 115}
+2024-01-01 20:14:17,153 [DEBUG] [log_message] Keyboard Input from UI Controller: 115
+2024-01-01 20:14:17,154 [DEBUG] [log_message] Received key: 100
+2024-01-01 20:14:17,255 [DEBUG] [log_message] Processing input from keyboard
+2024-01-01 20:14:17,256 [DEBUG] [log_message] Input data: 100
+2024-01-01 20:14:17,256 [DEBUG] [log_message] Handling input from keyboard
+2024-01-01 20:14:17,256 [DEBUG] [log_message] Keyboard Input from UI Controller: 100
+2024-01-01 20:14:17,256 [DEBUG] [log_message] User input: {'task_name': 'keyboard', 'data': 100}
+2024-01-01 20:14:17,256 [DEBUG] [log_message] Keyboard Input from UI Controller: 100
+2024-01-01 20:14:18,172 [DEBUG] [log_message] Received key: 115
+2024-01-01 20:14:18,274 [DEBUG] [log_message] Processing input from keyboard
+2024-01-01 20:14:18,274 [DEBUG] [log_message] Input data: 115
+2024-01-01 20:14:18,274 [DEBUG] [log_message] Handling input from keyboard
+2024-01-01 20:14:18,274 [DEBUG] [log_message] Keyboard Input from UI Controller: 115
+2024-01-01 20:14:18,274 [DEBUG] [log_message] User input: {'task_name': 'keyboard', 'data': 115}
+2024-01-01 20:14:18,274 [DEBUG] [log_message] Keyboard Input from UI Controller: 115
+2024-01-01 20:14:18,275 [DEBUG] [log_message] Received key: 100
+2024-01-01 20:14:18,377 [DEBUG] [log_message] Processing input from keyboard
+2024-01-01 20:14:18,377 [DEBUG] [log_message] Input data: 100
+2024-01-01 20:14:18,377 [DEBUG] [log_message] Handling input from keyboard
+2024-01-01 20:14:18,377 [DEBUG] [log_message] Keyboard Input from UI Controller: 100
+2024-01-01 20:14:18,377 [DEBUG] [log_message] User input: {'task_name': 'keyboard', 'data': 100}
+2024-01-01 20:14:18,377 [DEBUG] [log_message] Keyboard Input from UI Controller: 100
+2024-01-01 20:14:18,378 [DEBUG] [log_message] Received key: 97
+2024-01-01 20:14:18,479 [DEBUG] [log_message] Processing input from keyboard
+2024-01-01 20:14:18,479 [DEBUG] [log_message] Input data: 97
+2024-01-01 20:14:18,479 [DEBUG] [log_message] Handling input from keyboard
+2024-01-01 20:14:18,479 [DEBUG] [log_message] Keyboard Input from UI Controller: 97
+2024-01-01 20:14:18,479 [DEBUG] [log_message] User input: {'task_name': 'keyboard', 'data': 97}
+2024-01-01 20:14:18,479 [DEBUG] [log_message] Keyboard Input from UI Controller: 97
+2024-01-01 20:14:18,480 [DEBUG] [log_message] Received key: 115
+2024-01-01 20:14:18,581 [DEBUG] [log_message] Processing input from keyboard
+2024-01-01 20:14:18,582 [DEBUG] [log_message] Input data: 115
+2024-01-01 20:14:18,582 [DEBUG] [log_message] Handling input from keyboard
+2024-01-01 20:14:18,582 [DEBUG] [log_message] Keyboard Input from UI Controller: 115
+2024-01-01 20:14:18,582 [DEBUG] [log_message] User input: {'task_name': 'keyboard', 'data': 115}
+2024-01-01 20:14:18,582 [DEBUG] [log_message] Keyboard Input from UI Controller: 115
+2024-01-01 20:14:18,582 [DEBUG] [log_message] Received key: 100
+2024-01-01 20:14:18,684 [DEBUG] [log_message] Processing input from keyboard
+2024-01-01 20:14:18,684 [DEBUG] [log_message] Input data: 100
+2024-01-01 20:14:18,684 [DEBUG] [log_message] Handling input from keyboard
+2024-01-01 20:14:18,684 [DEBUG] [log_message] Keyboard Input from UI Controller: 100
+2024-01-01 20:14:18,684 [DEBUG] [log_message] User input: {'task_name': 'keyboard', 'data': 100}
+2024-01-01 20:14:18,684 [DEBUG] [log_message] Keyboard Input from UI Controller: 100
+2024-01-01 20:14:18,685 [DEBUG] [log_message] Received key: 97
+2024-01-01 20:14:18,788 [DEBUG] [log_message] Processing input from keyboard
+2024-01-01 20:14:18,788 [DEBUG] [log_message] Input data: 97
+2024-01-01 20:14:18,788 [DEBUG] [log_message] Handling input from keyboard
+2024-01-01 20:14:18,788 [DEBUG] [log_message] Keyboard Input from UI Controller: 97
+2024-01-01 20:14:18,788 [DEBUG] [log_message] User input: {'task_name': 'keyboard', 'data': 97}
+2024-01-01 20:14:18,788 [DEBUG] [log_message] Keyboard Input from UI Controller: 97
+2024-01-01 20:14:18,789 [DEBUG] [log_message] Received key: 115
+2024-01-01 20:14:18,890 [DEBUG] [log_message] Processing input from keyboard
+2024-01-01 20:14:18,890 [DEBUG] [log_message] Input data: 115
+2024-01-01 20:14:18,890 [DEBUG] [log_message] Handling input from keyboard
+2024-01-01 20:14:18,890 [DEBUG] [log_message] Keyboard Input from UI Controller: 115
+2024-01-01 20:14:18,890 [DEBUG] [log_message] User input: {'task_name': 'keyboard', 'data': 115}
+2024-01-01 20:14:18,890 [DEBUG] [log_message] Keyboard Input from UI Controller: 115
+2024-01-01 20:14:18,997 [DEBUG] [log_message] Received key: 100
+2024-01-01 20:14:19,098 [DEBUG] [log_message] Processing input from keyboard
+2024-01-01 20:14:19,098 [DEBUG] [log_message] Input data: 100
+2024-01-01 20:14:19,098 [DEBUG] [log_message] Handling input from keyboard
+2024-01-01 20:14:19,098 [DEBUG] [log_message] Keyboard Input from UI Controller: 100
+2024-01-01 20:14:19,098 [DEBUG] [log_message] User input: {'task_name': 'keyboard', 'data': 100}
+2024-01-01 20:14:19,098 [DEBUG] [log_message] Keyboard Input from UI Controller: 100
+2024-01-01 20:14:35,845 [INFO] [log_message] Keyboard interrupt detected.
+2024-01-01 20:14:37,303 [INFO] [log_message] Logger initialized.
+2024-01-01 20:14:37,304 [DEBUG] [log_message] Adding shared data: lobby
+2024-01-01 20:14:37,304 [DEBUG] [log_message] Shared data added: {'lobby': {'receive_queue': <Queue at 0x7faca5315900 maxsize=0>, 'send_queue': <Queue at 0x7faca53159f0 maxsize=0>, 'receive_lock': <asyncio.locks.Lock object at 0x7faca5315ae0 [unlocked]>, 'send_lock': <asyncio.locks.Lock object at 0x7faca5315b40 [unlocked]>}}
+2024-01-01 20:14:37,305 [DEBUG] [log_message] Adding shared data: keyboard
+2024-01-01 20:14:37,305 [DEBUG] [log_message] Shared data added: {'lobby': {'receive_queue': <Queue at 0x7faca5315900 maxsize=0>, 'send_queue': <Queue at 0x7faca53159f0 maxsize=0>, 'receive_lock': <asyncio.locks.Lock object at 0x7faca5315ae0 [unlocked]>, 'send_lock': <asyncio.locks.Lock object at 0x7faca5315b40 [unlocked]>}, 'keyboard': {'receive_queue': <Queue at 0x7faca5315cc0 maxsize=0>, 'receive_lock': <asyncio.locks.Lock object at 0x7faca5315c30 [unlocked]>}}
+2024-01-01 20:14:37,305 [DEBUG] [log_message] Launching UI
+2024-01-01 20:14:37,308 [DEBUG] [log_message] Connecting to websocket: ws://localhost:8001/ws/lobby2/?client_id=1
+2024-01-01 20:14:37,310 [DEBUG] [log_message] Keyboard Input Task started
+2024-01-01 20:14:37,313 [DEBUG] [_getaddrinfo_debug] Get address info localhost:8001, type=<SocketKind.SOCK_STREAM: 1>, flags=<AddressInfo.AI_ADDRCONFIG: 32>
+2024-01-01 20:14:37,316 [DEBUG] [_getaddrinfo_debug] Getting address info localhost:8001, type=<SocketKind.SOCK_STREAM: 1>, flags=<AddressInfo.AI_ADDRCONFIG: 32> took 0.659ms: [(<AddressFamily.AF_INET: 2>, <SocketKind.SOCK_STREAM: 1>, 6, '', ('127.0.0.1', 8001))]
+2024-01-01 20:14:37,320 [DEBUG] [create_connection] <asyncio.TransportSocket fd=7, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=6, laddr=('127.0.0.1', 48398), raddr=('127.0.0.1', 8001)> connected to 127.0.0.1:8001: (<_SelectorSocketTransport fd=7 read=polling write=<idle, bufsize=0>>, <aiohttp.client_proto.ResponseHandler object at 0x7faca53ca980>)
+2024-01-01 20:14:37,349 [DEBUG] [log_message] Received message: {"type": "user_joined", "data": {"client_id": "1", "lobby_name": "lobby", "online_users": {"1": "splix"}}}
+2024-01-01 20:14:40,060 [DEBUG] [log_message] Received key: 32
+2024-01-01 20:14:40,065 [DEBUG] [log_message] Splash screen user input: 32
+2024-01-01 20:14:41,177 [DEBUG] [log_message] Received key: 115
+2024-01-01 20:14:41,188 [DEBUG] [log_message] User input: 115
+2024-01-01 20:14:41,280 [DEBUG] [log_message] Received key: 112
+2024-01-01 20:14:41,291 [DEBUG] [log_message] User input: 112
+2024-01-01 20:14:41,485 [DEBUG] [log_message] Received key: 108
+2024-01-01 20:14:41,499 [DEBUG] [log_message] User input: 108
+2024-01-01 20:14:41,586 [DEBUG] [log_message] Received key: 105
+2024-01-01 20:14:41,593 [DEBUG] [log_message] User input: 105
+2024-01-01 20:14:41,688 [DEBUG] [log_message] Received key: 120
+2024-01-01 20:14:41,689 [DEBUG] [log_message] User input: 120
+2024-01-01 20:14:42,094 [DEBUG] [log_message] Received key: 10
+2024-01-01 20:14:42,111 [DEBUG] [log_message] User input: 10
+2024-01-01 20:14:42,400 [DEBUG] [log_message] Received key: 49
+2024-01-01 20:14:42,404 [DEBUG] [log_message] User input: 49
+2024-01-01 20:14:42,501 [DEBUG] [log_message] Received key: 50
+2024-01-01 20:14:42,518 [DEBUG] [log_message] User input: 50
+2024-01-01 20:14:42,602 [DEBUG] [log_message] Received key: 51
+2024-01-01 20:14:42,613 [DEBUG] [log_message] User input: 51
+2024-01-01 20:14:42,703 [DEBUG] [log_message] Received key: 10
+2024-01-01 20:14:42,710 [DEBUG] [log_message] User input: 10
+2024-01-01 20:14:42,710 [INFO] [log_message] Entered Data: {'Username': 'splix', 'Password': '123'}
+2024-01-01 20:14:42,715 [DEBUG] [_new_conn] Starting new HTTP connection (1): localhost:8000
+2024-01-01 20:14:43,074 [DEBUG] [_make_request] http://localhost:8000 "POST /api/user/login/ HTTP/1.1" 200 241
+2024-01-01 20:14:43,169 [DEBUG] [_make_request] http://localhost:8000 "GET /api/get_user_id/splix/ HTTP/1.1" 200 35
+2024-01-01 20:14:43,170 [INFO] [log_message] Login response: splix
+2024-01-01 20:14:43,172 [WARNING] [_run_once] Executing <Task pending name='Task-1' coro=<main() running at /home/splix/Desktop/new-sprint/CLI/main.py:30> wait_for=<Future pending cb=[Task.task_wakeup()] created at /usr/lib/python3.10/asyncio/base_events.py:429> cb=[_run_until_complete_cb() at /usr/lib/python3.10/asyncio/base_events.py:184] created at /usr/lib/python3.10/asyncio/tasks.py:636> took 0.462 seconds
+2024-01-01 20:14:43,190 [DEBUG] [log_message] Processing input from lobby
+2024-01-01 20:14:43,190 [DEBUG] [log_message] Input data: {"type": "user_joined", "data": {"client_id": "1", "lobby_name": "lobby", "online_users": {"1": "splix"}}}
+2024-01-01 20:14:43,190 [DEBUG] [log_message] Handling input from lobby
+2024-01-01 20:14:43,190 [DEBUG] [log_message] Lobby Input from UI Controller: {"type": "user_joined", "data": {"client_id": "1", "lobby_name": "lobby", "online_users": {"1": "splix"}}}
+2024-01-01 20:14:43,191 [DEBUG] [log_message] User input: {'task_name': 'lobby', 'data': '{"type": "user_joined", "data": {"client_id": "1", "lobby_name": "lobby", "online_users": {"1": "splix"}}}'}
+2024-01-01 20:14:43,191 [DEBUG] [log_message] Lobby Input from UI Controller: {"type": "user_joined", "data": {"client_id": "1", "lobby_name": "lobby", "online_users": {"1": "splix"}}}
+2024-01-01 20:14:53,396 [INFO] [log_message] Keyboard interrupt detected.
+2024-01-01 20:17:15,991 [INFO] [log_message] Logger initialized.
+2024-01-01 20:17:15,992 [DEBUG] [log_message] Adding shared data: lobby
+2024-01-01 20:17:15,992 [DEBUG] [log_message] Shared data added: {'lobby': {'receive_queue': <Queue at 0x7f34f8b11900 maxsize=0>, 'send_queue': <Queue at 0x7f34f8b119f0 maxsize=0>, 'receive_lock': <asyncio.locks.Lock object at 0x7f34f8b11ae0 [unlocked]>, 'send_lock': <asyncio.locks.Lock object at 0x7f34f8b11b40 [unlocked]>}}
+2024-01-01 20:17:15,992 [DEBUG] [log_message] Adding shared data: keyboard
+2024-01-01 20:17:15,993 [DEBUG] [log_message] Shared data added: {'lobby': {'receive_queue': <Queue at 0x7f34f8b11900 maxsize=0>, 'send_queue': <Queue at 0x7f34f8b119f0 maxsize=0>, 'receive_lock': <asyncio.locks.Lock object at 0x7f34f8b11ae0 [unlocked]>, 'send_lock': <asyncio.locks.Lock object at 0x7f34f8b11b40 [unlocked]>}, 'keyboard': {'receive_queue': <Queue at 0x7f34f8b11cc0 maxsize=0>, 'receive_lock': <asyncio.locks.Lock object at 0x7f34f8b11c30 [unlocked]>}}
+2024-01-01 20:17:15,993 [DEBUG] [log_message] Launching UI
+2024-01-01 20:17:15,995 [DEBUG] [log_message] Connecting to websocket: ws://localhost:8001/ws/lobby2/?client_id=1
+2024-01-01 20:17:15,997 [DEBUG] [log_message] Keyboard Input Task started
+2024-01-01 20:17:15,998 [DEBUG] [_getaddrinfo_debug] Get address info localhost:8001, type=<SocketKind.SOCK_STREAM: 1>, flags=<AddressInfo.AI_ADDRCONFIG: 32>
+2024-01-01 20:17:15,999 [DEBUG] [_getaddrinfo_debug] Getting address info localhost:8001, type=<SocketKind.SOCK_STREAM: 1>, flags=<AddressInfo.AI_ADDRCONFIG: 32> took 0.332ms: [(<AddressFamily.AF_INET: 2>, <SocketKind.SOCK_STREAM: 1>, 6, '', ('127.0.0.1', 8001))]
+2024-01-01 20:17:16,002 [DEBUG] [create_connection] <asyncio.TransportSocket fd=7, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=6, laddr=('127.0.0.1', 54884), raddr=('127.0.0.1', 8001)> connected to 127.0.0.1:8001: (<_SelectorSocketTransport fd=7 read=polling write=<idle, bufsize=0>>, <aiohttp.client_proto.ResponseHandler object at 0x7f34f8bf5fc0>)
+2024-01-01 20:17:16,041 [DEBUG] [log_message] Received message: {"type": "user_joined", "data": {"client_id": "1", "lobby_name": "lobby", "online_users": {"1": "splix"}}}
+2024-01-01 20:17:20,435 [INFO] [log_message] Keyboard interrupt detected.
+2024-01-01 20:23:16,760 [INFO] [log_message] Logger initialized.
+2024-01-01 20:23:16,761 [DEBUG] [log_message] Adding shared data: lobby
+2024-01-01 20:23:16,761 [DEBUG] [log_message] Shared data added: {'lobby': {'receive_queue': <Queue at 0x7f4c14d157e0 maxsize=0>, 'send_queue': <Queue at 0x7f4c14d158d0 maxsize=0>, 'receive_lock': <asyncio.locks.Lock object at 0x7f4c14d159c0 [unlocked]>, 'send_lock': <asyncio.locks.Lock object at 0x7f4c14d15a20 [unlocked]>}}
+2024-01-01 20:23:16,761 [DEBUG] [log_message] Adding shared data: keyboard
+2024-01-01 20:23:16,761 [DEBUG] [log_message] Shared data added: {'lobby': {'receive_queue': <Queue at 0x7f4c14d157e0 maxsize=0>, 'send_queue': <Queue at 0x7f4c14d158d0 maxsize=0>, 'receive_lock': <asyncio.locks.Lock object at 0x7f4c14d159c0 [unlocked]>, 'send_lock': <asyncio.locks.Lock object at 0x7f4c14d15a20 [unlocked]>}, 'keyboard': {'receive_queue': <Queue at 0x7f4c14d15ba0 maxsize=0>, 'receive_lock': <asyncio.locks.Lock object at 0x7f4c14d15b10 [unlocked]>}}
+2024-01-01 20:23:16,761 [DEBUG] [log_message] Launching UI
+2024-01-01 20:23:16,763 [DEBUG] [log_message] Connecting to websocket: ws://localhost:8001/ws/lobby2/?client_id=1
+2024-01-01 20:23:16,765 [DEBUG] [log_message] Keyboard Input Task started
+2024-01-01 20:23:16,765 [DEBUG] [_getaddrinfo_debug] Get address info localhost:8001, type=<SocketKind.SOCK_STREAM: 1>, flags=<AddressInfo.AI_ADDRCONFIG: 32>
+2024-01-01 20:23:16,766 [DEBUG] [_getaddrinfo_debug] Getting address info localhost:8001, type=<SocketKind.SOCK_STREAM: 1>, flags=<AddressInfo.AI_ADDRCONFIG: 32> took 0.211ms: [(<AddressFamily.AF_INET: 2>, <SocketKind.SOCK_STREAM: 1>, 6, '', ('127.0.0.1', 8001))]
+2024-01-01 20:23:16,769 [DEBUG] [create_connection] <asyncio.TransportSocket fd=7, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=6, laddr=('127.0.0.1', 50494), raddr=('127.0.0.1', 8001)> connected to 127.0.0.1:8001: (<_SelectorSocketTransport fd=7 read=polling write=<idle, bufsize=0>>, <aiohttp.client_proto.ResponseHandler object at 0x7f4c14dca440>)
+2024-01-01 20:23:16,794 [DEBUG] [log_message] Received message: {"type": "user_joined", "data": {"client_id": "1", "lobby_name": "lobby", "online_users": {"1": "splix"}}}
+2024-01-01 20:24:06,232 [DEBUG] [log_message] Received key: 32
+2024-01-01 20:24:06,334 [DEBUG] [log_message] Splash screen user input: 32
+2024-01-01 20:24:10,303 [INFO] [log_message] Keyboard interrupt detected.
+2024-01-01 20:25:58,606 [INFO] [log_message] Logger initialized.
+2024-01-01 20:25:58,607 [DEBUG] [log_message] Adding shared data: lobby
+2024-01-01 20:25:58,607 [DEBUG] [log_message] Shared data added: {'lobby': {'receive_queue': <Queue at 0x7fd57cf37610 maxsize=0>, 'send_queue': <Queue at 0x7fd57cf37520 maxsize=0>, 'receive_lock': <asyncio.locks.Lock object at 0x7fd57cf37430 [unlocked]>, 'send_lock': <asyncio.locks.Lock object at 0x7fd57cf373d0 [unlocked]>}}
+2024-01-01 20:25:58,608 [DEBUG] [log_message] Adding shared data: keyboard
+2024-01-01 20:25:58,608 [DEBUG] [log_message] Shared data added: {'lobby': {'receive_queue': <Queue at 0x7fd57cf37610 maxsize=0>, 'send_queue': <Queue at 0x7fd57cf37520 maxsize=0>, 'receive_lock': <asyncio.locks.Lock object at 0x7fd57cf37430 [unlocked]>, 'send_lock': <asyncio.locks.Lock object at 0x7fd57cf373d0 [unlocked]>}, 'keyboard': {'receive_queue': <Queue at 0x7fd57cf37250 maxsize=0>, 'receive_lock': <asyncio.locks.Lock object at 0x7fd57cf372e0 [unlocked]>}}
+2024-01-01 20:25:58,608 [DEBUG] [log_message] Launching UI
+2024-01-01 20:25:58,611 [DEBUG] [log_message] Connecting to websocket: ws://localhost:8001/ws/lobby2/?client_id=1
+2024-01-01 20:25:58,612 [DEBUG] [log_message] Keyboard Input Task started
+2024-01-01 20:25:58,614 [DEBUG] [_getaddrinfo_debug] Get address info localhost:8001, type=<SocketKind.SOCK_STREAM: 1>, flags=<AddressInfo.AI_ADDRCONFIG: 32>
+2024-01-01 20:25:58,615 [DEBUG] [_getaddrinfo_debug] Getting address info localhost:8001, type=<SocketKind.SOCK_STREAM: 1>, flags=<AddressInfo.AI_ADDRCONFIG: 32> took 0.515ms: [(<AddressFamily.AF_INET: 2>, <SocketKind.SOCK_STREAM: 1>, 6, '', ('127.0.0.1', 8001))]
+2024-01-01 20:25:58,620 [DEBUG] [create_connection] <asyncio.TransportSocket fd=7, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=6, laddr=('127.0.0.1', 33196), raddr=('127.0.0.1', 8001)> connected to 127.0.0.1:8001: (<_SelectorSocketTransport fd=7 read=polling write=<idle, bufsize=0>>, <aiohttp.client_proto.ResponseHandler object at 0x7fd57cfca3e0>)
+2024-01-01 20:25:58,652 [DEBUG] [log_message] Received message: {"type": "user_joined", "data": {"client_id": "1", "lobby_name": "lobby", "online_users": {"1": "splix"}}}
+2024-01-01 20:25:59,843 [DEBUG] [log_message] Received key: 32
+2024-01-01 20:25:59,941 [DEBUG] [log_message] Splash screen user input: 32
+2024-01-01 20:26:01,172 [DEBUG] [log_message] Received key: 115
+2024-01-01 20:26:01,273 [DEBUG] [log_message] User input: 115
+2024-01-01 20:26:01,274 [DEBUG] [log_message] Received key: 112
+2024-01-01 20:26:01,375 [DEBUG] [log_message] User input: 112
+2024-01-01 20:26:01,478 [DEBUG] [log_message] Received key: 108
+2024-01-01 20:26:01,579 [DEBUG] [log_message] User input: 108
+2024-01-01 20:26:01,580 [DEBUG] [log_message] Received key: 105
+2024-01-01 20:26:01,682 [DEBUG] [log_message] User input: 105
+2024-01-01 20:26:01,684 [DEBUG] [log_message] Received key: 120
+2024-01-01 20:26:01,784 [DEBUG] [log_message] User input: 120
+2024-01-01 20:26:01,991 [DEBUG] [log_message] Received key: 10
+2024-01-01 20:26:02,092 [DEBUG] [log_message] User input: 10
+2024-01-01 20:26:02,198 [DEBUG] [log_message] Received key: 49
+2024-01-01 20:26:02,300 [DEBUG] [log_message] User input: 49
+2024-01-01 20:26:02,302 [DEBUG] [log_message] Received key: 50
+2024-01-01 20:26:02,405 [DEBUG] [log_message] User input: 50
+2024-01-01 20:26:02,406 [DEBUG] [log_message] Received key: 51
+2024-01-01 20:26:02,508 [DEBUG] [log_message] User input: 51
+2024-01-01 20:26:02,509 [DEBUG] [log_message] Received key: 10
+2024-01-01 20:26:02,612 [DEBUG] [log_message] User input: 10
+2024-01-01 20:26:02,612 [INFO] [log_message] Entered Data: {'Username': 'splix', 'Password': '123'}
+2024-01-01 20:26:02,616 [DEBUG] [_new_conn] Starting new HTTP connection (1): localhost:8000
+2024-01-01 20:26:02,955 [DEBUG] [_make_request] http://localhost:8000 "POST /api/user/login/ HTTP/1.1" 200 241
+2024-01-01 20:26:03,033 [DEBUG] [_make_request] http://localhost:8000 "GET /api/get_user_id/splix/ HTTP/1.1" 200 35
+2024-01-01 20:26:03,034 [INFO] [log_message] Login response: splix
+2024-01-01 20:26:03,035 [WARNING] [_run_once] Executing <Task pending name='Task-1' coro=<main() running at /home/splix/Desktop/new-sprint/CLI/main.py:30> wait_for=<Future pending cb=[Task.task_wakeup()] created at /usr/lib/python3.10/asyncio/base_events.py:429> cb=[_run_until_complete_cb() at /usr/lib/python3.10/asyncio/base_events.py:184] created at /usr/lib/python3.10/asyncio/tasks.py:636> took 0.423 seconds
+2024-01-01 20:26:03,137 [DEBUG] [log_message] Processing input from lobby
+2024-01-01 20:26:03,137 [DEBUG] [log_message] Input data: {"type": "user_joined", "data": {"client_id": "1", "lobby_name": "lobby", "online_users": {"1": "splix"}}}
+2024-01-01 20:26:03,137 [DEBUG] [log_message] Handling input from lobby
+2024-01-01 20:26:03,137 [DEBUG] [log_message] Lobby Input from UI Controller: {"type": "user_joined", "data": {"client_id": "1", "lobby_name": "lobby", "online_users": {"1": "splix"}}}
+2024-01-01 20:26:03,137 [DEBUG] [log_message] User input: {'task_name': 'lobby', 'data': '{"type": "user_joined", "data": {"client_id": "1", "lobby_name": "lobby", "online_users": {"1": "splix"}}}'}
+2024-01-01 20:26:03,137 [DEBUG] [log_message] Lobby Input from UI Controller: {"type": "user_joined", "data": {"client_id": "1", "lobby_name": "lobby", "online_users": {"1": "splix"}}}
+2024-01-01 20:26:04,606 [INFO] [log_message] Keyboard interrupt detected.

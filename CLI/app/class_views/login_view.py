@@ -14,7 +14,7 @@ from utils.task_manager import TaskManager
 from app.class_views.home_view import HomePage
 
 class Login(Widget):
-    def __init__(self, stdscr, ui_controller):
+    def __init__(self, stdscr, ui_controller, frame_rate):
         super().__init__(stdscr)
         self.http = http_api()
         self.file_manager = FileManager()
@@ -27,6 +27,7 @@ class Login(Widget):
         self.current_input_index = 0
         self.error_message = None
         self.next_view = None
+        self.frame_rate = frame_rate
     
     def __str__(self):
         # Return a string representing the current view
@@ -36,6 +37,8 @@ class Login(Widget):
     async def draw(self):
         try:
             self._clear_screen()
+
+            self.frame_rate[0] = 10
 
             self.update_terminal_size()
 
@@ -89,7 +92,7 @@ class Login(Widget):
                         self.error_message = None
                     else:
                         self.logged_in = True
-                        self.next_view = HomePage(self.stdscr, self.ui_controller)
+                        self.next_view = HomePage(self.stdscr, self.ui_controller, self.frame_rate)
                         return True
                 else:
                     self.error_message = None  # Clear any previous error messages

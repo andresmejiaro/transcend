@@ -12,7 +12,7 @@ from utils.task_manager import TaskManager
 from app.widgets.widgets import Widget
 
 class HomePage(Widget):
-    def __init__(self, stdscr, ui_controller):
+    def __init__(self, stdscr, ui_controller, frame_rate):
         super().__init__(stdscr)
 
         self.file_manager = FileManager()
@@ -22,7 +22,7 @@ class HomePage(Widget):
         self.ui_controller = ui_controller
 
         # Frame rate timing
-        self.last_frame_time = time.time()
+        self.frame_rate = frame_rate
 
         # Next view to be displayed
         self.next_view = None
@@ -39,7 +39,10 @@ class HomePage(Widget):
         try:
             self._clear_screen()
 
+            self.frame_rate[0] = 30
+
             max_y, max_x = self.stdscr.getmaxyx()
+            self.update_terminal_size()
 
             if self.rows < 30 or self.cols < 120:
                 self.print_screen_too_small()
@@ -88,37 +91,21 @@ class HomePage(Widget):
 # Input Processing Methods
     def process_lobby_input(self, lobby_input):
         try:
-            # Lobby Messages are recieved as a dictionary with the following format:
             log_message(f"Lobby Input from UI Controller: {lobby_input}", level=logging.DEBUG)
-            # We will format the info in a dictionary with the following format:
-            # {"type": "user_joined", "data": {"client_id": "1", "lobby_name": "lobby", "online_users": {"2": "fsalazar", "1": "splix"}}}
-            # We will process the input based on type
-            
-            # Check if the fomrat is already in JSON or convert it
+
             if isinstance(lobby_input, str):
                 message_data = json.loads(lobby_input)
             else:
                 message_data = lobby_input
 
-            # Check if the message type is "user_joined" or "user_left"
-            if message_data.get("type") == "user_joined" or message_data.get("type") == "user_left":
-                user_data = message_data.get("data", {}).get("online_users", {})
+            message_type = message_data.get("type")
+            data = message_data.get("data", {})
 
-                # Create a new dictionary with updated online_users
-                updated_users = dict(self.online_users)
-                
-                # If it's a "user_joined" message, update the online_users dictionary with the new user data
-                if message_data.get("type") == "user_joined":
-                    updated_users.update(user_data)
-                # If it's a "user_left" message, remove the user from the online users dictionary
-                elif message_data.get("type") == "user_left":
-                    # Remove the user that left (if exists)
-                    left_user_id = message_data.get("data", {}).get("client_id")
-                    updated_users.pop(left_user_id, None)
+            if message_type == "user_joined":
+                self.handle_user_joined(data)
+            elif message_type == "user_left":
+                self.handle_user_left(data)
 
-                # Update the original online_users dictionary
-                self.online_users = updated_users
-        
         except Exception as e:
             log_message(f"Error in process_lobby_input: {e}", level=logging.ERROR)
 
@@ -152,8 +139,28 @@ class HomePage(Widget):
 
         except Exception as e:
             log_message(f"Error in send_message: {e}", level=logging.ERROR)
+# -------------------------------------
+            
+# Lobby Methods
+    def handle_user_joined(self, user_data):
+        try:
+            online_users = user_data.get("online_users")
+            updated_users = dict(self.online_users)
+            updated_users.update(online_users)
+            self.online_users = updated_users
 
+        except Exception as e:
+            log_message(f"Error in handle_user_joined: {e}", level=logging.ERROR)
 
+    def handle_user_left(self, user_data):
+        try:
+            left_user_id = user_data.get("client_id")
+            updated_users = dict(self.online_users)
+            updated_users.pop(left_user_id, None)
+            self.online_users = updated_users
+
+        except Exception as e:
+            log_message(f"Error in handle_user_left: {e}", level=logging.ERROR)
 
 
 
@@ -177,9 +184,7 @@ class HomePage(Widget):
 
         except Exception as e:
             log_message(f"Error printing online users: {e}", level=logging.ERROR)
-
-
-# # -------------------------------------
+# -------------------------------------
 
 
 

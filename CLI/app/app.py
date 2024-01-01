@@ -25,7 +25,7 @@ class CLIApp:
         self.task_manager = TaskManager()   # The task manager object - Used to create and manage tasks
 
         # Adjust App Frame Rate - Adjust the frame rate of the application
-        self.frame_rate = 10
+        self.frame_rate = [60]
 
 # Essential App Tasks - These tasks are essential to the application and will be created and started in the main loop
     # Lobby Websocket Task - Connect to the lobby websocket and send and receive messages throught the duration of the application
@@ -93,13 +93,13 @@ class CLIApp:
         try:
             log_message("Launching UI", level=logging.DEBUG)
             # Start the UI with the splash screen
-            self.ui_view = SplashView(self.stdscr, self.ui_controller)
+            self.ui_view = SplashView(self.stdscr, self.ui_controller, self.frame_rate)
             while True:
                 await self.ui_view.draw()
 
                 next_view = self.ui_view.get_next_view()
                 
-                await asyncio.sleep(self.set_frame_rate(self.frame_rate))
+                await asyncio.sleep(self.set_frame_rate(self.frame_rate[0]))
 
                 if next_view is not None:
                     self.ui_view = next_view
