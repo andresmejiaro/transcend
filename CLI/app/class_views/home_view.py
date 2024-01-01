@@ -34,7 +34,7 @@ class HomePage(Widget):
         # Return a string representing the current view
         return "home"
 
-# Update the screen        
+# Screen Updating and Screen Switching        
     async def draw(self):
         try:
             self._clear_screen()
@@ -88,7 +88,7 @@ class HomePage(Widget):
             log_message(f"Error in process_input: {e}", level=logging.ERROR)
 # -------------------------------------
 
-# Input Processing Methods
+# Task Specific Input Processing
     def process_lobby_input(self, lobby_input):
         try:
             log_message(f"Lobby Input from UI Controller: {lobby_input}", level=logging.DEBUG)
@@ -128,20 +128,7 @@ class HomePage(Widget):
 # -------------------------------------
 
 
-# Send messages to websocket
-    async def send_message(self, message):
-        try:
-            message = {"command": "list_of_users"}
-            message = json.dumps(message)
-            # Acquire the lock before accessing the queue
-            async with self.list_of_shared_data["lobby"]["send_lock"]:
-                await self.list_of_shared_data["lobby"]["send_queue"].put(message)
-
-        except Exception as e:
-            log_message(f"Error in send_message: {e}", level=logging.ERROR)
-# -------------------------------------
-            
-# Lobby Methods
+# Lobby Task Handling Methods
     def handle_user_joined(self, user_data):
         try:
             online_users = user_data.get("online_users")
@@ -163,8 +150,19 @@ class HomePage(Widget):
             log_message(f"Error in handle_user_left: {e}", level=logging.ERROR)
 
 
+# Send messages to websocket
+    async def send_message(self, message):
+        try:
+            message = {"command": "list_of_users"}
+            message = json.dumps(message)
+            # Acquire the lock before accessing the queue
+            async with self.list_of_shared_data["lobby"]["send_lock"]:
+                await self.list_of_shared_data["lobby"]["send_queue"].put(message)
 
-
+        except Exception as e:
+            log_message(f"Error in send_message: {e}", level=logging.ERROR)
+# -------------------------------------
+    
 
 # View Specific Methods - They should be structed with rows and columns in mind, so that they can be displayed in the terminal
     def print_online_users(self, max_y, max_x):
