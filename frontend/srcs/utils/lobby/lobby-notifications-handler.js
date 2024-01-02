@@ -1,23 +1,24 @@
 let notificationInfoSent = [];
 let notificationInfoReceived = [];
-let invitationListFriendsData = [];
 let receivedFriendsNotifications = [];
 
 const updateNotifications = async (data) => {
-	const bellSpan = document.getElementById("nav-notification-bell-span");
+    const bellSpan = document.getElementById("nav-notification-bell-span");
     if (data && data.length)
-        bellSpan.innerHTML = data.length;
-    else
-        bellSpan.innerHTML = "";
+    bellSpan.innerHTML = data.length;
+else
+bellSpan.innerHTML = "";
 };
 
+let invitationListFriendsData = [];
+let invitationListMatchData = [];
 const handleListSentInvites = async (data) => {
-    if (data.data)
-        notificationInfoSent = data.data;
-    else
-        notificationInfoSent = data;
+    let notificationInfoSent = data.data || data;
 
-    const updatedInfo = await Promise.all(notificationInfoSent.map(async (user) => {
+    const matchInvites = notificationInfoSent.filter(user => user.invite_type === 'match');
+    const friendRequestInvites = notificationInfoSent.filter(user => user.invite_type === 'friend_request');
+
+    invitationListMatchData = await Promise.all(matchInvites.map(async (user) => {
         const userInfo = await getPlayerInfo(user.invite_id);
         return {
             ...userInfo,
@@ -25,8 +26,18 @@ const handleListSentInvites = async (data) => {
             invite_type: user.invite_type,
         };
     }));
-    invitationListFriendsData = updatedInfo;
-	await listInvitationFriendsNav();
+
+    invitationListFriendsData = await Promise.all(friendRequestInvites.map(async (user) => {
+        const userInfo = await getPlayerInfo(user.invite_id);
+        return {
+            ...userInfo,
+            id: user.invite_id,
+            invite_type: user.invite_type,
+        };
+    }));
+
+    await listInvitationFriendsNav();
+    await listInvitationMatchNav();
 };
 
 const handleListReceivedInvites = async (data) => {

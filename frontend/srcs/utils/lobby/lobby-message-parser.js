@@ -1,6 +1,6 @@
 const handleMessage = async (message) => {
     const data = JSON.parse(message);
-    // console.log(data);
+    console.log(data);
 
     switch (data.type) {
         case "user_joined":

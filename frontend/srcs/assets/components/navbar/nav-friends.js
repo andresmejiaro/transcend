@@ -30,6 +30,45 @@ const listInvitationFriendsNav = async () => {
   }));
 };
 
+const listInvitationMatchNav = async () => {
+  const invitationListContainer = document.getElementById("match-invitation-list");
+  
+  invitationListContainer.innerHTML = "";
+  await Promise.all(invitationListMatchData.map(async (match) => {
+    const matchElement = document.createElement("div");
+    matchElement.classList.add("d-flex", "align-items-center");
+
+    const mxElement = document.createElement("div");
+    mxElement.classList.add("mx-1");
+
+    const pElement = document.createElement("p");
+    pElement.classList.add("pm0");
+    pElement.textContent = match.username;
+
+    const acceptButton = document.createElement("button");
+    acceptButton.classList.add("btn", "btn-success", "ms-2");
+    acceptButton.innerHTML = '<i class="bi bi-check"></i> Accept Match';
+    acceptButton.addEventListener("click", async () => {
+      console.log("Accepted Match", match);
+    });
+
+    const rejectButton = document.createElement("button");
+    rejectButton.classList.add("btn", "btn-danger", "ms-2");
+    rejectButton.innerHTML = '<i class="bi bi-x"></i> Reject Match';
+    rejectButton.addEventListener("click", async () => {
+      console.log("Rejected Match", match);
+    });
+
+    matchElement.appendChild(mxElement);
+    matchElement.appendChild(pElement);
+    matchElement.appendChild(acceptButton);
+    matchElement.appendChild(rejectButton);
+
+    invitationListContainer.appendChild(matchElement);
+  }));
+};
+
+
 
 const listFriendsNav = async () => {
   if (nowOnlineFriends) toggleFriendNav(nowOnlineFriends);

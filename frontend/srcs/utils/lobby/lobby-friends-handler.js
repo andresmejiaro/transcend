@@ -82,6 +82,7 @@ const updateFriendStatusNow = async (data) => {
   }
   friendList = updatedFriendList;
   await listFriendsNav();
+  invitationListFriendsData = invitationListFriendsData.filter(friend => friend.id !== targetId);
   await listInvitationFriendsNav();
 };
 

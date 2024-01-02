@@ -186,3 +186,26 @@ const showAlertSuccess = (message) => {
     alertContainer.removeChild(alertElement);
   });
 };
+
+const showAlertDanger = (message) => {
+  const alertContainer = document.getElementById('alert-container-danger');
+
+  const alertElement = document.createElement('div');
+  alertElement.classList.add('alert', 'alert-danger', 'fade', 'show');
+  alertElement.setAttribute('role', 'alert');
+  alertElement.innerHTML = `
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    ${message}
+  `;
+
+  alertContainer.appendChild(alertElement);
+
+  setTimeout(() => {
+    alertElement.classList.remove('show');
+  }, 5000);
+
+  alertElement.addEventListener('transitionend', () => {
+    alertContainer.removeChild(alertElement);
+  });
+};
+
