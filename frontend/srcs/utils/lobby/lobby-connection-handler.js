@@ -73,6 +73,7 @@ const getOnlineUsers = async () => {
       data: {},
     });
   } catch (error) {
+    handleLogout();
     console.error("Error while connecting to WebSocket:", error.message);
   }
 };

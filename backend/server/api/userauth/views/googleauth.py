@@ -10,6 +10,7 @@ from django.core.files.storage import default_storage
 from django.conf import settings
 from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
+
 import os
 import pyotp
 import qrcode
@@ -69,7 +70,7 @@ def disable_2fa(request, user_id):
 	user.disable_2fa()
 	return JsonResponse({'message': '2FA has been disabled.'})
 
-@requires_csrf_token
+@csrf_exempt
 def verify_totp_code(request):
 	if request.method == 'POST':
 		try:
@@ -90,7 +91,7 @@ def verify_totp_code(request):
 				user.save()
 				return JsonResponse({'status': 'ok', 'message': 'TOTP is valid'})
 			else:
-				return JsonResponse({'message': 'Invalid TOTP'}, status=400)
+				return JsonResponse({'status': 'error', 'message': 'Invalid TOTP'})
 		except CustomUser.DoesNotExist:
 			return JsonResponse({'message': 'User not found'}, status=400)
 		except pyotp.OTPError as e:
@@ -98,15 +99,13 @@ def verify_totp_code(request):
 	return JsonResponse({'status': 'error', 'message': 'Only POST requests are allowed'}, status=400)
 
 @requires_csrf_token
-def user_2fa_setup_complete(request):
-	if request.method == 'POST':
+def user_2fa_setup_complete(request, user_id):
+	if request.method == 'GET':
 		try:
-			data = json.loads(request.body)
-			user_id = data.get('user_id')
-			if not user_id:
-				return JsonResponse({'status': 'missing param'}, status=400)
 			user = CustomUser.objects.get(id=user_id)
-			return JsonResponse({'status': user.is_2fa_setup_complete})
+			if user.is_2fa_enabled and user.is_2fa_setup_complete:
+				return JsonResponse({'status': True})
+			return JsonResponse({'status': False})
 		except CustomUser.DoesNotExist:
 			return JsonResponse({'message': 'User not found'}, status=400)
-	return JsonResponse({'status': 'error', 'message': 'Only POST requests are allowed'}, status=400)
+	return JsonResponse({'status': 'error', 'message': 'Only GET requests are allowed'}, status=400)

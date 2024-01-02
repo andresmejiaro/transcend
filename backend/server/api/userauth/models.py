@@ -30,6 +30,7 @@ class CustomUser(AbstractUser):
     def disable_2fa(self):
         self.is_2fa_enabled = False
         self.secret_key = None
+        self.is_2fa_setup_complete = False
         self.save()    
 
 

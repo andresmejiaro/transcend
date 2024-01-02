@@ -1,7 +1,12 @@
 const loadGoogleAuth = async () => {
-  document.getElementById("gaDiv").style.display = "block";
+  const gaDiv = document.getElementById("gaDiv");
+  gaDiv.style.display = "block";
+
   await enable2FA();
   await load2FA();
+
+  document.getElementById("removeGA").style.display = "inline";
+  document.getElementById("startGA").style.display = "none";
 };
 
 document.getElementById("startGA").addEventListener("click", function (e) {
@@ -10,7 +15,12 @@ document.getElementById("startGA").addEventListener("click", function (e) {
 });
 
 const removeGA = async () => {
-  document.getElementById("gaDiv").style.display = "none";
+  const gaDiv = document.getElementById("gaDiv");
+  gaDiv.style.display = "none";
+
+  document.getElementById("removeGA").style.display = "none";
+  document.getElementById("startGA").style.display = "inline";
+
   await disable2FA();
 };
 
@@ -19,8 +29,4 @@ document.getElementById("removeGA").addEventListener("click", function (e) {
   removeGA();
 });
 
-document.getElementById("noGA").addEventListener("click", function (e) {
-  e.preventDefault();
-  removeGA();
-  window.location.href = "/play!";
-});
+

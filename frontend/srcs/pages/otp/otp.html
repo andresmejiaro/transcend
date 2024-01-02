@@ -1,18 +1,37 @@
 <!-- Depende cual clickea, display block, cambiar de null para mostrar el form para agregar ese 2FA -->
 
-<div class="text-center">
-  <h2>Do you want to add an extra layer of security?</h2>
-  <button class="btn btn-light" id="noGA">No, thanks</button>
-
-  <h4 class="mt-5">Google Authenticator</h4>
-  <button class="btn btn-light" id="startGA">Add</button>
-  <button class="btn btn-light" id="removeGA">Remove</button>
+<div class="text-center mt-10r">
+  <h4 class="mt-5">Activate Google Authenticator?</h4>
+  <button class="btn btn-light" id="startGA">Activate</button>
+  <button class="btn btn-light" id="removeGA" style="display: none">
+    Remove
+  </button>
   <div class="mt-4 text-center" style="display: none" id="gaDiv">
     <img src="" alt="QR Code" id="qrcodeImage" style="width: 200px" />
     <p id="statusMessage"></p>
     <form id="totpForm">
-      <input type="text" id="totpCode" placeholder="Enter TOTP code" />
-      <button type="button" onclick="verifyTOTP()">Verify</button>
+      <div class="row justify-content-center">
+        <div class="col-md-6">
+          <div>
+            <input
+              type="text"
+              class="input-signup"
+              id="totpCode"
+              placeholder="Enter TOTP code"
+            />
+          </div>
+          <div>
+            <button
+              class="btn mt-5"
+              type="button"
+              style="background: #fffeee; color: #4ca2bb"
+              onclick="verifyTOTP()"
+            >
+              verify
+            </button>
+          </div>
+        </div>
+      </div>
     </form>
   </div>
 </div>
