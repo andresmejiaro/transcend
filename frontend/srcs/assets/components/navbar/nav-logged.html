@@ -1,190 +1,105 @@
-<nav
-  class="navbar navbar-expand-lg navbar-light bg-light navbar-logged-pong"
-  id="navbar-logged-pong-id"
->
-  <img
-    src="./srcs/assets/imgs/logo-web.png"
-    alt=""
-    width="28"
-    height="auto"
-    class="ms-2"
-  />
+<nav class="navbar navbar-expand-lg navbar-light bg-light navbar-logged-pong" id="navbar-logged-pong-id">
+	<img src="./srcs/assets/imgs/logo-web.png" alt="" width="28" height="auto" class="ms-2" />
 
-  <div style="max-height: 100%;" class="d-flex align-items-center">
-    <a href="/profile" class="nav-link-logged-pong d-block d-lg-none">
-      <img src="./srcs/assets/imgs/default-avatar.jpeg" id="avatarImageNav" alt="Avatar" class="img-fluid" style="max-width: 40px" />
-      <span id="usernameNav" style="margin-left: 1rem">username</span>
-    </a>
-  </div>
+	<div style="max-height: 100%" class="d-flex align-items-center">
+		<a href="/profile" class="nav-link-logged-pong d-block d-lg-none">
+			<img src="./srcs/assets/imgs/default-avatar.jpeg" id="avatarImageNav" alt="Avatar" class="img-fluid" style="max-width: 40px" />
+			<span id="usernameNav" style="margin-left: 1rem">username</span>
+		</a>
+	</div>
 
-  <button
-    class="navbar-toggler me-4 ms-auto navbar-dark"
-    type="button"
-    data-bs-toggle="collapse"
-    data-bs-target="#navbarSupportedContent"
-    aria-controls="navbarSupportedContent"
-    aria-expanded="false"
-    aria-label="Toggle navigation"
-  >
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <div
-    class="collapse navbar-collapse rounded"
-    id="navbarSupportedContent"
-    style="background: #15142e !important;"
-  >
-    <div class="mx-auto d-flex align-items-center" id="navContentClass">
-      <ul class="navbar-nav" style="font-size: 1.75rem">
-        <li class="nav-item">
-          <a class="nav-link nav-link-logged-pong" href="/play!">Play!</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link nav-link-logged-pong" href="/tournaments"
-            >Tournaments</a
-          >
-        </li>
-        <li class="nav-item">
-          <a
-            class="nav-link nav-link-logged-pong"
-            data-bs-toggle="modal"
-            data-bs-target="#friendsModal"
-          >
-            <img
-              src="./srcs/assets/imgs/friends-icon.svg"
-              alt="Friends"
-              class="img-fluid"
-              style="max-width: 20px; cursor: pointer"
-              id="nav-friends-icon"
-            />
-          </a>
-        </li>
-        <li class="nav-item position-relative">
-          <a
-            href=""
-            class="nav-link nav-link-logged-pong"
-            data-bs-toggle="modal"
-            data-bs-target="#notificationsModal"
-          >
-            <i class="bi bi-bell position-relative">
-              <span
-                class="position-absolute bottom-0 translate-middle badge rounded-pill bg-danger"
-                style="font-size: 0.8rem; color: white !important"
-                id="nav-notification-bell-span"
-              ></span>
-            </i>
-          </a>
-        </li>
-        <li class="nav-item">
-          <button class="nav-link nav-link-logged-pong" id="logoutButton">
-            Logout
-          </button>
-        </li>
-      </ul>
+	<button class="navbar-toggler me-4 ms-auto navbar-dark" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+		<span class="navbar-toggler-icon"></span>
+	</button>
+	<div class="collapse navbar-collapse rounded" id="navbarSupportedContent" style="background: #15142e !important">
+		<div class="mx-auto d-flex align-items-center" id="navContentClass">
+			<ul class="navbar-nav" style="font-size: 1.75rem">
+				<li class="nav-item">
+					<a class="nav-link nav-link-logged-pong" href="/play!">Play!</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link nav-link-logged-pong" href="/tournaments">Tournaments</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link nav-link-logged-pong" data-bs-toggle="modal" data-bs-target="#friendsModal">
+						<img src="./srcs/assets/imgs/friends-icon.svg" alt="Friends" class="img-fluid" style="max-width: 20px; cursor: pointer" id="nav-friends-icon" />
+					</a>
+				</li>
+				<li class="nav-item position-relative">
+					<a href="" class="nav-link nav-link-logged-pong" data-bs-toggle="modal" data-bs-target="#notificationsModal">
+						<i class="bi bi-bell position-relative">
+							<span class="position-absolute bottom-0 translate-middle badge rounded-pill bg-danger" style="font-size: 0.8rem; color: white !important" id="nav-notification-bell-span"></span>
+						</i>
+					</a>
+				</li>
+				<li class="nav-item">
+					<button class="nav-link nav-link-logged-pong" id="logoutButton">Logout</button>
+				</li>
+			</ul>
 
-      <a
-        href="/profile"
-        class="nav-link-logged-pong d-flex align-items-center d-none d-lg-block"
-      >
-        <span id="usernameNav2" style="margin-right: 1rem">username</span>
-        <img
-          src="./srcs/assets/imgs/default-avatar.jpeg"
-          id="avatarImageNav2"
-          alt="Avatar"
-          class="img-fluid"
-          style="max-width: 40px"
-        />
-      </a>
-    </div>
-  </div>
+			<a href="/profile" class="nav-link-logged-pong d-flex align-items-center d-none d-lg-block">
+				<span id="usernameNav2" style="margin-right: 1rem">username</span>
+				<img src="./srcs/assets/imgs/default-avatar.jpeg" id="avatarImageNav2" alt="Avatar" class="img-fluid" style="max-width: 40px" />
+			</a>
+		</div>
+	</div>
 
-  <img
-    src="./srcs/assets/imgs/logo-web.png"
-    alt=""
-    width="28"
-    height="auto"
-    class="me-2"
-    id="rightNavBall"
-  />
+	<img src="./srcs/assets/imgs/logo-web.png" alt="" width="28" height="auto" class="me-2" id="rightNavBall" />
 </nav>
 
 <!-- Friends Modal -->
-<div
-  class="modal fade"
-  id="friendsModal"
-  tabindex="-1"
-  aria-labelledby="friendsModalLabel"
-  aria-hidden="true"
->
-  <div class="modal-dialog">
-    <div
-      class="modal-content"
-      style="background: #191f38; border: 5px solid #fffeee"
-    >
-      <div class="modal-header justify-content-center">
-        <div class="col">
-          <div class="row">
-            <h5
-              class="modal-title"
-              id="friendsModalLabel"
-              style="color: #f5a853"
-            >
-              Online: 0
-            </h5>
-          </div>
-        </div>
-        <button
-          type="button"
-          class="btn-close btn-close-white btn-friends-close"
-          data-bs-dismiss="modal"
-          aria-label="Close"
-        ></button>
-      </div>
-      <div class="modal-body" id="modal-body-friends">
-        <div class="text-center my-2">
-          <div>
-            <button
-              class="btn"
-              style="background: #fffeee; color: #4ca2bb"
-              id="friendsModalInvite"
-            >
-              Invite
-            </button>
-          </div>
-        </div>
-        <p class="text-decoration-underline">List of friends...</p>
-        <div id="friends-list"></div>
-        <p class="text-decoration-underline mt-5">Pendind invitations...</p>
-        <div id="friends-invitation-list"></div>
-      </div>
-    </div>
-  </div>
+<div class="modal fade" id="friendsModal" tabindex="-1" aria-labelledby="friendsModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content" style="background: #191f38; border: 5px solid #fffeee">
+			<div class="modal-header justify-content-center">
+				<div class="col">
+					<div class="row">
+						<h5 class="modal-title" id="friendsModalLabel" style="color: #f5a853">Online: 0</h5>
+					</div>
+				</div>
+				<button type="button" class="btn-close btn-close-white btn-friends-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body" id="modal-body-friends">
+				<div id="modal-body-friends-list">
+					<div class="text-center my-2">
+						<div>
+							<button class="btn" style="background: #fffeee; color: #4ca2bb" id="friendsModalInvite">Invite</button>
+						</div>
+					</div>
+					<p class="text-decoration-underline">List of friends...</p>
+					<div id="friends-list"></div>
+					<p class="text-decoration-underline mt-5">Pendind Friends invitations...</p>
+					<div id="friends-invitation-list"></div>
+					<p class="text-decoration-underline mt-5">Pendind Match invitations...</p>
+					<div id="match-invitation-list"></div>
+				</div>
+				<div id="modal-body-friends-invite" style="display: none;">
+					<div class="text-center">
+						<div class="mt-2"><input type="text" id="invitationInput" placeholder="Enter friend's name" /></div>
+						<div class="mt-3"><button id="sendInvitationBtn" class="btn btn-success">Send Invitation</button></div>
+					</div>
+					<div class="text-center">
+						<button class="btn" id="back-modal-btn">
+							<i class="bi bi-arrow-return-left" style="font-size: 1.5em; color: white"></i>
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
 
 <!-- Notifications Modal -->
-<div
-  class="modal fade"
-  id="notificationsModal"
-  tabindex="-1"
-  aria-labelledby="notificationsModalLabel"
-  aria-hidden="true"
->
-  <div class="modal-dialog">
-    <div
-      class="modal-content"
-      style="background: #191f38; border: 5px solid #fffeee"
-    >
-      <div class="modal-header justify-content-center">
-        <h5 class="modal-title">Notifications</h5>
-        <button
-          type="button"
-          class="btn-close btn-close-white btn-notifications-close"
-          data-bs-dismiss="modal"
-          aria-label="Close"
-        ></button>
-      </div>
-      <div class="modal-body" id="modal-body-notifications">
-        <div id="notifications-list"></div>
-      </div>
-    </div>
-  </div>
+<div class="modal fade" id="notificationsModal" tabindex="-1" aria-labelledby="notificationsModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content" style="background: #191f38; border: 5px solid #fffeee">
+			<div class="modal-header justify-content-center">
+				<h5 class="modal-title">Notifications</h5>
+				<button type="button" class="btn-close btn-close-white btn-notifications-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body" id="modal-body-notifications">
+				<div id="notifications-list"></div>
+			</div>
+		</div>
+	</div>
 </div>

@@ -101,6 +101,7 @@ const loadNavScripts = () => {
   const scriptPaths = [
     `${navDirec}/nav.js`,
     `${navDirec}/nav-friend-invite-handler.js`,
+    `${navDirec}/nav-friend-match-invite-handler.js`,
     `${navDirec}/nav-friend-remove-handler.js`,
     `${navDirec}/nav-friends-modal.js`,
     `${navDirec}/nav-friends.js`,
@@ -127,6 +128,7 @@ const loadLobbyScripts = () => {
   const lobbyDirec = `${direc}utils/lobby/`;
   const scriptPaths = [
     `${lobbyDirec}lobby-connection-handler.js`,
+    `${lobbyDirec}lobby-matches-friends-handler.js`,
     `${lobbyDirec}lobby-friends-handler.js`,
     `${lobbyDirec}lobby-message-parser.js`,
     `${lobbyDirec}lobby-notifications-handler.js`,
