@@ -2,14 +2,16 @@
 
 import curses
 import logging
-import time
+import sys
 import json
 
 from utils.logger import log_message
 from utils.url_macros import LOBBY_URI_TEMPLATE
 from utils.file_manager import FileManager
 from utils.task_manager import TaskManager
+#UI
 from app.widgets.widgets import Widget
+from app.widgets.nav_bar import NavBar
 
 class HomePage(Widget):
     def __init__(self, stdscr, ui_controller, frame_rate):
@@ -30,6 +32,10 @@ class HomePage(Widget):
         # Online users
         self.online_users = {}
 
+        self.nav_bar_items = ["Home", "Friends", "Settings", "Exit"]
+        
+        self.nav_bar = NavBar(stdscr, self.nav_bar_items)
+
     def __str__(self):
         # Return a string representing the current view
         return "home"
@@ -39,7 +45,7 @@ class HomePage(Widget):
         try:
             self._clear_screen()
 
-            self.frame_rate[0] = 30
+            self.frame_rate[0] = 500
 
             max_y, max_x = self.stdscr.getmaxyx()
             self.update_terminal_size()
@@ -48,9 +54,12 @@ class HomePage(Widget):
                 self.print_screen_too_small()
                 return
             
+            # Draw the nav bar
+            self.nav_bar.draw()
+
             self.print_header("Home - Welcome to Pong!")
 
-            self.print_current_time()
+            self.print_frame_rate()
 
             user_input = await self.ui_controller.check_and_process_inputs()
 
@@ -64,6 +73,7 @@ class HomePage(Widget):
 
         except Exception as e:
             log_message(f"Error in draw: {e}", level=logging.ERROR)
+
 
     def get_next_view(self):
         return self.next_view
@@ -111,17 +121,29 @@ class HomePage(Widget):
 
     def process_keyboard_input(self, keyboard_input):
         try:
-            # Here we format the message so the specific view can process it
-            log_message(f"Keyboard Input from UI Controller: {keyboard_input}", level=logging.DEBUG)
-            # We will format the info in a dictionary with the following format:
-            # {"task_name": "keyboard", "data": keyboard_input}
-            # We will process the input by getting the key code and converting it to the key name and then processing it
-
-            # Convert the key code to the key name
             key_name = curses.keyname(keyboard_input).decode('utf-8')
 
-            # For now just display the input on the screen
-            self.stdscr.addstr(6, 0, str(key_name))  # Ensure input is converted to a string before display
+            # For now display the key name on the screen to test
+            self.stdscr.addstr(6, 0, str(key_name))
+
+            if keyboard_input == curses.KEY_ENTER or keyboard_input == 10:
+                # Handle Enter key press
+                selected_item = self.nav_bar.get_selected_item()
+
+                # Switch to the corresponding view based on the selected item
+                # if selected_item == "Home":
+                #     self.active_view = self.home_view
+                # elif selected_item == "Friends":
+                #     self.active_view = self.friends_view
+                # elif selected_item == "Settings":
+                #     self.active_view = self.settings_view
+                if selected_item == "Exit":
+                    self.next_view = "exit"
+
+
+
+            # We can pass inputs to the nav bar to handle and any other widgets that need to handle input
+            self.nav_bar.handle_input(keyboard_input)
 
         except Exception as e:
             log_message(f"Error in process_keyboard_input: {e}", level=logging.ERROR)
@@ -153,22 +175,21 @@ class HomePage(Widget):
 # Send messages to websocket
     async def send_message(self, message):
         try:
-            message = {"command": "list_of_users"}
             message = json.dumps(message)
             # Acquire the lock before accessing the queue
-            async with self.list_of_shared_data["lobby"]["send_lock"]:
-                await self.list_of_shared_data["lobby"]["send_queue"].put(message)
+            async with self.ui_controller.list_of_shared_data["lobby"]["send_lock"]:
+                await self.ui_controller.list_of_shared_data["lobby"]["send_queue"].put(message)
 
         except Exception as e:
             log_message(f"Error in send_message: {e}", level=logging.ERROR)
+
 # -------------------------------------
-    
 
 # View Specific Methods - They should be structed with rows and columns in mind, so that they can be displayed in the terminal
     def print_online_users(self, max_y, max_x):
         try:
             # Print the online users
-            row, col = 1, 0  # Starting position
+            row, col = 2, 0  # Starting position
             self.stdscr.addstr(row, col, "Online Users:")
             row += 1
             for index, username in enumerate(self.online_users.values(), start=1):
@@ -182,6 +203,7 @@ class HomePage(Widget):
 
         except Exception as e:
             log_message(f"Error printing online users: {e}", level=logging.ERROR)
+
 # -------------------------------------
 
 

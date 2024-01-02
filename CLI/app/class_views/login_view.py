@@ -38,7 +38,7 @@ class Login(Widget):
         try:
             self._clear_screen()
 
-            self.frame_rate[0] = 10
+            self.frame_rate[0] = 60
 
             self.update_terminal_size()
 
@@ -47,10 +47,10 @@ class Login(Widget):
                 return
             
             self.print_header("Login")
-            self.print_current_time()
+            self.print_frame_rate()
 
             if self.logo:
-                self.print_logo_centered(self.file_manager.load_texture("logo.txt"))
+                self.print_logo_centered(self.file_manager.load_texture("pong.txt"))
 
             user_input = await self.ui_controller.handle_keyboard_input_directly()
 

@@ -1,9 +1,16 @@
 # utils/logger.py
 
-import os
-import datetime
 import logging
+import logging
+import inspect
 
 def log_message(message, level=logging.INFO):
-    logging.log(level, message)
+    frame = inspect.currentframe().f_back
+    
+    function_name = frame.f_code.co_name
+
+    log_message = f"{function_name}: {message}"
+    
+    logging.log(level, log_message)
+
 

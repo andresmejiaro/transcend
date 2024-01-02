@@ -25,7 +25,8 @@
     "log_directory": "game_files/logs",
     "file_type": ".log",
     "log_level": "DEBUG",
-    "log_format": "%(asctime)s [%(levelname)s] [%(funcName)s] %(message)s"
+    "log_format": "%(asctime)s [%(levelname)s] [%(funcName)s] %(message)s",
+    "log_date_format": "%H:%M:%S"
   },
   "database": {
     "database_type": "sqlite",

@@ -64,8 +64,6 @@ class TaskManager:
         # Retrieve the names of all tasks
         return list(self._tasks.keys())
 
-
-
     def is_running(self):
         return self._running
 

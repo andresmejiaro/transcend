@@ -4,7 +4,7 @@ import logging
 import asyncio
 import curses
 import aiohttp
-import time
+import functools
 
 from utils.logger import log_message
 from utils.url_macros import LOBBY_URI_TEMPLATE
@@ -30,39 +30,50 @@ class CLIApp:
 # Essential App Tasks - These tasks are essential to the application and will be created and started in the main loop
     # Lobby Websocket Task - Connect to the lobby websocket and send and receive messages throught the duration of the application
     async def lobby_websocket_send_and_receive_task(self, data):
-        async with aiohttp.ClientSession() as session:
-            client_info = self.file_manager.load_data('client_info.json')
-            client_id = client_info['client_id']
-            uri = LOBBY_URI_TEMPLATE.format(client_id=client_id)
-            log_message(f"Connecting to websocket: {uri}", level=logging.DEBUG)
-            async with session.ws_connect(uri) as ws:
-                try:
-                    async for msg in ws:
-                        if msg.type == aiohttp.WSMsgType.TEXT:
-                            async with data["receive_lock"]:
-                                await data["receive_queue"].put(msg.data)
-                                log_message(f"Received message: {msg.data}", level=logging.DEBUG)
-                        elif msg.type == aiohttp.WSMsgType.ERROR:
-                            break
+        try:
+            async with aiohttp.ClientSession() as session:
+                client_info = self.file_manager.load_data('client_info.json')
+                client_id = client_info['client_id']
+                uri = LOBBY_URI_TEMPLATE.format(client_id=client_id)
+                log_message(f"Connecting to websocket: {uri}", level=logging.INFO)
+                async with session.ws_connect(uri) as ws:
+                    try:
+                        async for msg in ws:
+                            if msg.type == aiohttp.WSMsgType.TEXT:
+                                async with data["receive_lock"]:
+                                    await data["receive_queue"].put(msg.data)
+                                    log_message(f"Received message: {msg.data}", level=logging.DEBUG)
+                            elif msg.type == aiohttp.WSMsgType.ERROR:
+                                break
 
-                        # Send messages
-                        while not data["send_queue"].empty():
-                            async with data["send_lock"]:
-                                message = await data["send_queue"].get()
-                                await ws.send_str(message)
-                                log_message(f"Sent message: {message}", level=logging.DEBUG)
+                            # Send messages
+                            while not data["send_queue"].empty():
+                                async with data["send_lock"]:
+                                    message = await data["send_queue"].get()
+                                    await ws.send_str(message)
+                                    log_message(f"Sent message: {message}", level=logging.DEBUG)
 
-                        await asyncio.sleep(1)
+                            await asyncio.sleep(1)
 
-                    log_message("Websocket task completed", level=logging.DEBUG)
+                        log_message("Websocket task completed", level=logging.DEBUG)
 
-                except (asyncio.CancelledError, GeneratorExit):
-                    log_message("Websocket task cancelled", level=logging.DEBUG)
-                    raise
+                    except (asyncio.CancelledError, GeneratorExit):
+                        log_message("Websocket task cancelled", level=logging.DEBUG)
+                        raise
 
-                except Exception as e:
-                    log_message(f"Websocket task error: {e}", level=logging.ERROR)
-                    raise
+                    except Exception as e:
+                        log_message(f"Websocket task error: {e}", level=logging.ERROR)
+                        raise
+                    
+        except asyncio.CancelledError:
+            # Catch the cancellation when leaving the view
+            pass
+        except aiohttp.ClientError as e:
+            log_message(f"An error occurred in Lobby Websocket Task: {e}", level=logging.ERROR)
+            self.exit_status = 1
+        except Exception as e:
+            log_message(f"An error occurred in Lobby Websocket Task: {e}", level=logging.ERROR)
+            self.exit_status = 1
 
     # Keyboard Input Task - Get keyboard input and put it in the keyboard input queue
     async def keyboard_input_task(self, data):
@@ -101,24 +112,46 @@ class CLIApp:
                 
                 await asyncio.sleep(self.set_frame_rate(self.frame_rate[0]))
 
-                if next_view is not None:
+                if next_view == "exit":
+                    log_message("Exiting UI", level=logging.DEBUG)
+                    break
+                elif next_view is not None:
                     self.ui_view = next_view
                     continue
 
         except asyncio.CancelledError:
             log_message("UI Task cancelled", level=logging.DEBUG)
             # await self.ui_view.cleanup()
-
         except KeyboardInterrupt:
             # Catch the keyboard interrupt
             log_message("Keyboard interrupt detected. Exiting...")
             # await self.ui_view.cleanup()
             self.exit_status = 0
-
         except Exception as e:
             log_message(f"An error occurred in UI Task: {e}", level=logging.ERROR)
             # await self.ui_view.cleanup()
             self.exit_status = 1
+
+    async def initialize_ui(self):
+        self.ui_view = SplashView(self.stdscr, self.ui_controller, self.frame_rate)
+        
+    async def process_ui_view(self):
+        await self.ui_view.draw()
+        
+        next_view = self.ui_view.get_next_view()
+        
+        await asyncio.sleep(self.set_frame_rate(self.frame_rate[0]))
+        
+        if next_view == "exit":
+            log_message("Exiting UI", level=logging.DEBUG)
+            return False
+        elif next_view is not None:
+            self.ui_view = next_view
+            return True
+        
+        
+
+
 # -------------------------------------
 
 # Entry Point - Initializes tasks and runs the main loop, additionaly tasks will be created and started and stopped as needed in the main loop
@@ -141,11 +174,7 @@ class CLIApp:
             self.task_manager.create_task(task_name="keyboard", task_func=self.keyboard_input_task, data=keyboard_input_data)
 
             # Create the current view
-            self.ui_controller = UIController(
-                stdscr=self.stdscr,
-                # lobby_ws_data=lobby_ws_data,
-                # keyboard_input_data=keyboard_input_data
-            )
+            self.ui_controller = UIController(stdscr=self.stdscr)
 
             self.ui_controller.add_shared_data("lobby", lobby_ws_data)
             self.ui_controller.add_shared_data("keyboard", keyboard_input_data)
@@ -159,23 +188,30 @@ class CLIApp:
             )
 
         except aiohttp.ClientError as e:
-            log_message(f"An error occurred in App Main: {e}", level=logging.ERROR)
+            log_message(f"AIOHTTP ERROR in app.start: {e}", level=logging.ERROR)
             self.exit_status = 1
-
-        except asyncio.CancelledError:
-            pass
-
+        except asyncio.CancelledError as e:
+            log_message(f"Asyncio ERROR in app.start: {e}", level=logging.ERROR)
+            self.exit_status = 1
         except KeyboardInterrupt:
             log_message("Keyboard interrupt detected. Exiting...")
             self.exit_status = 0
-
         except Exception as e:
-            log_message(f"An error occurred in App Start {e}", level=logging.ERROR)
+            log_message(f"ERROR in app.startt {e}", level=logging.ERROR)
             self.exit_status = 1
 
         finally:
             await self.task_manager.stop_all_tasks()
-            return self.exit_status
+            await self.cleanup()
+
+    async def cleanup(self):
+        try:
+            if self.ui_controller:
+                await self.ui_controller.cleanup()
+
+        except Exception as e:
+            log_message(f"An error occurred in App Cleanup: {e}", level=logging.ERROR)
+            self.exit_status = 11
 # -------------------------------------
 
 # Helper Methods

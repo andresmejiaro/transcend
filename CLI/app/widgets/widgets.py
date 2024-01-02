@@ -13,6 +13,8 @@ class Widget:
         self.file_manager = FileManager()
         self.last_frame_time = time.time()
         self.update_terminal_size()
+        
+        self.color_counter = 1
 
     def update_terminal_size(self):
         try:
@@ -42,8 +44,11 @@ class Widget:
         col = self.cols // 2 - logo_width // 2
 
         for frame_line in logo:
-            self._addstr(row, col, frame_line)
+            self._addstr(row, col, frame_line, curses.color_pair(self.color_counter))
             row += 1
+
+        # Increment the color counter for the next call
+        self.color_counter = (self.color_counter % 6) + 1
 
     def print_screen_too_small(self, size_required=(30, 120)):
         self._clear_screen()
@@ -71,7 +76,7 @@ class Widget:
         # Print message 1 row above the bottom of the screen
         row = self.rows - 2
         col = self.cols // 2 - len(message) // 2
-        self._addstr(row, col, message)
+        self._addstr(row, col, message, curses.color_pair(6) | curses.A_DIM | curses.A_BOLD | curses.A_BLINK)
 
     def print_frame_rate(self):
         try:
@@ -79,7 +84,7 @@ class Widget:
             frame_rate = 1 / (current_time - self.last_frame_time)
             self.last_frame_time = current_time
 
-            self._addstr(0, self.cols - 21, f"Frame Rate: {frame_rate:.2f} FPS", curses.color_pair(3) | curses.A_DIM | curses.A_BOLD)
+            self._addstr(1, self.cols - 21, f"Frame Rate: {frame_rate:.2f} FPS", curses.color_pair(3) | curses.A_DIM | curses.A_BOLD)
 
         except Exception as e:
             log_message(f"Error printing frame rate: {e}", level=logging.ERROR)

@@ -27,6 +27,12 @@ class UIController:
             "keyboard": self.handle_keyboard_input
         }
 
+    def __str__(self):
+        return "ui_controller"
+    
+    def cleanup(self):
+        self.list_of_shared_data = {}
+
 # Process Input Methods
     async def check_and_process_inputs(self):
         try:
@@ -118,4 +124,13 @@ class UIController:
     def remove_shared_data(self, name):
         del self.list_of_shared_data[name]
 
-        
+    def get_shared_data(self, name):
+        return self.list_of_shared_data[name]
+    
+    def get_all_shared_data(self):
+        return self.list_of_shared_data
+    
+    def get_shared_data_names(self):
+        return self.list_of_shared_data.keys()
+  # ---------------------------------------------
+    

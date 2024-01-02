@@ -27,11 +27,16 @@ async def main(stdscr, username, password):
 
         try:
             app = CLIApp(stdscr)
-            await app.start()
+            exit_status = await app.start()
 
         except Exception as e:
             log_message(f'Error starting the App: {e}', logging.ERROR)
             exit_status = 1
+
+        finally:
+            config_manager.cleanup()
+            sys.exit(exit_status)
+            
 
             
     except KeyError:
@@ -46,16 +51,13 @@ async def main(stdscr, username, password):
         log_message('Keyboard interrupt detected.')
         exit_status = 0
 
-    finally:
-        # cleanup_curses(stdscr)
-        print('Exiting finally block.')
-        return exit_status
 
 
 # Boot Launch   
 def run_main_with_username_password(username, password):
+    exit_status = 0
     try:
-        print('Curses and Asyncio Wrapper Launch.')
+        print('Boot Launch')
 
         loop = asyncio.get_event_loop()
         loop.set_debug(True)
@@ -73,7 +75,7 @@ def run_main_with_username_password(username, password):
         return exit_status
     
     except Exception as e:
-        log_message(f'Boot Launch {e}')
+        log_message(f'Error: Boot Launch {e}')
         exit_status = 1
         return exit_status
 
@@ -91,7 +93,7 @@ def cli():
         sys.exit(exit_status)
         
     except Exception as e:
-        print(f'Boot Launch {e}')
+        print(f'Error: CLI {e}')
         sys.exit(exit_status)
         
 if __name__ == "__main__":

@@ -25,7 +25,7 @@ class SplashView(Widget):
 # Screen Updating
     async def draw(self):
         try:
-            self.frame_rate[0] = 10
+            self.frame_rate[0] = 30
 
             self._clear_screen()
 
@@ -38,7 +38,7 @@ class SplashView(Widget):
             # self.print_current_time()
             self.print_frame_rate()
             self.print_header("Welcome to Pong!")
-            self.print_logo_centered(self.file_manager.load_texture("logo.txt"))
+            self.print_logo_centered(self.file_manager.load_texture("pong.txt"))
             self.print_message_bottom("Press any key to continue...")
 
             user_input = await self.ui_controller.handle_keyboard_input_directly()

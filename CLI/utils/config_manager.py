@@ -1,4 +1,4 @@
-# CLI.utils.config_manager.py
+# utils/config_manager.py
 
 import os
 import json
@@ -12,6 +12,9 @@ class ConfigurationManager:
         self.config_path = 'config.json'
         self.config_data = self.retrieve_configuration()
 
+    def __str__(self):
+        return "config_manager"
+
     def load_configuration_file(self, stdscr):
         # Check if the configuration file already exists
         if os.path.exists(self.config_path):
@@ -23,8 +26,7 @@ class ConfigurationManager:
                 
             except KeyError:
                 print('Error: Configuration data not found.')
-                return None
-            
+                return None      
             except Exception as e:
                 print(f'Error in Load Configuration: {e}')
                 return None
@@ -47,16 +49,16 @@ class ConfigurationManager:
             except KeyError:
                 print('Error: Configuration data not found.')
                 return None
-            
             except Exception as e:
                 print(f'Error in Load Configuration: {e}')
                 return None
 
     def initialize_logger(self):
         try:
-            log_file_path = os.path.join(self.config_data['logging']['log_directory'], 'log.txt')
+            log_file_path = os.path.join(self.config_data['logging']['log_directory'], 'app.log')
             log_format = self.config_data['logging']['log_format']
             log_level = self.config_data['logging']['log_level']
+            log_date_format = self.config_data['logging']['log_date_format']
             
             if log_level == 'DEBUG':
                 level = logging.DEBUG
@@ -74,10 +76,11 @@ class ConfigurationManager:
             logging.basicConfig(
                 filename=log_file_path,
                 level=level,
-                format=log_format
+                format=log_format,
+                datefmt=log_date_format
             )
 
-            log_message('Logger initialized.', level=logging.INFO)
+            log_message('Logger initialized Sucessfully!', level=logging.INFO)
 
         except KeyError:
             log_message('Error: Configuration data not found.', level=logging.ERROR)
@@ -122,6 +125,26 @@ class ConfigurationManager:
             log_message(f'Error in Load Configuration: {e}', level=logging.ERROR)
             return None
 
+    def reset_curses_settings(self, stdscr):
+        try:
+            # Reset the cursor
+            curses.curs_set(1)
+            # React to keys instantly without requiring Enter to be pressed
+            curses.nocbreak()
+            # Make getch() non-blocking
+            stdscr.nodelay(False)
+            # Echo keyboard input
+            curses.echo()
+            # Disable keypad mode
+            stdscr.keypad(False)
+            # Disable color
+            curses.start_color()
+            # Reset end the window
+            curses.endwin()
+
+        except Exception as e:
+            log_message(f'Error in Load Configuration: {e}', level=logging.ERROR)
+            return None
 
 # Utilities
     def retrieve_configuration(self):
@@ -137,6 +160,9 @@ class ConfigurationManager:
         except json.JSONDecodeError:
             print(f'Error decoding JSON in config file ({self.config_path}).')
             return None
+        except Exception as e:
+            print(f'Error in retrieve_configuration: {e}')
+            return None
         
     def cleanup(self):
         # Delete data files for the current session
@@ -145,6 +171,9 @@ class ConfigurationManager:
             for file in os.listdir(data_directory):
                 file_path = os.path.join(data_directory, file)
                 os.remove(file_path)
+
+            self.reset_curses_settings()
+
         except KeyError:
             log_message('Error: Configuration data not found.', level=logging.ERROR)
             return None
