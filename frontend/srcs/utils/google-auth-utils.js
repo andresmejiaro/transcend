@@ -61,14 +61,7 @@ async function verifyTOTP() {
 
 async function enable2FA() {
   try {
-    const id = await getUserId();
-    const userID = id;
-    if (id == null) {
-      console.error("User ID is null");
-      return;
-    }
-
-    const url = `${window.DJANGO_API_BASE_URL}/api/enable_2fa/${userID}/`;
+    const url = `${window.DJANGO_API_BASE_URL}/api/enable_2fa/`;
     const response = await makeRequest(true, url, {
       method: "POST",
       mode: "cors",

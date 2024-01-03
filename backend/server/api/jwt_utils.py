@@ -1,5 +1,4 @@
 import os
-from .userauth.models import CustomUser
 from .userauth.jwt.sign import sign
 from .userauth.jwt.verify import verify
 from .userauth.jwt.decode import decode
@@ -28,7 +27,8 @@ def validate_and_get_user_from_token(token):
 
         user_id = payload.get('user_id')
         username = payload.get('username')
-
+        
+        from api.userauth.models import CustomUser
         user = CustomUser.objects.get(id=user_id, username=username)
         user_data = {
             'username': user.username,

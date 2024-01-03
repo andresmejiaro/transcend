@@ -28,7 +28,7 @@ const tryLoginFormPostIntra = async (data) => {
 
 async function handleUpload(username, avatarUrl) {
   try {
-    const url = `${window.DJANGO_API_BASE_URL}/api/user/update-avatar/${username}/`;
+    const url = `${window.DJANGO_API_BASE_URL}/api/user/update-avatar/`;
 
     const response = await makeRequest(true, url, {
       method: "POST",
