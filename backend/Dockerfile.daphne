@@ -1,13 +1,9 @@
-FROM python:3.8-slim
+FROM python:3.8-alpine
 
 EXPOSE 8001
 WORKDIR /app
 
-RUN apt-get update && apt-get install -y build-essential
-
-RUN pip install --upgrade pip
-
-RUN python3 -m pip install --upgrade pip setuptools wheel
+RUN apk update && apk add --no-cache gcc bash musl-dev jpeg-dev zlib-dev libffi-dev cairo-dev pango-dev gdk-pixbuf-dev
 
 RUN pip install --no-cache-dir \
     daphne \

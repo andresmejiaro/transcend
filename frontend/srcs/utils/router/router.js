@@ -92,8 +92,9 @@ const urlLocationHandler = async () => {
     console.error("Element with id 'nav-router' not found in the DOM");
   }
 
-  loadLobbyScripts();
   loadNavScripts();
+  if (isLogged()) 
+    loadLobbyScripts();
 };
 
 const loadNavScripts = () => {

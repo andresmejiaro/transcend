@@ -10,6 +10,7 @@ from django.core.files.storage import default_storage
 from django.conf import settings
 from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
+from api.jwt_utils import get_user_id_from_jwt_token
 
 import os
 import pyotp
@@ -53,8 +54,17 @@ def display_qr_code(request, user_id):
 	return JsonResponse({'qrcode_path': img_path, 'user_id': user_id})
 
 @requires_csrf_token
-def enable_2fa(request, user_id):
-	user = CustomUser.objects.get(id=user_id)
+def enable_2fa(request):
+	authorization_header = request.headers.get('Authorization')
+	if authorization_header:
+		try:
+			_, token = authorization_header.split()
+			user_id = get_user_id_from_jwt_token(token)
+			print(user_id)
+			user = CustomUser.objects.get(id=user_id)
+		except Exception as e:
+			return JsonResponse({'error': str(e)}, status=401)
+		
 	if user.is_2fa_enabled:
 		return JsonResponse({'message': '2FA is already enabled.'})
 
@@ -63,8 +73,16 @@ def enable_2fa(request, user_id):
 	user.enable_2fa(secret_key)
 	return JsonResponse({'qrcode_path': img_path, 'message': 'Scan the QR code with your authenticator app to enable 2FA.'})
 
-def disable_2fa(request, user_id):
-	user = CustomUser.objects.get(id=user_id)
+def disable_2fa(request):
+	authorization_header = request.headers.get('Authorization')
+	if authorization_header:
+		try:
+			_, token = authorization_header.split()
+			user_id = get_user_id_from_jwt_token(token)
+			print(user_id)
+			user = CustomUser.objects.get(id=user_id)
+		except Exception as e:
+			return JsonResponse({'error': str(e)}, status=401)
 	if not user.is_2fa_enabled:
 		return JsonResponse({'message': '2FA is already disabled.'})
 	user.disable_2fa()
@@ -99,10 +117,18 @@ def verify_totp_code(request):
 	return JsonResponse({'status': 'error', 'message': 'Only POST requests are allowed'}, status=400)
 
 @requires_csrf_token
-def user_2fa_setup_complete(request, user_id):
+def user_2fa_setup_complete(request):
 	if request.method == 'GET':
 		try:
-			user = CustomUser.objects.get(id=user_id)
+			authorization_header = request.headers.get('Authorization')
+			if authorization_header:
+				try:
+					_, token = authorization_header.split()
+					user_id = get_user_id_from_jwt_token(token)
+					print(user_id)
+					user = CustomUser.objects.get(id=user_id)
+				except Exception as e:
+					return JsonResponse({'error': str(e)}, status=401)
 			if user.is_2fa_enabled and user.is_2fa_setup_complete:
 				return JsonResponse({'status': True})
 			return JsonResponse({'status': False})

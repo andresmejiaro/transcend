@@ -8,7 +8,7 @@ from django.utils import timezone                           # Used to get the cu
 from django.db import transaction                           # Used to make database transactions used for friendship model
 from django.utils.module_loading import import_string       # Used to import models from other apps to avoid circular imports
 import logging                                              # Used to log errors
-
+from api.jwt_utils import get_user_id_from_jwt_token
 
 class LobbyConsumer(AsyncWebsocketConsumer):
 
@@ -54,7 +54,17 @@ class LobbyConsumer(AsyncWebsocketConsumer):
             # Get the client id from the query string
             query_string = self.scope['query_string'].decode('utf-8')
             query_params = parse_qs(query_string)
-            self.client_id = query_params['client_id'][0]
+            if not query_params.get('token'):
+                await self.close()
+            print(f'Token: {query_params.get("token")}')
+            token = query_params['token'][0]
+
+            try:
+                user_id = get_user_id_from_jwt_token(token)
+                self.client_id = str(user_id)
+                print(self.client_id)
+            except Exception as e:
+                await self.close()
 
             # Check if the user exists and add it to the list of online users/admins
             if await self.does_not_exist(self.client_id):

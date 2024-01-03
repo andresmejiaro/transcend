@@ -1,10 +1,10 @@
 let torSocket;
 
-const connectWebSocket = async () => {
-    const userId = await getUserId();
-
+const connectWebSocketTor = async () => {
+    const authToken = sessionStorage.getItem("jwt");
+    
     return new Promise((resolve, reject) => {
-		const uri = `ws://localhost:8001/ws/tournament/${tournamentId}/?client_id=${userId}`
+		const uri = `ws://localhost:8001/ws/tournament/${tournamentId}/?token=${authToken}`
         torSocket = new WebSocket(uri);
 
         torSocket.addEventListener('open', (event) => {
@@ -34,7 +34,7 @@ const connectWebSocket = async () => {
 
 const getInfo = async (tournamentId) => {
     try {
-        await connectWebSocket(tournamentId);
+        await connectWebSocketTor(tournamentId);
 
 		torSocket.addEventListener('message', (event) => {
             const data = JSON.parse(event.data);
