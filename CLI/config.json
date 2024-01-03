@@ -1,0 +1,44 @@
+{
+  "server": {
+    "url": "http://localhost",
+    "port": 8000,
+    "websockets": {
+      "url": "ws://localhost",
+      "port": 8001
+    }
+  },
+  "data": {
+    "data_directory": "game_files/data",
+    "file_type": ".json"
+  },
+  "user": {
+    "theme": "dark",
+    "preferences": {
+      "show_notifications": true,
+      "use_sound": true
+    }
+  },
+  "authentication": {
+    "api_key": "api_key_goes_here"
+  },
+  "logging": {
+    "log_directory": "game_files/logs",
+    "file_type": ".log",
+    "log_level": "DEBUG",
+    "log_format": "%(asctime)s [%(levelname)s] [%(funcName)s] %(message)s",
+    "log_date_format": "%H:%M:%S"
+  },
+  "database": {
+    "database_type": "sqlite",
+    "database_name": "database",
+    "database_file_type": ".db",
+    "database_directory": "db/files",
+    "database_username": "splix",
+    "database_password": "123",
+    "database_table": "table"
+  },
+  "curses_settings": {
+    "curses_theme": "dark",
+    "sound_enabled": true
+  }
+}
