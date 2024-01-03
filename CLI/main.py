@@ -69,7 +69,12 @@ def cli():
         sys.exit(exit_status)
 
 def login_user(username, password):
-    response = api.login(username, password)
+    try:
+        response = api.login(username, password)
+        
+    except Exception as e:
+        print(f"Unable to reach the server: {e}")
+        sys.exit(1)
 
     if response == "User not found":
         # Unsuccessful login
@@ -83,7 +88,12 @@ def login_user(username, password):
         sys.exit(1)
 
 def register_user(username, password, full_name, email):
-    response = api.register(username, password, full_name, email)
+    try:
+        response = api.register(username, password, full_name, email)
+        
+    except Exception as e:
+        print(f"Unable to reach the server: {e}")
+        sys.exit(1)
 
     if response == "User not found":
         # Unsuccessful login

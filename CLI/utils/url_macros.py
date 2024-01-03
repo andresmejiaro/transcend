@@ -4,7 +4,7 @@ API_BASE_URL = 'http://localhost:8000/api'
 WS_BASE_URL = 'ws://localhost:8001/ws'
 
 # WS Templates
-LOBBY_URI_TEMPLATE = WS_BASE_URL + '/lobby2/?client_id={client_id}'
+LOBBY_URI_TEMPLATE = WS_BASE_URL + '/lobby2/?token={token}'
 
 # API Endpoints
 LOGIN = API_BASE_URL + '/user/login/'
