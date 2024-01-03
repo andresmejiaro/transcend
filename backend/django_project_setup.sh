@@ -41,7 +41,6 @@ cd server
 python3 manage.py makemigrations api
 python3 manage.py makemigrations tournament
 python3 manage.py makemigrations userauth
-python3 manage.py makemigrations friends
 python3 manage.py makemigrations ws_api
 python3 manage.py migrate
 

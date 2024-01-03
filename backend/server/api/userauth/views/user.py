@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import JsonResponse
-from ..models import CustomUser
+from ..models import CustomUser, Friendship
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
@@ -63,7 +63,6 @@ def info_me_id_view(request, user_id):
             return JsonResponse({'error': str(e)}, status=401)
 
     return JsonResponse({'error': 'Only GET requests are allowed'}, status=400)
-
 
 
 @requires_csrf_token
@@ -180,3 +179,38 @@ def user_intra_exists(request, username, fullname):
         return JsonResponse({"status": "exists"})
     except CustomUser.DoesNotExist:
         return JsonResponse({"error": "no user found"})
+
+
+@requires_csrf_token
+def user_friends_list(request):
+    if request.method == 'GET':
+        try:
+            authorization_header = request.headers.get('Authorization')
+            if authorization_header:
+                try:
+                    _, token = authorization_header.split()
+                    user_id = get_user_id_from_jwt_token(token)
+                    user = CustomUser.objects.get(id=user_id)
+                except Exception as e:
+                    return JsonResponse({'error': str(e)}, status=401)
+
+            friendship = Friendship.objects.get(user=user)
+            friends = friendship.friends.all()
+            friend_list = []
+
+            user_id_before_loop = user.id
+
+            for friendship in friends:
+                if friendship.id != user_id_before_loop:
+                    friend_list.append({
+                        'id': friendship.id,
+                        'username': friendship.username,
+                    })
+
+            return JsonResponse({'status': 'ok', 'data': friend_list})
+
+        except Friendship.DoesNotExist:
+            return JsonResponse({'status': 'error', 'message': 'User not found or has no friends'})
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
+    return JsonResponse({'status': 'error', 'message': 'Only GET requests are allowed'}, status=400)

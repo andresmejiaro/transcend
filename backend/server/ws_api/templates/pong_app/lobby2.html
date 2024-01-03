@@ -46,8 +46,7 @@
 
             let token = sessionStorage.getItem('token');
 
-            {#ws = new WebSocket(`ws://localhost:8001/ws/lobby2/?client_id=${clientId}`);#}
-            ws = new WebSocket(`ws://localhost:8001/ws/lobby2/?token=${token}`);
+            ws = new WebSocket(`ws://localhost:8001/ws/lobby/?token=${token}`);
 
             ws.onopen = (event) => {
                 logMessage(`WebSocket connection opened for client ID: ${clientId}`);
