@@ -18,9 +18,9 @@ from app.class_views.splash_view import SplashView
 class CLIApp:
     def __init__(self, stdscr):
         self.stdscr = stdscr        # The curses screen object
-        self.ui_view = None    # The current view being displayed
-        self.exit_status = 0        # The exit status of the application
-        self.logged_in = False      # The logged in status of the application
+        self.ui_view = None         # The current view being displayed initialized to None
+        self.exit_status = 0        # The exit status of the application - 0 is success, 1 is failure (will expand on this later)
+        self.logged_in = True       # The logged in status of the application 
         self.file_manager = FileManager()   # The file manager object - Used to load and save data to files
         self.task_manager = TaskManager()   # The task manager object - Used to create and manage tasks
 
@@ -100,13 +100,14 @@ class CLIApp:
             self.exit_status = 1
 
     # Main Loop Task - Run the main loop of the application
-    async def launch_UI(self):
+    async def launch_UI(self, data):
         try:
             log_message("Launching UI", level=logging.DEBUG)
             # Start the UI with the splash screen
             self.ui_view = SplashView(self.stdscr, self.ui_controller, self.frame_rate)
             while True:
                 await self.ui_view.draw()
+                await self.ui_view.process_input()
 
                 next_view = self.ui_view.get_next_view()
                 
@@ -121,36 +122,16 @@ class CLIApp:
 
         except asyncio.CancelledError:
             log_message("UI Task cancelled", level=logging.DEBUG)
-            # await self.ui_view.cleanup()
+            await self.ui_view.cleanup()
         except KeyboardInterrupt:
             # Catch the keyboard interrupt
             log_message("Keyboard interrupt detected. Exiting...")
-            # await self.ui_view.cleanup()
+            await self.ui_view.cleanup()
             self.exit_status = 0
         except Exception as e:
             log_message(f"An error occurred in UI Task: {e}", level=logging.ERROR)
-            # await self.ui_view.cleanup()
+            await self.ui_view.cleanup()
             self.exit_status = 1
-
-    async def initialize_ui(self):
-        self.ui_view = SplashView(self.stdscr, self.ui_controller, self.frame_rate)
-        
-    async def process_ui_view(self):
-        await self.ui_view.draw()
-        
-        next_view = self.ui_view.get_next_view()
-        
-        await asyncio.sleep(self.set_frame_rate(self.frame_rate[0]))
-        
-        if next_view == "exit":
-            log_message("Exiting UI", level=logging.DEBUG)
-            return False
-        elif next_view is not None:
-            self.ui_view = next_view
-            return True
-        
-        
-
 
 # -------------------------------------
 
@@ -179,12 +160,13 @@ class CLIApp:
             self.ui_controller.add_shared_data("lobby", lobby_ws_data)
             self.ui_controller.add_shared_data("keyboard", keyboard_input_data)
 
+            self.task_manager.create_task(task_name="ui", task_func=self.launch_UI)
 
             # Start all tasks
             await asyncio.gather(
                 self.task_manager.start_task_by_name("lobby"),
                 self.task_manager.start_task_by_name("keyboard"),
-                await self.launch_UI(),
+                self.task_manager.start_task_by_name("ui"),
             )
 
         except aiohttp.ClientError as e:
@@ -197,21 +179,12 @@ class CLIApp:
             log_message("Keyboard interrupt detected. Exiting...")
             self.exit_status = 0
         except Exception as e:
-            log_message(f"ERROR in app.startt {e}", level=logging.ERROR)
+            log_message(f"ERROR in app.start {e}", level=logging.ERROR)
             self.exit_status = 1
-
         finally:
             await self.task_manager.stop_all_tasks()
-            await self.cleanup()
-
-    async def cleanup(self):
-        try:
-            if self.ui_controller:
-                await self.ui_controller.cleanup()
-
-        except Exception as e:
-            log_message(f"An error occurred in App Cleanup: {e}", level=logging.ERROR)
-            self.exit_status = 11
+            await self.ui_controller.cleanup()
+            return self.exit_status
 # -------------------------------------
 
 # Helper Methods

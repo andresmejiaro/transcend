@@ -84,17 +84,6 @@ class http_api:
 
         return headers
 
-    def _parse_response(self, response):
-        try:
-            if response.status_code == 200:
-                return response.json()
-            else:
-                log_message(f"Error in API response: {response.text}", level=logging.ERROR)
-                return False
-        except json.JSONDecodeError as e:
-            log_message(f"Error decoding JSON response: {e}", level=logging.ERROR)
-            return False
-
     def _handle_successful_login(self, response, username):
         jwt_token = response.json().get("token")
         cookies_dict = response.headers.get('Set-Cookie')
@@ -118,17 +107,20 @@ class http_api:
             data = {"username": username, "password": password}
             response = self.make_api_call("POST", url, data)
 
-            json_response = self._parse_response(response)
-            if response.status_code == 200 and json_response and json_response.get('status') == 'ok':
+            json_response = response.json()
+            if  json_response and response.status_code == 200 and json_response.get('status') == 'ok':
                 self._handle_successful_login(response, username)
                 return username
+            elif json_response:
+                log_message(f"Login failed: {response.text}", level=logging.INFO)
+                return json_response.get('message')
             else:
-                log_message(f"Login failed: {response.text}", level=logging.ERROR)
+                log_message("No response from server.", level=logging.ERROR)
                 return False
 
         except Exception as e:
             log_message(f"Error logging in: {e}", level=logging.ERROR)
-            return False
+            return json_response
 
     def register(self, username, password, fullname, email):
         try:
@@ -136,7 +128,7 @@ class http_api:
             data = {"username": username, "password": password, "fullname": fullname, "email": email}
             response = self.make_api_call("POST", url, data)
 
-            json_response = self._parse_response(response)
+            json_response = response.json()
 
             if response.status_code == 200 and json_response and json_response.get('status') == 'ok':
                 self._handle_successful_login(response, username)

@@ -2,13 +2,10 @@
 
 import logging
 
-# Utility Imports
 from utils.logger import log_message
 from utils.file_manager import FileManager
-# View Imports
 from app.widgets.widgets import Widget
-# Next View
-from app.class_views.login_view import Login
+from app.class_views.login_view import HomePage
 
 class SplashView(Widget):
     def __init__(self, stdscr, ui_controller, frame_rate):
@@ -25,7 +22,7 @@ class SplashView(Widget):
 # Screen Updating
     async def draw(self):
         try:
-            self.frame_rate[0] = 30
+            self.frame_rate[0] = 100
 
             self._clear_screen()
 
@@ -41,17 +38,29 @@ class SplashView(Widget):
             self.print_logo_centered(self.file_manager.load_texture("pong.txt"))
             self.print_message_bottom("Press any key to continue...")
 
-            user_input = await self.ui_controller.handle_keyboard_input_directly()
-            if user_input == 32:
-                log_message(f"Splash screen user input: {user_input}", level=logging.DEBUG)
-                self.next_view = Login(self.stdscr, self.ui_controller, self.frame_rate)
-
             self._refresh_screen()
 
         except Exception as e:
             log_message(f"Error displaying splash screen: {e}", level=logging.ERROR)
             self.next_view = self
+# -----------------------------
             
+# Input Processing
+    async def process_input(self):
+        user_input = await self.ui_controller.handle_keyboard_input_directly()
+        if user_input == 32:
+            log_message(f"Splash screen user input: {user_input}", level=logging.DEBUG)
+            self.next_view = HomePage(self.stdscr, self.ui_controller, self.frame_rate)
+        elif user_input == 27:
+            self.next_view = "exit"
+# -----------------------------
+
+# Next View                   
     def get_next_view(self):
         return self.next_view
+# -----------------------------
+    
+# Cleanup
+    def cleanup(self):
+        pass
 # -----------------------------

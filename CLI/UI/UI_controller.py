@@ -49,6 +49,8 @@ class UIController:
                     # If the input was processed, return it
                     if processed_inputs:
                         return processed_inputs
+                    else:
+                        return "Queues Empty"
 
                 except asyncio.QueueEmpty:
                     # Queue is empty, continue to the next shared_data

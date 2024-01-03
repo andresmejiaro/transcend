@@ -2,14 +2,12 @@
 
 import curses
 import logging
-import sys
 import json
 
 from utils.logger import log_message
 from utils.url_macros import LOBBY_URI_TEMPLATE
 from utils.file_manager import FileManager
 from utils.task_manager import TaskManager
-#UI
 from app.widgets.widgets import Widget
 from app.widgets.nav_bar import NavBar
 
@@ -45,7 +43,7 @@ class HomePage(Widget):
         try:
             self._clear_screen()
 
-            self.frame_rate[0] = 500
+            self.frame_rate[0] = 60
 
             max_y, max_x = self.stdscr.getmaxyx()
             self.update_terminal_size()
@@ -61,42 +59,45 @@ class HomePage(Widget):
 
             self.print_frame_rate()
 
-            user_input = await self.ui_controller.check_and_process_inputs()
-
-            if user_input:
-                log_message(f"User input: {user_input}", level=logging.DEBUG)
-                self.process_input(user_input)               
-        
             self.print_online_users(max_y, max_x)
 
             self._refresh_screen()
 
         except Exception as e:
             log_message(f"Error in draw: {e}", level=logging.ERROR)
-
-
-    def get_next_view(self):
-        return self.next_view
-# -------------------------------------
-
+# -----------------------------
+            
 # Input Processing Handler
-    def process_input(self, user_input):
+    async def process_input(self):
         try:
-            # Inputs are recieved as a dictionary with the following format:
-            # {"task_name": "task(lobby)", "data": "input_data"}
-            # We will process the input based on the task name
-            task_name = user_input.get("task_name")
-            input_data = user_input.get("data")
+            user_input = await self.ui_controller.check_and_process_inputs()
 
-            if task_name == "lobby":
-                self.process_lobby_input(input_data)
-            elif task_name == "keyboard":
-                self.process_keyboard_input(input_data)
+            if user_input:
+                task_name = user_input.get("task_name")
+                input_data = user_input.get("data")
 
+                if task_name == "lobby":
+                    self.process_lobby_input(input_data)
+                elif task_name == "keyboard":
+                    self.process_keyboard_input(input_data)
 
         except Exception as e:
             log_message(f"Error in process_input: {e}", level=logging.ERROR)
-# -------------------------------------
+# -----------------------------
+
+# Next View
+    def get_next_view(self):
+        return self.next_view
+# -----------------------------
+
+# Cleanup
+    def cleanup(self):
+        pass
+# -----------------------------
+
+
+
+
 
 # Task Specific Input Processing
     def process_lobby_input(self, lobby_input):
@@ -147,7 +148,7 @@ class HomePage(Widget):
 
         except Exception as e:
             log_message(f"Error in process_keyboard_input: {e}", level=logging.ERROR)
-# -------------------------------------
+# -----------------------------
 
 
 # Lobby Task Handling Methods
@@ -182,8 +183,7 @@ class HomePage(Widget):
 
         except Exception as e:
             log_message(f"Error in send_message: {e}", level=logging.ERROR)
-
-# -------------------------------------
+# -----------------------------
 
 # View Specific Methods - They should be structed with rows and columns in mind, so that they can be displayed in the terminal
     def print_online_users(self, max_y, max_x):
@@ -204,7 +204,7 @@ class HomePage(Widget):
         except Exception as e:
             log_message(f"Error printing online users: {e}", level=logging.ERROR)
 
-# -------------------------------------
+# -----------------------------
 
 
 

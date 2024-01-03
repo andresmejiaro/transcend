@@ -11,18 +11,21 @@ class ConfigurationManager:
     def __init__(self):
         self.config_path = 'config.json'
         self.config_data = self.retrieve_configuration()
+        self.stdscr = None
 
     def __str__(self):
         return "config_manager"
 
     def load_configuration_file(self, stdscr):
         # Check if the configuration file already exists
+        self.stdscr = stdscr
+
         if os.path.exists(self.config_path):
             # Create directories
             try:
                 self.check_and_create_directories()
                 self.initialize_logger()
-                self.initialize_curses_settings(stdscr)
+                self.initialize_curses_settings(self.stdscr)
                 
             except KeyError:
                 print('Error: Configuration data not found.')
@@ -172,7 +175,7 @@ class ConfigurationManager:
                 file_path = os.path.join(data_directory, file)
                 os.remove(file_path)
 
-            self.reset_curses_settings()
+            self.reset_curses_settings(self.stdscr)
 
         except KeyError:
             log_message('Error: Configuration data not found.', level=logging.ERROR)
