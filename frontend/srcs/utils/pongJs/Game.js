@@ -19,6 +19,7 @@ class Game {
     #delay
     #endGame
     #actualframe;
+    #timeloop;
 
     constructor(leftPlayer, rightPlayer, remote = 0) {
         this.#leftPlayer = leftPlayer;
@@ -37,9 +38,10 @@ class Game {
             left : "UNUSED_DEFAULT_KEY", right : "UNUSED_DEFAULT_KEY"};
         this.#frame = -5;
         this.#remoteCanvasQ = {};
-        this.#delay = 0;
+        this.#delay = -1;
         this.#endGame = 0;
-        this.#actualframe = 0; 
+        this.#actualframe = -100;
+        this.#timeloop =performance.now(); 
     }
     
     startScreen() {
@@ -102,6 +104,8 @@ class Game {
 
     // game loop
     pointLoop() {
+        //console.log("performance:",performance.now()- this.#timeloop-16.67) ;
+        this.#timeloop = performance.now();
         this.drawNonInteractive();
         if (this.statusToText() == "remote")
             this.remoteGameLogic();
@@ -119,30 +123,41 @@ class Game {
     
     updateRemoteCanvas(){
         //try to print from memory
+        if (this.#delay == -1){
+            //console.log("still starting");
+            if(Object.keys(this.#remoteCanvasQ).length > 0){
+                console.log(Object.keys(this.#remoteCanvasQ).length);
+                let lowest = Math.min(...Object.keys(this.#remoteCanvasQ).map(Number));
+                //console.log("some data is here", lowest,Object.keys(this.#remoteCanvasQ) );
+                this.#actualframe = lowest;
+                this.#delay = 0;
+            }
+        }
         if (this.#remoteCanvasQ[this.#actualframe]){
             this.#remoteCanvas= this.#remoteCanvasQ[this.#actualframe];
-            this.#actualframe += 1;
-            this.#delay = 0;
-            // console.log("printing from memory");
-            return;
+            //console.log("printing frame", this.#actualframe,"from memory",this.#remoteCanvasQ[this.#actualframe]);
         } else{
             // try to find if skipped
             let lowestHigherNumber = Math.min(...Object.keys(this.#remoteCanvasQ).
-            map(Number).filter(key => key > this.#actualframe));
+                map(Number).filter(key => key > this.#actualframe));
+            //console.log("frame", this.#actualframe, "not found");
+            //console.log("most recent frame is", lowestHigherNumber);
             if (isFinite(lowestHigherNumber)){
-                this.#actualframe = lowestHigherNumber;
-                this.#remoteCanvas= this.#remoteCanvasQ[this.#actualframe];
-                return;
+                //console.log("a later frame is here though",lowestHigherNumber);
+                //this.#actualframe = lowestHigherNumber;
+                //this.#remoteCanvas= this.#remoteCanvasQ[this.#actualframe];
+                //return;
             }
-        
+            
         }
+        this.#actualframe += 1;
         if (!this.#remoteCanvasQ[this.#actualframe + this.#delay]){
-            this.#delay = Math.max(...Object.keys(this.#remoteCanvasQ).map(Number)) - this.#actualframe;
+            //this.#delay = Math.max(...Object.keys(this.#remoteCanvasQ).map(Number)) - this.#actualframe;
             // console.log(this.#delay);
         }
-        if (isFinite(this.#delay)){
-            this.#remoteCanvas = this.#remoteCanvasQ[this.#frame + this.#delay]
-        }
+        //if (isFinite(this.#delay)){
+        //    this.#remoteCanvas = this.#remoteCanvasQ[this.#frame + this.#delay]
+        //}
     }
     
     async remoteGameLogic() {
@@ -159,14 +174,9 @@ class Game {
         this.#leftPaddle.setSize(canvas["leftPaddle"]["size"]);
         this.#rightPaddle.setPosition(canvas["rightPaddle"]["position"]);
         this.#rightPaddle.setSize(canvas["rightPaddle"]["size"]);
-        if (isFinite(this.#delay) && this.#delay < 0){
-                for (let i = 0; i < Math.max(0, -this.#delay); i++){
-                this.localGameLogic2();
-            }
-        }
-        
-        
         this.#frame += 1;
+        //console.log("internal frame", this.#frame,"actual frame from server", 
+        //    this.#actualframe);
     }
 
     localGameLogic() {
@@ -212,6 +222,11 @@ class Game {
         const p2metrics = ctx.measureText(text2);
         ctx.fillText(text1, canvas.width / 4 - p1metrics.width / 2, 40);
         ctx.fillText(text2, canvas.width * 3 / 4 - p2metrics.width / 2, 40);
+        ctx.fillText(this.#ball.getPosition.x, canvas.width / 2, 40);
+        ctx.fillText(this.#ball.getPosition.y, canvas.width / 2, 56);
+        ctx.fillText(this.#actualframe, canvas.width / 2,70);
+        
+
         //ctx.fillText(this.#remoteIAM, canvas.width / 2, 40);
         
     }
@@ -341,6 +356,7 @@ class Game {
             let gameUpdate = item.game_update;
             this.#remoteCanvasQ[frame] = gameUpdate; 
         });
+        
     }
 
     scoreUpdate(data){

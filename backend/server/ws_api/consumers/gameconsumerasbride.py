@@ -1,3 +1,4 @@
+import copy
 import json
 import asyncio
 from channels.generic.websocket import AsyncWebsocketConsumer
@@ -331,13 +332,15 @@ class GameConsumerAsBridge(AsyncWebsocketConsumer):
                     'game_update': self.list_of_games[self.match_id].reportScreen(),
                     'score_update': {'left': self.list_of_games[self.match_id]._leftPlayer.getScore(), 'right': self.list_of_games[self.match_id]._rightPlayer.getScore()},
                 }
-
-                self.update_buffer.append(update_data)
+                #print(f'frame: {update_data["frame"]}, ball:[x={update_data["game_update"]["ball"]["position"]["x"]},y={update_data["game_update"]["ball"]["position"]["y"]}]')
+                self.update_buffer.append(copy.deepcopy(update_data))
                 
                 try:
 
                     if self.checkWorthySend():
                         await self.broadcast_to_group(self.match_id, 'update_buffer', self.update_buffer)
+                        for update_data in self.update_buffer:
+                            print(f'frame: {update_data["frame"]}, x: {update_data["game_update"]["ball"]["position"]["x"]}')
                         self.update_buffer = []
                     await asyncio.sleep(update_interval) # For use with FPS
                     # await asyncio.sleep(0) # For manual control of FPS
@@ -374,7 +377,7 @@ class GameConsumerAsBridge(AsyncWebsocketConsumer):
         if (self.update_buffer[-1]["score_update"] != 
                 self.update_buffer[-2]["score_update"]):
             return 1
-        if (len(self.update_buffer) > 5):
+        if (len(self.update_buffer) > 200):
             return 1
         return 0
 

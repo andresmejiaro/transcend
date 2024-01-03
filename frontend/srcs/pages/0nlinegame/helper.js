@@ -53,6 +53,11 @@ function updateGameCanvas(data, game) {
 		// Handle game update data
 		//console.log("game data:", data.data);
 		k = data.data.length;
+		data.data.forEach(obj => {
+			console.log("Frame:", obj.frame);
+			console.log("Ball Position - X:", obj.game_update.ball.position.x, "Y:", obj.game_update.ball.position.y);
+		});
+		
 		game.receiveRemoteCanvas(data);
 		game.scoreUpdate(data.data[k - 1]["score_update"]);
 	} else if (data.type === "keyup") {

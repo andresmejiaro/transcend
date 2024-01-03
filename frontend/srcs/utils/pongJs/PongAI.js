@@ -38,7 +38,7 @@ class PongAI {
 
     keyUpdater(target){
         let ycenter = this.#canvas['rightPaddle']['position']['y'] + 
-            this.#canvas['rightPaddle']['size']['y'] /2 ; 
+            this.#canvas['rightPaddle']['size']['y'] / 2 ; 
         if (target > ycenter + this.#canvas['rightPaddle']['size']['y'] / 5){
             this.pressDown();             
         } else if (target < ycenter - this.#canvas['rightPaddle']['size']['y'] / 5)
