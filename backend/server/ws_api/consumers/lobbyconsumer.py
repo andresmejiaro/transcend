@@ -1,512 +1,933 @@
-import json
 from channels.generic.websocket import AsyncWebsocketConsumer
-from urllib.parse import parse_qs
-from channels.db import database_sync_to_async
-from .lobbyutils import LobbyCommands, LobbyFunctions
-import asyncio
-
-class Group(object):
-    def __init__(self, group_name, lobby_consumer):
-        self.lobby_consumer = lobby_consumer
-        # String name of the group
-        self.group_name = group_name
-        # Dictionary of user_id: channel_name (channel_name is the channel name of the user's websocket connection)
-        self.users = {}
-        self.lock = asyncio.Lock()
-
-    async def add_member(self, user_id, channel_name):
-        async with self.lock:
-            print(f"In class Group, adding user_id: {user_id} with channel_name: {channel_name}")
-
-            if user_id in self.users:
-                print(f"User {user_id} already in group {self.group_name}")
-                return
-            else:
-                print(f"User {user_id} with channel_name: {channel_name} added to group {self.group_name}") 
-
-                self.users[user_id] = channel_name
-                print(f'self.users: {self.users}')
-
-            await self.lobby_consumer.channel_layer.group_add(
-                self.group_name,
-                channel_name,
-            )
-
-            await self.lobby_consumer.send_info_to_group(
-                self.group_name,
-                'user_joined',
-                {
-                    'data': {
-                        'message': 'User joined the group',
-                        'user_id': user_id,
-                        'channel_name': channel_name,
-                        'group_name': self.group_name,
-                    }
-                }
-            )
-
-    async def remove_member(self, user_id, channel_name):
-        print(f"User {user_id} with channel_name: {channel_name} removed from group {self.group_name}")
-        async with self.lock:
-            if user_id in self.users:
-                # Assuming some asynchronous operation, use "await" if needed
-                del self.users[user_id]
-                await self.lobby_consumer.channel_layer.group_discard(
-                    self.group_name,
-                    channel_name,
-                )
-                # Announce to everyone in the group that someone has left
-                await self.lobby_consumer.send_info_to_group(
-                    self.group_name,
-                    'user_left',
-                    {
-                            'data': {
-                                'message': 'User left the group',
-                                'user_id': user_id,
-                                'channel_name': channel_name,
-                                'group_name': self.group_name,
-                                'group_member_count': self.get_member_count(),
-                                'group_members': self.get_channel_all_member_names(),
-                                'group_info': self.get_group_info(),
-                            }
-                    }
-                ) 
-            else:
-                print(f"User {user_id} not found in group {self.group_name}")
-
-    async def change_group_name(self, group_name):
-        async with self.lock:
-            self.group_name = group_name
-            # Announce the group name change to everyone in the group
-            await self.lobby_consumer.send_info_to_group(
-                self.group_name,
-                'group_name_changed',
-                {
-                    'data': {
-                        'message': 'Group name changed',
-                        'group_name': self.group_name,
-                    }
-                }
-            )
-
-    async def broadcast(self, command, data):
-        """
-        Broadcast a message to all members of the group.
-        """
-        await self.lobby_consumer.send_info_to_group(
-            self.group_name,
-            command,
-            {'data': data}
-        )
-
-    def get_member_count(self):
-        # Return the number of users in the group
-        return len(self.users)
-
-    def get_all_user_objects(self):
-        # Return a list of user objects in the group
-        return list(self.users.values())
-
-    def get_all_member_ids(self):
-        # Return a list of user_ids in the group
-        return list(self.users.keys())
-
-    def get_channel_name(self, user_id):
-        # Return the channel_name of the user_id
-        user = self.users.get(user_id)
-        return user.channel_name
-
-    def get_channel_all_member_names(self):
-        # Return a list of channel_names in the group
-        print(f"self.users: {self.users}")
-        list_of_member_name = list(self.users.keys())
-        return list_of_member_name
-        
-    def get_group_name(self):
-        return self.group_name
-    
-    def get_group_info(self):
-        group_info = {
-            'group_name': self.group_name,
-            'group_member_count': self.get_member_count(),
-            'group_members': self.get_channel_all_member_names(),
-        }
-        return group_info
-
-    def is_user_in_group(self, user_id):
-        # Return True if user is in the group, False otherwise
-        return user_id in self.users
-
-    def is_empty(self):
-        # Return True if group is empty, False otherwise
-        return len(self.users) == 0
-
-class User(object):
-    def __init__(self, user_id, channel_name, user_model, lobby_consumer):
-        self.lobby_consumer = lobby_consumer
-        self.user_id = user_id
-        self.channel_name = channel_name
-        self.user_model = user_model
-        self.groups = []
-
-    def get_user_id(self):
-        return self.user_id
-
-    def get_channel_name(self):
-        return self.channel_name
-
-    def get_user_model(self):
-        return self.user_model
-
-    def get_groups(self):
-        return self.groups
-
-    def add_group(self, group):
-        self.groups.append(group)
-
-    def remove_group(self, group):
-        if group in self.groups:
-            self.groups.remove(group)
-
-    def __str__(self):
-        return f"{self.user_id}"
+import json                                                 # Used to encode and decode JSON data
+from urllib.parse import parse_qs                           # Used to parse the query string
+from channels.db import database_sync_to_async              # Used to make database calls asynchronously
+from django.shortcuts import get_object_or_404              # Used to get an object from the database
+from django.http import Http404                             # Used to return a 404 error if an object is not found
+from django.utils import timezone                           # Used to get the current time
+from django.db import transaction                           # Used to make database transactions used for friendship model
+from django.utils.module_loading import import_string       # Used to import models from other apps to avoid circular imports
+import logging                                              # Used to log errors
+from api.jwt_utils import get_user_id_from_jwt_token
 
 class LobbyConsumer(AsyncWebsocketConsumer):
-    list_of_groups = {}
-    list_of_users = {}
-    list_of_channels = {}
+
+# Class variables shared by all instances
+    list_of_admins = {}
+    list_of_online_users = {}
+    lobby_name = 'lobby'
+
+# Endpoints and commands (Client -> Server)
+    LIST_OF_USERS = 'list_of_users'                     # Command to send the list of online users (Connected to the socket)
+    LIST_SENT_INVITES = 'list_sent_invites'             # Command to send the list of invites sent
+    LIST_RECEIVED_INVITES = 'list_received_invites'     # Command to send the list of invites received
+    SEND_PRV_MSG = 'send_prv_msg'                       # Command to send a private message arguments: pass the values as of 'client_id' and 'message' eg: {'command': 'send_prv_msg', 'data': {'client_id': '1', 'message': 'Hello'}}
+    SEND_NOTIFICATION = 'send_notification'             # Command to send a group wide notification arguments: pass the values as of 'message' eg: {'command': 'send_notification', 'data': {'message': 'Hello'}}
+    CMD_NOT_FOUND = 'command_not_found'                 # Command to send when a command is not found
+    CLOSE_CONNECTION = 'close_connection'               # Command to close the connection
+    CREATE_USER = 'create_user'                         # Command to create a user arguments: pass the values as of 'user_data'
+    MODIFY_USER = 'modify_user'                         # Command to modify a user arguments: pass the values as of 'changes'
+    SERVER_TIME = 'server_time'                         # Command to send the server time
+    INVITE_TO_MATCH = 'invite_to_match'                 # Command to invite a user to a match arguments: pass the values as of 'client_id' and 'match_id' eg: {'command': 'invite_to_match', 'data': {'client_id': '1', 'match_id': '1'}}
+    ACCEPT_MATCH = 'accept_match'                       # Command to accept a match arguments: pass the values as of 'client_id' and 'match_id' eg: {'command': 'accept_match', 'data': {'client_id': '1', 'match_id': '1'}}
+    REJECT_MATCH = 'reject_match'                       # Command to reject a match arguments: pass the values as of 'client_id' and 'match_id' eg: {'command': 'reject_match', 'data': {'client_id': '1', 'match_id': '1'}}
+    CANCEL_MATCH = 'cancel_match'                       # Command to cancel a match arguments: pass the values as of 'client_id' and 'match_id' eg: {'command': 'cancel_match', 'data': {'client_id': '1', 'match_id': '1'}}
+    SEND_FRIEND_REQUEST = 'send_friend_request'         # Command to send a friend request arguments: pass the values as of 'client_id' eg: {'command': 'send_friend_request', 'data': {'client_id': '1'}}
+    ACCEPT_FRIEND_REQUEST = 'accept_friend_request'     # Command to accept a friend request arguments: pass the values as of 'client_id' eg: {'command': 'accept_friend_request', 'data': {'client_id': '1'}}
+    REJECT_FRIEND_REQUEST = 'reject_friend_request'     # Command to reject a friend request arguments: pass the values as of 'client_id' eg: {'command': 'reject_friend_request', 'data': {'client_id': '1'}}
+    CANCEL_FRIEND_REQUEST = 'cancel_friend_request'     # Command to cancel a friend request arguments: pass the values as of 'client_id' eg: {'command': 'cancel_friend_request', 'data': {'client_id': '1'}}
+    GET_USER_INFO = 'get_user_info'                     # Command to get user info arguments: pass the values as of 'client_id' eg: {'command': 'get_user_info', 'data': {'client_id': '35'}}
+    INVITE_TO_TOURNAMENT = 'invite_to_tournament'       # Command to invite a user to a tournament arguments: pass the values as of 'client_id' and 'tournament_id' eg: {'command': 'invite_to_tournament', 'data': {'client_id': '1', 'tournament_id': '1'}}
+    ACCEPT_TOURNAMENT = 'accept_tournament'             # Command to accept a tournament arguments: pass the values as of 'client_id' and 'tournament_id' eg: {'command': 'accept_tournament', 'data': {'client_id': '1', 'tournament_id': '1'}}
+    REJECT_TOURNAMENT = 'reject_tournament'             # Command to reject a tournament arguments: pass the values as of 'client_id' and 'tournament_id' eg: {'command': 'reject_tournament', 'data': {'client_id': '1', 'tournament_id': '1'}}
+    CANCEL_TOURNAMENT = 'cancel_tournament'             # Command to cancel a tournament arguments: pass the values as of 'client_id' and 'tournament_id' eg: {'command': 'cancel_tournament', 'data': {'client_id': '1', 'tournament_id': '1'}}
+# ---------------------------------------
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.lobbycommands = LobbyCommands(self)
-        self.lobbyfunctions = LobbyFunctions(self)
-        website_lobby = Group('website_lobby', self)
-        if 'website_lobby' not in LobbyConsumer.list_of_groups:
-            website_lobby = Group('website_lobby', self)
-            LobbyConsumer.list_of_groups['website_lobby'] = website_lobby
+        self.client_id = None
+        self.client_username = None
 
-
-    @database_sync_to_async
-    def get_user(self, client_id):
-        from api.userauth.models import CustomUser as User
-        try:
-            user = User.objects.get(pk=client_id)
-            print(f"User {client_id} found")
-            return user
-        except User.DoesNotExist:
-            print(f"User {client_id} does not exist")
-            return
-
+# Channel methods (Connect, Disconnect, Receive)
     async def connect(self):
-        query_string = self.scope['query_string'].decode('utf-8')
-        query_params = parse_qs(query_string)
-        self.client_id = query_params.get('client_id', [''])[0]
-
-        print(f"Channel name: {self.channel_name}")
-
         try:
-            self.client_id = int(self.client_id)
+            # Get the client id from the query string
+            query_string = self.scope['query_string'].decode('utf-8')
+            query_params = parse_qs(query_string)
+            if not query_params.get('token'):
+                await self.close()
+            print(f'Token: {query_params.get("token")}')
+            token = query_params['token'][0]
 
-            if self.client_id not in LobbyConsumer.list_of_users:
-                user_model = await self.get_user(self.client_id)
+            try:
+                user_id = get_user_id_from_jwt_token(token)
+                self.client_id = str(user_id)
+                print(self.client_id)
+            except Exception as e:
+                await self.close()
 
-                if user_model:
-                    print(f"User {self.client_id} connected")
-                    self.user = User(self.client_id, self.channel_name, user_model, self)
+            # Check if the user exists and add it to the list of online users/admins
+            if await self.does_not_exist(self.client_id):
+                await self.message_another_player(
+                    self.client_id,
+                    'duplicate_connection',
+                    {
+                        'time': timezone.now().isoformat(),
+                        'client_id': self.client_id,
+                        'message': 'Duplicate connection',
+                    }
+                )
+                await self.close()
+                return
 
-                    # Get the website_lobby group from the list_of_groups
-                    website_lobby = LobbyConsumer.list_of_groups.get('website_lobby')
+            await self.accept()
 
-                    if website_lobby:
-                        # Add the user to the website_lobby group
-                        await website_lobby.add_member(self.client_id, self.channel_name)
+            # Channel layer groups
+            await self.channel_layer.group_add(self.lobby_name, self.channel_name)
+            await self.channel_layer.group_add(self.client_id, self.channel_name)
 
-                        # Make a channel layer group for the user
-                        user_channel = f'user_{self.client_id}'
-                        await self.channel_layer.group_add(
-                            user_channel,
-                            self.user.get_channel_name(),
-                        )
+            # Predifined arrival method
+            await self.announce_arrival()
 
-                        # Add the user to the list of users
-                        async with asyncio.Lock():
-                            LobbyConsumer.list_of_users.update({self.client_id: self.user})
-                            LobbyConsumer.list_of_channels[str(self.client_id)] = self.channel_name
 
-                        await self.accept()
-
-                        # Send to the website_lobby group that a user has connected
-                        await self.send_info_to_group(
-                            'website_lobby',
-                            'user_connected',
-                            {
-                                'data': {
-                                    'message': 'User connected',
-                                    'user_id': self.client_id,
-                                    'channel_name': self.channel_name,
-                                    'group_name': 'website_lobby',
-                                    'group_member_count': website_lobby.get_member_count(),
-                                    'group_members': website_lobby.get_channel_all_member_names(),
-                                    'group_info': website_lobby.get_group_info(),
-                                }
-                            }
-                        )
-                        print(f"User {self.client_id} added to website_lobby with channel_name: {self.channel_name} and user_model: {user_model} with type: {type(user_model)}")
-
-                    else:
-                        print("Error: website_lobby group not found")
-                        await self.close(code=4004, reason='website_lobby group not found')
-
-        except ValueError:
-            print(f"Invalid client_id: {self.client_id}")
-            self.close(code=4004, reason='Invalid client_id')
+        except Exception as e:
+            error_message = f"Error in connect method: {e}"
+            print(error_message)
+            logging.error(error_message)
+            await self.close()
 
     async def disconnect(self, close_code):
         try:
-            if self.client_id in LobbyConsumer.list_of_users:
-                await self.send_info_to_group(
-                    'website_lobby',
-                    'user_disconnected',
-                    {
-                        'data': {
-                            'message': 'User disconnected',
-                            'user_id': self.client_id,
-                            'channel_name': self.channel_name,
-                            'group_name': 'website_lobby',
-                        }
-                    }
-                )
+            print(f'Client {self.client_id} disconnected with code {close_code}')
+            if self.list_of_online_users.get(self.client_id):
+                del self.list_of_online_users[self.client_id]
+                        # Remove client from the group channel
+            await self.channel_layer.group_discard(self.lobby_name, self.channel_name)
+            await self.channel_layer.group_discard(self.client_id, self.channel_name)
 
-                # Acquire a lock before accessing/modifying shared data
-                async with asyncio.Lock():
-                    user = LobbyConsumer.list_of_users[self.client_id]
-                    groups = user.get_groups()
-                    for group in groups:
-                        await group.remove_member(self.client_id, self.channel_name)
-                        group_member_count = group.get_member_count()
-                        if group_member_count == 0 and group.get_group_name() != 'website_lobby':
-                            print(f"Group {group.get_group_name()} has no members, deleting group")
-                            await self.delete_a_group(group.get_group_name())
+            # Send info of group status every time a client leaves
+            await self.announce_departure()
+            self.close()
 
-                    LobbyConsumer.list_of_users.pop(self.client_id)
-
-                print(f"User {self.client_id} disconnected")
-            else:
-                print("User not connected")
-
-        except ValueError:
-            print(f"Invalid client_id: {self.client_id}")
-            self.close(code=4004, reason='Invalid client_id')
+        except Exception as e:
+            error_message = f"Error in disconnect method: {e}"
+            print(error_message)
+            logging.error(error_message)
+            await self.close()
 
     async def receive(self, text_data):
         try:
-            text_data_json = json.loads(text_data)
-            message_type = text_data_json.get('type', '')
-            command = text_data_json.get('command', '')
-            data = text_data_json.get('data', {})
+            data = json.loads(text_data)
+            command = data.get('command')
+            data = data.get('data')
 
-            print(f"Received message: {text_data_json}")
-            print(f"Message type: {message_type}")
-            print(f"Command: {command}")
-            print(f"Data: {data}")
-            
-
-            if message_type == 'command':
-                await self.lobbycommands.execute_command(command, data)
-            elif message_type == 'private_message':
-                await self.send_private_message(data)
-            elif message_type == 'group_message':
-                await self.send_group_message(data)
-            else:
-                print("Invalid message type")
-
-        except ValueError:
-            print("Invalid JSON")
-            await self.send_info_to_client('error', 'Invalid JSON')
-
-    # Send information to client or group
-    async def handle_group_info(self, event):
-        """
-        Handle group information received from the channel layer.
-        This method will be invoked when a message with type 'handle_group_info' is received.
-        """
-        command = event['command']
-        data = event['data']
-        
-        # Process the information as needed
-        print(f'RECIEVED group information: {command}, {data}')
-        # Send the information to the connected client
-        await self.send_info_to_client(command, data)
-    # Working
-    async def send_info_to_client(self, command, data):
-        print(f'SENDING: information to client: {command}, {data}')
-        await self.send(text_data=json.dumps({
-            'type': 'information',
-            'command': command,
-            'data': data,
-    }))
-    # Working
-    async def send_info_to_group(self, group_name, command, data):
-        print(f'SENDING: information to group: {group_name}, {command}, {data}')
-        
-        # Debug prints to check values before the call
-        print(f'Command: {command}')
-        print(f'Data: {data}')
-
-        await self.channel_layer.group_send(
-            group_name,
-            {
-                'type': 'handle_group_info',
-                'command': command,
-                'data': data,
-        }
-    )
-    # -------------------------------
-
-    # Send Messages to Client or Group 
-    # Working
-    async def handle_private_message(self, event):
-        command = event['command']
-        data = event['data']
-        await self.send_info_to_client(command, data)
-    # Working
-    async def send_private_message(self, data):
-        recipient_id = data.get('recipient_id')
-        message = data.get('message')
-
-        if recipient_id and message:
-            recipient_channel = LobbyConsumer.list_of_channels.get(str(recipient_id))
-            print(f"Recipient channel: {recipient_channel}")
-            if recipient_channel:
-                await self.channel_layer.send(
-                    recipient_channel,
+            if command == self.LIST_OF_USERS:
+                await self.send_info_to_client(self.LIST_OF_USERS, self.list_of_online_users)
+            elif command == self.LIST_SENT_INVITES:
+                await self.send_info_to_client(self.LIST_SENT_INVITES, await self.get_sent_invites(self.client_id))
+            elif command == self.LIST_RECEIVED_INVITES:
+                await self.send_info_to_client(self.LIST_RECEIVED_INVITES, await self.get_recieved_invites(self.client_id))
+            elif command == self.CLOSE_CONNECTION:
+                await self.disconnect(1000)
+            elif command == self.SEND_PRV_MSG:
+                await self.message_another_player(data['client_id'], 'prv_msg', data['message'])
+            elif command == self.SEND_NOTIFICATION:
+                await self.broadcast_to_group(
+                    self.lobby_name,
+                    'notification',
                     {
-                        'type': 'handle_private_message',
-                        'command': 'private_message',
-                        'data': {
-                            'sender_id': self.client_id,
-                            'message': message,
-                        }
+                        'client_id': self.client_id,
+                        'message': data['message'],
                     }
                 )
+            elif command == self.SERVER_TIME:
+                await self.send_info_to_client(self.SERVER_TIME, timezone.now().isoformat())
+            elif command == self.CREATE_USER:
+                result = await self.create_user(data['user_data'])
+                await self.send_info_to_client(self.CREATE_USER, result)
+            elif command == self.MODIFY_USER:
+                result = await self.modify_user(self.client_id, data['changes'])
+                await self.send_info_to_client(self.MODIFY_USER, result)
+            elif command == self.INVITE_TO_MATCH:
+                await self.invite_to_match(data['client_id'], data['match_id'])
+            elif command == self.ACCEPT_MATCH:
+                await self.accept_match(data['client_id'], data['match_id'])
+            elif command == self.REJECT_MATCH:
+                await self.reject_match(data['client_id'], data['match_id'])
+            elif command == self.CANCEL_MATCH:
+                await self.cancel_match(data['client_id'], data['match_id'])
+            elif command == self.SEND_FRIEND_REQUEST:
+                await self.send_friend_request(data['client_id'])
+            elif command == self.ACCEPT_FRIEND_REQUEST:
+                await self.accept_friend_request(data['client_id'])
+            elif command == self.REJECT_FRIEND_REQUEST:
+                await self.reject_friend_request(data['client_id'])
+            elif command == self.CANCEL_FRIEND_REQUEST:
+                await self.cancel_friend_request(data['client_id'])
+            elif command == self.GET_USER_INFO:
+                await self.send_info_to_client(self.GET_USER_INFO, await self.get_user_info(data['client_id']))
+            elif command == self.INVITE_TO_TOURNAMENT:
+                await self.invite_to_tournament(data['client_id'], data['tournament_id'])
+            elif command == self.ACCEPT_TOURNAMENT:
+                await self.accept_tournament(data['client_id'], data['tournament_id'])
+            elif command == self.REJECT_TOURNAMENT:
+                await self.reject_tournament(data['client_id'], data['tournament_id'])
+            elif command == self.CANCEL_TOURNAMENT:
+                await self.cancel_tournament(data['client_id'], data['tournament_id'])
             else:
-                await self.send_info_to_client('error', 'Recipient not found')
-    # Working
-    async def send_group_message(self, data):
-        group_name = data.get('group_name')
-        message = data.get('message')
+                await self.send_info_to_client(self.CMD_NOT_FOUND, text_data)
 
-        if group_name and message:
-            group = LobbyConsumer.list_of_groups.get(group_name)
-            if group:
-                await group.broadcast('group_message', {
-                    'sender_id': self.client_id,
-                    'message': message,
-                })
-            else:
-                await self.send_info_to_client('error', 'Group not found')
-        else:
-            await self.send_info_to_client('error', 'Invalid group message data')
-    # -------------------------------
+        except json.JSONDecodeError as e:
+            error_message = f"Error in receive method: {e}"
+            print(error_message)
+            logging.error(error_message)
+        except Exception as e:
+            error_message = f"Error in receive method: {e}"
+            print(error_message)
+            logging.error(error_message)
+# ---------------------------------------
 
-    # Class Groups Object Methods
-    # Working
-    async def create_a_group(self, room_name):
-        print(f"Actual Creating and Sending: {room_name}")
-        new_group = Group(room_name, self)
-
-        async with asyncio.Lock():
-            LobbyConsumer.list_of_groups.update({room_name: new_group})
-
-        await self.channel_layer.group_add(
-            room_name,
-            self.channel_name,
-        )
-        await new_group.add_member(self.client_id, self.channel_name)
-        self.user.add_group(new_group)
-        await self.send_info_to_client('group_created', {'group_name': room_name})
-        
-        print(f"Group {room_name} created by {self.client_id}")
-    
-    #  Working
-    async def delete_a_group(self, room_name):
-        print(f'LobbyConsumer Deleting group {room_name}')
-
-        if room_name in LobbyConsumer.list_of_groups and room_name != 'website_lobby':
-            group = LobbyConsumer.list_of_groups[room_name]
-
-            print(f'Group {room_name} members: {group.get_all_member_ids()}')
-            print(f'Group Type: {type(group)} and Group Name: {group.get_group_name()} ')
-
-            list_of_members = group.get_all_member_ids()
-
-            try:
-                for member in list_of_members:
-                    print(f'Removing member {member} from group {room_name}')
-                    await group.remove_member(member, LobbyConsumer.list_of_channels.get(str(member)))
-
-                print(f'Group {room_name} deleted')
-                await self.channel_layer.group_discard(
-                    room_name,
-                    self.channel_name,
-                )
-
-                async with asyncio.Lock():
-                    LobbyConsumer.list_of_groups.pop(room_name)
-
-                await self.send_info_to_client('group_deleted', {'group_name': room_name})
-                print(f"Group {room_name} deleted")
-
-            except Exception as e:
-                print(f"Error deleting group {room_name}: {e}")
-                await self.send_info_to_client('error', f"Error deleting group {room_name}: {e}")
-
-        else:
-            if room_name == 'website_lobby':
-                await self.send_info_to_client('error', f'Cannot delete group {room_name}')
-                print(f"Cannot delete group {room_name}")
-            else:
-                await self.send_info_to_client('error', f'Group {room_name} does not exist')
-                print(f"Group {room_name} does not exist")
-
-
-    # Working
-    async def change_group_name(self, old_room_name, new_room_name):
-        if old_room_name in LobbyConsumer.list_of_groups:
-            group = LobbyConsumer.list_of_groups[old_room_name]
-            group.change_group_name(new_room_name)
-            LobbyConsumer.list_of_groups.pop(old_room_name)
-            LobbyConsumer.list_of_groups.update({new_room_name: group})
-            print(f"Group {old_room_name} changed to {new_room_name}")
-            await self.send_info_to_client('group_name_changed', {'old_group_name': old_room_name, 'new_group_name': new_room_name})
-        else:
-            print(f"Group {old_room_name} does not exist")
-    # -------------------------------
-
-    # Class Users Object Methods
-    # Working
-    async def create_a_user(self, client_id, channel_name):
+# Messaging methods
+    async def broadcast(self, event):
         try:
-            print(f"Creating user: {client_id}")
-            if client_id in LobbyConsumer.list_of_users:
-                await self.send_info_to_client('error', 'User already exists')
-            else:
-                # Check if the user model exists
-                user_model = await self.get_user(int(client_id))
+            command = event['command']
+            data = event['data']
+            
+            await self.send(text_data=json.dumps({
+                'type': command,
+                'data': data
+            }))
+        except Exception as e:
+            error_message = f"Error in broadcast method: {e}"
+            print(error_message)
+            logging.error(error_message)
 
-                if not user_model:
-                    await self.send_info_to_client('error', 'User model does not exist')
-                    print(f"User model does not exist for {client_id}")
-                else:
-                    new_user = User(client_id, channel_name, user_model, self)
+    async def broadcast_to_group(self, group_name, command, data):
+        try:
+            await self.channel_layer.group_send(
+                group_name,
+                {
+                    'type': 'broadcast',
+                    'command': command,
+                    'data': data
+                }
+            )
+        except Exception as e:
+            error_message = f"Error in broadcast_to_group method: {e}"
+            print(error_message)
+            logging.error(error_message)
 
-                    async with asyncio.Lock():
-                        LobbyConsumer.list_of_users.update({client_id: new_user})
+    async def message_another_player(self, user_id, command, data):
+        try:
+            await self.channel_layer.group_send(
+                user_id,
+                {
+                    'type': 'broadcast',
+                    'command': command,
+                    'data': data
+                }
+            )
+        except Exception as e:
+            error_message = f"Error in message_another_player method: {e}"
+            print(error_message)
+            logging.error(error_message)
+
+    async def send_info_to_client(self, command, data):
+        try:
+            print(f'Sending message to client {self.client_id} with data: {data}')
+            await self.send(text_data=json.dumps({
+                'type': command,
+                'data': data
+            }))
+        except Exception as e:
+            error_message = f"Error in send_info_to_client method: {e}"
+            print(error_message)
+            logging.error(error_message)
+# ---------------------------------------
+
+# Predefined Arrival Departure methods
+    async def announce_arrival(self):
+        try:
+            await self.broadcast_to_group(
+                self.lobby_name,
+                'user_joined',
+                {
+                    'client_id': self.client_id,
+                    'lobby_name': self.lobby_name,
+                    'online_users': self.list_of_online_users,
+                }
+            )
+        except Exception as e:
+            error_message = f"Error in announce_arrival method: {e}"
+            print(error_message)
+            logging.error(error_message)
+            await self.disconnect(1000)
+
+    async def announce_departure(self):
+        try:
+            await self.broadcast_to_group(
+                self.lobby_name,
+                'user_left',
+                {
+                    'client_id': self.client_id,
+                    'lobby_name': self.lobby_name,
+                    'online_users': self.list_of_online_users,
+                }
+            )
+        except Exception as e:
+            error_message = f"Error in announce_departure method: {e}"
+            print(error_message)
+            logging.error(error_message)
+            await self.disconnect(1000)
+# ---------------------------------------
+
+# Predefined Matchmaking methods
+    async def invite_to_match(self, user_id, match_id):
+        try:
+            message_for_client = await self.modify_user(self.client_id, {'add_sent_invites': user_id, 'invite_type': 'match'})
+            message_other_client = await self.modify_user(user_id, {'add_received_invites': self.client_id, 'invite_type': 'match'})
+
+            await self.message_another_player(
+                user_id,
+                'recieved_match_invite',
+                {
+                    'time': timezone.now().isoformat(),
+                    'client_id': self.client_id,
+                    'match_id': match_id,
+                    'message': message_other_client,
+                }
+            )
+            await self.send_info_to_client(
+                'sent_match_invite',
+                {
+                    'time': timezone.now().isoformat(),
+                    'client_id': user_id,
+                    'message': message_for_client,
                     
-                    await self.send_info_to_client('user_created', {'user_id': client_id})
-                    print(f"User {client_id} created")
+                }
+            )
+        except Exception as e:
+            print(f'Exception in invite_to_game {e}')
+            await self.disconnect(1000)
 
-        except ValueError:
-            print(f"Invalid client_id: {client_id}")
-            self.close(code=4004, reason='Invalid client_id')
+    async def accept_match(self, user_id, match_id):
+        try:
 
+            message_for_client = await self.modify_user(self.client_id, {'remove_recieved_invites': user_id, 'invite_type': 'match'})
+            message_other_client = await self.modify_user(user_id, {'remove_sent_invites': self.client_id, 'invite_type': 'match'})
+
+            await self.message_another_player(
+                user_id,
+                'match_accepted',
+                {
+                    'time': timezone.now().isoformat(),
+                    'client_id': self.client_id,
+                    'match_id': match_id,
+                    'message': message_other_client,
+                }
+            )
+            await self.send_info_to_client(
+                'accept_match',
+                {
+                    'time': timezone.now().isoformat(),
+                    'client_id': user_id,
+                    'match_id': match_id,
+                    'message': message_for_client,
+                }
+            )
+        except Exception as e:
+            print(f'Exception in accept_match {e}')
+            await self.disconnect(1000)
+
+    async def reject_match(self, user_id, match_id):
+        try:
+            message_for_client = await self.modify_user(self.client_id, {'remove_recieved_invites': user_id, 'invite_type': 'match'})
+            message_other_client = await self.modify_user(user_id, {'remove_sent_invites': self.client_id, 'invite_type': 'match'})
+
+            await self.message_another_player(
+                user_id,
+                'match_rejected',
+                {
+                    'time': timezone.now().isoformat(),
+                    'client_id': self.client_id,
+                    'match_id': match_id,
+                    'message': message_other_client,
+                }
+            )
+            await self.send_info_to_client(
+                'reject_match',
+                {
+                    'time': timezone.now().isoformat(),
+                    'client_id': user_id,
+                    'match_id': match_id,
+                    'message': message_for_client,
+                }
+            )
+        except Exception as e:
+            print(f'Exception in reject_match {e}')
+            await self.disconnect(1000)
+
+    async def cancel_match(self, user_id, match_id):
+        try:
+            message_for_client = await self.modify_user(self.client_id, {'remove_sent_invites': user_id, 'invite_type': 'match'})
+            message_other_client = await self.modify_user(user_id, {'remove_recieved_invites': self.client_id, 'invite_type': 'match'})
+
+            await self.message_another_player(
+                user_id,
+                'match_cancelled',
+                {
+                    'time': timezone.now().isoformat(),
+                    'client_id': self.client_id,
+                    'match_id': match_id,
+                    'message': message_other_client,
+                }
+            )
+            await self.send_info_to_client(
+                'cancel_match',
+                {
+                    'time': timezone.now().isoformat(),
+                    'client_id': user_id,
+                    'match_id': match_id,
+                    'message': message_for_client,
+                }
+            )
+        except Exception as e:
+            print(f'Exception in cancel_match {e}')
+            await self.disconnect(1000)
+# ---------------------------------------
+
+# Predefined Friend methods
+    async def send_friend_request(self, user_id):
+        try:
+            message_for_client = await self.modify_user(self.client_id, {'add_sent_invites': user_id, 'invite_type': 'friend_request'})
+            message_other_client = await self.modify_user(user_id, {'add_received_invites': self.client_id, 'invite_type': 'friend_request'})
+
+            await self.message_another_player(
+                user_id,
+                'recieved_friend_request',
+                {
+                    'time': timezone.now().isoformat(),
+                    'client_id': self.client_id,
+                    'message': message_other_client,
+                }
+            )
+            # Advice the user that the friend request was sent
+            await self.send_info_to_client(
+                'sent_friend_request',
+                {
+                    'time': timezone.now().isoformat(),
+                    'client_id': user_id,
+                    'message': message_for_client,
+                }
+            )
+
+        except Exception as e:
+            print(f'Exception in send_friend_request {e}')
+            await self.disconnect(1000)
+
+    async def accept_friend_request(self, user_id):
+        try:
+            # Add the current user as a friend for the other person
+            message = await self.add_friendship(pk=user_id)
+            print(message)
+
+            # Remove the friend request from both users lists
+            message_to_client = await self.modify_user(self.client_id, {'remove_recieved_invites': user_id, 'invite_type': 'friend_request'})
+            message_other_client = await self.modify_user(user_id, {'remove_sent_invites': self.client_id, 'invite_type': 'friend_request'})
+
+            # Send a message to the other person
+            await self.message_another_player(
+                user_id,
+                'friend_request_accepted',
+                {
+                    'time': timezone.now().isoformat(),
+                    'client_id': self.client_id,
+                    'message': message_other_client,
+                }
+            )
+            # Send a message to the current user
+            await self.send_info_to_client(
+                'accept_friend_request',
+                {
+                    'time': timezone.now().isoformat(),
+                    'client_id': user_id,
+                    'message': message_to_client,
+                }
+            )
+
+        except Exception as e:
+            print(f'Exception in accept_friend_request: {e}')
+            await self.disconnect(1000)
+
+    async def reject_friend_request(self, user_id):
+        try:
+
+            message_to_client = await self.modify_user(self.client_id, {'remove_recieved_invites': user_id, 'invite_type': 'friend_request'})
+            message_other_client = await self.modify_user(user_id, {'remove_sent_invites': self.client_id, 'invite_type': 'friend_request'})
+
+            await self.message_another_player(
+                user_id,
+                'friend_request_rejected',
+                {
+                    'time': timezone.now().isoformat(),
+                    'client_id': self.client_id,
+                    'message': message_other_client,
+                }
+            )
+            await self.send_info_to_client(
+                'reject_friend_request',
+                {
+                    'time': timezone.now().isoformat(),
+                    'client_id': user_id,
+                    'message': message_to_client,
+                }
+            )
+        except Exception as e:
+            print(f'Exception in reject_friend_request {e}')
+            await self.disconnect(1000)
+
+    async def cancel_friend_request(self, user_id):
+        try:
+            message_for_client = await self.modify_user(self.client_id, {'remove_sent_invites': user_id, 'invite_type': 'friend_request'})
+            message_other_client = await self.modify_user(user_id, {'remove_recieved_invites': self.client_id, 'invite_type': 'friend_request'})
+
+            await self.message_another_player(
+                user_id,
+                'friend_request_cancelled',
+                {
+                    'time': timezone.now().isoformat(),
+                    'client_id': self.client_id,
+                    'message': message_other_client,
+                }
+            )
+            await self.send_info_to_client(
+                'cancel_friend_request',
+                {
+                    'time': timezone.now().isoformat(),
+                    'client_id': user_id,
+                    'message': message_for_client,
+                }
+            )
+        except Exception as e:
+            print(f'Exception in cancel_friend_request {e}')
+            await self.disconnect(1000)
+# ---------------------------------------
+
+# Predefined Tournament methods
+    async def invite_to_tournament(self, user_id, tournament_id):
+        try:
+
+            message_for_client = await self.modify_user(self.client_id, {'add_sent_invites': user_id, 'invite_type': 'tournament'})
+            message_other_client = await self.modify_user(user_id, {'add_received_invites': self.client_id, 'invite_type': 'tournament'})
+
+            await self.message_another_player(
+                user_id,
+                'recieved_tournament_invite',
+                {
+                    'time': timezone.now().isoformat(),
+                    'client_id': self.client_id,
+                    'tournament_id': tournament_id,
+                    'message': message_other_client,
+                }
+            )
+            await self.send_info_to_client(
+                'sent_tournament_invite',
+                {
+                    'time': timezone.now().isoformat(),
+                    'client_id': user_id,
+                    'tournament_id': tournament_id,
+                    'message': message_for_client,
+                }
+            )
+        except Exception as e:
+            print(f'Exception in invite_to_tournament {e}')
+            await self.disconnect(1000)
+
+    async def accept_tournament(self, user_id, tournament_id):
+        try:
+
+            message_for_client = await self.modify_user(self.client_id, {'remove_recieved_invites': user_id, 'invite_type': 'tournament'})
+            message_other_client = await self.modify_user(user_id, {'remove_sent_invites': self.client_id, 'invite_type': 'tournament'})
+
+            await self.message_another_player(
+                user_id,
+                'tournament_accepted',
+                {
+                    'time': timezone.now().isoformat(),
+                    'client_id': self.client_id,
+                    'tournament_id': tournament_id,
+                    'message': message_other_client,
+                }
+            )
+            await self.send_info_to_client(
+                'accept_tournament',
+                {
+                    'time': timezone.now().isoformat(),
+                    'client_id': user_id,
+                    'tournament_id': tournament_id,
+                    'message': message_for_client,
+
+                }
+            )
+
+        except Exception as e:
+            print(f'Exception in accept_tournament {e}')
+            await self.disconnect(1000)
+
+    async def reject_tournament(self, user_id, tournament_id):
+        try:
+
+            message_for_client = await self.modify_user(self.client_id, {'remove_recieved_invites': user_id, 'invite_type': 'tournament'})
+            message_other_client = await self.modify_user(user_id, {'remove_sent_invites': self.client_id, 'invite_type': 'tournament'})
+
+            await self.message_another_player(
+                user_id,
+                'tournament_rejected',
+                {
+                    'time': timezone.now().isoformat(),
+                    'client_id': self.client_id,
+                    'tournament_id': tournament_id,
+                    'message': message_other_client,
+                }
+            )
+            await self.send_info_to_client(
+                'reject_tournament',
+                {
+                    'time': timezone.now().isoformat(),
+                    'client_id': user_id,
+                    'tournament_id': tournament_id,
+                    'message': message_for_client,
+                }
+            )
+        except Exception as e:
+            print(f'Exception in reject_tournament {e}')
+            await self.disconnect(1000)
+
+    async def cancel_tournament(self, user_id, tournament_id):
+        try:
+
+            message_for_client = await self.modify_user(self.client_id, {'remove_sent_invites': user_id, 'invite_type': 'tournament'})
+            message_other_client = await self.modify_user(user_id, {'remove_recieved_invites': self.client_id, 'invite_type': 'tournament'})
+
+            await self.message_another_player(
+                user_id,
+                'tournament_cancelled',
+                {
+                    'time': timezone.now().isoformat(),
+                    'client_id': self.client_id,
+                    'tournament_id': tournament_id,
+                    'message': message_other_client,
+                }
+            )
+            await self.send_info_to_client(
+                'cancel_tournament',
+                {
+                    'time': timezone.now().isoformat(),
+                    'client_id': user_id,
+                    'tournament_id': tournament_id,
+                    'message': message_for_client,
+                }
+            )
+        except Exception as e:
+            print(f'Exception in cancel_tournament {e}')
+            await self.disconnect(1000)
+# ---------------------------------------
+
+# Object existence methods
+    @database_sync_to_async
+    def does_not_exist(self, pk):
+        try:
+            User = import_string('api.userauth.models.CustomUser')
+            user = get_object_or_404(User, pk=pk)
+            # Check if the user is already connected on another client
+            if self.list_of_online_users.get(self.client_id):
+                return True
+
+            self.list_of_online_users[self.client_id] = user.username
+            if user.is_superuser:
+                self.list_of_admins[self.client_id] = user.username
+            return False
+
+        except Http404:
+            return True
+
+        except Exception as e:
+            print(e)
+            self.disconnect(1000)
+# ---------------------------------------
+
+# Client modification methods
+    @database_sync_to_async
+    def modify_user(self, pk, changes):
+        try:
+            User = import_string('api.userauth.models.CustomUser')
+            user = get_object_or_404(User, pk=pk)
+
+            if user is None:
+                return {
+                    'status': 'error',
+                    'message': 'User not found',
+                }
+
+            if changes.get('add_sent_invites'):
+                self.add_sent_invites(user, changes)
+                return {
+                    'status': 'ok',
+                    'message': 'Sent invite added successfully',
+                }
+            
+            if changes.get('remove_sent_invites'):
+                self.remove_sent_invites(user, changes)
+                return {
+                    'status': 'ok',
+                    'message': 'Sent invite removed successfully',
+                }
+            
+            if changes.get('add_received_invites'):
+                self.add_received_invites(user, changes)
+                return {
+                    'status': 'ok',
+                    'message': 'Recieved invite added successfully',
+                }
+
+            if changes.get('remove_recieved_invites'):
+                self.remove_received_invites(user, changes)
+                return {
+                    'status': 'ok',
+                    'message': 'Recieved invite removed successfully',
+                }
+
+            for key, value in changes.items():
+                setattr(user, key, value)
+
+            user.save()
+
+            return {
+                'status': 'ok',
+                'message': 'User modified successfully',
+            }
+
+        except Exception as e:
+            print(e)
+            print(f'Could not find user with id {pk}')
+            return None
+# ---------------------------------------
+
+# Invites list methods (Sent and Received)
+    def add_received_invites(self, user, change):
+        try:
+            invite_id = change['add_received_invites']
+            invite_type = change['invite_type']
+            user.add_received_invites(invite_id, invite_type)
+
+        except Exception as e:
+            print(e)
+
+    def remove_received_invites(self, user, change):
+        try:
+            invite_id = change['remove_recieved_invites']
+            invite_type = change['invite_type']
+            user.remove_received_invites(invite_id, invite_type)
+
+        except Exception as e:
+            print(e)
+
+    def add_sent_invites(self, user, change):
+        try:
+            invite_id = change['add_sent_invites']
+            invite_type = change['invite_type']
+            user.add_sent_invites(invite_id, invite_type)
+
+        except Exception as e:
+            print(e)
+
+    def remove_sent_invites(self, user, change):
+        try:
+            invite_id = change['remove_sent_invites']
+            invite_type = change['invite_type']
+            user.remove_sent_invites(invite_id, invite_type)
+
+        except Exception as e:
+            print(e)
+# ---------------------------------------
+
+# Database methods synchronised with the channel layer
+    @database_sync_to_async
+    @transaction.atomic
+    def add_friendship(self, pk):
+        try:
+            Friendship = import_string('api.userauth.models.Friendship')
+            User = import_string('api.userauth.models.CustomUser')
+
+            user = get_object_or_404(User, id=self.client_id)
+
+            if Friendship.objects.filter(user=user).exists():
+                user_friend = Friendship.objects.get(user=user)
+            else:
+                user_friend = Friendship.objects.create(user=user)
+
+            friend = get_object_or_404(User, id=pk)
+
+            if user == friend:
+                return f'You cannot add yourself as a friend'
+
+            if friend in user_friend.friends.all():
+                return f'{friend.username} is already your friend'
+            
+            # Check if the intended friend has a Friendship object, create one if not
+            if Friendship.objects.filter(user=friend).exists():
+                friend_friend = Friendship.objects.get(user=friend)
+            else:
+                friend_friend = Friendship.objects.create(user=friend)
+
+            # Check if the intended friend has blocked the current user
+            if user in friend_friend.blocked_users.all():
+                return f'{friend.username} has blocked you'
+            # Add friend for the current user
+            user_friend.friends.add(friend)
+            user_friend.save()
+
+            # Add the current user as a friend for the other user
+            friend_friend.friends.add(user)
+            friend_friend.save()
+
+            return f'{friend.username} added as a friend'
+
+        except Exception as e:
+            print(e)    
+        
+    @database_sync_to_async
+    def create_user(self, user_data):
+        try:
+            User = import_string('api.userauth.models.CustomUser')
+
+            # Extract the username and password fields
+            username = user_data['username']
+            password = user_data['password']
+
+            # Use create to create a new user with mandatory fields
+            user = User.objects.create(
+                username=username,
+                password=password,
+            )
+
+            # Update optional fields if provided
+            if 'email' in user_data:
+                user.email = user_data['email']
+
+            if 'first_name' in user_data:
+                user.first_name = user_data['first_name']
+
+            if 'last_name' in user_data:
+                user.last_name = user_data['last_name']
+
+            user.is_active = True
+            user.is_staff = False
+            user.is_superuser = False
+
+            user.save()
+
+            return {
+                'status': 'ok',
+                'message': 'User created successfully',
+            }
+
+        except Exception as e:
+            print(f'Error creating user: {e}')
+            return None
+
+    @database_sync_to_async
+    def get_user_info(self, pk):
+        try:
+            User = import_string('api.userauth.models.CustomUser')
+            print(f'Getting info for user {pk} type {type(pk)}')
+            print(f'The requesting user is {self.client_id} type {type(self.client_id)}')
+            
+            user = get_object_or_404(User, pk=pk)
+            self_user = get_object_or_404(User, pk=self.client_id)
+
+            print(f'Getting info for user {user.username} with its pk {pk} with type {type(pk)}')
+            print(f'The requesting user is {self_user.username} with its pk {self.client_id} with type {type(self.client_id)}')
+         
+            if self_user.is_superuser:
+                return {
+                    'status': 'ok',
+                    'message': 'User info retrieved successfully',
+                    'data': {
+                        'username': user.username,
+                        'email': user.email,
+                        'first_name': user.first_name,
+                        'last_name': user.last_name,
+                        'is_active': user.is_active,
+                        'is_staff': user.is_staff,
+                        'is_superuser': user.is_superuser,
+                        'pending_invites': user.get_pending_invites(),
+                    }
+                }
+
+            return {
+                'status': 'ok',
+                'message': 'User info retrieved successfully',
+                'data': {
+                    'username': user.username,
+                    'is_active': user.is_active,
+                    'pending_invites': user.get_pending_invites(),
+                }
+            }
+
+        except Exception as e:
+            print(e)
+            print(f'Could not find user with id {self.client_id}')
+            return None
+
+    @database_sync_to_async
+    def get_sent_invites(self, pk):
+        try:
+            User = import_string('api.userauth.models.CustomUser')
+            user = get_object_or_404(User, pk=pk)
+            return user.get_sent_invites()
+
+        except Exception as e:
+            print(e)
+            print(f'Could not find user with id {pk}')
+            return None
+        
+    @database_sync_to_async 
+    def get_recieved_invites(self, pk):
+        try:
+            User = import_string('api.userauth.models.CustomUser')
+            user = get_object_or_404(User, pk=pk)
+            return user.get_received_invites()
+
+        except Exception as e:
+            print(e)
+            print(f'Could not find user with id {pk}')
+            return None
+# ---------------------------------------
+
+
+# WebSocket close codes
+
+# | Close code (uint16) | Codename               | Internal | Customizable | Description |
+# |---------------------|------------------------|----------|--------------|-------------|
+# | 0 - 999             |                        | Yes      | No           | Unused |
+# | 1000                | `CLOSE_NORMAL`         | No       | No           | Successful operation / regular socket shutdown |
+# | 1001                | `CLOSE_GOING_AWAY`     | No       | No           | Client is leaving (browser tab closing) |
+# | 1002                | `CLOSE_PROTOCOL_ERROR` | Yes      | No           | Endpoint received a malformed frame |
+# | 1003                | `CLOSE_UNSUPPORTED`    | Yes      | No           | Endpoint received an unsupported frame (e.g. binary-only endpoint received text frame) |
+# | 1004                |                        | Yes      | No           | Reserved |
+# | 1005                | `CLOSED_NO_STATUS`     | Yes      | No           | Expected close status, received none |
+# | 1006                | `CLOSE_ABNORMAL`       | Yes      | No           | No close code frame has been receieved |
+# | 1007                | *Unsupported payload*  | Yes      | No           | Endpoint received inconsistent message (e.g. malformed UTF-8) |
+# | 1008                | *Policy violation*     | No       | No           | Generic code used for situations other than 1003 and 1009 |
+# | 1009                | `CLOSE_TOO_LARGE`      | No       | No           | Endpoint won't process large frame |
+# | 1010                | *Mandatory extension*  | No       | No           | Client wanted an extension which server did not negotiate |
+# | 1011                | *Server error*         | No       | No           | Internal server error while operating |
+# | 1012                | *Service restart*      | No       | No           | Server/service is restarting |
+# | 1013                | *Try again later*      | No       | No           | Temporary server condition forced blocking client's request |
+# | 1014                | *Bad gateway*          | No       | No           | Server acting as gateway received an invalid response |
+# | 1015                | *TLS handshake fail*   | Yes      | No           | Transport Layer Security handshake failure |
+# | 1016 - 1999         |                        | Yes      | No           | Reserved for later |
+# | 2000 - 2999         |                        | Yes      | Yes          | Reserved for websocket extensions |
+# | 3000 - 3999         |                        | No       | Yes          | Registered first come first serve at IANA |
+# | 4000 - 4999         |                        | No       | Yes          | Available for applications |

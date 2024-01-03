@@ -71,7 +71,6 @@ if DOCKERIZED:
         'api',
         'api.userauth',
         'api.tournament',
-        'api.friends',
         'channels',
         'ws_api',
     ]
@@ -89,7 +88,6 @@ else:
         'api',
         'api.userauth',
         'api.tournament',
-        'api.friends',
         'channels',
         'ws_api',
     ]
