@@ -32,9 +32,9 @@ class CLIApp:
     async def lobby_websocket_send_and_receive_task(self, data):
         try:
             async with aiohttp.ClientSession() as session:
-                client_info = self.file_manager.load_data('client_info.json')
-                client_id = client_info['client_id']
-                uri = LOBBY_URI_TEMPLATE.format(client_id=client_id)
+                token_info = self.file_manager.load_data('token.json')
+                token = token_info['token']
+                uri = LOBBY_URI_TEMPLATE.format(token=token)
                 log_message(f"Connecting to websocket: {uri}", level=logging.INFO)
                 async with session.ws_connect(uri) as ws:
                     try:
