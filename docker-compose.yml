@@ -86,7 +86,7 @@ services:
 
   # Redis container for the websockets
   redis:
-    image: "redis:latest"
+    image: "redis:7.2.3-alpine"
     container_name: "redis"
     command: ["redis-server", "--bind", "redis", "--port", "6379"]
     # ports:
