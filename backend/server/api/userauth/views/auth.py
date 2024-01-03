@@ -16,7 +16,7 @@ import qrcode
 from django.http import HttpResponseRedirect
 from django.conf import settings
 import requests
-from ..oauth.user_info import get_user_info, get_or_create_user
+from ..oauth.user_info import get_user_info, get_or_create_user_oauth
 
 
 
@@ -131,7 +131,7 @@ def oauth_login(request, *args, **kwargs):
         access_token = response.json().get("access_token")
         user_info = get_user_info(access_token)
 
-        user = get_or_create_user(user_info)
+        user = get_or_create_user_oauth(user_info)
         jwt_token = create_jwt_token(user.id, user.username)
 
         return JsonResponse({"token": jwt_token})

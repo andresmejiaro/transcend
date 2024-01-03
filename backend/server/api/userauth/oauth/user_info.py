@@ -20,11 +20,38 @@ def get_user_info(access_token: str) -> dict:
     }
 
 
-def get_or_create_user(user_info: dict) -> CustomUser:
-    user, created = CustomUser.objects.get_or_create(
-        username=user_info.get("login"),
-        email=user_info.get("email"),
-        fullname=user_info.get("fullname")
-    )
+def get_or_create_user_oauth(user_info: dict) -> CustomUser:
+    login = user_info.get('login')
 
-    return user
+    try:
+        user = CustomUser.objects.get(login=login).user
+        return user
+
+    except CustomUser.DoesNotExist:
+        username = login
+        fullname = user_info.get('fullname')
+        email = user_info.get('email')
+        if not CustomUser.objects.filter(username=username).exists():
+            user = CustomUser.objects.create_user(
+                username=username,
+                login=username,
+                fullname=fullname,
+                email=email
+            )
+            user.set_unusable_password()
+            user.save()
+            return user
+
+        suffix = 2
+        while CustomUser.objects.filter(username=f'{username}{suffix}').exists():
+            suffix += 1
+
+        user = CustomUser.objects.create_user(
+            username=f'{username}{suffix}',
+            login=login,
+            fullname=fullname,
+            email=email
+        )
+        user.set_unusable_password()
+        user.save()
+        return user
