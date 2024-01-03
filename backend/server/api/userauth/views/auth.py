@@ -13,6 +13,9 @@ from django.core.files.base import ContentFile
 import os
 import pyotp
 import qrcode
+from django.http import HttpResponseRedirect
+from django.conf import settings
+
 
 
 # AUTH
@@ -90,3 +93,11 @@ def login_view(request):
 
     return JsonResponse({'status': 'error', 'message': 'Only POST requests are allowed'}, status=400)
 
+
+@csrf_exempt
+@ensure_csrf_cookie
+def oauth_start(request, *args, **kwargs):
+    client_id = os.getenv("INTRA_CLIENT_ID")
+    redirect_uri = os.getenv("INTRA_REDIRECT_URI")
+    oauth_url = f"https://api.intra.42.fr/oauth/authorize?client_id={client_id}&redirect_uri={redirect_uri}&response_type=code"
+    return HttpResponseRedirect(oauth_url)
