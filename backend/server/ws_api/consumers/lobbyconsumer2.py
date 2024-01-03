@@ -8,7 +8,7 @@ from django.utils import timezone                           # Used to get the cu
 from django.db import transaction                           # Used to make database transactions used for friendship model
 from django.utils.module_loading import import_string       # Used to import models from other apps to avoid circular imports
 import logging                                              # Used to log errors
-from .utils.validate_jwt import get_user_id_from_jwt_token
+from api.jwt_utils import get_user_id_from_jwt_token
 
 class LobbyConsumer(AsyncWebsocketConsumer):
 

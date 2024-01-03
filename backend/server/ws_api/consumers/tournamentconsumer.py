@@ -11,7 +11,7 @@ import math
 import random
 import logging
 import asyncio
-from .utils.validate_jwt import get_user_id_from_jwt_token
+from api.jwt_utils import get_user_id_from_jwt_token
 
 from django.utils.module_loading import import_string
 
