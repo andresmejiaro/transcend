@@ -1,3 +1,4 @@
+import os
 from .userauth.models import CustomUser
 from .userauth.jwt.sign import sign
 from .userauth.jwt.verify import verify
@@ -6,7 +7,7 @@ from .userauth.jwt.decode import decode
 from datetime import datetime, timedelta
     
     
-secret_key = 'hola'
+secret_key = os.environ["JWT_SEED"]
 
 def create_jwt_token(user_id, username, expiration_time_minutes=240):
     now = datetime.utcnow()
