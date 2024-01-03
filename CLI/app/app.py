@@ -100,7 +100,7 @@ class CLIApp:
             self.exit_status = 1
 
     # Main Loop Task - Run the main loop of the application
-    async def launch_UI(self, data):
+    async def launch_UI(self):
         try:
             log_message("Launching UI", level=logging.DEBUG)
             # Start the UI with the splash screen
@@ -160,13 +160,11 @@ class CLIApp:
             self.ui_controller.add_shared_data("lobby", lobby_ws_data)
             self.ui_controller.add_shared_data("keyboard", keyboard_input_data)
 
-            self.task_manager.create_task(task_name="ui", task_func=self.launch_UI)
-
             # Start all tasks
             await asyncio.gather(
                 self.task_manager.start_task_by_name("lobby"),
                 self.task_manager.start_task_by_name("keyboard"),
-                self.task_manager.start_task_by_name("ui"),
+                await self.launch_UI(),
             )
 
         except aiohttp.ClientError as e:
