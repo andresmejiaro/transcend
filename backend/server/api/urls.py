@@ -6,5 +6,4 @@ urlpatterns = [
 	path('test/', test_view, name="test"),
     path('', include('api.userauth.urls')),
     path('', include('api.tournament.urls')),
-    path('', include('api.friends.urls')),
 ]

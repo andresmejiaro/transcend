@@ -3,9 +3,11 @@ const handleMessage = async (message) => {
     // console.log(data);
 
     switch (data.type) {
+        case "list_of_users":
+            break;
+
         case "user_joined":
         case "user_left":
-        case "list_of_users":
             updateFriendStatus(data);
             break;
 
