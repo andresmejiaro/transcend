@@ -11,6 +11,7 @@ class CustomUser(AbstractUser):
     email = models.EmailField(unique=True, null=False, blank=False)
     fullname = models.CharField(max_length=100, null=False, blank=False)
     avatar = models.ImageField(upload_to='avatars/', null=True, blank=True)
+    login = models.CharField(max_length=100, null=True, blank=True, default=None)
 
     def update_avatar(self, new_avatar):
         if self.avatar:

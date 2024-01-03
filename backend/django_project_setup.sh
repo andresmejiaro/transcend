@@ -22,12 +22,11 @@ pip install qrcode
 pip install channels
 pip install channels-redis
 pip install icecream
+pip install requests
 
 pip freeze > requirements.txt
 
 pip install --upgrade pip
-
-pip install -r requirements.txt
 
 # Check if the project directory already exists
 if [ ! -d "$PROJECT_DIR" ]; then

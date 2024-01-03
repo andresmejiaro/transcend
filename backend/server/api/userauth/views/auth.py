@@ -13,6 +13,11 @@ from django.core.files.base import ContentFile
 import os
 import pyotp
 import qrcode
+from django.http import HttpResponseRedirect
+from django.conf import settings
+import requests
+from ..oauth.user_info import get_user_info, get_or_create_user_oauth
+
 
 
 # AUTH
@@ -90,3 +95,48 @@ def login_view(request):
 
     return JsonResponse({'status': 'error', 'message': 'Only POST requests are allowed'}, status=400)
 
+
+@csrf_exempt
+@ensure_csrf_cookie
+def oauth_start(request, *args, **kwargs):
+    client_id = os.getenv("INTRA_CLIENT_ID")
+    redirect_uri = os.getenv("INTRA_REDIRECT_URI")
+    oauth_url = f"https://api.intra.42.fr/oauth/authorize?client_id={client_id}&redirect_uri={redirect_uri}&response_type=code"
+    return HttpResponseRedirect(oauth_url)
+
+
+@csrf_exempt
+@ensure_csrf_cookie
+def oauth_login(request, *args, **kwargs):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        code = data.get("code")
+        if not code:
+            return JsonResponse({"detail": "No code provided"}, status=400)
+
+        data = {
+            "client_id": os.getenv("INTRA_CLIENT_ID"),
+            "client_secret": os.getenv("INTRA_CLIENT_SECRET"),
+            "redirect_uri": os.getenv("INTRA_REDIRECT_URI"),
+            "grant_type": "authorization_code",
+            "code": code,
+        }
+
+        oauth_url = "https://api.intra.42.fr/oauth/token/"
+
+        response = requests.post(oauth_url, json=data)
+        if response.status_code != 200:
+            return JsonResponse({"detail": "Invalid code"}, status=401)
+
+        access_token = response.json().get("access_token")
+        user_info = get_user_info(access_token)
+
+        user = get_or_create_user_oauth(user_info)
+        jwt_token = create_jwt_token(user.id, user.username)
+
+        return JsonResponse({"token": jwt_token})
+
+    return JsonResponse({
+        "detail": "Method not allowed",
+        "status": 405
+    })

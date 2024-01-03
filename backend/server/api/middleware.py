@@ -4,7 +4,7 @@ from .jwt_utils import validate_and_get_user_from_token
 import logging
 
 # List of paths that should be excluded from token verification
-EXCLUDED_PREFIXES = ['/api/test/', '/api/user/login/', '/api/user/signup/', '/api/user/validate-jwt/', '/media/', '/api/user/exists/', '/pong/', '/admin/', '/api/verify_totp_code/']
+EXCLUDED_PREFIXES = ['/api/test/', '/api/user/login/', '/api/user/signup/', '/api/user/validate-jwt/', '/media/', '/api/user/exists/', '/pong/', '/admin/', '/api/verify_totp_code/', '/api/oauth-init/', '/api/oauth/login/']
 
 def should_exclude_path(request_path):
 	return any(request_path.startswith(prefix) for prefix in EXCLUDED_PREFIXES)
