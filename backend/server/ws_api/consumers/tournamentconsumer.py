@@ -11,6 +11,7 @@ import math
 import random
 import logging
 import asyncio
+from api.jwt_utils import get_user_id_from_jwt_token
 
 from django.utils.module_loading import import_string
 
@@ -45,8 +46,20 @@ class TournamentConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         query_string = self.scope['query_string'].decode('utf-8')
         query_params = parse_qs(query_string)
+
+        if not query_params.get('token'):
+                await self.close()
+        print(f'Token: {query_params.get("token")}')
+        token = query_params['token'][0]
+
+        try:
+            user_id = get_user_id_from_jwt_token(token)
+            self.client_id = str(user_id)
+            print(self.client_id)
+        except Exception as e:
+            await self.close()
+
         self.tournament_id = self.scope['url_route']['kwargs']['tournament_id']
-        self.client_id = query_params['client_id'][0]
 
         # Get the user and see if they exist before accepting the connection
         self.player_object = await self.init_player_obj(self.client_id)
