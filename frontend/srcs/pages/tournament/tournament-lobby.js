@@ -4,7 +4,7 @@ const connectWebSocketTor = async () => {
     const authToken = sessionStorage.getItem("jwt");
     
     return new Promise((resolve, reject) => {
-		const uri = `ws://localhost:8001/ws/tournament/${tournamentId}/?token=${authToken}`
+		const uri = `${window.DAPHNE_BASE_URL}/ws/tournament/${tournamentId}/?token=${authToken}`
         torSocket = new WebSocket(uri);
 
         torSocket.addEventListener('open', (event) => {

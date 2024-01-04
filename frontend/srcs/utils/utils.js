@@ -1,4 +1,5 @@
-window.DJANGO_API_BASE_URL = "http://localhost:8000";
+window.DJANGO_API_BASE_URL = "http://c3r5s3.42madrid.com:8000";
+window.DAPHNE_BASE_URL = "ws://c3r5s3.42madrid.com:8001";
 
 function getCSRFCookie() {
 	let name = "csrftoken" + "=";

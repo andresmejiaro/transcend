@@ -63,7 +63,7 @@ services:
     networks:
       - app-network
     environment:
-      - DJANGO_API_BASE_URL=http://localhost:8000
+      - DJANGO_API_BASE_URL=http://c3r5s3.42madrid.com:8000
 
   # Daphne container for the websockets
   daphne:

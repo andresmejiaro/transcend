@@ -228,6 +228,12 @@ AUTH_USER_MODEL = 'userauth.CustomUser'
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://127.0.0.1:3000",
+    "http://c3r5s3.42madrid.com:3000",
+    "http://c3r1s1.42madrid.com:3000",
+    "http://c3r5s3.42madrid.com:3000",
+    "http://127.0.0.1:3000",
+    "http://127.0.0.1:3000",
+    "http://*"
 ]
 
 CORS_ALLOW_CREDENTIALS = True
