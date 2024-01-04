@@ -41,16 +41,23 @@ function validateUsername() {
 	const usernameHelp = document.getElementById("usernameHelp");
 	const username = usernameInput.value;
 
+	const maxCharLimit = 20; // Set the maximum character limit
+
 	if (username.length < 4) {
-		usernameHelp.innerText = "Write at least 4 characters";
-		usernameInput.classList.add("is-invalid");
-		usernameInput.classList.remove("is-valid");
-		return false;
+	  usernameHelp.innerText = "Username must be at least 4 characters";
+	  usernameInput.classList.add("is-invalid");
+	  usernameInput.classList.remove("is-valid");
+	  return false;
+	} else if (username.length > maxCharLimit) {
+	  usernameHelp.innerText = `Username cannot exceed ${maxCharLimit} characters`;
+	  usernameInput.classList.add("is-invalid");
+	  usernameInput.classList.remove("is-valid");
+	  return false;
 	} else {
-		usernameHelp.innerText = "";
-		usernameInput.classList.remove("is-invalid");
-		usernameInput.classList.add("is-valid");
-		return true;
+	  usernameHelp.innerText = "";
+	  usernameInput.classList.remove("is-invalid");
+	  usernameInput.classList.add("is-valid");
+	  return true;
 	}
 }
 
