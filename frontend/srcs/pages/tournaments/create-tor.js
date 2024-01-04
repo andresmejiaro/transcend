@@ -43,7 +43,7 @@ const getListofTournaments = async () => {
       console.log("JWT token not found");
       return;
     }
-    const username = sessionStorage.getItem("username");
+    const username = getUserUsername();
     if (!username) {
       console.log("username not found");
       return;
@@ -140,7 +140,7 @@ const getListofMatches = async () => {
       console.log("JWT token not found");
       return;
     }
-    const username = sessionStorage.getItem("username");
+    const username = getUserUsername();
     if (!username) {
       console.log("username not found");
       return;
@@ -269,7 +269,7 @@ const deleteTournament = async (tournamentId) => {
       console.log("JWT token not found");
       return;
     }
-    const username = sessionStorage.getItem("username");
+    const username = getUserUsername();
     if (!username) {
       console.log("username not found");
       return;
@@ -305,7 +305,7 @@ const deleteMatch = async (matchId) => {
       console.log("JWT token not found");
       return;
     }
-    const username = sessionStorage.getItem("username");
+    const username = getUserUsername();
     if (!username) {
       console.log("username not found");
       return;
@@ -341,7 +341,7 @@ const deleteUser = async (userId) => {
       console.log("JWT token not found");
       return;
     }
-    const username = sessionStorage.getItem("username");
+    const username = getUserUsername();
     if (!username) {
       console.log("username not found");
       return;

@@ -228,16 +228,19 @@ AUTH_USER_MODEL = 'userauth.CustomUser'
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://127.0.0.1:3000",
+    "https://api.intra.42.fr"
 ]
 
 CORS_ALLOW_CREDENTIALS = True
 
-CORS_ALLOW_HEADERS = [
-    'access-control-allow-origin',
-    'authorization',
-    'content-type',
-	'x-csrftoken',
-]
+CORS_ALLOW_HEADERS = (
+    "accept",
+    "authorization",
+    "content-type",
+    "user-agent",
+    "x-csrftoken",
+    "x-requested-with",
+)
 
 CORS_ALLOW_METHODS = [
     'DELETE',
