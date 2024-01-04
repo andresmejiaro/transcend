@@ -26,3 +26,25 @@ const rejectFriendRequest = async (friend) => {
   });
   handleCloseNotificationModalMsg("Invitation Rejected Succesfully");
 };
+
+const acceptMatchRequest = async (friend) => {
+  sendWebSocketMessage("command", {
+    command: "accept_match",
+    data: {
+      client_id: `${friend.id}`,
+      match_id: `99`,
+    },
+  });
+  handleCloseNotificationModalMsg("Invitation Accepted Succesfully");
+};
+
+const rejectMatchRequest = async (friend) => {
+  sendWebSocketMessage("command", {
+    command: "reject_match",
+    data: {
+      client_id: `${friend.id}`,
+      match_id: `99`,
+    },
+  });
+  handleCloseNotificationModalMsg("Invitation Rejected Succesfully");
+};
