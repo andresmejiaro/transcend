@@ -17,10 +17,9 @@ function getCSRFCookie() {
 }
 
 const isLogged = () => {
-	username = sessionStorage.getItem("username");
 	jwt = sessionStorage.getItem("jwt");
 
-	if (!username || !jwt) return false;
+	if (!jwt) return false;
 	else return true;
 };
 
@@ -76,9 +75,18 @@ async function makeRequest(useCsrf, url, options, queries) {
 	}
 }
 
+const getUserUsername = () => {
+	const jwtToken = sessionStorage.getItem('jwt');
+	const [header, payload] = jwtToken.split('.').slice(0, 2);
+	const decodedPayload = JSON.parse(atob(payload));
+	const username = decodedPayload.username;
+
+	return username
+}
+
 const getUserId = async () => {
 	try {
-		const username = sessionStorage.getItem("username");
+		const username = getUserUsername();
 		const url = `${window.DJANGO_API_BASE_URL}/api/get_user_id/${username}`;
 		const options = {
 			method: "GET",

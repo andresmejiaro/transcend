@@ -17,7 +17,6 @@ async function validateOTP(username, userId, jwt) {
 		});
 
 		if (response.status == "ok") {
-			sessionStorage.setItem("username", username);
 			sessionStorage.setItem("jwt", jwt);
 			window.location.href = "/play!";
 		} else {
@@ -100,7 +99,6 @@ const tryFormPost = async () => {
 		});
 
 		if (response.status === "ok") {
-			sessionStorage.setItem("username", username);
 			sessionStorage.setItem("jwt", response.token);
 			window.location.href = "/play!";
 		} else if (response.status === "2FA") {

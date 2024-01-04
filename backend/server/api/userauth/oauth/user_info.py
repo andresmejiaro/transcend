@@ -24,7 +24,7 @@ def get_or_create_user_oauth(user_info: dict) -> CustomUser:
     login = user_info.get('login')
 
     try:
-        user = CustomUser.objects.get(login=login).user
+        user = CustomUser.objects.get(login=login)
         return user
 
     except CustomUser.DoesNotExist:
