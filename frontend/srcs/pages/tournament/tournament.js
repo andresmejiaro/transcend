@@ -2,7 +2,7 @@ const urlParams = new URLSearchParams(window.location.search);
 const tournamentId = urlParams.get("id");
 
 const getTournamentInfo = async (tournamentId) => {
-  const url = `http://localhost:8000/api/tournament/${tournamentId}/`;
+  const url = `${window.DJANGO_API_BASE_URL}/api/tournament/${tournamentId}/`;
   const options = {
     method: "GET",
     mode: "cors",

@@ -1,5 +1,5 @@
 const startNextRoundTor = async (tourId) => {
-  const url = `http://localhost:8000/api/tournament/${tourId}/matchmaking`;
+  const url = `${window.DJANGO_API_BASE_URL}/api/tournament/${tourId}/matchmaking`;
   const options = {
     method: "GET",
     mode: "cors",
