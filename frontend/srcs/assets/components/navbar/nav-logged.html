@@ -2,9 +2,11 @@
 	<img src="./srcs/assets/imgs/logo-web.png" alt="" width="28" height="auto" class="ms-2" />
 
 	<div style="max-height: 100%" class="d-flex align-items-center">
-		<a href="/profile" class="nav-link-logged-pong d-block d-lg-none">
-			<img src="./srcs/assets/imgs/default-avatar.jpeg" id="avatarImageNav" alt="Avatar" class="img-fluid" style="max-width: 40px" />
-			<span id="usernameNav" style="margin-left: 1rem">username</span>
+		<a class="nav-link-logged-pong d-block d-lg-none" onclick="navigateToProfile()">
+			<div class="d-flex align-items-center">
+				<img src="./srcs/assets/imgs/default-avatar.jpeg" id="avatarImageNav" alt="Avatar" class="img-fluid" style="max-width: 40px" />
+				<p id="usernameNav" style="margin: 0; font-size: 16px; padding-left: 1rem;">username</p>
+			</div>
 		</a>
 	</div>
 
@@ -37,9 +39,11 @@
 				</li>
 			</ul>
 
-			<a href="/profile" class="nav-link-logged-pong d-flex align-items-center d-none d-lg-block">
-				<span id="usernameNav2" style="margin-right: 1rem">username</span>
-				<img src="./srcs/assets/imgs/default-avatar.jpeg" id="avatarImageNav2" alt="Avatar" class="img-fluid" style="max-width: 40px" />
+			<a class="nav-link-logged-pong d-flex align-items-center d-none d-lg-block" onclick="navigateToProfile()">
+				<div class="d-flex align-items-center">
+					<p id="usernameNav2"  style="margin: 0; font-size: 16px; padding-right: 1rem;">username</p>
+					<img src="./srcs/assets/imgs/default-avatar.jpeg" id="avatarImageNav2" alt="Avatar" class="img-fluid" style="max-width: 40px" />
+				</div>
 			</a>
 		</div>
 	</div>
