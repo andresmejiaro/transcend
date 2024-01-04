@@ -73,10 +73,12 @@ services:
   backend:
     build:
       context: ./backend_proxy/
-      dockerfile: nginx/Dockerfile
+      dockerfile: Dockerfile
     container_name: 'backend'
     depends_on:
       - db
+      - daphne
+      - django
     env_file:
       - .env
     ports:
