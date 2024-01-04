@@ -102,7 +102,12 @@ def oauth_start(request, *args, **kwargs):
     client_id = os.getenv("INTRA_CLIENT_ID")
     redirect_uri = os.getenv("INTRA_REDIRECT_URI")
     oauth_url = f"https://api.intra.42.fr/oauth/authorize?client_id={client_id}&redirect_uri={redirect_uri}&response_type=code"
-    return HttpResponseRedirect(oauth_url)
+    
+    response = JsonResponse({'status': 'ok', 'url': oauth_url})
+    response['Access-Control-Allow-Methods'] = '*'
+    response['Access-Control-Allow-Headers'] = '*'
+
+    return response
 
 
 @csrf_exempt

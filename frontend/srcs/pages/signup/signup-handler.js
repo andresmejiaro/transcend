@@ -147,7 +147,6 @@ const tryFormPost = async () => {
       }),
     });
     if (response.status === "ok") {
-      sessionStorage.setItem("username", username);
       sessionStorage.setItem("jwt", response.token);
       window.location.href = "/otp";
     } else {
