@@ -1,5 +1,5 @@
 const handleJoinTor = async (tournamentId, userId) => {
-  const url = `http://localhost:8000/api/tournament/${tournamentId}/`;
+  const url = `${window.DJANGO_API_BASE_URL}/api/tournament/${tournamentId}/`;
   const options = {
     method: "PUT",
     mode: "cors",

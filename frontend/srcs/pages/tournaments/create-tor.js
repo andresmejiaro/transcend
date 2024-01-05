@@ -11,8 +11,8 @@ const createRequest = async () => {
   try {
     
     const url =
-    "http://localhost:8000/api/tournament/create/" +
-    "?username=" +username;
+    `${window.DJANGO_API_BASE_URL}/api/tournament/create/` +
+    "?username=" + username
     const options = {
       method: "POST",
       mode: "cors",
@@ -50,7 +50,7 @@ const getListofTournaments = async () => {
     }
 
     const url =
-      "http://localhost:8000/api/tournament/" +
+      `${window.DJANGO_API_BASE_URL}/api/tournament/` +
       "?token=" +
       token +
       "&username=" +
@@ -147,7 +147,7 @@ const getListofMatches = async () => {
     }
 
     const url =
-      "http://localhost:8000/api/match/" +
+      `${window.DJANGO_API_BASE_URL}/api/match/` +
       "?token=" +
       token +
       "&username=" +
@@ -196,7 +196,7 @@ const getListofUsers = async () => {
     }
 
     const url =
-      "http://localhost:8000/api/user/" +
+      `${window.DJANGO_API_BASE_URL}/api/user/` +
       "?token=" +
       token +
       "&username=" +
@@ -276,7 +276,7 @@ const deleteTournament = async (tournamentId) => {
     }
 
     const url =
-      `http://localhost:8000/api/tournament/${tournamentId}/` +
+      `${window.DJANGO_API_BASE_URL}/api/tournament/${tournamentId}/` +
       "?token=" +
       token +
       "&username=" +
@@ -312,7 +312,7 @@ const deleteMatch = async (matchId) => {
     }
 
     const url =
-      `http://localhost:8000/api/match/${matchId}/` +
+      `${window.DJANGO_API_BASE_URL}/api/match/${matchId}/` +
       "?token=" +
       token +
       "&username=" +
@@ -348,7 +348,7 @@ const deleteUser = async (userId) => {
     }
 
     const url =
-      `http://localhost:8000/api/user/${userId}/` +
+      `${window.DJANGO_API_BASE_URL}/api/user/${userId}/` +
       "?token=" +
       token +
       "&username=" +
