@@ -18,18 +18,23 @@ async def main(stdscr):
     exit_status = 0
     try:
         config_manager = ConfigurationManager()
-
         config_manager.load_configuration_file(stdscr)
-
+        
         try:
             app = CLIApp(stdscr)
+            
+        except Exception as e:
+            log_message(f'Error initializing the App: {e}', logging.ERROR)
+            exit_status = 1
+        
+        try:
             exit_status = await app.start()
 
         except Exception as e:
             log_message(f'Error starting the App: {e}', logging.ERROR)
             exit_status = 1
         finally:
-            config_manager.cleanup()
+            # config_manager.cleanup()
             sys.exit(exit_status)
             
     except KeyError:
@@ -50,8 +55,7 @@ def cli():
         loop.set_debug(True)
 
         exit_status = curses.wrapper(lambda stdscr: loop.run_until_complete(main(stdscr)))
-        
-        loop.close()
+        # loop.close()
 
         log_message(f'Exit Status: {exit_status}', logging.INFO)
     

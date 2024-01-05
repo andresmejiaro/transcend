@@ -23,7 +23,7 @@ class CLIApp:
         self.logged_in = True       # The logged in status of the application 
         self.file_manager = FileManager()   # The file manager object - Used to load and save data to files
         self.task_manager = TaskManager()   # The task manager object - Used to create and manage tasks
-
+        self.ui_controller = None   # The UI controller object - Used to manage the UI and shared data between tasks
         # Adjust App Frame Rate - Adjust the frame rate of the application
         self.frame_rate = [60]
 
@@ -100,7 +100,7 @@ class CLIApp:
             self.exit_status = 1
 
     # Main Loop Task - Run the main loop of the application
-    async def launch_UI(self):
+    async def UI_task(self, data):
         try:
             log_message("Launching UI", level=logging.DEBUG)
             # Start the UI with the splash screen
@@ -135,6 +135,7 @@ class CLIApp:
 
 # -------------------------------------
 
+
 # Entry Point - Initializes tasks and runs the main loop, additionaly tasks will be created and started and stopped as needed in the main loop
     async def start(self):
         try:
@@ -145,27 +146,37 @@ class CLIApp:
                 "receive_lock": asyncio.Lock(),
                 "send_lock": asyncio.Lock(),
             }
-            self.task_manager.create_task(task_name="lobby", task_func=self.lobby_websocket_send_and_receive_task, data=lobby_ws_data)
 
             # Create keyboard input task using the task_manager
             keyboard_input_data = {
                 "receive_queue": asyncio.Queue(),
                 "receive_lock": asyncio.Lock(),
             }
-            self.task_manager.create_task(task_name="keyboard", task_func=self.keyboard_input_task, data=keyboard_input_data)
 
+            UI_data = {
+                "receive_queue": asyncio.Queue(),
+                "send_queue": asyncio.Queue(),
+                "receive_lock": asyncio.Lock(),
+                "send_lock": asyncio.Lock(),
+            }
+            
             # Create the current view
             self.ui_controller = UIController(stdscr=self.stdscr)
 
             self.ui_controller.add_shared_data("lobby", lobby_ws_data)
             self.ui_controller.add_shared_data("keyboard", keyboard_input_data)
+            self.ui_controller.add_shared_data("UI", UI_data)
+
+            # Start tasks (lobby, keyboard, and launch_UI as tasks)
+            tasks = [
+                self.task_manager.create_task(task_name="lobby", task_func=self.lobby_websocket_send_and_receive_task, data=lobby_ws_data),
+                self.task_manager.create_task(task_name="keyboard", task_func=self.keyboard_input_task, data=keyboard_input_data),
+                self.task_manager.create_task(task_name="UI", task_func=self.UI_task, data=UI_data),
+            ]
 
             # Start all tasks
-            await asyncio.gather(
-                self.task_manager.start_task_by_name("lobby"),
-                self.task_manager.start_task_by_name("keyboard"),
-                await self.launch_UI(),
-            )
+            self.exit_status = await asyncio.gather(*tasks)
+            
 
         except aiohttp.ClientError as e:
             log_message(f"AIOHTTP ERROR in app.start: {e}", level=logging.ERROR)
@@ -181,8 +192,8 @@ class CLIApp:
             self.exit_status = 1
         finally:
             await self.task_manager.stop_all_tasks()
-            await self.ui_controller.cleanup()
-            return self.exit_status
+            # self.ui_controller.cleanup()
+            self.exit_status
 # -------------------------------------
 
 # Helper Methods

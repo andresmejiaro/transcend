@@ -22,7 +22,7 @@ class SplashView(Widget):
 # Screen Updating
     async def draw(self):
         try:
-            self.frame_rate[0] = 2
+            self.frame_rate[0] = 1
 
             self._clear_screen()
 
