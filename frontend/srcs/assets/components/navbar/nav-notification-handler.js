@@ -14,7 +14,8 @@ const acceptFriendRequest = async (friend) => {
       client_id: `${friend.id}`,
     },
   });
-  handleCloseNotificationModalMsg("Invitation Accepted Succesfully");
+  // handleCloseNotificationModalMsg("Invitation Accepted Succesfully");
+  handleCloseNotificationModal();
 };
 
 const rejectFriendRequest = async (friend) => {
@@ -24,7 +25,8 @@ const rejectFriendRequest = async (friend) => {
       client_id: `${friend.id}`,
     },
   });
-  handleCloseNotificationModalMsg("Invitation Rejected Succesfully");
+  // handleCloseNotificationModalMsg("Invitation Rejected Succesfully");
+  handleCloseNotificationModal();
 };
 
 const acceptMatchRequest = async (friend) => {
@@ -35,7 +37,8 @@ const acceptMatchRequest = async (friend) => {
       match_id: `99`,
     },
   });
-  handleCloseNotificationModalMsg("Invitation Accepted Succesfully");
+  // handleCloseNotificationModalMsg("Invitation Accepted Succesfully");
+  handleCloseNotificationModal();
 };
 
 const rejectMatchRequest = async (friend) => {
@@ -46,5 +49,6 @@ const rejectMatchRequest = async (friend) => {
       match_id: `99`,
     },
   });
-  handleCloseNotificationModalMsg("Invitation Rejected Succesfully");
+  // handleCloseNotificationModalMsg("Invitation Rejected Succesfully");
+  handleCloseNotificationModal();
 };

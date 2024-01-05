@@ -1,5 +1,5 @@
-window.DJANGO_API_BASE_URL = "http://c3r1s1.42madrid.com:8000";
-window.DAPHNE_BASE_URL = "wss://c3r1s1.42madrid.com:8001";
+window.DJANGO_API_BASE_URL = "http://localhost:8000";
+window.DAPHNE_BASE_URL = "ws://localhost:8001";
 
 function getCSRFCookie() {
 	let name = "csrftoken" + "=";
@@ -138,11 +138,30 @@ const getIdFromUsername = async (clientUsername) => {
 	}
 };
 
-const showToast = (data) => {
+const showToast = (title, image, body) => {
 	const toastElement = document.getElementById("liveToast");
 
+	const toastTitle = document.getElementById("toast-title-top");
+	toastTitle.textContent = title;
+	
 	const toastBody = document.getElementById("toast-body-index");
-	toastBody.textContent = data;
+	toastBody.textContent = body;
+
+	if (image) {
+		const toastImage = document.getElementById("toast-image-top");
+		image = `http://localhost:8000${image}`;
+		toastImage.src = image;
+	}
+
+	const bsToast = new bootstrap.Toast(toastElement);
+	bsToast.show();
+};
+
+const showSimpleToast = (body) => {
+	const toastElement = document.getElementById("liveSimpleToast");
+	
+	const toastBody = document.getElementById("toast-simple-body-index");
+	toastBody.textContent = body;
 
 	const bsToast = new bootstrap.Toast(toastElement);
 	bsToast.show();

@@ -1,12 +1,3 @@
-let matchFriendInviteHandler = {
-	match: {
-		title: "Match Request: ",
-	},
-	friend: {
-		title: "Friend Request: ",
-	},
-};
-
 const handleModalForNotifications = async () => {
 	function createNotificationElement(data) {
 		const notificationContainer = document.getElementById("notifications-list");
@@ -67,7 +58,6 @@ const handleModalForNotifications = async () => {
 
 	const notificationContainer = document.getElementById("notifications-list");
 	notificationContainer.innerHTML = "";
-	console.log(receivedFriendsNotifications);
 	receivedFriendsNotifications.forEach(createNotificationElement);
 	updateNavNotification(receivedFriendsNotifications.length);
 };
@@ -90,5 +80,5 @@ const handleCloseNotificationModal = () => {
 const handleCloseNotificationModalMsg = (msg) => {
 	const closeModalBtn = document.querySelector(".btn-close.btn-close-white.btn-notifications-close");
 	closeModalBtn.click();
-	showToast(msg);
+	showSimpleToast(msg);
 };

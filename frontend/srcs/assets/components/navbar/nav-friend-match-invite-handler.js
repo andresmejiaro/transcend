@@ -11,7 +11,6 @@ const createAndJoinMatchFriend = async (userId) => {
 			player1: userId,
 		}),
 	});
-	console.log(response);
 	return response.match_id;
 	// startGame(response.match_id, userId, "", userId, 11);
 };
