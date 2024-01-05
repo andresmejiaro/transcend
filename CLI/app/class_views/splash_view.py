@@ -5,7 +5,7 @@ import logging
 from utils.logger import log_message
 from utils.file_manager import FileManager
 from app.widgets.widgets import Widget
-from app.class_views.login_view import HomePage
+from app.class_views.home_view import HomePage
 
 
 class SplashView(Widget):
