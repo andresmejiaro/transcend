@@ -9,12 +9,6 @@ document.getElementById("updateAvatarForm").addEventListener(
 
 const changeAvatar = async () => {
 	const avatarInput = document.getElementById("avatar");
-	const username = sessionStorage.getItem("username");
-
-	if (!username) {
-		console.log("username not found");
-		return;
-	}
 
 	try {
 		const url = `${window.DJANGO_API_BASE_URL}/api/user/update-avatar/`;

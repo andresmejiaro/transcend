@@ -3,8 +3,15 @@ function validateUsername() {
   const usernameHelp = document.getElementById("usernameHelp");
   const username = usernameInput.value;
 
+  const maxCharLimit = 20; // Set the maximum character limit
+
   if (username.length < 4) {
     usernameHelp.innerText = "Username must be at least 4 characters";
+    usernameInput.classList.add("is-invalid");
+    usernameInput.classList.remove("is-valid");
+    return false;
+  } else if (username.length > maxCharLimit) {
+    usernameHelp.innerText = `Username cannot exceed ${maxCharLimit} characters`;
     usernameInput.classList.add("is-invalid");
     usernameInput.classList.remove("is-valid");
     return false;
@@ -22,8 +29,15 @@ function validateFullname() {
   const fullnameHelp = document.getElementById("fullnameHelp");
   const fullname = fullnameInput.value;
 
+  const maxCharLimit = 20; // Set the maximum character limit
+
   if (fullname.length < 4) {
     fullnameHelp.innerText = "Fullname must be at least 4 characters";
+    fullnameInput.classList.add("is-invalid");
+    fullnameInput.classList.remove("is-valid");
+    return false;
+  } else if (fullname.length > maxCharLimit) {
+    fullnameHelp.innerText = `Fullname cannot exceed ${maxCharLimit} characters`;
     fullnameInput.classList.add("is-invalid");
     fullnameInput.classList.remove("is-valid");
     return false;
@@ -147,7 +161,6 @@ const tryFormPost = async () => {
       }),
     });
     if (response.status === "ok") {
-      sessionStorage.setItem("username", username);
       sessionStorage.setItem("jwt", response.token);
       window.location.href = "/otp";
     } else {

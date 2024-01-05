@@ -57,3 +57,7 @@ navbar.addEventListener("hidden.bs.collapse", function () {
 	document.getElementById("rightNavBall").style.display = "block";
 	navbar.style.maxHeight = "100%";
 });
+
+function navigateToProfile() {
+	window.location.pathname = '/profile';
+}

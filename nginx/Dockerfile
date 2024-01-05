@@ -12,8 +12,11 @@ WORKDIR /usr/share/nginx/html
 # Copy the custom Nginx configuration
 COPY nginx/conf/default.conf /etc/nginx/conf.d/
 
+COPY nginx/setup.sh /setup.sh
+RUN chmod +x /setup.sh
+
 # Expose port 3000
 EXPOSE 3000
 
 # Command to start Nginx
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["/setup.sh"]
