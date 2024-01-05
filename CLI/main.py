@@ -14,20 +14,15 @@ from network.http_api import http_api
 
 api = http_api()
 
+
 async def main(stdscr):
     exit_status = 0
     try:
         config_manager = ConfigurationManager()
         config_manager.load_configuration_file(stdscr)
-        
+
         try:
             app = CLIApp(stdscr)
-            
-        except Exception as e:
-            log_message(f'Error initializing the App: {e}', logging.ERROR)
-            exit_status = 1
-        
-        try:
             exit_status = await app.start()
 
         except Exception as e:
@@ -36,7 +31,7 @@ async def main(stdscr):
         finally:
             # config_manager.cleanup()
             sys.exit(exit_status)
-            
+
     except KeyError:
         log_message('KeyError in main.', logging.ERROR)
         exit_status = 1
@@ -47,7 +42,7 @@ async def main(stdscr):
         log_message('Keyboard interrupt detected.')
         exit_status = 0
 
-# Boot Launch
+
 def cli():
     exit_status = 0
     try:
@@ -58,24 +53,25 @@ def cli():
         # loop.close()
 
         log_message(f'Exit Status: {exit_status}', logging.INFO)
-    
+
     except KeyboardInterrupt:
         log_message('Keyboard interrupt detected.')
         print('Keyboard interrupt detected.')
-        exit_status = 0  
+        exit_status = 0
     except Exception as e:
         log_message(f'Error: Boot Launch {e}')
         print(f'Error: Boot Launch {e}')
         exit_status = 1
-    
+
     finally:
         log_message(f'Exit Status: {exit_status}', logging.INFO)
         sys.exit(exit_status)
 
+
 def login_user(username, password):
     try:
         response = api.login(username, password)
-        
+
     except Exception as e:
         print(f"Unable to reach the server: {e}")
         sys.exit(1)
@@ -90,11 +86,12 @@ def login_user(username, password):
     else:
         print(f"Server did not respond.")
         sys.exit(1)
+
 
 def register_user(username, password, full_name, email):
     try:
         response = api.register(username, password, full_name, email)
-        
+
     except Exception as e:
         print(f"Unable to reach the server: {e}")
         sys.exit(1)
@@ -109,6 +106,7 @@ def register_user(username, password, full_name, email):
     else:
         print(f"Server did not respond.")
         sys.exit(1)
+
 
 @click.command()
 @click.option('--login', is_flag=True, help='Login to the CLI')
@@ -129,6 +127,7 @@ def get_credentials(login, register):
     else:
         print('No option selected!')
         print('Please launch the CLI with either --login or --register')
+
 
 if __name__ == "__main__":
     get_credentials()

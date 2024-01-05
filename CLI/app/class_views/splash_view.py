@@ -7,19 +7,21 @@ from utils.file_manager import FileManager
 from app.widgets.widgets import Widget
 from app.class_views.login_view import HomePage
 
+
 class SplashView(Widget):
-    def __init__(self, stdscr, ui_controller, frame_rate):
+    def __init__(self, stdscr, ui_controller, frame_rate, process_speed):
         super().__init__(stdscr)
         self.ui_controller = ui_controller
         self.file_manager = FileManager()
         self.next_view = None
         self.frame_rate = frame_rate
+        self.process_speed = process_speed
 
     def __str__(self):
-            # Return a string representing the current view
-            return "splash"
+        # Return a string representing the current view
+        return "splash"
 
-# Screen Updating
+    # Screen Updating
     async def draw(self):
         try:
             self.frame_rate[0] = 1
@@ -43,24 +45,28 @@ class SplashView(Widget):
         except Exception as e:
             log_message(f"Error displaying splash screen: {e}", level=logging.ERROR)
             self.next_view = self
-# -----------------------------
-            
-# Input Processing
+
+    # -----------------------------
+
+    # Input Processing
     async def process_input(self):
+        self.process_speed[0] = 1
         user_input = await self.ui_controller.handle_keyboard_input_directly()
         if user_input == 32:
             log_message(f"Splash screen user input: {user_input}", level=logging.DEBUG)
-            self.next_view = HomePage(self.stdscr, self.ui_controller, self.frame_rate)
+            self.next_view = HomePage(self.stdscr, self.ui_controller, self.frame_rate, self.process_speed)
         elif user_input == 27:
             self.next_view = "exit"
-# -----------------------------
 
-# Next View                   
+    # -----------------------------
+
+    # Next View
     def get_next_view(self):
         return self.next_view
-# -----------------------------
-    
-# Cleanup
+
+    # -----------------------------
+
+    # Cleanup
     def cleanup(self):
         pass
 # -----------------------------

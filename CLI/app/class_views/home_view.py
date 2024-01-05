@@ -11,8 +11,9 @@ from utils.task_manager import TaskManager
 from app.widgets.widgets import Widget
 from app.widgets.nav_bar import NavBar
 
+
 class HomePage(Widget):
-    def __init__(self, stdscr, ui_controller, frame_rate):
+    def __init__(self, stdscr, ui_controller, frame_rate, process_speed):
         super().__init__(stdscr)
 
         self.file_manager = FileManager()
@@ -24,6 +25,9 @@ class HomePage(Widget):
         # Frame rate timing
         self.frame_rate = frame_rate
 
+        # Process speed timing
+        self.process_speed = process_speed
+
         # Next view to be displayed
         self.next_view = None
 
@@ -31,19 +35,19 @@ class HomePage(Widget):
         self.online_users = {}
 
         self.nav_bar_items = ["Home", "Friends", "Settings", "Exit"]
-        
+
         self.nav_bar = NavBar(stdscr, self.nav_bar_items)
 
     def __str__(self):
         # Return a string representing the current view
         return "home"
 
-# Screen Updating and Screen Switching        
+    # Screen Updating and Screen Switching
     async def draw(self):
         try:
             self._clear_screen()
 
-            self.frame_rate[0] = 60
+            self.frame_rate[0] = 2
 
             max_y, max_x = self.stdscr.getmaxyx()
             self.update_terminal_size()
@@ -51,7 +55,7 @@ class HomePage(Widget):
             if self.rows < 30 or self.cols < 120:
                 self.print_screen_too_small()
                 return
-            
+
             # Draw the nav bar
             self.nav_bar.draw()
 
@@ -65,11 +69,14 @@ class HomePage(Widget):
 
         except Exception as e:
             log_message(f"Error in draw: {e}", level=logging.ERROR)
-# -----------------------------
-            
-# Input Processing Handler
+
+    # -----------------------------
+
+    # Input Processing Handler
     async def process_input(self):
         try:
+            self.process_speed[0] = 300
+
             user_input = await self.ui_controller.check_and_process_inputs()
 
             if user_input:
@@ -83,23 +90,22 @@ class HomePage(Widget):
 
         except Exception as e:
             log_message(f"Error in process_input: {e}", level=logging.ERROR)
-# -----------------------------
 
-# Next View
+    # -----------------------------
+
+    # Next View
     def get_next_view(self):
         return self.next_view
-# -----------------------------
 
-# Cleanup
+    # -----------------------------
+
+    # Cleanup
     def cleanup(self):
         pass
-# -----------------------------
 
+    # -----------------------------
 
-
-
-
-# Task Specific Input Processing
+    # Task Specific Input Processing
     def process_lobby_input(self, lobby_input):
         try:
             log_message(f"Lobby Input from UI Controller: {lobby_input}", level=logging.DEBUG)
@@ -141,17 +147,15 @@ class HomePage(Widget):
                 if selected_item == "Exit":
                     self.next_view = "exit"
 
-
-
             # We can pass inputs to the nav bar to handle and any other widgets that need to handle input
             self.nav_bar.handle_input(keyboard_input)
 
         except Exception as e:
             log_message(f"Error in process_keyboard_input: {e}", level=logging.ERROR)
-# -----------------------------
 
+    # -----------------------------
 
-# Lobby Task Handling Methods
+    # Lobby Task Handling Methods
     def handle_user_joined(self, user_data):
         try:
             online_users = user_data.get("online_users")
@@ -172,8 +176,7 @@ class HomePage(Widget):
         except Exception as e:
             log_message(f"Error in handle_user_left: {e}", level=logging.ERROR)
 
-
-# Send messages to websocket
+    # Send messages to websocket
     async def send_message(self, message):
         try:
             message = json.dumps(message)
@@ -183,9 +186,10 @@ class HomePage(Widget):
 
         except Exception as e:
             log_message(f"Error in send_message: {e}", level=logging.ERROR)
-# -----------------------------
 
-# View Specific Methods - They should be structed with rows and columns in mind, so that they can be displayed in the terminal
+    # -----------------------------
+
+    # View Specific Methods - They should be structured with rows and columns in mind
     def print_online_users(self, max_y, max_x):
         try:
             # Print the online users
@@ -205,6 +209,3 @@ class HomePage(Widget):
             log_message(f"Error printing online users: {e}", level=logging.ERROR)
 
 # -----------------------------
-
-
-
