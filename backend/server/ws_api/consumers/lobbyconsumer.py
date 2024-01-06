@@ -51,6 +51,17 @@ class LobbyConsumer(AsyncWebsocketConsumer):
         try:
             if self.queue.get(queue_name) is None:
                 self.queue[queue_name] = []
+            if user_id in self.queue[queue_name]:
+                await self.send_info_to_client(
+                    'joined_queue',
+                    {
+                        'time': timezone.now().isoformat(),
+                        'client_id': user_id,
+                        'queue_name': queue_name,
+                        'message': 'Already in queue',
+                    }
+                )
+                return
             self.queue[queue_name].append(user_id)
             await self.send_info_to_client(
                 'joined_queue',
@@ -78,6 +89,17 @@ class LobbyConsumer(AsyncWebsocketConsumer):
                         'message': 'Queue does not exist',
                     }
                 )
+            if user_id not in self.queue[queue_name]:
+                await self.send_info_to_client(
+                    'left_queue',
+                    {
+                        'time': timezone.now().isoformat(),
+                        'client_id': user_id,
+                        'queue_name': queue_name,
+                        'message': 'Not in queue',
+                    }
+                )
+                return
             self.queue[queue_name].remove(user_id)
             await self.send_info_to_client(
                 'left_queue',
