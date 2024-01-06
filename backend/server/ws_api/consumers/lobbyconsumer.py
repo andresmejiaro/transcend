@@ -15,6 +15,7 @@ class LobbyConsumer(AsyncWebsocketConsumer):
 # Class variables shared by all instances
     list_of_admins = {}
     list_of_online_users = {}
+    queue = []
     lobby_name = 'lobby'
 
 # Endpoints and commands (Client -> Server)
