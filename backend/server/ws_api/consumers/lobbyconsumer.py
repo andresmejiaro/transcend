@@ -43,8 +43,8 @@ class LobbyConsumer(AsyncWebsocketConsumer):
     ACCEPT_TOURNAMENT = 'accept_tournament'             # Command to accept a tournament arguments: pass the values as of 'client_id' and 'tournament_id' eg: {'command': 'accept_tournament', 'data': {'client_id': '1', 'tournament_id': '1'}}
     REJECT_TOURNAMENT = 'reject_tournament'             # Command to reject a tournament arguments: pass the values as of 'client_id' and 'tournament_id' eg: {'command': 'reject_tournament', 'data': {'client_id': '1', 'tournament_id': '1'}}
     CANCEL_TOURNAMENT = 'cancel_tournament'             # Command to cancel a tournament arguments: pass the values as of 'client_id' and 'tournament_id' eg: {'command': 'cancel_tournament', 'data': {'client_id': '1', 'tournament_id': '1'}}
-    JOIN_QUEUE = 'join_queue'                           # Command to join the queue arguments: pass the values as of 'client_id' eg: {'command': 'join_queue', 'data': {'client_id': '1'}}
-    LEAVE_QUEUE = 'leave_queue'                         # Command to leave the queue arguments: pass the values as of 'client_id' eg: {'command': 'leave_queue', 'data': {'client_id': '1'}}
+    JOIN_QUEUE = 'join_queue'                           # Command to join the queue arguments: pass the values as of 'client_id' eg: {'command': 'join_queue', 'data': {'queue_name': 'global'}}
+    LEAVE_QUEUE = 'leave_queue'                         # Command to leave the queue arguments: pass the values as of 'client_id' eg: {'command': 'leave_queue', 'data': {'queue_name': 'tournament_26'}}
 # ---------------------------------------
 
     async def join_queue(self, queue_name, user_id):
