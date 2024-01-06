@@ -50,8 +50,8 @@ class LobbyConsumer(AsyncWebsocketConsumer):
     async def join_queue(self, queue_name, user_id):
         try:
             if self.queue.get(queue_name) is None:
-                self.queue[queue_name] = []
-            if user_id in self.queue[queue_name]:
+                LobbyConsumer.queue[queue_name] = []
+            if user_id in LobbyConsumer.queue[queue_name]:
                 await self.send_info_to_client(
                     'joined_queue',
                     {
@@ -62,7 +62,7 @@ class LobbyConsumer(AsyncWebsocketConsumer):
                     }
                 )
                 return
-            self.queue[queue_name].append(user_id)
+            LobbyConsumer.queue[queue_name].append(user_id)
             await self.send_info_to_client(
                 'joined_queue',
                 {
@@ -72,14 +72,14 @@ class LobbyConsumer(AsyncWebsocketConsumer):
                     'message': 'Joined queue successfully',
                 }
             )
-            self.find_opponent(queue_name, user_id)
+            await self.find_opponent(queue_name, user_id)
         except Exception as e:
             print(f'Exception in join_queue {e}')
             await self.disconnect(1000)
             
     async def leave_queue(self, queue_name, user_id):
         try:
-            if self.queue.get(queue_name) is None:
+            if LobbyConsumer.queue.get(queue_name) is None:
                 await self.send_info_to_client(
                     'left_queue',
                     {
@@ -89,7 +89,7 @@ class LobbyConsumer(AsyncWebsocketConsumer):
                         'message': 'Queue does not exist',
                     }
                 )
-            if user_id not in self.queue[queue_name]:
+            if user_id not in LobbyConsumer.queue[queue_name]:
                 await self.send_info_to_client(
                     'left_queue',
                     {
@@ -100,7 +100,7 @@ class LobbyConsumer(AsyncWebsocketConsumer):
                     }
                 )
                 return
-            self.queue[queue_name].remove(user_id)
+            LobbyConsumer.queue[queue_name].remove(user_id)
             await self.send_info_to_client(
                 'left_queue',
                 {
@@ -116,8 +116,10 @@ class LobbyConsumer(AsyncWebsocketConsumer):
 
     async def find_opponent(self, queue_name, user_id):
         try:
-            while len(self.queue[queue_name]) < 2 and user_id in self.queue[queue_name]:
-                await asyncio.sleep(1)
+            # while len(self.queue[queue_name]) < 2 and user_id in self.queue[queue_name]:
+            #     await asyncio.sleep(1)
+            if len(self.queue[queue_name]) != 2:
+                return
             
             if user_id not in self.queue[queue_name]:
                 return
@@ -127,7 +129,7 @@ class LobbyConsumer(AsyncWebsocketConsumer):
                 if opponent_id == user_id:
                     opponent_id = self.queue[queue_name][1]
                     
-                match_id = self.create_match(user_id, opponent_id)
+                match_id = await self.create_match(user_id, opponent_id)
                 
                 await self.send_info_to_client(
                     'found_opponent',
@@ -294,6 +296,10 @@ class LobbyConsumer(AsyncWebsocketConsumer):
                 await self.reject_tournament(data['client_id'], data['tournament_id'])
             elif command == self.CANCEL_TOURNAMENT:
                 await self.cancel_tournament(data['client_id'], data['tournament_id'])
+            elif command == self.JOIN_QUEUE:
+                await self.join_queue(data['queue_name'], self.client_id)
+            elif command == self.LEAVE_QUEUE:
+                await self.leave_queue(data['queue_name'], self.client_id)
             else:
                 await self.send_info_to_client(self.CMD_NOT_FOUND, text_data)
 
@@ -1027,13 +1033,14 @@ class LobbyConsumer(AsyncWebsocketConsumer):
     @database_sync_to_async
     def create_match(self, user_id, opponent_id):
         try:
-            Match = import_string('api.match.models.Match')
+            Match = import_string('api.tournament.models.Match')
             User = import_string('api.userauth.models.CustomUser')
             user = get_object_or_404(User, pk=user_id)
             opponent = get_object_or_404(User, pk=opponent_id)
             match = Match.objects.create(
-                user=user,
-                opponent=opponent,
+                player1=user,
+                player2=opponent,
+                active=True
             )
             match.save()
             return match.id
