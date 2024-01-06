@@ -290,7 +290,7 @@ class GameConsumerAsBridge(AsyncWebsocketConsumer):
                     #ic(f'Cannot start game. Both players for this match are not connected yet.')
 
         elif command == 'keyboard':
-            ic(f'Updating keyboard for client {self.client_id} with data: {data}')
+            # ic(f'Updating keyboard for client {self.client_id} with data: {data}')
             if self.list_of_games[self.match_id]:
                 if self.list_of_games[self.match_id] and self.list_of_games[self.match_id].isAlive() and self.left_player and self.right_player:
                     await self.broadcast_to_group(self.match_id, 'keyup', data)
@@ -336,11 +336,10 @@ class GameConsumerAsBridge(AsyncWebsocketConsumer):
                 self.update_buffer.append(copy.deepcopy(update_data))
                 
                 try:
-
                     if self.checkWorthySend():
                         await self.broadcast_to_group(self.match_id, 'update_buffer', self.update_buffer)
-                        for update_data in self.update_buffer:
-                            print(f'frame: {update_data["frame"]}, x: {update_data["game_update"]["ball"]["position"]["x"]}')
+                        #for update_data in self.update_buffer:
+                        #    print(f'frame: {update_data["frame"]}, x: {update_data["game_update"]["ball"]["position"]["x"]}')
                         self.update_buffer = []
                     await asyncio.sleep(update_interval) # For use with FPS
                     # await asyncio.sleep(0) # For manual control of FPS
@@ -363,42 +362,42 @@ class GameConsumerAsBridge(AsyncWebsocketConsumer):
         await self.disconnect(1000)
 
     def checkWorthySend(self):
-        if(len(self.update_buffer)< 2):
-            return 0
-        if (self.update_buffer[-1]["game_update"]["ball"]["speed"] != 
-                self.update_buffer[-2]["game_update"]["ball"]["speed"]):
+        # if(len(self.update_buffer)< 2):
+        #     return 0
+        #if (self.update_buffer[-1]["game_update"]["ball"]["speed"] != 
+        #        self.update_buffer[-2]["game_update"]["ball"]["speed"]):
+        #    return 1
+        # if (self.update_buffer[-1]["game_update"]["rightPaddle"]["speed"] != 
+        #         self.update_buffer[-2]["game_update"]["rightPaddle"]["speed"]):
+        #     return 1
+        # if (self.update_buffer[-1]["game_update"]["leftPaddle"]["speed"] != 
+        #         self.update_buffer[-2]["game_update"]["leftPaddle"]["speed"]):
+        #     return 1
+        # if (self.update_buffer[-1]["score_update"] != 
+        #         self.update_buffer[-2]["score_update"]):
+        #     return 1
+        if (len(self.update_buffer) > 2):
             return 1
-        if (self.update_buffer[-1]["game_update"]["rightPaddle"]["speed"] != 
-                self.update_buffer[-2]["game_update"]["rightPaddle"]["speed"]):
-            return 1
-        if (self.update_buffer[-1]["game_update"]["leftPaddle"]["speed"] != 
-                self.update_buffer[-2]["game_update"]["leftPaddle"]["speed"]):
-            return 1
-        if (self.update_buffer[-1]["score_update"] != 
-                self.update_buffer[-2]["score_update"]):
-            return 1
-        if (len(self.update_buffer) > 200):
-            return 1
-        return 0
+        return 1
 
 
 
     # Keyboard input processing and formatting
     def on_press(self, key, frame = 0):
-        ic(f'I am player {self.client_id}, my keyboard is {self.keyboard.get(str(self.client_id), {})} and the key is {key}')
+        # ic(f'I am player {self.client_id}, my keyboard is {self.keyboard.get(str(self.client_id), {})} and the key is {key}')
 
         # Format the key to match the format used in the game. Example: up.1 for client 1 pressing the up key
         formatted_key = f'{key}.{self.client_id}'
-        ic(f'Trying to update key {formatted_key} for match {self.match_id}')
+        # ic(f'Trying to update key {formatted_key} for match {self.match_id}')
                 
         asyncio.get_event_loop().call_soon_threadsafe(self.update_key2, formatted_key, True, frame)
 
     def on_release(self, key, frame = 0):
-        ic(f'I am player {self.client_id}, my keyboard is {self.keyboard.get(str(self.client_id), {})} and the key is {key}')
+        # ic(f'I am player {self.client_id}, my keyboard is {self.keyboard.get(str(self.client_id), {})} and the key is {key}')
 
         # Format the key to match the format used in the game. Example: up.342 for client 342 releasing the up key
         formatted_key = f'{key}.{self.client_id}'
-        ic(f'Trying to update key {formatted_key} for match {self.match_id}')
+        # ic(f'Trying to update key {formatted_key} for match {self.match_id}')
         #pressmsg = json.dumps({"key": key,
         #                      "type": "release"})
         #self.broadcast_to_group(self.match_id, 'keyboard_update', pressmsg)

@@ -11,6 +11,7 @@ class Ball(MovingRectangle):
 				   position = position,speed = speed, 
 				   size = size, enclousure = enclousure)
 		self._collide = []
+		self._justCollided = 0
 		
 
 	def checkCollision(self, colider: MovingRectangle) -> bool:
@@ -41,9 +42,13 @@ class Ball(MovingRectangle):
 			colider.getCorners()["yl"] <= self.getCorners()["yh"] and
 			self.getCorners()["yh"] <= colider.getCorners()["yh"]):
 			return True
+		
+		#sticky for just colided.
+		self._justCollided = 0
 		return False
 	
 	def collisionHandler(self, colider: MovingRectangle):
+		self._justCollided = 1
 		#//Calculate the left and right side of the "inscribed square of the intersection"
 		leftInter = max(self.getCorners()["xl"],colider.getCorners()["xl"])
 		rightInter = min(self.getCorners()["xh"],colider.getCorners()["xh"])
@@ -76,7 +81,7 @@ class Ball(MovingRectangle):
 				or self.getPosition()["y"] < self.getEnclousure()["yl"]):
 			self.setSpeed(y = -self.getSpeed()["y"])
 		for ele in self._collide:
-			if (self.checkCollision(ele)):
+			if (self.checkCollision(ele) and self._justCollided != 1):
 				self.collisionHandler(ele)
 		self.setPosition(x = self.getPosition()["x"] + self.getSpeed()["x"],
 				   y = self.getPosition()["y"] + self.getSpeed()["y"])

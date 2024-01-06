@@ -1,5 +1,6 @@
 class Ball extends MovingRectangle {
     #collide
+    #justCollided = 0
 
     constructor(position = { x: 0, y: 0 }, speed = { x: 0, y: 0 }, 
         size = { x: 0, y: 0 }, color = "white") {
@@ -37,11 +38,15 @@ class Ball extends MovingRectangle {
             this.getCorners.yh <= collider.getCorners.yh) {
             return true;
         }
+
+        //sticky for just colided
+        this.#justCollided = 0
         return false;
     }
 
     collisionHandler(colider) {
-        if (this.checkCollision(colider)) {
+        //small diference in the client if is inside of the handler
+        if (this.checkCollision(colider) && this.#justCollided != 1) {
             //Calculate the left and right side of the "inscribed square of the intersection"
             const leftInter = Math.max(this.getCorners.xl, colider.getCorners.xl);
             const rightInter = Math.min(this.getCorners.xh, colider.getCorners.xh);

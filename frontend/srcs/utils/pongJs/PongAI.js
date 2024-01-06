@@ -1,23 +1,18 @@
 class PongAI {
-    #side
     #binds
     #lastCanvas
     #canvas
     #game
     #ballspeed
     #collisionPoint
-    #internalClock
-    #sticky
+    #difficulty
 
-    constructor(player, game, side = 1){
-        this.#side = side;
+    constructor(player, game){
         this.#binds =  player.binds;
-        this.#side = side;
         this.#game = game;
         this.#ballspeed = {x: 3, y: 1}  
         this.#collisionPoint = canvas.height / 2;  
-        this.#internalClock = 0
-        this.#sticky = 10;
+        this.#difficulty = 9;
     }
 
     keyboardUpdate(){
@@ -32,7 +27,6 @@ class PongAI {
         this.updateBallSpeed();
         this.calculateCollisionPoint()
         this.deadCenterMethod();
-        this.#internalClock += 1;
     }
     
 
@@ -51,12 +45,6 @@ class PongAI {
         this.keyUpdater(this.#collisionPoint);
     }
 
-    sineMethod(){
-        let offset = canvas.height/2 * Math.sin(this.#internalClock /60);
-        this.keyUpdater(this.#collisionPoint + offset);
-    }
-
- 
     updateBallSpeed(){
         if (this.#canvas !== undefined && this.#lastCanvas !== undefined){
             this.#ballspeed["x"] = this.#canvas["ball"]["position"]["x"] - 
@@ -69,9 +57,9 @@ class PongAI {
     calculateCollisionPoint(){
         if (this.#ballspeed["x"] > 0){
             let remainingX = this.#canvas["rightPaddle"]["position"]["x"] -
-                + this.#canvas["ball"]["position"]["x"];
+            + this.#canvas["ball"]["position"]["x"];
             let collisionPoint = this.#canvas["ball"]["position"]["y"] +
-                this.#ballspeed["y"] * remainingX /this.#ballspeed["x"];
+            this.#ballspeed["y"] * remainingX /this.#ballspeed["x"];
             if (collisionPoint < 0){
                 collisionPoint = -collisionPoint;
             }
@@ -81,9 +69,11 @@ class PongAI {
                 this.#collisionPoint = canvas.height - collisionPoint % canvas.height;
             else 
                 this.#collisionPoint = collisionPoint % canvas.height;
+            this.#collisionPoint += canvas.height/4 * (10 - this.#difficulty) * Math.sin(game.frame / 17);
             return;
         }
-        this.#collisionPoint = canvas.height / 2;        
+        this.#collisionPoint = canvas.height / 2 + (10 - this.#difficulty)*canvas.height/4 * Math.sin(game.frame / 17 );
+        
     }
     
     
