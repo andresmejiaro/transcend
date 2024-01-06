@@ -8,6 +8,7 @@ from channels.db import database_sync_to_async
 from django.utils import timezone
 # Icecream is a library that allows us to ic variables in a more readable way its is only for debugging and can be removed
 from icecream import ic
+from api.jwt_utils import get_user_id_from_jwt_token
 
 
 class GameConsumerAsBridge(AsyncWebsocketConsumer):
@@ -122,18 +123,33 @@ class GameConsumerAsBridge(AsyncWebsocketConsumer):
 
     # Handles the initial connection
     async def connect(self):
+        from api.userauth.models import CustomUser
         try:
             query_string = self.scope['query_string'].decode('utf-8')
             query_params = parse_qs(query_string)
             self.match_id = self.scope['url_route']['kwargs']['match_id']
-            self.player_1_id = query_params.get('player_1_id', [None])[0]
-            self.player_2_id = query_params.get('player_2_id', [None])[0]
-            self.client_id = query_params.get('client_id', [None])[0]
-            self.scorelimit = query_params.get('scorelimit', [None])[0]
+            await self.get_match(self.match_id)
+
+            if not query_params.get('token'):
+                await self.close()
+            print(f'Token: {query_params.get("token")}')
+            token = query_params['token'][0]
+
+            try:
+                user_id = get_user_id_from_jwt_token(token)
+                self.client_id = str(user_id)
+                print(self.client_id)
+            except Exception as e:
+                await self.close()
+
+
+            self.player_1_id = self.match_object.player1.id
+            self.player_2_id = self.match_object.player2.id
+            # self.scorelimit = query_params.get('scorelimit', [None])[0]
+            self.scorelimit = "11"
 
             ic(f'Connecting to match {self.match_id} with client {self.client_id}. Player 1: {self.player_1_id}. Player 2: {self.player_2_id}')
 
-            await self.get_match(self.match_id)
             await self.get_user(self.client_id)
 
             ic(f'Connected to match {self.match_id} with client {self.client_id}. Player 1: {self.player_1_id}. Player 2: {self.player_2_id}')
