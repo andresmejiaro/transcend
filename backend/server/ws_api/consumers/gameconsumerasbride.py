@@ -143,8 +143,9 @@ class GameConsumerAsBridge(AsyncWebsocketConsumer):
                 await self.close()
 
 
-            self.player_1_id = self.match_object.player1.id
-            self.player_2_id = self.match_object.player2.id
+            self.player_1_id = str(self.match_object.player1.id)
+            self.player_2_id = str(self.match_object.player2.id)
+            print(f'Player 1: {self.player_1_id}, Player 2: {self.player_2_id}, Client: {self.client_id}')
             # self.scorelimit = query_params.get('scorelimit', [None])[0]
             self.scorelimit = "11"
 
