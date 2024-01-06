@@ -38,3 +38,27 @@ class Round(models.Model):
 
     def __str__(self):
         return f"Round {self.round_number} of {self.tournament}"
+    
+class MatchMaking(models.Model):
+    queue = models.ManyToManyField(User, blank=True)
+    queue_name = models.CharField(max_length=100)
+    
+    def add_to_queue(self, user):
+        self.queue.add(user)
+        self.save()
+        
+    def remove_from_queue(self, user):
+        self.queue.remove(user)
+        self.save()
+        
+    def get_queue(self):
+        return self.queue.all()
+    
+    def get_queue_size(self):
+        return self.queue.count()
+    
+    def get_queue_name(self):
+        return self.queue_name
+        
+    def __str__(self):
+        return f"MatchMaking {self.id} - {self.queue_name}"

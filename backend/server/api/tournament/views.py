@@ -1,14 +1,17 @@
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
-from .models import Tournament, Match, Round
+from .models import Tournament, Match, Round, MatchMaking
 from api.userauth.models import CustomUser as User
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from django.db.models import Q
+from api.jwt_utils import get_user_id_from_jwt_token
+
 import json
 import math
 import random
+import time
 
 # Create your views here.
 
@@ -789,3 +792,104 @@ def game_matchmaking(request, pk):
 
     return JsonResponse({'status': 'error', 'message': 'Only GET requests are allowed'}, status=355)
 # -----------------------------
+
+
+# Matchmaking Queue Views
+def create_matchmaking_queue(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            queue_name = data.get('queue_name')
+            
+            if len(queue_name) > 20 or len(queue_name) < 1:
+                return JsonResponse({'status': 'error', 'message': 'Queue name must be between 1 and 20 characters'}, status=400)
+            
+            if queue_name:
+                queue = MatchMaking(queue_name=queue_name)
+                queue.save()
+                
+                response = JsonResponse({'status': 'ok', 'message': 'Matchmaking queue created successfully', 'queue_id': queue.id})
+                response['Access-Control-Allow-Methods'] = 'POST, OPTIONS'
+                response['Access-Control-Allow-Headers'] = 'Content-Type'
+            
+            return response
+
+        except json.JSONDecodeError:
+            return JsonResponse({'status': 'error', 'message': 'Invalid JSON in the request body'}, status=400)
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
+        
+    return JsonResponse({'status': 'error', 'message': 'Only POST requests are allowed'}, status=400)
+
+def matchmaking_queue_list(request):
+    if request.method == 'GET':
+        try:
+            matchmaking_queues = MatchMaking.objects.all()
+            queue_list = []
+            for matchmaking_queue in matchmaking_queues:
+                queue_list.append({
+                    'id': matchmaking_queue.id,
+                    'queue_name': matchmaking_queue.queue_name,
+                    'users_in_queue': [user.id for user in matchmaking_queue.queue.all()],         
+                })
+                
+            return JsonResponse({'status': 'ok', 'data': queue_list})
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
+        
+    return JsonResponse({'status': 'error', 'message': 'Only GET requests are allowed'}, status=400)
+
+def matchmaking_queue_operations(request, pk):
+    matchmaking_instance = get_object_or_404(MatchMaking, pk=pk)
+    if request.method == 'GET':
+        # Retrieve queue details
+        try:
+            queue_detail = {
+                'id': matchmaking_instance.id,
+                'queue_name': matchmaking_instance.queue_name,
+                'users_in_queue': [user.id for user in matchmaking_instance.queue.all()],         
+            }
+            return JsonResponse({'status': 'ok', 'data': queue_detail})
+        
+        except MatchMaking.DoesNotExist:
+            return JsonResponse({'status': 'error', 'message': 'Queue does not exist'}, status=400)
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
+        
+    elif request.method == 'DELETE':
+        # Delete queue
+        try:
+            matchmaking_instance.delete()
+            return JsonResponse({'status': 'ok', 'message': 'Queue deleted successfully'})
+        
+        except MatchMaking.DoesNotExist:
+            return JsonResponse({'status': 'error', 'message': 'Queue does not exist'}, status=400)
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
+        
+    elif request.method == 'PUT':
+        # Update queue
+        try:
+            authorization_header = request.headers.get('Authorization')
+            if authorization_header:
+                try:
+                    _, token = authorization_header.split()
+                    user_id = get_user_id_from_jwt_token(token)
+                    user = User.objects.get(id=user_id)
+                    
+                except Exception as e:
+                    return JsonResponse({'error': str(e)}, status=401)                    
+            
+            matchmaking_instance.add_to_queue(user)
+                    
+            return JsonResponse({'status': 'ok', 'message': 'Queue updated successfully'})
+        
+        except MatchMaking.DoesNotExist:
+            return JsonResponse({'status': 'error', 'message': 'Queue does not exist'}, status=400)
+        except json.JSONDecodeError:
+            return JsonResponse({'status': 'error', 'message': 'Invalid JSON in the request body'}, status=400)
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
+        
+    else:
+        return JsonResponse({'status': 'error', 'message': f'Unsupported HTTP method: {request.method}'}, status=400)
