@@ -2,6 +2,7 @@ from django.db import models
 from api.userauth.models import CustomUser as User
 from django.utils import timezone
 
+
 class Tournament(models.Model):
     name = models.CharField(max_length=100)
     type = models.CharField(max_length=100, blank=True, null=True)
@@ -9,12 +10,14 @@ class Tournament(models.Model):
     end_date = models.DateField(blank=True, null=True)
     round = models.IntegerField(default=0)
     winner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='winner_tournament', blank=True, null=True)
-    tournament_admin = models.ForeignKey(User, on_delete=models.CASCADE, related_name='tournament_admin', blank=True, null=True)
+    tournament_admin = models.ForeignKey(User, on_delete=models.CASCADE, related_name='tournament_admin', blank=True,
+                                         null=True)
     players = models.ManyToManyField(User, blank=True)
     observers = models.ManyToManyField(User, blank=True, related_name='observers')
 
     def __str__(self):
         return f"Tournament {self.id} - {self.name}"
+
 
 class Match(models.Model):
     player1 = models.ForeignKey(User, on_delete=models.CASCADE, related_name='player1')
@@ -31,6 +34,7 @@ class Match(models.Model):
     def __str__(self):
         return f"Match {self.id} - {self.player1} vs {self.player2}"
 
+
 class Round(models.Model):
     tournament = models.ForeignKey(Tournament, on_delete=models.CASCADE, related_name='rounds')
     round_number = models.IntegerField(verbose_name='Round Number', default=0)
@@ -38,27 +42,19 @@ class Round(models.Model):
 
     def __str__(self):
         return f"Round {self.round_number} of {self.tournament}"
-    
+
+
 class MatchMaking(models.Model):
     queue = models.ManyToManyField(User, blank=True)
     queue_name = models.CharField(max_length=100)
-    
+
     def add_to_queue(self, user):
         self.queue.add(user)
         self.save()
-        
+
     def remove_from_queue(self, user):
         self.queue.remove(user)
         self.save()
-        
-    def get_queue(self):
-        return self.queue.all()
-    
-    def get_queue_size(self):
-        return self.queue.count()
-    
-    def get_queue_name(self):
-        return self.queue_name
-        
+
     def __str__(self):
         return f"MatchMaking {self.id} - {self.queue_name}"

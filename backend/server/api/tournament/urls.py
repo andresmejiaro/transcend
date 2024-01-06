@@ -1,7 +1,5 @@
 from django.urls import path
 from .views import *
-
-
 urlpatterns = [
     # Tournament
     path('tournament/create/', tournament_create, name="create"),
@@ -27,13 +25,17 @@ urlpatterns = [
     path('matchmaking/create/', create_matchmaking_queue, name='matchmaking_create'),
     path('matchmaking/', matchmaking_queue_list, name='matchmaking_list'),
     path('matchmaking/<int:pk>/', matchmaking_queue_operations, name='matchmaking_detail'),
-    
+    path('matchmaking/<int:pk>/join/', find_opponent, name='matchmaking_join'),
+    path('matchmaking/<int:queue>/tournament/<int:tournament>/', find_opponent_tournament, name='matchmaking_leave'),
+
     # Matchmaking for Tournaments
     # <int:pk> is the tournament id
     # The first time you call this, it will determine the number of rounds needed per the amount of players
     # It will then create the rounds and matches for each round
     # It will then return the first round of matches
     # You can then call this again to get the next round of matches until there are no more rounds
-    # If you call this again after all rounds have been played, it will return a the winner of the tournament
+    # If you call this again after all rounds have been played, it will return the winner of the tournament
     path('tournament/<int:pk>/matchmaking/', game_matchmaking, name='game_matchmaking'),
 ]
+
+

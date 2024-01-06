@@ -13,6 +13,7 @@ import math
 import random
 import time
 
+
 # Create your views here.
 
 # Tournament CRUD views
@@ -41,14 +42,14 @@ def tournament_create(request):
             if not valid_observers[0]:
                 return valid_observers[1]
 
-
-
-            tournament = Tournament(name=name, type=type, end_date=end_date, round=round, tournament_admin=tournament_admin)
+            tournament = Tournament(name=name, type=type, end_date=end_date, round=round,
+                                    tournament_admin=tournament_admin)
             tournament.save()
             tournament.players.set(valid_players[1])
             tournament.observers.set(valid_observers[1])
 
-            response = JsonResponse({'status': 'ok', 'tournament_id': tournament.id, 'message': 'Tournament created successfully'})
+            response = JsonResponse(
+                {'status': 'ok', 'tournament_id': tournament.id, 'message': 'Tournament created successfully'})
             response['Access-Control-Allow-Methods'] = 'POST, OPTIONS'
             response['Access-Control-Allow-Headers'] = 'Content-Type'
             response['Access-Control-Allow-Origin'] = '*'  # Add this line for broader CORS support
@@ -62,6 +63,7 @@ def tournament_create(request):
 
     return JsonResponse({'status': 'error', 'message': 'Only POST requests are allowed'}, status=400)
 
+
 def validate_users_existence(user_ids):
     valid_users = []
     for user_id in user_ids:
@@ -69,6 +71,7 @@ def validate_users_existence(user_ids):
             return (False, JsonResponse({"status": "error", "message": f"Invalid user ID: {user_id}"}, status=400))
         valid_users.append(User.objects.get(id=user_id))
     return (True, valid_users)
+
 
 def tournament_list(request):
     if request.method == 'GET':
@@ -84,12 +87,13 @@ def tournament_list(request):
                     'round': tournament.round,
                     'winner': tournament.winner.id if tournament.winner else None,
                     'players': [player.id for player in tournament.players.all()],
-                    'observers': [observer.id for observer in tournament.observers.all()],            
+                    'observers': [observer.id for observer in tournament.observers.all()],
                 })
             return JsonResponse({'status': 'ok', 'data': tournament_list})
         except Exception as e:
             return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
     return JsonResponse({'status': 'error', 'message': 'Only GET requests are allowed'}, status=400)
+
 
 def tournament_operations(request, pk):
     tournament_instance = get_object_or_404(Tournament, pk=pk)
@@ -104,7 +108,8 @@ def tournament_operations(request, pk):
                 'start_date': tournament_instance.start_date,
                 'end_date': tournament_instance.end_date,
                 'round': tournament_instance.round,
-                'winner': tournament_instance.winner.id if tournament_instance.winner else None, # 'None' if 'winner' is 'None
+                'winner': tournament_instance.winner.id if tournament_instance.winner else None,
+                # 'None' if 'winner' is 'None
                 'players': [player.id for player in tournament_instance.players.all()],
                 'observers': [observer.id for observer in tournament_instance.observers.all()],
                 'tournament_admin': tournament_instance.tournament_admin_id
@@ -132,7 +137,8 @@ def tournament_operations(request, pk):
                     tournament_instance.save()
                     return JsonResponse({'status': 'ok', 'message': 'Player removed from the tournament successfully'})
                 else:
-                    return JsonResponse({'status': 'error', 'message': 'Player ID to remove is missing from the request'}, status=400)
+                    return JsonResponse(
+                        {'status': 'error', 'message': 'Player ID to remove is missing from the request'}, status=400)
             else:
                 return JsonResponse({'status': 'error', 'message': 'Invalid action in the request'}, status=400)
 
@@ -145,9 +151,8 @@ def tournament_operations(request, pk):
         except Exception as e:
             return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
 
-
     elif request.method == 'PUT':
-    # Update tournament
+        # Update tournament
         try:
             data = json.loads(request.body)
             new_name = data.get('name', None)
@@ -179,7 +184,6 @@ def tournament_operations(request, pk):
             tournament_instance.save()
             return JsonResponse({'status': 'ok', 'message': 'Tournament updated successfully'})
 
-        
         except Tournament.DoesNotExist:
             return JsonResponse({'status': 'error', 'message': 'Tournament does not exist'}, status=400)
         except json.JSONDecodeError:
@@ -189,6 +193,7 @@ def tournament_operations(request, pk):
 
     else:
         return JsonResponse({'status': 'error', 'message': f'Unsupported HTTP method: {request.method}'}, status=400)
+
 
 def tournament_rounds(request, pk):
     if request.method == 'GET':
@@ -210,6 +215,8 @@ def tournament_rounds(request, pk):
 
             return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
     return JsonResponse({'status': 'error', 'message': 'Only GET requests are allowed'}, status=400)
+
+
 # -----------------------------
 
 # Match CRUD views
@@ -229,12 +236,12 @@ def match_create(request):
                 player1 = User.objects.get(id=player1_id)
             except User.DoesNotExist:
                 return JsonResponse({'status': 'error', 'message': 'Invalid player 1 ID'}, status=400)
-            
+
             try:
                 player2 = User.objects.get(id=player2_id)
             except User.DoesNotExist:
                 player2 = None
-            
+
             # if not (player1 and player2):
             #     return JsonResponse({"status": "error", "message": "Invalid players"}, status=400)
             winner_user = None
@@ -242,29 +249,30 @@ def match_create(request):
                 try:
                     winner_user = User.objects.get(id=winner_id)
                     if winner_user not in [player1, player2]:
-                        return JsonResponse({"status": "error", "message": "Winner must be one of the players"}, status=400)
+                        return JsonResponse({"status": "error", "message": "Winner must be one of the players"},
+                                            status=400)
                 except User.DoesNotExist:
                     return JsonResponse({"status": "error", "message": "Winner does not exist"}, status=400)
             if not (player1_score >= 0 and player2_score >= 0):
                 return JsonResponse({"status": "error", "message": "Score must be positive"}, status=400)
             if active not in [True, False]:
                 return JsonResponse({"status": "error", "message": "Active must be a boolean"}, status=400)
-            
+
             match = Match(
                 player1=player1,
                 player2=player2,
                 player1_score=player1_score,
-                player2_score=player2_score, 
+                player2_score=player2_score,
                 winner=winner_user,
-                date_played=timezone.now(), 
+                date_played=timezone.now(),
                 active=active
-                )
+            )
             match.save()
             response = JsonResponse({'status': 'ok', 'message': 'Match created successfully', 'match_id': match.id})
             response['Access-Control-Allow-Methods'] = 'POST, OPTIONS'
             response['Access-Control-Allow-Headers'] = 'Content-Type'
             return response
-        
+
         except json.JSONDecodeError:
             return JsonResponse({'status': 'error', 'message': 'Invalid JSON in the request body'}, status=400)
         except User.DoesNotExist:
@@ -275,6 +283,7 @@ def match_create(request):
             return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
 
     return JsonResponse({'status': 'error', 'message': 'Only POST requests are allowed'}, status=400)
+
 
 def match_list(request):
     if request.method == 'GET':
@@ -298,8 +307,9 @@ def match_list(request):
             return JsonResponse({'status': 'ok', 'data': match_list})
         except Exception as e:
             return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
-    
+
     return JsonResponse({'status': 'error', 'message': 'Only GET requests are allowed'}, status=400)
+
 
 def match_available(request):
     if request.method == 'GET':
@@ -309,12 +319,13 @@ def match_available(request):
             for match in matches:
                 if match.player2 is None:
                     return JsonResponse({'status': 'ok', 'id': match.id})
-                
+
             return JsonResponse({'status': 'ok', 'data': None})
         except Exception as e:
             return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
-    
+
     return JsonResponse({'status': 'error', 'message': 'Only GET requests are allowed'}, status=400)
+
 
 def match_operations(request, pk):
     match_instance = get_object_or_404(Match, pk=pk)
@@ -374,7 +385,8 @@ def match_operations(request, pk):
                 if winner_id is not None:
                     winner_user = User.objects.get(id=winner_id)
                     if winner_user not in [match_instance.player1, match_instance.player2]:
-                        return JsonResponse({"status": "error", "message": "Winner must be one of the players"}, status=400)
+                        return JsonResponse({"status": "error", "message": "Winner must be one of the players"},
+                                            status=400)
                     match_instance.winner = winner_user
                 else:
                     match_instance.winner = None
@@ -395,6 +407,8 @@ def match_operations(request, pk):
             return JsonResponse({'status': 'error', 'message': 'Match does not exist'}, status=400)
         except Exception as e:
             return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
+
+
 # -----------------------------
 
 # Round CRUD views
@@ -437,6 +451,7 @@ def round_create(request):
 
     return JsonResponse({'status': 'error', 'message': 'Only POST requests are allowed'}, status=400)
 
+
 def round_list(request):
     if request.method == 'GET':
         try:
@@ -447,12 +462,13 @@ def round_list(request):
                     'id': round.id,
                     'tournament': round.tournament.id,
                     'round_number': round.round_number,
-                    'matches': [match.id for match in round.matches.all()]                
+                    'matches': [match.id for match in round.matches.all()]
                 })
             return JsonResponse({'status': 'ok', 'data': round_list})
         except Exception as e:
             return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
     return JsonResponse({'status': 'error', 'message': 'Only GET requests are allowed'}, status=400)
+
 
 def round_operations(request, pk):
     round_instance = get_object_or_404(Round, pk=pk)
@@ -514,6 +530,8 @@ def round_operations(request, pk):
 
     else:
         return JsonResponse({'status': 'error', 'message': f'Unsupported HTTP method: {request.method}'}, status=400)
+
+
 # -----------------------------
 
 # User CRUD views
@@ -551,6 +569,7 @@ def user_create(request):
 
     return JsonResponse({'status': 'error', 'message': 'Only POST requests are allowed'}, status=400)
 
+
 def user_list(request):
     if request.method == 'GET':
         try:
@@ -571,6 +590,7 @@ def user_list(request):
         except Exception as e:
             return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
     return JsonResponse({'status': 'error', 'message': 'Only GET requests are allowed'}, status=400)
+
 
 def user_operations(request, pk):
     user = get_object_or_404(User, pk=pk)
@@ -630,6 +650,7 @@ def user_operations(request, pk):
     else:
         return JsonResponse({'status': 'error', 'message': f'Unsupported HTTP method: {request.method}'}, status=400)
 
+
 def user_all_matches(request, pk):
     if request.method == 'GET':
         try:
@@ -646,13 +667,14 @@ def user_all_matches(request, pk):
                     'winner': match.winner.id if match.winner else None,
                     'date_played': match.date_played,
                     'active': match.active
-                    })
+                })
             return JsonResponse({'status': 'ok', 'data': match_list})
         except User.DoesNotExist:
             return JsonResponse({'status': 'error', 'message': 'User does not exist'}, status=400)
         except Exception as e:
             return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
     return JsonResponse({'status': 'error', 'message': 'Only GET requests are allowed'}, status=400)
+
 
 def user_all_tournaments(request, pk):
     if request.method == 'GET':
@@ -668,7 +690,7 @@ def user_all_tournaments(request, pk):
                     'end_date': tournament.end_date,
                     'round': tournament.round,
                     'players': [player.id for player in tournament.players.all()],
-                    'observers': [observer.id for observer in tournament.observers.all()],            
+                    'observers': [observer.id for observer in tournament.observers.all()],
                 })
             return JsonResponse({'status': 'ok', 'data': tournament_list})
         except User.DoesNotExist:
@@ -676,6 +698,8 @@ def user_all_tournaments(request, pk):
         except Exception as e:
             return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
     return JsonResponse({'status': 'error', 'message': 'Only GET requests are allowed'}, status=400)
+
+
 # -----------------------------
 
 # Tournament Matchmaking
@@ -701,19 +725,22 @@ def create_matches(sorted_players):
             date_played=timezone.now(),
             active=True
         )
-        
+
         match.save()
         matches.append(match)
 
     return matches
+
 
 def create_round(tournament, matches):
     new_round = Round(tournament=tournament, round_number=tournament.round + 1)
     new_round.save()
     new_round.matches.set(matches)
 
+
 def calculate_rounds(num_players):
     return math.ceil(math.log2(num_players))
+
 
 def calculate_player_score(player, tournament=None):
     if not tournament:
@@ -756,7 +783,7 @@ def game_matchmaking(request, pk):
                 return JsonResponse({'status': 'ok', 'message': f'Tournament winner is {winner.username}'})
 
             sorted_players = players.order_by('id')
-            
+
             if sit_out_player:
                 sorted_players = [player for player in sorted_players if player != sit_out_player]
             print(sit_out_player)
@@ -776,14 +803,15 @@ def game_matchmaking(request, pk):
             tournament.save()
 
             # Prepare the response with match details
-            match_list = [{'match_id': match.id, 'total_rounds': num_rounds, 'player1_id': match.player1.id, 'player2_id': match.player2.id} for match in matches]
+            match_list = [{'match_id': match.id, 'total_rounds': num_rounds, 'player1_id': match.player1.id,
+                           'player2_id': match.player2.id} for match in matches]
 
             return JsonResponse({
                 'status': 'ok', 'message': 'Matchmaking successful',
                 'sit_out_player': sit_out_player.id if sit_out_player else None,
                 'matches': match_list,
                 'total_rounds': num_rounds,
-                })
+            })
 
         except Tournament.DoesNotExist:
             return JsonResponse({'status': 'error', 'message': 'Tournament does not exist'}, status=377)
@@ -791,6 +819,8 @@ def game_matchmaking(request, pk):
             return JsonResponse({'status': 'error', 'message': str(e)}, status=366)
 
     return JsonResponse({'status': 'error', 'message': 'Only GET requests are allowed'}, status=355)
+
+
 # -----------------------------
 
 
@@ -800,26 +830,29 @@ def create_matchmaking_queue(request):
         try:
             data = json.loads(request.body)
             queue_name = data.get('queue_name')
-            
+
             if len(queue_name) > 20 or len(queue_name) < 1:
-                return JsonResponse({'status': 'error', 'message': 'Queue name must be between 1 and 20 characters'}, status=400)
-            
+                return JsonResponse({'status': 'error', 'message': 'Queue name must be between 1 and 20 characters'},
+                                    status=400)
+
             if queue_name:
                 queue = MatchMaking(queue_name=queue_name)
                 queue.save()
-                
-                response = JsonResponse({'status': 'ok', 'message': 'Matchmaking queue created successfully', 'queue_id': queue.id})
+
+                response = JsonResponse(
+                    {'status': 'ok', 'message': 'Matchmaking queue created successfully', 'queue_id': queue.id})
                 response['Access-Control-Allow-Methods'] = 'POST, OPTIONS'
                 response['Access-Control-Allow-Headers'] = 'Content-Type'
-            
+
             return response
 
         except json.JSONDecodeError:
             return JsonResponse({'status': 'error', 'message': 'Invalid JSON in the request body'}, status=400)
         except Exception as e:
             return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
-        
+
     return JsonResponse({'status': 'error', 'message': 'Only POST requests are allowed'}, status=400)
+
 
 def matchmaking_queue_list(request):
     if request.method == 'GET':
@@ -830,14 +863,15 @@ def matchmaking_queue_list(request):
                 queue_list.append({
                     'id': matchmaking_queue.id,
                     'queue_name': matchmaking_queue.queue_name,
-                    'users_in_queue': [user.id for user in matchmaking_queue.queue.all()],         
+                    'users_in_queue': [user.id for user in matchmaking_queue.queue.all()],
                 })
-                
+
             return JsonResponse({'status': 'ok', 'data': queue_list})
         except Exception as e:
             return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
-        
+
     return JsonResponse({'status': 'error', 'message': 'Only GET requests are allowed'}, status=400)
+
 
 def matchmaking_queue_operations(request, pk):
     matchmaking_instance = get_object_or_404(MatchMaking, pk=pk)
@@ -847,28 +881,56 @@ def matchmaking_queue_operations(request, pk):
             queue_detail = {
                 'id': matchmaking_instance.id,
                 'queue_name': matchmaking_instance.queue_name,
-                'users_in_queue': [user.id for user in matchmaking_instance.queue.all()],         
+                'users_in_queue': [user.id for user in matchmaking_instance.queue.all()],
             }
             return JsonResponse({'status': 'ok', 'data': queue_detail})
-        
+
         except MatchMaking.DoesNotExist:
             return JsonResponse({'status': 'error', 'message': 'Queue does not exist'}, status=400)
         except Exception as e:
             return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
-        
+
     elif request.method == 'DELETE':
         # Delete queue
         try:
             matchmaking_instance.delete()
             return JsonResponse({'status': 'ok', 'message': 'Queue deleted successfully'})
-        
+
         except MatchMaking.DoesNotExist:
             return JsonResponse({'status': 'error', 'message': 'Queue does not exist'}, status=400)
         except Exception as e:
             return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
-        
+
     elif request.method == 'PUT':
         # Update queue
+        try:
+            data = json.loads(request.body)
+            new_queue_name = data.get('queue_name')
+
+            if new_queue_name:
+                matchmaking_instance.queue_name = new_queue_name
+            else:
+                return JsonResponse({'status': 'error', 'message': 'Queue name is missing'}, status=400)
+            matchmaking_instance.save()
+
+            return JsonResponse({'status': 'ok', 'message': 'Queue updated successfully'})
+
+        except MatchMaking.DoesNotExist:
+            return JsonResponse({'status': 'error', 'message': 'Queue does not exist'}, status=400)
+        except json.JSONDecodeError:
+            return JsonResponse({'status': 'error', 'message': 'Invalid JSON in the request body'}, status=400)
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
+
+    else:
+        return JsonResponse({'status': 'error', 'message': f'Unsupported HTTP method: {request.method}'}, status=400)
+
+
+def find_opponent(request, pk):
+    matchmaking_instance = get_object_or_404(MatchMaking, pk=pk)
+    start_request_time = time.time()
+    if request.method == 'GET':
+        # Retrieve queue details
         try:
             authorization_header = request.headers.get('Authorization')
             if authorization_header:
@@ -876,20 +938,77 @@ def matchmaking_queue_operations(request, pk):
                     _, token = authorization_header.split()
                     user_id = get_user_id_from_jwt_token(token)
                     user = User.objects.get(id=user_id)
-                    
+                    matchmaking_instance.add_to_queue(user)
+
                 except Exception as e:
-                    return JsonResponse({'error': str(e)}, status=401)                    
-            
-            matchmaking_instance.add_to_queue(user)
-                    
-            return JsonResponse({'status': 'ok', 'message': 'Queue updated successfully'})
-        
+                    return JsonResponse({'error': str(e)}, status=401)
+
+                while True:
+                    # Find queue size
+                    queue_members = matchmaking_instance.queue.all()
+                    opponent = random.choice(queue_members)
+                    if opponent != user:
+                        break
+                    if time.time() - start_request_time > 60:
+                        matchmaking_instance.remove_from_queue(user)
+                        return JsonResponse({'status': 'error', 'message': 'No opponent found'}, status=400)
+                    time.sleep(5)
+
+                matchmaking_instance.remove_from_queue(user)
+
+                return JsonResponse({'status': 'ok', 'data': opponent.id}, status=200)
+
         except MatchMaking.DoesNotExist:
             return JsonResponse({'status': 'error', 'message': 'Queue does not exist'}, status=400)
-        except json.JSONDecodeError:
-            return JsonResponse({'status': 'error', 'message': 'Invalid JSON in the request body'}, status=400)
         except Exception as e:
             return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
-        
+
+    else:
+        return JsonResponse({'status': 'error', 'message': f'Unsupported HTTP method: {request.method}'}, status=400)
+
+
+def find_opponent_tournament(request, queue, tournament):
+    matchmaking_instance = get_object_or_404(MatchMaking, pk=queue)
+    tournament_instance = get_object_or_404(Tournament, pk=tournament)
+    start_request_time = time.time()
+    if request.method == 'GET':
+        # Retrieve queue details
+        try:
+            authorization_header = request.headers.get('Authorization')
+            if authorization_header:
+                try:
+                    _, token = authorization_header.split()
+                    user_id = get_user_id_from_jwt_token(token)
+                    user = User.objects.get(id=user_id)
+
+                except Exception as e:
+                    return JsonResponse({'error': str(e)}, status=401)
+
+                # Get users from Tournament and add them to the queue
+                for player in tournament_instance.players.all():
+                    matchmaking_instance.add_to_queue(player)
+
+                while True:
+                    # Find queue size
+                    queue_members = matchmaking_instance.queue.all()
+                    opponent = random.choice(queue_members)
+                    if opponent != user:
+                        break
+                    if time.time() - start_request_time > 60:
+                        return JsonResponse({'status': 'error', 'message': 'No opponent found'}, status=400)
+                    time.sleep(5)
+
+                matchmaking_instance.remove_from_queue(user)
+                tournament_instance.players.add(opponent)
+                tournament_instance.save()
+                return JsonResponse({'status': 'ok', 'data': opponent.id}, status=200)
+
+        except MatchMaking.DoesNotExist:
+            return JsonResponse({'status': 'error', 'message': 'Queue does not exist'}, status=400)
+        except Tournament.DoesNotExist:
+            return JsonResponse({'status': 'error', 'message': 'Tournament does not exist'}, status=400)
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
+
     else:
         return JsonResponse({'status': 'error', 'message': f'Unsupported HTTP method: {request.method}'}, status=400)
