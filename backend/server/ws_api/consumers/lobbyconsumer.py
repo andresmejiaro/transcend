@@ -1,5 +1,6 @@
 from channels.generic.websocket import AsyncWebsocketConsumer
 import json                                                 # Used to encode and decode JSON data
+import asyncio
 from urllib.parse import parse_qs                           # Used to parse the query string
 from channels.db import database_sync_to_async              # Used to make database calls asynchronously
 from django.shortcuts import get_object_or_404              # Used to get an object from the database
@@ -15,7 +16,7 @@ class LobbyConsumer(AsyncWebsocketConsumer):
 # Class variables shared by all instances
     list_of_admins = {}
     list_of_online_users = {}
-    queue = []
+    queue = {}
     lobby_name = 'lobby'
 
 # Endpoints and commands (Client -> Server)
@@ -42,8 +43,104 @@ class LobbyConsumer(AsyncWebsocketConsumer):
     ACCEPT_TOURNAMENT = 'accept_tournament'             # Command to accept a tournament arguments: pass the values as of 'client_id' and 'tournament_id' eg: {'command': 'accept_tournament', 'data': {'client_id': '1', 'tournament_id': '1'}}
     REJECT_TOURNAMENT = 'reject_tournament'             # Command to reject a tournament arguments: pass the values as of 'client_id' and 'tournament_id' eg: {'command': 'reject_tournament', 'data': {'client_id': '1', 'tournament_id': '1'}}
     CANCEL_TOURNAMENT = 'cancel_tournament'             # Command to cancel a tournament arguments: pass the values as of 'client_id' and 'tournament_id' eg: {'command': 'cancel_tournament', 'data': {'client_id': '1', 'tournament_id': '1'}}
+    JOIN_QUEUE = 'join_queue'                           # Command to join the queue arguments: pass the values as of 'client_id' eg: {'command': 'join_queue', 'data': {'client_id': '1'}}
+    LEAVE_QUEUE = 'leave_queue'                         # Command to leave the queue arguments: pass the values as of 'client_id' eg: {'command': 'leave_queue', 'data': {'client_id': '1'}}
 # ---------------------------------------
 
+    async def join_queue(self, queue_name, user_id):
+        try:
+            if self.queue.get(queue_name) is None:
+                self.queue[queue_name] = []
+            self.queue[queue_name].append(user_id)
+            await self.send_info_to_client(
+                'joined_queue',
+                {
+                    'time': timezone.now().isoformat(),
+                    'client_id': user_id,
+                    'queue_name': queue_name,
+                    'message': 'Joined queue successfully',
+                }
+            )
+            self.find_opponent(queue_name, user_id)
+        except Exception as e:
+            print(f'Exception in join_queue {e}')
+            await self.disconnect(1000)
+            
+    async def leave_queue(self, queue_name, user_id):
+        try:
+            if self.queue.get(queue_name) is None:
+                await self.send_info_to_client(
+                    'left_queue',
+                    {
+                        'time': timezone.now().isoformat(),
+                        'client_id': user_id,
+                        'queue_name': queue_name,
+                        'message': 'Queue does not exist',
+                    }
+                )
+            self.queue[queue_name].remove(user_id)
+            await self.send_info_to_client(
+                'left_queue',
+                {
+                    'time': timezone.now().isoformat(),
+                    'client_id': user_id,
+                    'queue_name': queue_name,
+                    'message': 'Left queue successfully',
+                }
+            )
+        except Exception as e:
+            print(f'Exception in leave_queue {e}')
+            await self.disconnect(1000)
+
+    async def find_opponent(self, queue_name, user_id):
+        try:
+            while len(self.queue[queue_name]) < 2 and user_id in self.queue[queue_name]:
+                await asyncio.sleep(1)
+            
+            if user_id not in self.queue[queue_name]:
+                return
+                
+            if len(self.queue[queue_name]) >= 2:
+                opponent_id = self.queue[queue_name][0]
+                if opponent_id == user_id:
+                    opponent_id = self.queue[queue_name][1]
+                    
+                match_id = self.create_match(user_id, opponent_id)
+                
+                await self.send_info_to_client(
+                    'found_opponent',
+                    {
+                        'time': timezone.now().isoformat(),
+                        'client_id': user_id,
+                        'opponent_id': opponent_id,
+                        'match_id': match_id,
+                        'message': 'Found opponent successfully',
+                    }
+                )
+                await self.message_another_player(
+                    opponent_id,
+                    'found_opponent',
+                    {
+                        'time': timezone.now().isoformat(),
+                        'client_id': opponent_id,
+                        'opponent_id': user_id,
+                        'match_id': match_id,
+                        'message': 'Found opponent successfully',
+                    }
+                )
+                await self.leave_queue(queue_name, user_id)
+                await self.leave_queue(queue_name, opponent_id)
+                    
+                
+        except Exception as e:
+            print(f'Exception in find_opponent {e}')
+            await self.disconnect(1000)
+            
+            
+            
+            
+            
+            
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.client_id = None
@@ -904,6 +1001,25 @@ class LobbyConsumer(AsyncWebsocketConsumer):
             print(e)
             print(f'Could not find user with id {pk}')
             return None
+
+    @database_sync_to_async
+    def create_match(self, user_id, opponent_id):
+        try:
+            Match = import_string('api.match.models.Match')
+            User = import_string('api.userauth.models.CustomUser')
+            user = get_object_or_404(User, pk=user_id)
+            opponent = get_object_or_404(User, pk=opponent_id)
+            match = Match.objects.create(
+                user=user,
+                opponent=opponent,
+            )
+            match.save()
+            return match.id
+        except Exception as e:
+            print(f'Exception in create_match {e}')
+            return None
+
+
 # ---------------------------------------
 
 
