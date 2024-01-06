@@ -11,6 +11,7 @@ class CustomUser(AbstractUser):
     email = models.EmailField(unique=True, null=False, blank=False)
     fullname = models.CharField(max_length=100, null=False, blank=False)
     avatar = models.ImageField(upload_to='avatars/', null=True, blank=True)
+    login = models.CharField(max_length=100, null=True, blank=True, default=None)
 
     def update_avatar(self, new_avatar):
         if self.avatar:
@@ -95,3 +96,13 @@ class CustomUser(AbstractUser):
 
     def __str__(self):
         return f'{self.id} {self.username}'
+    
+
+
+class Friendship(models.Model):
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name='user_friends')
+    friends = models.ManyToManyField(CustomUser, related_name='friends', blank=True)
+    blocked_users = models.ManyToManyField(CustomUser, related_name='blocked_users', blank=True)
+
+    def __str__(self):
+        return f'{self.user.id} {self.user.username}\'s friends'

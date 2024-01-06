@@ -38,7 +38,7 @@
             const tournamentId = document.getElementById('tournamentId').value;
             const clientId = document.getElementById('clientId').value;
 
-            const uri = `ws://localhost:8001/ws/tournament/${tournamentId}/?client_id=${clientId}`;
+            const uri = `${window.DAPHNE_BASE_URL}/ws/tournament/${tournamentId}/?client_id=${clientId}`;
 
             websocket = new WebSocket(uri);
 

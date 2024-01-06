@@ -51,7 +51,6 @@ const handleModalForNotifications = async () => {
 // const btn = document.getElementById("notificationsModalInvite");
 document.getElementById("notificationsModal").addEventListener("shown.bs.modal", function (event) {
     event.preventDefault();
-    console.log("HASHDHASHHD")
 	  handleModalForNotifications();
 });
 

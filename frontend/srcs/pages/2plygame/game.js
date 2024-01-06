@@ -28,7 +28,7 @@ textures.paddleRed.src = './srcs/assets/game/purple_paddle.png';
 // Function to start the game
 function startGame(matchId, player1Id, player2Id, clientId, scoreLimit) {
   return new Promise((resolve, reject) => {
-    const uri = `ws://localhost:8001/ws/pong/${matchId}/?player_1_id=${player1Id}&player_2_id=${player2Id}&client_id=${clientId}&scorelimit=${scoreLimit}`;
+    const uri = `${window.DAPHNE_BASE_URL}/ws/pong/${matchId}/?player_1_id=${player1Id}&player_2_id=${player2Id}&client_id=${clientId}&scorelimit=${scoreLimit}`;
 
     ws = new WebSocket(uri);
 

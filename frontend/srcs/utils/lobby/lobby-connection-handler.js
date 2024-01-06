@@ -21,7 +21,7 @@ const sendWebSocketMessage = (messageType, payload) => {
 
 
 const connectWebSocket = async () => {
-  const userId = await getUserId();
+  const authToken = sessionStorage.getItem("jwt");
 
   if (lobbySocket && lobbySocket.readyState === WebSocket.OPEN) {
     console.log("WebSocket is already connected.");
@@ -30,7 +30,7 @@ const connectWebSocket = async () => {
 
   return new Promise((resolve, reject) => {
     lobbySocket = new WebSocket(
-      `ws://localhost:8001/ws/lobby2/?client_id=${userId}`
+      `${window.DAPHNE_BASE_URL}/ws/lobby/?token=${authToken}`
     );
 
     lobbySocket.addEventListener("open", (event) => {

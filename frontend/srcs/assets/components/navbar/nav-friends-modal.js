@@ -45,7 +45,7 @@ const handleBackButtonClick = async () => {
 
 	const btn = document.getElementById("back-modal-btn");
 
-  console.log(btn)
+
 	// if (btn) {
 	// 	btn.removeEventListener("click", handleBackButtonClick);
 	// 	btn.addEventListener("click", handleBackButtonClick);

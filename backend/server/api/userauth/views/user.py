@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import JsonResponse
-from ..models import CustomUser
+from ..models import CustomUser, Friendship
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
@@ -14,12 +14,23 @@ import os
 from django.utils.text import slugify
 from urllib import request as urllib_request
 from django.views.decorators.csrf import requires_csrf_token
+from api.jwt_utils import get_user_id_from_jwt_token
+
 
 @requires_csrf_token
-def info_me_view(request, username):
+def info_me_view(request):
     if request.method == 'GET':
         try:
-            user = CustomUser.objects.get(username=username)
+            authorization_header = request.headers.get('Authorization')
+            if authorization_header:
+                try:
+                    _, token = authorization_header.split()
+                    user_id = get_user_id_from_jwt_token(token)
+                    print(user_id)
+                    user = CustomUser.objects.get(id=user_id)
+                except Exception as e:
+                    return JsonResponse({'error': str(e)}, status=401)
+
             user_data_response = {
                 'username': user.username,
                 'fullname': user.fullname,
@@ -33,6 +44,7 @@ def info_me_view(request, username):
             return JsonResponse({'error': str(e)}, status=401)
 
     return JsonResponse({'error': 'Only GET requests are allowed'}, status=400)
+
 
 @requires_csrf_token
 def info_me_id_view(request, user_id):
@@ -54,9 +66,17 @@ def info_me_id_view(request, user_id):
 
 
 @requires_csrf_token
-def update_avatar_view(request, username):
+def update_avatar_view(request):
     try:
-        user = CustomUser.objects.get(username=username)
+        authorization_header = request.headers.get('Authorization')
+        if authorization_header:
+            try:
+                _, token = authorization_header.split()
+                user_id = get_user_id_from_jwt_token(token)
+                print(user_id)
+                user = CustomUser.objects.get(id=user_id)
+            except Exception as e:
+                return JsonResponse({'error': str(e)}, status=401)
         if request.method == 'POST':
             if 'avatar' in request.FILES:
                 avatar = request.FILES['avatar']
@@ -115,12 +135,14 @@ def update_avatar_view(request, username):
     except Exception as e:
         return JsonResponse({'err': str(e)}, status=400)
 
+
 def get_user_from_username(username):
-	try:
-		user = CustomUser.objects.get(username=username)
-		return user
-	except CustomUser.DoesNotExist:
-		return None
+    try:
+        user = CustomUser.objects.get(username=username)
+        return user
+    except CustomUser.DoesNotExist:
+        return None
+
 
 @requires_csrf_token
 def get_user_id(request, username):
@@ -140,6 +162,7 @@ def get_user_id(request, username):
 
     return JsonResponse({'message': 'Only GET requests are allowed'}, status=400)
 
+
 @csrf_exempt
 def user_exists(request, username):
     try:
@@ -147,6 +170,7 @@ def user_exists(request, username):
         return JsonResponse({"status": "exists"})
     except CustomUser.DoesNotExist:
         return JsonResponse({"error": "no user found"})
+
 
 @csrf_exempt
 def user_intra_exists(request, username, fullname):
@@ -156,3 +180,37 @@ def user_intra_exists(request, username, fullname):
     except CustomUser.DoesNotExist:
         return JsonResponse({"error": "no user found"})
 
+
+@requires_csrf_token
+def user_friends_list(request):
+    if request.method == 'GET':
+        try:
+            authorization_header = request.headers.get('Authorization')
+            if authorization_header:
+                try:
+                    _, token = authorization_header.split()
+                    user_id = get_user_id_from_jwt_token(token)
+                    user = CustomUser.objects.get(id=user_id)
+                except Exception as e:
+                    return JsonResponse({'error': str(e)}, status=401)
+
+            friendship = Friendship.objects.get(user=user)
+            friends = friendship.friends.all()
+            friend_list = []
+
+            user_id_before_loop = user.id
+
+            for friendship in friends:
+                if friendship.id != user_id_before_loop:
+                    friend_list.append({
+                        'id': friendship.id,
+                        'username': friendship.username,
+                    })
+
+            return JsonResponse({'status': 'ok', 'data': friend_list})
+
+        except Friendship.DoesNotExist:
+            return JsonResponse({'status': 'error', 'message': 'User not found or has no friends'})
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
+    return JsonResponse({'status': 'error', 'message': 'Only GET requests are allowed'}, status=400)

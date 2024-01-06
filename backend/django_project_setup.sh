@@ -22,12 +22,11 @@ pip install qrcode
 pip install channels
 pip install channels-redis
 pip install icecream
+pip install requests
 
 pip freeze > requirements.txt
 
 pip install --upgrade pip
-
-pip install -r requirements.txt
 
 # Check if the project directory already exists
 if [ ! -d "$PROJECT_DIR" ]; then
@@ -42,7 +41,6 @@ cd server
 python3 manage.py makemigrations api
 python3 manage.py makemigrations tournament
 python3 manage.py makemigrations userauth
-python3 manage.py makemigrations friends
 python3 manage.py makemigrations ws_api
 python3 manage.py migrate
 
