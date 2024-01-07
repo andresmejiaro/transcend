@@ -71,6 +71,24 @@ class Game:
 			self._rightPaddle.draw()
 			self._rightPaddle.updatePosition()
 		self._frame += 1
+  
+	def pointLoop2(self):
+		self._ball.draw()
+		ballState = self._ball.updatePosition()
+		if ballState == 1:
+			self._leftPlayer.goal()
+			self.reportScore()
+			self.resetPosition()
+		elif ballState == -1:
+			self._rightPlayer.goal()
+			self.reportScore()
+			self.resetPosition()
+		else:
+			self._leftPaddle.draw()
+			self._leftPaddle.updatePosition()
+			self._rightPaddle.draw()
+			self._rightPaddle.updatePosition()
+		self._frame += 1
 		
 		
 
