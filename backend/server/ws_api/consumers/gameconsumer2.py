@@ -120,7 +120,7 @@ class PongConsumer(AsyncWebsocketConsumer):
         match_object.save()
     
     async def disconnect(self, close_code):
-        self.discard_channels()
+        await self.discard_channels()
         if self.client_id in PongConsumer.list_of_players:
             del PongConsumer.list_of_players[self.client_id]
         if self.client_id == self.player_1_id or self.client_id == self.player_2_id:
@@ -152,16 +152,15 @@ class PongConsumer(AsyncWebsocketConsumer):
                 user_id = get_user_id_from_jwt_token(token)
                 self.client_id = str(user_id)
                 print(f'Client ID: {self.client_id}')
-                self.channel_layer.group_add(f"{self.client_id}", self.channel_name)
+                await self.channel_layer.group_add(f"{self.match_id}.client_id", self.channel_name)
+                await self.channel_layer.group_add(f"{self.match_id}", self.channel_name)
                 await self.get_match(self.match_id)
             except Exception as e:
                 await self.close()
                 print(e)
                 
             await self.accept()
-            
-            await self.set_channels()
-            
+                        
             print(f'List of Players: {PongConsumer.list_of_players}')
             
             await self.broadcast_to_group(f"{self.match_id}", "message", {
@@ -181,11 +180,6 @@ class PongConsumer(AsyncWebsocketConsumer):
 
 # Messaging Handling Methods
     async def broadcast_to_group(self, group_name, command, data):
-        #print(f'Channel Broadcasting {command} to group {group_name}')
-
-        # Send message to group, this utilizes channel_layer.group_send
-        # channel_layer.group_send: This is a low-level function to send a message directly to a group of channels.
-        # The type key in the message is used to route the message to a consumer. In this case, the consumer is the broadcast function.
         await self.channel_layer.group_send(
             group_name,
             {
@@ -207,6 +201,7 @@ class PongConsumer(AsyncWebsocketConsumer):
                
     async def receive(self, text_data):
         try:
+            asyncio.sleep(0.1)
             data = json.loads(text_data)
             print(f'Received data: {data}')
             if data['command'] == 'keyboard':      # Send the keyboard input to the other player and to the game
@@ -252,13 +247,12 @@ class PongConsumer(AsyncWebsocketConsumer):
     async def start_game(self, data):
         try:
             while PongConsumer.run_game:
-                print('Game running')
-                await asyncio.sleep(set_frame_rate(30))
                 PongConsumer.shared_game.pointLoop2()
                 await self.broadcast_to_group(f"{self.match_id}", "screen_report", {
                     "game_update": self.shared_game.reportScreen(),
                     "score_update": self.shared_game.reportScore(),
                 })
+                await asyncio.sleep(set_frame_rate(30))
         except asyncio.CancelledError:
             print('Game stopped')
         except Exception as e:
@@ -267,18 +261,6 @@ class PongConsumer(AsyncWebsocketConsumer):
 # -----------------------------
 
 # Channel Methods
-    async def set_channels(self):
-        try:
-            print(f'Channel Connected')
-            await self.channel_layer.group_add(
-                f"{self.match_id}",
-                self.channel_name
-            )
-            
-        except Exception as e:
-            print(e)
-            await self.close()
-
     async def discard_channels(self):
         try:
             print(f'Channel Disconnected')
@@ -287,7 +269,7 @@ class PongConsumer(AsyncWebsocketConsumer):
                 self.channel_name
             )
             await self.channel_layer.group_discard(
-                f"{self.client_id}",
+                f"{self.match_id}.client_id",
                 self.channel_name
             )
 
