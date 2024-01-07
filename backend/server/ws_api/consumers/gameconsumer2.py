@@ -20,9 +20,9 @@ def set_frame_rate(fps):
 class PongConsumer(AsyncWebsocketConsumer):
     list_of_players = {}
     shared_game_keyboard = {}
-    shared_game_task = None
-    shared_game = None
-    run_game = False
+    shared_game_task = {}
+    shared_game = {}
+    run_game = {}
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -40,8 +40,8 @@ class PongConsumer(AsyncWebsocketConsumer):
         self.user_object = None
         self.match_id = None
         self.client_id = None
+        PongConsumer.run_game[self.match_id] = False
 
-        
     @database_sync_to_async
     def get_match(self, match_id):
         try:
@@ -75,22 +75,22 @@ class PongConsumer(AsyncWebsocketConsumer):
             
             print(f'Left Player: {self.left_player}, Right Player: {self.right_player}')
             
-            PongConsumer.shared_game_keyboard = {
+            PongConsumer.shared_game_keyboard[self.match_id] = {
                 f'up.{self.player_1_id}': False,
                 f'down.{self.player_1_id}': False,
                 f'up.{self.player_2_id}': False,
                 f'down.{self.player_2_id}': False,
             }
-            print(f'Keyboard Inputs: {self.shared_game_keyboard}')
+            print(f'Keyboard Inputs: {self.shared_game_keyboard[self.match_id]}')
             
-            PongConsumer.shared_game = Game(
-                dictKeyboard=PongConsumer.shared_game_keyboard,
+            PongConsumer.shared_game[self.match_id] = Game(
+                dictKeyboard=PongConsumer.shared_game_keyboard[self.match_id],
                 leftPlayer=self.left_player,        # This is the Player object for the left player for the game
                 rightPlayer=self.right_player,      # This is the Player object for the right player for the game
                 scoreLimit=self.scorelimit,    
             )
             
-            print(f'Game: {PongConsumer.shared_game}')
+            print(f'Game: {PongConsumer.shared_game[self.match_id]}')
                           
         except Match.DoesNotExist:
             print(f"Match with ID {match_id} does not exist.")
@@ -207,10 +207,10 @@ class PongConsumer(AsyncWebsocketConsumer):
             if data['command'] == 'keyboard':      # Send the keyboard input to the other player and to the game
                 await self.keyboard_input(data)
             elif data['command'] == 'start_ball':
-                PongConsumer.run_game = True
-                PongConsumer.shared_game_task = asyncio.create_task(self.start_game(data))
+                PongConsumer.run_game[self.match_id] = True
+                PongConsumer.shared_game_task[self.match_id] = asyncio.create_task(self.start_game(data))
             elif data['command'] == 'stop_ball':
-                PongConsumer.run_game = False
+                PongConsumer.run_game[self.match_id] = False
             elif data['command'] == 'finalize_match':
                 await self.finalize_match(data)
 
@@ -231,12 +231,12 @@ class PongConsumer(AsyncWebsocketConsumer):
 
             if key_status == 'on_press':
                 print(f'Key Pressed: {formatted_key}')
-                PongConsumer.shared_game_keyboard[formatted_key] = True
-                print(f'Game Keyboard Status: {PongConsumer.shared_game_keyboard}')
+                PongConsumer.shared_game_keyboard[self.match_id][formatted_key] = True
+                print(f'Game Keyboard Status: {PongConsumer.shared_game_keyboard[self.match_id]}')
             elif key_status == 'on_release':
                 print(f'Key Released: {formatted_key}')
-                PongConsumer.shared_game_keyboard[formatted_key] = False
-                print(f'Game Keyboard Status: {PongConsumer.shared_game_keyboard}')
+                PongConsumer.shared_game_keyboard[self.match_id][formatted_key] = False
+                print(f'Game Keyboard Status: {PongConsumer.shared_game_keyboard[self.match_id]}')
             else:
                 print(f'Unknown key status: {key_status}, {formatted_key}')
                     
@@ -246,12 +246,12 @@ class PongConsumer(AsyncWebsocketConsumer):
             
     async def start_game(self, data):
         try:
-            while PongConsumer.run_game:
-                PongConsumer.shared_game.pointLoop2()
+            while PongConsumer.run_game[self.match_id] is True:
+                PongConsumer.shared_game[self.match_id].pointLoop2()
                 await self.broadcast_to_group(f"{self.match_id}", "screen_report", {
-                    "game_update": self.shared_game.reportScreen(),
-                    "left_score": self.shared_game._leftPlayer.getScore(),
-                    "right_score": self.shared_game._rightPlayer.getScore(),
+                    "game_update": PongConsumer.shared_game[self.match_id].reportScreen(),
+                    "left_score": PongConsumer.shared_game[self.match_id]._leftPlayer.getScore(),
+                    "right_score": PongConsumer.shared_game[self.match_id]._rightPlayer.getScore(),
                 })
                 await asyncio.sleep(set_frame_rate(30))
         except asyncio.CancelledError:
