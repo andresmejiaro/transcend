@@ -103,8 +103,9 @@
         }
 
         function drawPongGame(data, leftScore, rightScore) {
+            ctx.fillStyle = 'black'; // Set the background color
+            ctx.fillRect(0, 0, gameCanvas.width, gameCanvas.height);
             if (data && data.ball && data.leftPaddle && data.rightPaddle) {
-                ctx.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
                 drawRect(data.ball.position, data.ball.size, ballTexture);
                 drawRect(data.leftPaddle.position, data.leftPaddle.size, leftPaddleTexture);
                 drawRect(data.rightPaddle.position, data.rightPaddle.size, rightPaddleTexture);
@@ -112,6 +113,7 @@
                 console.error('Invalid data format:', data);
             }
             ctx.font = '48px serif';
+            ctx.fillStyle = 'white'; // Set the color for the scores
             ctx.fillText(leftScore, 100, 50);
             ctx.fillText(rightScore, 700, 50);
         }
