@@ -6,8 +6,19 @@ from ws_api.python_pong.Game import Game
 from urllib.parse import parse_qs
 from channels.db import database_sync_to_async
 from django.utils import timezone
+from django.db import transaction
 from api.jwt_utils import get_user_id_from_jwt_token
 
+# Commands:
+# The consumer handles formatting they keys. Client only needs to send the key and key_status.
+# Use start/top ball to start and pause the game.
+# Finalize match is used to finalize the match and update the database Match Object.
+
+# {"command": "keyboard", "key_status": "on_press", "key": "up"}
+# {"command": "keyboard", "key_status": "on_release", "key": "down"}
+# {"command": "start_ball"}
+# {"command": "stop_ball"}
+# {"command": "finalize_match"}
 
 def set_frame_rate(fps):
     if fps < 1 or fps > 60 or type(fps) != int:
@@ -16,11 +27,11 @@ def set_frame_rate(fps):
     return frame_dur
 
 class PongConsumer(AsyncWebsocketConsumer):
-    list_of_players = {}
-    shared_game_keyboard = {}
-    shared_game_task = {}
-    shared_game = {}
-    run_game = {}
+    list_of_players = {}        # Hold the user instances of the players in the match
+    shared_game_keyboard = {}   # Holds the the shared game keyboard to manipulate the game.
+    shared_game_task = {}       # Holds the task for the shared game, in order to cancel it when the game is stopped.
+    shared_game = {}            # Holds the shared game object for the match.
+    run_game = {}               # Boolean to run/pause the game.
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -31,48 +42,45 @@ class PongConsumer(AsyncWebsocketConsumer):
         self.right_player = None    # Holds the Player object for the right player for the game
         self.player_1_id = None     # Holds the ID of the left player for the game
         self.player_2_id = None     # Holds the ID of the right player for the game
-        self.player_1_score = 0
-        self.player_2_score = 0
-        self.update_buffer = []
-        self.match_object = None
-        self.user_object = None
-        self.match_id = None
-        self.client_id = None
-        PongConsumer.run_game[self.match_id] = False
+        self.player_1_score = 0     # Holds the score of the left player for the game
+        self.player_2_score = 0     # Holds the score of the right player for the game
+        self.match_object = None    # Holds the Match object for the game
+        self.match_id = None        # Holds the ID of the match
+        self.client_id = None       # Holds the ID of the client
 
 # Async Database Methods
     @database_sync_to_async
-    def get_match(self, match_id):
+    def load_models(self, match_id):
         try:
             from api.tournament.models import Match
             from api.userauth.models import CustomUser as User
-
-            print(f'Match ID: {match_id}')
+            PongConsumer.run_game[self.match_id] = False
+            
+            print(f'Getting Match: {match_id}, game_run_state: {PongConsumer.run_game[self.match_id]}')
+            
             self.match_object = Match.objects.get(id=match_id)
-            print(f'Match Object: {self.match_object}')
+            print(f'Match Object Found: {self.match_object}')
             self.player_object = User.objects.get(id=self.client_id)
-            print(f'Player Object: {self.player_object}')
+            print(f'Player Object Found: {self.player_object}')
             
             self.player_1_id = str(self.match_object.player1.id)
             self.player_2_id = str(self.match_object.player2.id)
             self.scorelimit = 7
-            
             print(f'Player 1 ID: {self.player_1_id}, Player 2 ID: {self.player_2_id}, score_limit: {self.scorelimit}')
-                
+                            
             PongConsumer.list_of_players[self.client_id] = self
+            print(f'List of Players in all PongConsumer Instances: {PongConsumer.list_of_players}')
+            self.list_of_players[self.player_1_id] = User.objects.get(id=self.player_1_id)
+            self.list_of_players[self.player_2_id] = User.objects.get(id=self.player_2_id)
+            print(f'List of Players in this PongConsumer Instance: {self.list_of_players}')
             
-            print(f'List of Players: {PongConsumer.list_of_players}')
-            
-            if self.client_id == self.player_1_id or self.client_id == self.player_2_id:
-                self.keyboard[self.player_1_id] = {"up": f"up.{self.player_1_id}", "down": f"down.{self.player_1_id}", "left": "xx", "right": "xx"}
-                self.keyboard[self.player_2_id] = {"up": f"up.{self.player_2_id}", "down": f"down.{self.player_2_id}", "left": "xx", "right": "xx"}
-
+            self.keyboard[self.player_1_id] = {"up": f"up.{self.player_1_id}", "down": f"down.{self.player_1_id}", "left": "xx", "right": "xx"}
+            self.keyboard[self.player_2_id] = {"up": f"up.{self.player_2_id}", "down": f"down.{self.player_2_id}", "left": "xx", "right": "xx"}
             print(f'Keyboard: {self.keyboard[self.player_1_id]}, {self.keyboard[self.player_2_id]}')
             
             self.left_player = Player(name=self.player_1_id, binds=self.keyboard[self.player_1_id])
             self.right_player = Player(name=self.player_2_id, binds=self.keyboard[self.player_2_id])
-            
-            print(f'Left Player: {self.left_player}, Right Player: {self.right_player}')
+            print(f'Left Player Object: {self.left_player}, Right Player Object: {self.right_player}')
             
             PongConsumer.shared_game_keyboard[self.match_id] = {
                 f'up.{self.player_1_id}': False,
@@ -80,7 +88,7 @@ class PongConsumer(AsyncWebsocketConsumer):
                 f'up.{self.player_2_id}': False,
                 f'down.{self.player_2_id}': False,
             }
-            print(f'Keyboard Inputs: {self.shared_game_keyboard[self.match_id]}')
+            print(f'Keyboard Inputs for Match {self.match_id}: {self.shared_game_keyboard[self.match_id]}')
             
             PongConsumer.shared_game[self.match_id] = Game(
                 dictKeyboard=PongConsumer.shared_game_keyboard[self.match_id],
@@ -88,9 +96,8 @@ class PongConsumer(AsyncWebsocketConsumer):
                 rightPlayer=self.right_player,      # This is the Player object for the right player for the game
                 scoreLimit=self.scorelimit,    
             )
-            
-            print(f'Game: {PongConsumer.shared_game[self.match_id]}')
-                          
+            print(f'Shared Game Object for Match {self.match_id}: {PongConsumer.shared_game[self.match_id]}')
+                
         except Match.DoesNotExist:
             print(f"Match with ID {match_id} does not exist.")
             self.close()
@@ -101,22 +108,86 @@ class PongConsumer(AsyncWebsocketConsumer):
             print(e)
             self.close()
     
+
     @database_sync_to_async
+    @transaction.atomic
     def finalize_match(self, data):
         from api.tournament.models import Match
         from api.userauth.models import CustomUser as User
-        
-        match_object = Match.objects.get(id=self.match_id)
-        match_object.player1_score = PongConsumer.shared_game[self.match_id]._leftPlayer.getScore()
-        match_object.player2_score = PongConsumer.shared_game[self.match_id]._rightPlayer.getScore()
-        if match_object.player1_score > match_object.player2_score:
-            winner = self.player_1_id
-        else:
-            winner = self.player_2_id
-        match_object.winner = User.objects.get(id=winner)
-        match_object.date_played = timezone.now()
-        match_object.active = False
-        match_object.save()
+
+        try:
+            match_object = Match.objects.select_for_update().get(id=self.match_id)
+            match_object.player1_score = PongConsumer.shared_game[self.match_id]._leftPlayer.getScore()
+            match_object.player2_score = PongConsumer.shared_game[self.match_id]._rightPlayer.getScore()
+
+            player1_id = self.player_1_id
+            player2_id = self.player_2_id
+
+            print(f"Player 1 Score: {match_object.player1_score}, Player 2 Score: {match_object.player2_score}")
+
+            if match_object.player1_score == match_object.player2_score:
+                # Handle tie by comparing ELO scores
+                player1_elo = User.objects.get(id=player1_id).ELO
+                player2_elo = User.objects.get(id=player2_id).ELO
+
+                print(f"Player 1 ELO: {player1_elo}, Player 2 ELO: {player2_elo}")
+
+                if player1_elo > player2_elo:
+                    match_object.winner = User.objects.get(id=player1_id)
+                    loser_id = player2_id
+                elif player1_elo < player2_elo:
+                    match_object.winner = User.objects.get(id=player2_id)
+                    loser_id = player1_id
+                else:
+                    # If ELO scores are also the same, you can handle it as needed
+                    match_object.winner = None  # For example, set winner to None in case of a tie
+                    loser_id = None
+
+                if match_object.winner:
+                    print(f"Tiebreaker - Winner: {match_object.winner}, Loser ID: {loser_id}")
+                else:
+                    print(f"Tiebreaker - It's a tie!")
+
+            else:
+                # Determine the winner based on the score
+                match_object.winner = User.objects.get(id=player1_id) if match_object.player1_score > match_object.player2_score else User.objects.get(id=player2_id)
+                loser_id = player1_id if match_object.winner.id == player2_id else player2_id
+                print(f"Winner: {match_object.winner}, Loser ID: {loser_id}")
+
+            match_object.date_played = timezone.now()
+            match_object.active = False
+            match_object.save()
+
+            if match_object.winner:
+                winner_id = match_object.winner.id
+
+                # Update ELO scores
+                winner_object = User.objects.get(id=winner_id)
+                loser_object = User.objects.get(id=loser_id)
+
+                # Split the ELO change equally among the tied players
+                elo_change = 15  # Adjust the value as needed
+                elo_change_per_player = elo_change / 2
+
+                winner_object.ELO = max(0, winner_object.ELO + elo_change_per_player)
+                loser_object.ELO = max(0, loser_object.ELO - elo_change_per_player)
+
+                winner_object.save()
+                loser_object.save()
+
+        except Match.DoesNotExist as e:
+            print(f"Match with ID {self.match_id} does not exist.")
+        except User.DoesNotExist as e:
+            print(f"User not found. Winner ID: {winner_id}, Loser ID: {loser_id}")
+        except Exception as e:
+            print(f"An error occurred during match finalization: {e}")
+
+
+
+
+
+
+
 # -----------------------------
   
 # Websocket Methods
@@ -142,11 +213,9 @@ class PongConsumer(AsyncWebsocketConsumer):
             query_params = parse_qs(query_string)
             self.match_id = self.scope['url_route']['kwargs']['match_id']
             
-            print(f'Match ID: {self.match_id}')
-
             if not query_params.get('token'):
                 await self.close()
-            print(f'Token: {query_params.get("token")}')
+            print(f'JWT Token: {query_params.get("token")}')
             token = query_params['token'][0]
 
             try:
@@ -155,7 +224,7 @@ class PongConsumer(AsyncWebsocketConsumer):
                 print(f'Client ID: {self.client_id}')
                 await self.channel_layer.group_add(f"{self.match_id}.client_id", self.channel_name)
                 await self.channel_layer.group_add(f"{self.match_id}", self.channel_name)
-                await self.get_match(self.match_id)
+                await self.load_models(self.match_id)
             except Exception as e:
                 await self.close()
                 print(e)
