@@ -6,8 +6,6 @@ from ws_api.python_pong.Game import Game
 from urllib.parse import parse_qs
 from channels.db import database_sync_to_async
 from django.utils import timezone
-# Icecream is a library that allows us to ic variables in a more readable way its is only for debugging and can be removed
-from icecream import ic
 from api.jwt_utils import get_user_id_from_jwt_token
 
 
@@ -108,8 +106,8 @@ class PongConsumer(AsyncWebsocketConsumer):
         from api.userauth.models import CustomUser as User
         
         match_object = Match.objects.get(id=self.match_id)
-        match_object.player1_score = self.left_player.getScore()
-        match_object.player2_score = self.right_player.getScore()
+        match_object.player1_score = PongConsumer.shared_game[self.match_id]._leftPlayer.getScore()
+        match_object.player2_score = PongConsumer.shared_game[self.match_id]._rightPlayer.getScore()
         if match_object.player1_score > match_object.player2_score:
             winner = self.player_1_id
         else:
@@ -204,7 +202,7 @@ class PongConsumer(AsyncWebsocketConsumer):
             asyncio.sleep(0.1)
             data = json.loads(text_data)
             print(f'Received data: {data}')
-            if data['command'] == 'keyboard':      # Send the keyboard input to the other player and to the game
+            if data['command'] == 'keyboard':
                 await self.keyboard_input(data)
             elif data['command'] == 'start_ball':
                 PongConsumer.run_game[self.match_id] = True
