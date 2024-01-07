@@ -124,7 +124,7 @@ class PongConsumer(AsyncWebsocketConsumer):
         if self.client_id in PongConsumer.list_of_players:
             del PongConsumer.list_of_players[self.client_id]
         if self.client_id == self.player_1_id or self.client_id == self.player_2_id:
-            PongConsumer.run_game = False
+            PongConsumer.run_game[self.match_id] = False
             await self.broadcast_to_group(f"{self.match_id}", "message", {
                 "message": "Game Stopped",
             })
