@@ -40,6 +40,7 @@ class PongConsumer(AsyncWebsocketConsumer):
         self.client_id = None
         PongConsumer.run_game[self.match_id] = False
 
+# Async Database Methods
     @database_sync_to_async
     def get_match(self, match_id):
         try:
@@ -116,7 +117,9 @@ class PongConsumer(AsyncWebsocketConsumer):
         match_object.date_played = timezone.now()
         match_object.active = False
         match_object.save()
-    
+# -----------------------------
+  
+# Websocket Methods
     async def disconnect(self, close_code):
         await self.discard_channels()
         if self.client_id in PongConsumer.list_of_players:
@@ -175,6 +178,7 @@ class PongConsumer(AsyncWebsocketConsumer):
         except Exception as e:
             print(e)
             await self.close()
+# -----------------------------
 
 # Messaging Handling Methods
     async def broadcast_to_group(self, group_name, command, data):
@@ -251,7 +255,7 @@ class PongConsumer(AsyncWebsocketConsumer):
                     "left_score": PongConsumer.shared_game[self.match_id]._leftPlayer.getScore(),
                     "right_score": PongConsumer.shared_game[self.match_id]._rightPlayer.getScore(),
                 })
-                await asyncio.sleep(set_frame_rate(30))
+                await asyncio.sleep(set_frame_rate(40))
         except asyncio.CancelledError:
             print('Game stopped')
         except Exception as e:
@@ -271,12 +275,10 @@ class PongConsumer(AsyncWebsocketConsumer):
                 f"{self.match_id}.client_id",
                 self.channel_name
             )
-
-            if self.client_id in PongConsumer.list_of_players:
-                del PongConsumer.list_of_players[self.client_id]
             
         except Exception as e:
             print(e)
             await self.close()
     
-            
+
+        
