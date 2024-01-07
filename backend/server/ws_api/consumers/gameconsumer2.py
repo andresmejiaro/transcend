@@ -174,19 +174,25 @@ class PongConsumer(AsyncWebsocketConsumer):
 
                 winner_object.save()
                 loser_object.save()
-
+                
+                print(f"Match finalized. Winner ID: {winner_id}, Loser ID: {loser_id}, Winner ELO: {winner_object.ELO}, Loser ELO: {loser_object.ELO}")
+                
+                # Send the match results back to the client
+                return (f"{self.match_id}", "match_results", {
+                    "winner_id": winner_id,
+                    "loser_id": int(loser_id),
+                    "player1_score": match_object.player1_score,
+                    "player2_score": match_object.player2_score,
+                    "winner_elo": winner_object.ELO,
+                    "loser_elo": loser_object.ELO,
+                })               
+                
         except Match.DoesNotExist as e:
             print(f"Match with ID {self.match_id} does not exist.")
         except User.DoesNotExist as e:
             print(f"User not found. Winner ID: {winner_id}, Loser ID: {loser_id}")
         except Exception as e:
             print(f"An error occurred during match finalization: {e}")
-
-
-
-
-
-
 
 # -----------------------------
   
@@ -283,7 +289,9 @@ class PongConsumer(AsyncWebsocketConsumer):
             elif data['command'] == 'stop_ball':
                 PongConsumer.run_game[self.match_id] = False
             elif data['command'] == 'finalize_match':
-                await self.finalize_match(data)
+                PongConsumer.run_game[self.match_id] = False
+                results = await self.finalize_match(data)
+                await self.broadcast_to_group(results[0], results[1], results[2])
 
         except Exception as e:
             print(e)

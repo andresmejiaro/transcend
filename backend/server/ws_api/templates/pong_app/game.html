@@ -97,7 +97,10 @@
                 console.log('Server Message:', data.data);
             } else if (data.type === 'screen_report') {
                 drawPongGame(data.data.game_update, data.data.left_score, data.data.right_score);
-            } else {
+            } else if (data.type === 'match_results') {
+                console.log('Match Results:', data.data);
+            }
+            else {
                 console.error('Invalid message type:', data.type);
             }
         }
