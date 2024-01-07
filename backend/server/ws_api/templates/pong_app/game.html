@@ -96,14 +96,13 @@
             if (data.type === 'message') {
                 console.log('Server Message:', data.data);
             } else if (data.type === 'screen_report') {
-                drawPongGame(data.data.game_update, data.data.score_update);
+                drawPongGame(data.data.game_update, data.data.left_score, data.data.right_score);
             } else {
                 console.error('Invalid message type:', data.type);
             }
         }
 
-
-        function drawPongGame(data, score) {
+        function drawPongGame(data, leftScore, rightScore) {
             if (data && data.ball && data.leftPaddle && data.rightPaddle) {
                 ctx.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
                 drawRect(data.ball.position, data.ball.size, ballTexture);
@@ -112,6 +111,9 @@
             } else {
                 console.error('Invalid data format:', data);
             }
+            ctx.font = '48px serif';
+            ctx.fillText(leftScore, 100, 50);
+            ctx.fillText(rightScore, 700, 50);
         }
 
         function drawRect(position, size, texture) {

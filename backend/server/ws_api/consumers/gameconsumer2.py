@@ -250,7 +250,8 @@ class PongConsumer(AsyncWebsocketConsumer):
                 PongConsumer.shared_game.pointLoop2()
                 await self.broadcast_to_group(f"{self.match_id}", "screen_report", {
                     "game_update": self.shared_game.reportScreen(),
-                    "score_update": self.shared_game.reportScore(),
+                    "left_score": self.shared_game._leftPlayer.getScore(),
+                    "right_score": self.shared_game._rightPlayer.getScore(),
                 })
                 await asyncio.sleep(set_frame_rate(30))
         except asyncio.CancelledError:
