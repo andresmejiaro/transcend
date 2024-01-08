@@ -1,6 +1,6 @@
 const handleMessage = async (message) => {
     const data = JSON.parse(message);
-    // console.log(data);
+    console.log(data);
 
     switch (data.type) {
         case "list_of_users":
@@ -54,7 +54,19 @@ const handleMessage = async (message) => {
             break;
 
 
-        // MATCH REQUESTS
+        // QUEUE && MATCH REQUESTS        
+        case "joined_queue":
+            await handleJoinedQueue(data);
+            break;
+
+        case "left_queue":
+            await handleLeftQueue(data);
+            break;
+
+        case "found_opponent":
+            await handleFoundOpponent(data);
+            break;
+
         case "sent_match_invite":
             await handleSentFriendMatchRequest(data);
             break;

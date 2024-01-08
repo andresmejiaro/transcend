@@ -133,6 +133,7 @@ const loadLobbyScripts = () => {
     `${lobbyDirec}lobby-friends-handler.js`,
     `${lobbyDirec}lobby-message-parser.js`,
     `${lobbyDirec}lobby-notifications-handler.js`,
+    `${lobbyDirec}lobby-queue-handler.js`,
   ];
   const body = document.body;
 
