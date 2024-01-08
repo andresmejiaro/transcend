@@ -19,6 +19,7 @@ class Game {
     #delay
     #endGame
     #actualframe;
+    #connStatus;
 
     constructor(leftPlayer, rightPlayer, remote = 0) {
         this.#leftPlayer = leftPlayer;
@@ -39,7 +40,8 @@ class Game {
         this.#remoteCanvasQ = {};
         this.#delay = 0;
         this.#endGame = 0;
-        this.#actualframe = 0; 
+        this.#actualframe = 0;
+        this.#connStatus = "Waiting for Match ..."; 
     }
     
     startScreen() {
@@ -51,7 +53,7 @@ class Game {
             if (this.#remote == 0 || this.#remote == 2)
                 requestAnimationFrame(() => this.gameSetup());
             else {
-                handleMatchmaking(this);
+                //handleMatchmaking(this);
                 requestAnimationFrame(() => this.conectingScreen());
             }
         }
@@ -65,11 +67,12 @@ class Game {
 
     conectingScreen(){
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.fillText("Waiting for opponent ...", 50, 30);
-        if (this.#playersConnected < 2){
+        ctx.fillText(`${this.#connStatus} ... `, 50, 30);
+        if (this.#connStatus != 'Game Ready'){
             requestAnimationFrame(() => this.conectingScreen());
         }
         else{ 
+            console.log("going to setup");
             requestAnimationFrame(() => this.gameSetup());
             activateGame();
         }
@@ -261,17 +264,23 @@ class Game {
         this.#rightPaddle.initializePaddleKeys();
         if(this.#remote == 1){
             document.addEventListener('keydown', (event) => {
-                if (event.key == "w")
-                    sendKeyPress("up",this.#remoteIAM, this.#frame);
-                if(event.key == "s")
-                    sendKeyPress("down",this.#remoteIAM, this.#frame);
+                handleArrowKeyPress(event.key);
             });
             document.addEventListener('keyup', (event) => {
-                if (event.key == "w")
-                    sendRelease("up", this.#remoteIAM, this.#frame);
-                if(event.key == "s")
-                    sendRelease("down",  this.#remoteIAM, this.#frame);
+                handleArrowKeyRelease(event.key);
             });
+            // document.addEventListener('keydown', (event) => {
+            //     if (event.key == "w")
+            //         sendKeyPress("up",this.#remoteIAM, this.#frame);
+            //     if(event.key == "s")
+            //         sendKeyPress("down",this.#remoteIAM, this.#frame);
+            // });
+            // document.addEventListener('keyup', (event) => {
+            //     if (event.key == "w")
+            //         sendRelease("up", this.#remoteIAM, this.#frame);
+            //     if(event.key == "s")
+            //         sendRelease("down",  this.#remoteIAM, this.#frame);
+            // });
         }
     }
 
@@ -377,6 +386,10 @@ class Game {
         this.#endGame = 1;
     }
     
+    set connStatus (data){
+        this.#connStatus = data;
+    }
+
 }
 
 
