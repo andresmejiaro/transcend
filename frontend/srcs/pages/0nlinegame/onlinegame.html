@@ -1,6 +1,19 @@
 <div class="container-fluid d-flex align-items-center justify-content-center vh-100">
     <div class="row">
       <div class="col-12 text-center">
+        
+        <label for="matchId">Match ID:</label>
+        <input type="text" id="matchId" placeholder="Enter Match ID">
+    
+        <label for="tokenId">Token:</label>
+        <input type="text" id="tokenId" placeholder="Enter Token">
+    
+        <button onclick="SetUpListeners()">Connect to Socket</button>
+    
+        <label for="jsonInput">JSON Input:</label>
+        <textarea id="jsonInput" placeholder="Enter JSON"></textarea>
+    
+        <button onclick="sendJson()">Send Message</button>
         <canvas id="gameCanvas" width="858" height="525"></canvas>
       </div>
     </div>
