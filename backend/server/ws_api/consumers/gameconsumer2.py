@@ -232,6 +232,10 @@ class PongConsumer(AsyncWebsocketConsumer):
             except Exception as e:
                 await self.close()
                 print(e)
+
+            if self.client_id not in (self.player_1_id, self.player_2_id):
+                print(f'Client ID: {self.client_id}: Not a player in this match')
+                await self.close()
                 
             await self.accept()
                         
@@ -280,7 +284,7 @@ class PongConsumer(AsyncWebsocketConsumer):
                
     async def receive(self, text_data):
         try:
-            asyncio.sleep(0.1)
+            await asyncio.sleep(0.1)
             data = json.loads(text_data)
             print(f'Received data: {data}')
             if data['command'] == 'keyboard':
