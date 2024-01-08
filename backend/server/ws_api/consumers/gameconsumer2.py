@@ -18,7 +18,7 @@ from api.jwt_utils import get_user_id_from_jwt_token
 # {"command": "keyboard", "key_status": "on_release", "key": "down"}
 # {"command": "start_ball"}
 # {"command": "stop_ball"}
-# {"command": "finalize_match"}
+# {"command": "save_models"}
 
 def set_frame_rate(fps):
     if fps < 1 or fps > 60 or type(fps) != int:
@@ -28,6 +28,7 @@ def set_frame_rate(fps):
 
 class PongConsumer(AsyncWebsocketConsumer):
     list_of_players = {}        # Hold the user instances of the players in the match
+    user_by_match = {}          # Holds the users in the match by match ID
     shared_game_keyboard = {}   # Holds the the shared game keyboard to manipulate the game.
     shared_game_task = {}       # Holds the task for the shared game, in order to cancel it when the game is stopped.
     shared_game = {}            # Holds the shared game object for the match.
@@ -108,10 +109,9 @@ class PongConsumer(AsyncWebsocketConsumer):
             print(e)
             self.close()
     
-
     @database_sync_to_async
     @transaction.atomic
-    def finalize_match(self, data):
+    def save_models(self, close_code):
         from api.tournament.models import Match
         from api.userauth.models import CustomUser as User
 
@@ -134,25 +134,21 @@ class PongConsumer(AsyncWebsocketConsumer):
 
                 if player1_elo > player2_elo:
                     match_object.winner = User.objects.get(id=player1_id)
-                    loser_id = player2_id
                 elif player1_elo < player2_elo:
                     match_object.winner = User.objects.get(id=player2_id)
-                    loser_id = player1_id
                 else:
                     # If ELO scores are also the same, you can handle it as needed
                     match_object.winner = None  # For example, set winner to None in case of a tie
-                    loser_id = None
 
                 if match_object.winner:
-                    print(f"Tiebreaker - Winner: {match_object.winner}, Loser ID: {loser_id}")
+                    print(f"Tiebreaker - Winner: {match_object.winner}, Loser: {match_object.loser()}")
                 else:
                     print(f"Tiebreaker - It's a tie!")
 
             else:
                 # Determine the winner based on the score
                 match_object.winner = User.objects.get(id=player1_id) if match_object.player1_score > match_object.player2_score else User.objects.get(id=player2_id)
-                loser_id = player1_id if match_object.winner.id == player2_id else player2_id
-                print(f"Winner: {match_object.winner}, Loser ID: {loser_id}")
+                print(f"Winner: {match_object.winner}, Loser ID: {match_object.loser()}")
 
             match_object.date_played = timezone.now()
             match_object.active = False
@@ -160,6 +156,7 @@ class PongConsumer(AsyncWebsocketConsumer):
 
             if match_object.winner:
                 winner_id = match_object.winner.id
+                loser_id = match_object.loser().id
 
                 # Update ELO scores
                 winner_object = User.objects.get(id=winner_id)
@@ -180,7 +177,7 @@ class PongConsumer(AsyncWebsocketConsumer):
                 # Send the match results back to the client
                 return (f"{self.match_id}", "match_results", {
                     "winner_id": winner_id,
-                    "loser_id": int(loser_id),
+                    "loser_id": loser_id,
                     "player1_score": match_object.player1_score,
                     "player2_score": match_object.player2_score,
                     "winner_elo": winner_object.ELO,
@@ -197,19 +194,20 @@ class PongConsumer(AsyncWebsocketConsumer):
 # -----------------------------
   
 # Websocket Methods
-    async def disconnect(self, close_code):
+    async def disconnect(self, close_code=1000):
         await self.discard_channels()
-        if self.client_id in PongConsumer.list_of_players:
-            del PongConsumer.list_of_players[self.client_id]
-        if self.client_id == self.player_1_id or self.client_id == self.player_2_id:
-            PongConsumer.run_game[self.match_id] = False
-            await self.broadcast_to_group(f"{self.match_id}", "message", {
-                "message": "Game Stopped",
-            })
         await self.broadcast_to_group(f"{self.match_id}", "message", {
             "message": "User Disconnected",
             "client_id": self.client_id,
         })
+        
+        if self.client_id in PongConsumer.list_of_players:
+            del PongConsumer.list_of_players[self.client_id]
+            
+        if self.client_id == self.player_1_id or self.client_id == self.player_2_id:
+            PongConsumer.run_game[self.match_id] = False
+            result = await self.save_models(close_code)
+            await self.broadcast_to_group(result[0], result[1], result[2])
             
         await self.close()
         
@@ -248,6 +246,10 @@ class PongConsumer(AsyncWebsocketConsumer):
             if self.player_1_id in PongConsumer.list_of_players and self.player_2_id in PongConsumer.list_of_players:
                 await self.broadcast_to_group(f"{self.match_id}", "message", {
                     "message": 'Game Ready',
+                })
+            else:
+                await self.broadcast_to_group(f"{self.match_id}", "message", {
+                    "message": 'Waiting for other player',
                 })
                   
         except Exception as e:
@@ -288,9 +290,9 @@ class PongConsumer(AsyncWebsocketConsumer):
                 PongConsumer.shared_game_task[self.match_id] = asyncio.create_task(self.start_game(data))
             elif data['command'] == 'stop_ball':
                 PongConsumer.run_game[self.match_id] = False
-            elif data['command'] == 'finalize_match':
+            elif data['command'] == 'save_models':
                 PongConsumer.run_game[self.match_id] = False
-                results = await self.finalize_match(data)
+                results = await self.save_models(data)
                 await self.broadcast_to_group(results[0], results[1], results[2])
 
         except Exception as e:
@@ -349,7 +351,11 @@ class PongConsumer(AsyncWebsocketConsumer):
                 self.channel_name
             )
             await self.channel_layer.group_discard(
-                f"{self.match_id}.client_id",
+                f"{self.match_id}.player_1_id",
+                self.channel_name
+            )
+            await self.channel_layer.group_discard(
+                f"{self.match_id}.player_2_id",
                 self.channel_name
             )
             
