@@ -10,15 +10,11 @@ class Game {
     #remote
     #remoteCanvas
     #ai
-    #playersConnected
     #remoteIAM
     #defLocalBinds
     #defRemoteBinds
     #frame
-    #remoteCanvasQ
-    #delay
     #endGame
-    #actualframe;
     #connStatus;
 
     constructor(leftPlayer, rightPlayer, remote = 0) {
@@ -30,17 +26,13 @@ class Game {
         this.#backgroundLoaded = false;
         this.#background.onload = () => { this.#backgroundLoaded = true; };
         this.#remote = remote; 
-        this.#playersConnected = 0;
         this.#remoteIAM = "none";
         this.#defLocalBinds = {up : "w", down : "s",
             left : "UNUSED_DEFAULT_KEY", right : "UNUSED_DEFAULT_KEY"};
         this.#defRemoteBinds = {up : "ru", down : "rd",
             left : "UNUSED_DEFAULT_KEY", right : "UNUSED_DEFAULT_KEY"};
         this.#frame = -5;
-        this.#remoteCanvasQ = {};
-        this.#delay = 0;
         this.#endGame = 0;
-        this.#actualframe = 0;
         this.#connStatus = "Waiting for Match ..."; 
     }
     
@@ -106,8 +98,9 @@ class Game {
     // game loop
     pointLoop() {
         this.drawNonInteractive();
-        if (this.statusToText() == "remote")
+        if (this.statusToText() == "remote"){
             this.remoteGameLogic();
+        }
         else 
             this.localGameLogic();
         this.drawInteractive();
@@ -120,37 +113,39 @@ class Game {
             requestAnimationFrame(() => this.pointLoop());
     }
     
-    updateRemoteCanvas(){
-        //try to print from memory
-        if (this.#remoteCanvasQ[this.#actualframe]){
-            this.#remoteCanvas= this.#remoteCanvasQ[this.#actualframe];
-            this.#actualframe += 1;
-            this.#delay = 0;
-            // console.log("printing from memory");
-            return;
-        } else{
-            // try to find if skipped
-            let lowestHigherNumber = Math.min(...Object.keys(this.#remoteCanvasQ).
-            map(Number).filter(key => key > this.#actualframe));
-            if (isFinite(lowestHigherNumber)){
-                this.#actualframe = lowestHigherNumber;
-                this.#remoteCanvas= this.#remoteCanvasQ[this.#actualframe];
-                return;
-            }
+    // updateRemoteCanvas(){
+    //     //try to print from memory
+    //     if (this.#remoteCanvasQ[this.#actualframe]){
+    //         this.#remoteCanvas= this.#remoteCanvasQ[this.#actualframe];
+    //         this.#actualframe += 1;
+    //         this.#delay = 0;
+    //         // console.log("printing from memory");
+    //         return;
+    //     } else{
+    //         // try to find if skipped
+    //         let lowestHigherNumber = Math.min(...Object.keys(this.#remoteCanvasQ).
+    //         map(Number).filter(key => key > this.#actualframe));
+    //         if (isFinite(lowestHigherNumber)){
+    //             this.#actualframe = lowestHigherNumber;
+    //             this.#remoteCanvas= this.#remoteCanvasQ[this.#actualframe];
+    //             return;
+    //         }
         
-        }
-        if (!this.#remoteCanvasQ[this.#actualframe + this.#delay]){
-            this.#delay = Math.max(...Object.keys(this.#remoteCanvasQ).map(Number)) - this.#actualframe;
-            // console.log(this.#delay);
-        }
-        if (isFinite(this.#delay)){
-            this.#remoteCanvas = this.#remoteCanvasQ[this.#frame + this.#delay]
-        }
-    }
+    //     }
+    //     if (!this.#remoteCanvasQ[this.#actualframe + this.#delay]){
+    //         this.#delay = Math.max(...Object.keys(this.#remoteCanvasQ).map(Number)) - this.#actualframe;
+    //         // console.log(this.#delay);
+    //     }
+    //     if (isFinite(this.#delay)){
+    //         this.#remoteCanvas = this.#remoteCanvasQ[this.#frame + this.#delay]
+    //     }
+    // }
     
-    async remoteGameLogic() {
-        this.updateRemoteCanvas();
-        let canvas = this.#remoteCanvas;
+    remoteGameLogic() {
+       // this.updateRemoteCanvas();
+       let canvas = this.#remoteCanvas;
+       //console.log("remote game logic", canvas)
+        
         if (canvas === undefined){
             // console.log("undefined canvas");
             return;
@@ -162,11 +157,11 @@ class Game {
         this.#leftPaddle.setSize(canvas["leftPaddle"]["size"]);
         this.#rightPaddle.setPosition(canvas["rightPaddle"]["position"]);
         this.#rightPaddle.setSize(canvas["rightPaddle"]["size"]);
-        if (isFinite(this.#delay) && this.#delay < 0){
-                for (let i = 0; i < Math.max(0, -this.#delay); i++){
-                this.localGameLogic2();
-            }
-        }
+        // if (isFinite(this.#delay) && this.#delay < 0){
+        //         for (let i = 0; i < Math.max(0, -this.#delay); i++){
+        //         this.localGameLogic2();
+        //     }
+        // }
         
         
         this.#frame += 1;
@@ -332,8 +327,7 @@ class Game {
                 console.error(names, names.length,data)
             }
         }
-        this.#playersConnected = names.length; 
-
+        
        
         if (name1.username == sessionStorage.getItem("username")){
             this.#remoteIAM = "left";
@@ -344,12 +338,9 @@ class Game {
     }
 
     receiveRemoteCanvas(data){
-
-        data.data.forEach(item => {
-            let frame = item.frame;
-            let gameUpdate = item.game_update;
-            this.#remoteCanvasQ[frame] = gameUpdate; 
-        });
+        console.log("recieving", data.data.game_update)
+        this.#remoteCanvas = data.data.game_update; 
+        
     }
 
     scoreUpdate(data){
