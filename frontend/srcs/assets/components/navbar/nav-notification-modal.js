@@ -1,57 +1,71 @@
 const handleModalForNotifications = async () => {
-  function createNotificationElement(data) {
-    const notificationContainer = document.getElementById('notifications-list');
+	function createNotificationElement(data) {
+		const notificationContainer = document.getElementById("notifications-list");
 
-    const notificationDiv = document.createElement('div');
-    notificationDiv.classList.add('d-flex');
-    notificationDiv.classList.add('justify-content-between');
+		const notificationDiv = document.createElement("div");
+		notificationDiv.classList.add("d-flex");
+		notificationDiv.classList.add("justify-content-between");
 
-    const descriptionDiv = document.createElement('div');
-    const descriptionParagraph = document.createElement('p');
-    descriptionParagraph.textContent = `${data.invite_type}: ${data.username}`;
-    descriptionDiv.appendChild(descriptionParagraph);
+		const descriptionDiv = document.createElement("div");
+		const descriptionParagraph = document.createElement("p");
+		if (data.invite_type == "match") descriptionParagraph.textContent = `${data.username} invited you to a Match`;
+		else descriptionParagraph.textContent = `${data.username} wants to become friends`;
 
-    const actionsDiv = document.createElement('div');
-    
-    const acceptButton = document.createElement('button');
-    acceptButton.type = 'button';
-    acceptButton.classList.add('accept-btn');
-    acceptButton.innerHTML = '<i class="bi bi-check"></i>';
-    acceptButton.addEventListener("click", async () => {
-      (async () => {
-        await acceptFriendRequest(data);
-      })();
-    });
-    
-    const rejectButton = document.createElement('button');
-    rejectButton.type = 'button';
-    rejectButton.classList.add('reject-btn');
-    rejectButton.innerHTML = '<i class="bi bi-x"></i>';
-    rejectButton.addEventListener("click", async () => {
-      (async () => {
-        await rejectFriendRequest(data);
-      })();
-    });
+		descriptionDiv.appendChild(descriptionParagraph);
 
-    actionsDiv.appendChild(acceptButton);
-    actionsDiv.appendChild(rejectButton);
+		const actionsDiv = document.createElement("div");
 
-    notificationDiv.appendChild(descriptionDiv);
-    notificationDiv.appendChild(actionsDiv);
+		const acceptButton = document.createElement("button");
+		acceptButton.type = "button";
+		acceptButton.classList.add("accept-btn");
+		acceptButton.innerHTML = '<i class="bi bi-check"></i>';
+		acceptButton.addEventListener("click", async () => {
+			if (data.invite_type !== "match") {
+				(async () => {
+					await acceptFriendRequest(data);
+				})();
+			} else {
+        (async () => {
+					await acceptMatchRequest(data);
+				})();
+			}
+		});
 
-    notificationContainer.appendChild(notificationDiv);
-  }
+		const rejectButton = document.createElement("button");
+		rejectButton.type = "button";
+		rejectButton.classList.add("reject-btn");
+		rejectButton.innerHTML = '<i class="bi bi-x"></i>';
+		rejectButton.addEventListener("click", async () => {
+			if (data.invite_type !== "match") {
+				(async () => {
+					await rejectFriendRequest(data);
+				})();
+			} else {
+        (async () => {
+					await rejectMatchRequest(data);
+				})();
+			}
+		});
 
-  const notificationContainer = document.getElementById('notifications-list');
-  notificationContainer.innerHTML = "";
-  receivedFriendsNotifications.forEach(createNotificationElement);
-  updateNavNotification(receivedFriendsNotifications.length)
-}
+		actionsDiv.appendChild(acceptButton);
+		actionsDiv.appendChild(rejectButton);
+
+		notificationDiv.appendChild(descriptionDiv);
+		notificationDiv.appendChild(actionsDiv);
+
+		notificationContainer.appendChild(notificationDiv);
+	}
+
+	const notificationContainer = document.getElementById("notifications-list");
+	notificationContainer.innerHTML = "";
+	receivedFriendsNotifications.forEach(createNotificationElement);
+	updateNavNotification(receivedFriendsNotifications.length);
+};
 
 // const btn = document.getElementById("notificationsModalInvite");
 document.getElementById("notificationsModal").addEventListener("shown.bs.modal", function (event) {
-    event.preventDefault();
-	  handleModalForNotifications();
+	event.preventDefault();
+	handleModalForNotifications();
 });
 
 // if (notificationInfo.length) {
@@ -59,12 +73,12 @@ document.getElementById("notificationsModal").addEventListener("shown.bs.modal",
 // }
 
 const handleCloseNotificationModal = () => {
-  const closeModalBtn = document.querySelector(".btn-close.btn-close-white.btn-notifications-close");
-  closeModalBtn.click();
-}
+	const closeModalBtn = document.querySelector(".btn-close.btn-close-white.btn-notifications-close");
+	closeModalBtn.click();
+};
 
 const handleCloseNotificationModalMsg = (msg) => {
-  const closeModalBtn = document.querySelector(".btn-close.btn-close-white.btn-notifications-close");
-  closeModalBtn.click();
-  showToast(msg)
-}
+	const closeModalBtn = document.querySelector(".btn-close.btn-close-white.btn-notifications-close");
+	closeModalBtn.click();
+	showSimpleToast(msg);
+};

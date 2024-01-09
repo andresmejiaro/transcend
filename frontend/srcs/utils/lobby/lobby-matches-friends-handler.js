@@ -3,7 +3,6 @@ const handleSentFriendMatchRequest = async (data) => {
 };
 
 const acceptMatchInvite = async (friendId, matchId) => {
-	console.log(friendId, matchId)
   try {
     const playerId = await getUserId();
     await updateMatchInDb(matchId, playerId);

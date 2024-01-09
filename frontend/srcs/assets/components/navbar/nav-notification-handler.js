@@ -14,7 +14,8 @@ const acceptFriendRequest = async (friend) => {
       client_id: `${friend.id}`,
     },
   });
-  handleCloseNotificationModalMsg("Invitation Accepted Succesfully");
+  // handleCloseNotificationModalMsg("Invitation Accepted Succesfully");
+  handleCloseNotificationModal();
 };
 
 const rejectFriendRequest = async (friend) => {
@@ -24,5 +25,30 @@ const rejectFriendRequest = async (friend) => {
       client_id: `${friend.id}`,
     },
   });
-  handleCloseNotificationModalMsg("Invitation Rejected Succesfully");
+  // handleCloseNotificationModalMsg("Invitation Rejected Succesfully");
+  handleCloseNotificationModal();
+};
+
+const acceptMatchRequest = async (friend) => {
+  sendWebSocketMessage("command", {
+    command: "accept_match",
+    data: {
+      client_id: `${friend.id}`,
+      match_id: `99`,
+    },
+  });
+  // handleCloseNotificationModalMsg("Invitation Accepted Succesfully");
+  handleCloseNotificationModal();
+};
+
+const rejectMatchRequest = async (friend) => {
+  sendWebSocketMessage("command", {
+    command: "reject_match",
+    data: {
+      client_id: `${friend.id}`,
+      match_id: `99`,
+    },
+  });
+  // handleCloseNotificationModalMsg("Invitation Rejected Succesfully");
+  handleCloseNotificationModal();
 };
