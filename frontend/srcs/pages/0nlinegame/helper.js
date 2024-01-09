@@ -15,7 +15,7 @@ function SetUpListeners() {
 
 		ws.addEventListener("message", (event) => {
 			const data = JSON.parse(event.data);
-			console.log(data);
+			//console.log(data);
 			updateGameCanvas(data, game);
 		});
 
@@ -55,14 +55,14 @@ function updateGameCanvas(data, game) {
 			//console.log("game data:", data.data);
 			game.remoteGameEnd();
 		 } 
-		 // else {
-		// 	// Handle game update data
-		// 	console.log("game data:", data.data);
-		// 	console.error("Invalid message type:", data.type);
-		// }
-	} else if (data.type == "screen_report"){
-		game.receiveRemoteCanvas(data);
-	 }
+		} else if (data.type == "screen_report"){
+			game.receiveRemoteCanvas(data);
+		}
+		 else {
+	    	// Handle game update data
+	    	console.log("game data:", data.data);
+	    	console.error("Invalid message type:", data.type);
+	    }
 }
 
 function sendKeyPress(key, side, frame) {
@@ -128,6 +128,7 @@ const activateGame = async () => {
 
 function handleArrowKeyPress(key) {
 	// Customize this based on your game's key bindings
+	//console.log(key);
 	switch (key) {
 		case 'ArrowUp':
 			sendKeyPress('up');

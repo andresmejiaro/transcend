@@ -12,7 +12,7 @@ class Ball(MovingRectangle):
 				   size = size, enclousure = enclousure)
 		self._collide = []
   
-		self.speed_multiplier = 2.0	
+		self.speed_multiplier = 1.0	
 
 	def checkCollision(self, colider: MovingRectangle) -> bool:
 		# Check if upper right corner is touching the collider

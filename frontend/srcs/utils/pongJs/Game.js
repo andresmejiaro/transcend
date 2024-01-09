@@ -10,7 +10,6 @@ class Game {
     #remote
     #remoteCanvas
     #ai
-    #remoteIAM
     #defLocalBinds
     #defRemoteBinds
     #frame
@@ -26,7 +25,6 @@ class Game {
         this.#backgroundLoaded = false;
         this.#background.onload = () => { this.#backgroundLoaded = true; };
         this.#remote = remote; 
-        this.#remoteIAM = "none";
         this.#defLocalBinds = {up : "w", down : "s",
             left : "UNUSED_DEFAULT_KEY", right : "UNUSED_DEFAULT_KEY"};
         this.#defRemoteBinds = {up : "ru", down : "rd",
@@ -64,7 +62,7 @@ class Game {
             requestAnimationFrame(() => this.conectingScreen());
         }
         else{ 
-            console.log("going to setup");
+            //console.log("going to setup");
             requestAnimationFrame(() => this.gameSetup());
             activateGame();
         }
@@ -105,41 +103,15 @@ class Game {
             this.localGameLogic();
         this.drawInteractive();
         this.drawScore();
-        if (this.#leftPlayer.score >= this.#scoreLimit
-            || this.#rightPlayer.score >= this.#scoreLimit || 
+        if (this.#remote != 1 && (
+            this.#leftPlayer.score >= this.#scoreLimit
+            || this.#rightPlayer.score >= this.#scoreLimit) || 
                 this.#endGame == 1)
             requestAnimationFrame(() => this.endScreen());
         else
             requestAnimationFrame(() => this.pointLoop());
     }
-    
-    // updateRemoteCanvas(){
-    //     //try to print from memory
-    //     if (this.#remoteCanvasQ[this.#actualframe]){
-    //         this.#remoteCanvas= this.#remoteCanvasQ[this.#actualframe];
-    //         this.#actualframe += 1;
-    //         this.#delay = 0;
-    //         // console.log("printing from memory");
-    //         return;
-    //     } else{
-    //         // try to find if skipped
-    //         let lowestHigherNumber = Math.min(...Object.keys(this.#remoteCanvasQ).
-    //         map(Number).filter(key => key > this.#actualframe));
-    //         if (isFinite(lowestHigherNumber)){
-    //             this.#actualframe = lowestHigherNumber;
-    //             this.#remoteCanvas= this.#remoteCanvasQ[this.#actualframe];
-    //             return;
-    //         }
-        
-    //     }
-    //     if (!this.#remoteCanvasQ[this.#actualframe + this.#delay]){
-    //         this.#delay = Math.max(...Object.keys(this.#remoteCanvasQ).map(Number)) - this.#actualframe;
-    //         // console.log(this.#delay);
-    //     }
-    //     if (isFinite(this.#delay)){
-    //         this.#remoteCanvas = this.#remoteCanvasQ[this.#frame + this.#delay]
-    //     }
-    // }
+ 
     
     remoteGameLogic() {
        // this.updateRemoteCanvas();
@@ -157,13 +129,6 @@ class Game {
         this.#leftPaddle.setSize(canvas["leftPaddle"]["size"]);
         this.#rightPaddle.setPosition(canvas["rightPaddle"]["position"]);
         this.#rightPaddle.setSize(canvas["rightPaddle"]["size"]);
-        // if (isFinite(this.#delay) && this.#delay < 0){
-        //         for (let i = 0; i < Math.max(0, -this.#delay); i++){
-        //         this.localGameLogic2();
-        //     }
-        // }
-        
-        
         this.#frame += 1;
     }
 
@@ -179,7 +144,8 @@ class Game {
         else if (ballState == -1) {
             this.#rightPlayer.goal();
             this.resetPosition();
-        } eleyJhbGciOiAiSFMyNTYiLCAidHlwIjogIkpXVCJ9.eyJ1c2VyX2lkIjogMiwgInVzZXJuYW1lIjogImdhdG92b2xhZG9yIiwgImV4cCI6ICIyMDI0LTAxLTA5VDEyOjA2OjM2LjU4ODgyNiJ9.nUBUOcv3KFI-3NYo0qcnWipMGCcn52QR1DBTj_M0HP0.#leftPaddle.updatePosition();
+        } 
+        this.#leftPaddle.updatePosition();
         this.#rightPaddle.updatePosition();
     }
 
@@ -238,37 +204,34 @@ class Game {
             requestAnimationFrame(() => this.pointLoop());
         }
         
-    remoteGameSetup(){
-        if (this.#remote == 1 && this.#remoteIAM == "right"){
-            this.#rightPaddle.binds = this.#defLocalBinds;
-            this.#leftPaddle.binds = this.#defRemoteBinds;
+    async remoteGameSetup(){
+        try{
+            const url = `${window.DJANGO_API_BASE_URL}/api/match/${matchIdInput.value}/`;
+            const options = {
+                method: "GET",
+                mode: "cors",
+                credentials: "include",
+                headers: {
+                    "Content-Type": "application/json",
+                  }};
+            const response = await makeRequest(true,url, options,"");
+            this.#leftPlayer.name = response.player1.username;
+            this.#rightPlayer.name = response.player2.username;
+            //console.log(response);
         }
-        if (this.#remote == 1 && this.#remoteIAM == "left"){
-            this.#leftPaddle.binds = this.#defLocalBinds;
-            this.#rightPaddle.binds = this.#defRemoteBinds;
+        catch (error)
+        {
+            console.error(error);
         }
-        this.#leftPaddle.initializePaddleKeys();
-        this.#rightPaddle.initializePaddleKeys();
-        if(this.#remote == 1){
-            document.addEventListener('keydown', (event) => {
-                handleArrowKeyPress(event.key);
-            });
-            document.addEventListener('keyup', (event) => {
-                handleArrowKeyRelease(event.key);
-            });
-            // document.addEventListener('keydown', (event) => {
-            //     if (event.key == "w")
-            //         sendKeyPress("up",this.#remoteIAM, this.#frame);
-            //     if(event.key == "s")
-            //         sendKeyPress("down",this.#remoteIAM, this.#frame);
-            // });
-            // document.addEventListener('keyup', (event) => {
-            //     if (event.key == "w")
-            //         sendRelease("up", this.#remoteIAM, this.#frame);
-            //     if(event.key == "s")
-            //         sendRelease("down",  this.#remoteIAM, this.#frame);
-            // });
-        }
+        document.addEventListener('keydown', (event) => {
+            // Handle arrow key presses and send messages to the server
+            handleArrowKeyPress(event.key);
+        });
+
+        document.addEventListener('keyup', (event) => {
+            // Handle arrow key releases and send messages to the server
+            handleArrowKeyRelease(event.key);
+        });
     }
 
     conexionSetup() {
@@ -302,36 +265,12 @@ class Game {
         lcanvas["rightPaddle"]["size"] = this.#rightPaddle.getSize;
         return lcanvas;
     }
-
-    async updatePlayerNames(data){
-        let names = Object.keys(data.data);
-        let name1 = await getPlayerInfo(names[0]);
-        let name2;
-        this.#leftPlayer.name = name1.username;
-        if (names.length > 1){
-            
-            try{
-                name2 = await getPlayerInfo(names[1]);
-                this.#rightPlayer.name = name2.username;
-            }
-            catch(error){
-                console.error(error);
-                console.error(names, names.length,data)
-            }
-        }
-        
-       
-        if (name1.username == sessionStorage.getItem("username")){
-            this.#remoteIAM = "left";
-        }
-        if (name2 && name2.username == sessionStorage.getItem("username")){
-            this.#remoteIAM = "right";
-        }
-    }
-
+   
     receiveRemoteCanvas(data){
-        console.log("recieving", data.data.game_update)
+        //console.log("recieving", data.data.game_update)
         this.#remoteCanvas = data.data.game_update; 
+        this.#leftPlayer.score = data.data.left_score;
+        this.#rightPlayer.score = data.data.right_score;
         
     }
 
@@ -341,30 +280,7 @@ class Game {
         this.#rightPlayer.score = data["right"];
     }
 
-    remoteKeyUpHandling(data){
-        if (["left", "right"].includes(data.data.side)){
-            if (data.data.side != this.#remoteIAM){
-                // console.log(data);
-                let keyToPress;
-                if (data.data.key == "down"){
-                    keyToPress = this.#defRemoteBinds["down"];
-                    
-                }
-                if (data.data.key == "up"){
-                    keyToPress = this.#defRemoteBinds["up"];
-                    
-                }
-                let status;
-                if (data.data.key_status == "on_press")
-                    status = true;
-                if (data.data.key_status == "on_release")
-                    status = false;
-                keysPressed[keyToPress] = status;
-               // console.log(keyToPress,data.data.key,keysPressed[keyToPress], data.data.key_status);
-            }
-        }
-    }
-
+   
     remoteGameEnd(){
         this.#endGame = 1;
     }
