@@ -24,7 +24,8 @@ class UIController:
 
         self.input_handlers = {
             "lobby": self.handle_lobby_input,
-            "keyboard": self.handle_keyboard_input
+            "keyboard": self.handle_keyboard_input,
+            "game": self.handle_game_input,
         }
 
     def __str__(self):
@@ -98,6 +99,19 @@ class UIController:
         
         except Exception as e:
             log_message(f"Error in handle_keyboard_input: {e}", level=logging.ERROR)
+
+
+    async def handle_game_input(self, game_input):
+        try:
+            # Here we format the message so the specific view can process it
+            log_message(f"Lobby Input from UI Controller: {game_input}", level=logging.DEBUG)
+            # We will format the info in a dictionary with the following format:
+            # {"task_name": "lobby", "message": lobby_input}
+            return {"task_name": "game", "data": game_input}
+        
+        except Exception as e:
+            log_message(f"Error in handle_game_input: {e}", level=logging.ERROR)        
+
 # ---------------------------------------------
 
 # Use to handle keyboard input directly from the UI Controller without processing all other inputs for use with no ws views

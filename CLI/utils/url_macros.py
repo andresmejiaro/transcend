@@ -5,6 +5,7 @@ WS_BASE_URL = 'ws://localhost:8001/ws'
 
 # WS Templates
 LOBBY_URI_TEMPLATE = WS_BASE_URL + '/lobby/?token={token}'
+PONG_URI_TEMPLATE = WS_BASE_URL + '/pong2/{match_id}/?token={token}'
 
 # API Endpoints
 LOGIN = API_BASE_URL + '/user/login/'

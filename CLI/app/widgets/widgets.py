@@ -96,3 +96,26 @@ class Widget:
 
         except Exception as e:
             log_message(f"Error printing current time: {e}", level=logging.ERROR)
+
+    def print_input_box(self, prompt, input_text):
+        row = self.rows - 1
+        self._addstr(row, 0, prompt, curses.color_pair(6) | curses.A_DIM | curses.A_BOLD)
+        col = 0 + len(prompt)
+        self._addstr(row, col, input_text, curses.color_pair(6) | curses.A_DIM | curses.A_BOLD | curses.A_BLINK)
+
+
+
+    def scaler(self, prior, priorMax, posMax):
+        return int(posMax * prior / priorMax)
+
+    def rectdrawer(self, dictCanvas: dict, obj:str, stdscr, 
+                enclousure = {"xl" : 0,"xh": 858,"yl": 0,"yh": 525}):
+        height,width = stdscr.getmaxyx()
+        startY = self.scaler(dictCanvas[obj]["position"]["y"],enclousure["yh"],height)
+        endY = self.scaler(dictCanvas[obj]["position"]["y"] + dictCanvas[obj]["size"]["y"],enclousure["yh"],height)
+        startX = self.scaler(dictCanvas[obj]["position"]["x"],enclousure["xh"],width)
+        endX = self.scaler(dictCanvas[obj]["position"]["x"] + dictCanvas[obj]["size"]["x"],enclousure["xh"],width)
+        for i in range(round(startY), round(endY)):
+            for j in range(round(startX), round(endX)):
+                stdscr.addstr(i, j, "x")
+        

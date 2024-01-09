@@ -34,12 +34,12 @@ class CLIApp:
         self.task_manager = TaskManager()  # The task manager object - Used to create and manage tasks
         self.ui_controller = None  # The UI controller object - Used to manage the UI and shared data between tasks
         # Adjust App Frame Rate - Adjust the frame rate of the application
-        self.frame_rate = [60]
+        self.frame_rate = [30]
         self.process_speed = [10]
 
-    # Essential App Tasks - These tasks are essential to the application and will be created
+# Essential App Tasks - These tasks are essential to the application and will be created
     # Lobby Websocket Task - Connect to the lobby websocket and send and receive messages
-    async def websocket_task(self, data):
+    async def websocket_receive(self, data):
         try:
             async with aiohttp.ClientSession() as session:
                 token_info = self.file_manager.load_data('token.json')
@@ -48,6 +48,9 @@ class CLIApp:
                 log_message(f"Connecting to websocket: {uri}", level=logging.INFO)
                 async with session.ws_connect(uri) as ws:
                     try:
+                        # Create a task to check the send_queue periodically
+                        send_task = asyncio.create_task(self.check_lobby_send_queue(data, ws))
+
                         async for msg in ws:
                             if msg.type == aiohttp.WSMsgType.TEXT:
                                 async with data["receive_lock"]:
@@ -56,21 +59,11 @@ class CLIApp:
                             elif msg.type == aiohttp.WSMsgType.ERROR:
                                 break
 
-                            # Send messages
-                            while not data["send_queue"].empty():
-                                async with data["send_lock"]:
-                                    message = await data["send_queue"].get()
-                                    await ws.send_str(message)
-                                    log_message(f"Sent message: {message}", level=logging.DEBUG)
-
-                            await asyncio.sleep(1)
-
                         log_message("Websocket task completed", level=logging.DEBUG)
 
                     except (asyncio.CancelledError, GeneratorExit):
                         log_message("Websocket task cancelled", level=logging.DEBUG)
                         raise
-
                     except Exception as e:
                         log_message(f"Websocket task error: {e}", level=logging.ERROR)
                         raise
@@ -84,6 +77,31 @@ class CLIApp:
         except Exception as e:
             log_message(f"An error occurred in Lobby Websocket Task: {e}", level=logging.ERROR)
             self.exit_status = 1
+        finally:
+            # Cancel the send_task when the websocket task is cancelled
+            if send_task:
+                send_task.cancel()
+
+    async def check_lobby_send_queue(self, data, ws):
+        while True:
+            try:
+                # Check for outgoing messages in the send_queue
+                while not data["send_queue"].empty():
+                    log_message("Lobby has a message pending to send", level=logging.DEBUG)
+                    async with data["send_lock"]:
+                        message = await data["send_queue"].get()
+                        await ws.send_str(message)
+                        log_message(f"Sent message: {message}", level=logging.DEBUG)
+
+                # Sleep for a short duration before checking again
+                await asyncio.sleep(1)
+
+            except asyncio.CancelledError:
+                # If the task is cancelled, exit the loop
+                break
+        
+    
+    # -------------------------------------
 
     # Keyboard Input Task - Get keyboard input and put it in the keyboard input queue
     async def keyboard_task(self, data):
@@ -108,6 +126,7 @@ class CLIApp:
         except Exception as e:
             log_message(f"An error occurred in Keyboard Input Task: {e}", level=logging.ERROR)
             self.exit_status = 1
+    # -------------------------------------
 
     # Main Loop Task - Run the main loop of the application
     async def ui_draw_task(self, data):
@@ -162,8 +181,21 @@ class CLIApp:
             log_message(f"An error occurred in UI Task: {e}", level=logging.ERROR)
             await self.ui_view.cleanup()
             self.exit_status = 1
-
     # -------------------------------------
+
+
+
+
+        except asyncio.CancelledError:
+            # Catch the cancellation when leaving the view
+            pass
+        except aiohttp.ClientError as e:
+            log_message(f"An error occurred in Lobby Websocket Task: {e}", level=logging.ERROR)
+            self.exit_status = 1
+        except Exception as e:
+            log_message(f"An error occurred in Lobby Websocket Task: {e}", level=logging.ERROR)
+            self.exit_status = 1
+
 
     # Entry Point - Initializes tasks and runs the main loop, additionally tasks will be created and started and stopped
     async def start(self):
@@ -200,7 +232,7 @@ class CLIApp:
 
             # Start tasks (ws_task, keyboard_task, UI_input_task, UI_draw_task)
             tasks = [
-                self.task_manager.create_task(task_name="lobby", task_func=self.websocket_task, data=ws_data),
+                self.task_manager.create_task(task_name="lobby", task_func=self.websocket_receive, data=ws_data),
                 self.task_manager.create_task(task_name="keyboard", task_func=self.keyboard_task, data=keyboard_data),
                 self.task_manager.create_task(task_name="UI", task_func=self.ui_handle_input_task, data=ui_data),
                 self.task_manager.create_task(task_name="UI_draw", task_func=self.ui_draw_task, data=ui_data),
