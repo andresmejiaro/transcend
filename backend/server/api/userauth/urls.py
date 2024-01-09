@@ -7,6 +7,7 @@ from .views.user import info_me_view, info_me_id_view, update_avatar_view, get_u
 from .views.token import send_csrf_token_view, validate_jwt_token_view
 from .views.googleauth import enable_2fa, disable_2fa, display_qr_code, verify_totp_code, user_2fa_setup_complete
 from .views.auth import oauth_start, oauth_login
+from .views.stats import get_kpi
 
 urlpatterns = [
     path('user/signup/', signup_view, name="signup"),
@@ -35,6 +36,8 @@ urlpatterns = [
 
     path('oauth-init/', oauth_start, name="oauth-start"),
     path('oauth/login/', oauth_login, name="oauth-login"),
+
+    path('user/<int:user_id>/stats/', get_kpi, name="get_kpi"),
 
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
