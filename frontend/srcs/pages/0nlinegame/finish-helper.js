@@ -21,6 +21,5 @@ const showInFrontMatchFinish = (data) => {
 }
 
 const handleFinishedMatchUpdate = async (data) => {
-	console.log(data)
 	showInFrontMatchFinish(data);
 }
