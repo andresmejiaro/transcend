@@ -1,5 +1,5 @@
-window.DJANGO_API_BASE_URL = "http://localhost:8000";
-window.DAPHNE_BASE_URL = "ws://localhost:8001";
+window.DJANGO_API_BASE_URL = "https://localhost:3000";
+window.DAPHNE_BASE_URL = "wss://localhost:3000";
 
 function getCSRFCookie() {
 	let name = "csrftoken" + "=";
