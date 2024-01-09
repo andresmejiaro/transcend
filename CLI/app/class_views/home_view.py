@@ -55,7 +55,7 @@ class HomePage(Widget):
         try:
             self._clear_screen()
 
-            self.frame_rate[0] = .1
+            self.frame_rate[0] = 2
 
             max_y, max_x = self.stdscr.getmaxyx()
             self.update_terminal_size()
