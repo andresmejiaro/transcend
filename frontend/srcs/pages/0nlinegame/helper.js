@@ -54,16 +54,15 @@ function updateGameCanvas(data, game) {
 			// Handle game update data
 			//console.log("game data:", data.data);
 			game.remoteGameEnd();
-		 } else if (data.type == "screen_report"){
-
-		 }
+		 } 
 		 // else {
 		// 	// Handle game update data
 		// 	console.log("game data:", data.data);
 		// 	console.error("Invalid message type:", data.type);
 		// }
-	}
-	
+	} else if (data.type == "screen_report"){
+		game.receiveRemoteCanvas(data);
+	 }
 }
 
 function sendKeyPress(key, side, frame) {
@@ -126,3 +125,21 @@ const activateGame = async () => {
 	const param = '{"command":"start_ball"}';
 	sendJson(param);
 };
+
+function handleArrowKeyPress(key) {
+	// Customize this based on your game's key bindings
+	switch (key) {
+		case 'ArrowUp':
+			sendKeyPress('up');
+			break;
+		case 'ArrowDown':
+			sendKeyPress('down');
+			break;
+		case 'ArrowLeft':
+			sendKeyPress('left');
+			break;
+		case 'ArrowRight':
+			sendKeyPress('right');
+			break;
+	}
+}
