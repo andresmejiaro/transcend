@@ -11,7 +11,11 @@ def get_kpi(request, user_id):
         return JsonResponse({
             "status": "Method not allowed"
         }, status=405)
-    user = CustomUser.objects.get(pk=user_id)
+    try:
+        user = CustomUser.objects.get(pk=user_id)
+    except CustomUser.DoesNotExist:
+        return JsonResponse({"status": "User not found"}, status=404)
+
     matches = Match.objects.filter(Q(player1=user) | Q(player2=user))
     wins = matches.filter(winner=user)
     winrate = round(len(wins) / len(matches), 2) if len(matches) != 0 else 0
@@ -25,4 +29,3 @@ def get_kpi(request, user_id):
     }
 
     return JsonResponse(res)
-
