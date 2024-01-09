@@ -216,7 +216,7 @@ class PongConsumer(AsyncWebsocketConsumer):
             query_string = self.scope['query_string'].decode('utf-8')
             query_params = parse_qs(query_string)
             self.match_id = self.scope['url_route']['kwargs']['match_id']
-            
+
             if not query_params.get('token'):
                 await self.close()
             print(f'JWT Token: {query_params.get("token")}')
