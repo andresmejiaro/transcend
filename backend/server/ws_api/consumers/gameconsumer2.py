@@ -337,7 +337,7 @@ class PongConsumer(AsyncWebsocketConsumer):
                     "left_score": PongConsumer.shared_game[self.match_id]._leftPlayer.getScore(),
                     "right_score": PongConsumer.shared_game[self.match_id]._rightPlayer.getScore(),
                 })
-                await asyncio.sleep(set_frame_rate(40))
+                await asyncio.sleep(set_frame_rate(60))
         except asyncio.CancelledError:
             print('Game stopped')
         except Exception as e:
