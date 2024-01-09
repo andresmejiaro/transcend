@@ -789,3 +789,32 @@ def game_matchmaking(request, pk):
 
     return JsonResponse({'status': 'error', 'message': 'Only GET requests are allowed'}, status=355)
 # -----------------------------
+
+
+def get_match_info(request, *args, **kwargs):
+    if request.method == 'GET':
+        try:
+            match_object = Match.objects.get(id=kwargs['match_id'])
+            res = {
+                "match_id": match_object.id,
+                "player1": {
+                    "id": match_object.player1.id,
+                    "username": match_object.player1.username,
+                    "score": match_object.player1_score
+                },
+                "player2": {
+                    "id": match_object.player2.id,
+                    "username": match_object.player2.username,
+                    "score": match_object.player2_score,
+                },
+                "winner": match_object.winner.username,
+                "date_played": match_object.date_played
+            }
+            return JsonResponse(res)
+        except Match.DoesNotExist:
+            return JsonResponse({
+                "message": "Match not found"
+            }, status=404)
+    return JsonResponse({
+        "message": "Method not allowed"
+    }, status=405)
