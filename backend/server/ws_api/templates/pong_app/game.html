@@ -16,19 +16,10 @@
     <label for="matchId">Match ID:</label>
     <input type="text" id="matchId" placeholder="Enter Match ID">
 
-    <label for="player1Id">Player 1 ID:</label>
-    <input type="text" id="player1Id" placeholder="Enter Player 1 ID">
+    <label for="tokenId">Token:</label>
+    <input type="text" id="tokenId" placeholder="Enter Token">
 
-    <label for="player2Id">Player 2 ID:</label>
-    <input type="text" id="player2Id" placeholder="Enter Player 2 ID">
-
-    <label for="clientId">Client ID:</label>
-    <input type="text" id="clientId" placeholder="Enter Client ID">
-
-    <label for="scoreLimit">Score Limit:</label>
-    <input type="number" id="scoreLimit" placeholder="Enter Score Limit">
-
-    <button onclick="startGame()">Start Game</button>
+    <button onclick="startGame()">Connect to Socket</button>
 
     <label for="jsonInput">JSON Input:</label>
     <textarea id="jsonInput" placeholder="Enter JSON"></textarea>
@@ -39,24 +30,28 @@
 
     <script>
         const matchIdInput = document.getElementById('matchId');
-        const player1IdInput = document.getElementById('player1Id');
-        const player2IdInput = document.getElementById('player2Id');
-        const clientIdInput = document.getElementById('clientId');
-        const scoreLimitInput = document.getElementById('scoreLimit');
+        const tokenInput = document.getElementById('tokenId');
         const jsonInput = document.getElementById('jsonInput');
         const gameCanvas = document.getElementById('gameCanvas');
         const ctx = gameCanvas.getContext('2d');
+
+        // Image textures
+        const ballTexture = new Image();
+        ballTexture.src = 'textures/ball.png';
+
+        const leftPaddleTexture = new Image();
+        leftPaddleTexture.src = 'textures/left_paddle.png';
+
+        const rightPaddleTexture = new Image();
+        rightPaddleTexture.src = 'textures/right_paddle.png';
 
         let ws;
 
         function startGame() {
             const matchId = matchIdInput.value;
-            const player1Id = player1IdInput.value;
-            const player2Id = player2IdInput.value;
-            const clientId = clientIdInput.value;
-            const scoreLimit = scoreLimitInput.value;
+            const token = tokenInput.value;
 
-            const uri = `${window.DAPHNE_BASE_URL}/ws/pong/${matchIdInput.value}/?player_1_id=${player1IdInput.value}&player_2_id=${player2IdInput.value}&client_id=${clientIdInput.value}&scorelimit=${scoreLimitInput.value}`;
+            const uri = `ws://localhost:8001/ws/pong2/${matchIdInput.value}/?token=${tokenInput.value}`;
 
             ws = new WebSocket(uri);
 
@@ -70,8 +65,6 @@
 
             ws.addEventListener('message', (event) => {
                 const data = JSON.parse(event.data);
-                console.log('Received message:', data);
-
                 updateGameCanvas(data);
             });
         }
@@ -98,42 +91,41 @@
             handleArrowKeyRelease(event.key);
         });
 
+// Game Canvas Functions
         function updateGameCanvas(data) {
-        console.log('Updating game canvas with data:', data);
-
-        if (data.type === 'player_list') {
-            // Handle player list data if needed
-            console.log('Received player list:', data.data);
-        } else if (data.type === 'game_update') {
-            // Handle game update data
-            drawPongGame(data.data);
-        } else {
-            console.error('Invalid message type:', data.type);
-        }
-    }
-
-        function drawPongGame(data) {
-        // Check if the required properties exist in the data object
-        if (data && data.canvas && data.canvas.ball && data.canvas.leftPaddle && data.canvas.rightPaddle) {
-            ctx.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
-            drawRect(data.canvas.ball.position, data.canvas.ball.size, 'blue');
-            drawRect(data.canvas.leftPaddle.position, data.canvas.leftPaddle.size, 'green');
-            drawRect(data.canvas.rightPaddle.position, data.canvas.rightPaddle.size, 'red');
-
-            const scores = data.score;
-            ctx.fillStyle = 'black';
-            ctx.font = '20px Arial';
-            ctx.fillText(`${player1IdInput.value}: ${scores[player1IdInput.value]} - ${player2IdInput.value}: ${scores[player2IdInput.value]}`, 10, 20);
-        } else {
-            console.error('Invalid data format:', data);
-        }
-    }
-
-        function drawRect(position, size, color) {
-            ctx.fillStyle = color;
-            ctx.fillRect(position.x, position.y, size.x, size.y);
+            if (data.type === 'message') {
+                console.log('Server Message:', data.data);
+            } else if (data.type === 'screen_report') {
+                drawPongGame(data.data.game_update, data.data.left_score, data.data.right_score);
+            } else if (data.type === 'match_results') {
+                console.log('Match Results:', data.data);
+            }
+            else {
+                console.error('Invalid message type:', data.type);
+            }
         }
 
+        function drawPongGame(data, leftScore, rightScore) {
+            ctx.fillStyle = 'black'; // Set the background color
+            ctx.fillRect(0, 0, gameCanvas.width, gameCanvas.height);
+            if (data && data.ball && data.leftPaddle && data.rightPaddle) {
+                drawRect(data.ball.position, data.ball.size, ballTexture);
+                drawRect(data.leftPaddle.position, data.leftPaddle.size, leftPaddleTexture);
+                drawRect(data.rightPaddle.position, data.rightPaddle.size, rightPaddleTexture);
+            } else {
+                console.error('Invalid data format:', data);
+            }
+            ctx.font = '48px serif';
+            ctx.fillStyle = 'white'; // Set the color for the scores
+            ctx.fillText(leftScore, 100, 50);
+            ctx.fillText(rightScore, 700, 50);
+        }
+
+        function drawRect(position, size, texture) {
+            ctx.drawImage(texture, position.x, position.y, size.x, size.y);
+        }
+
+// Keyboard Handling Functions
         function handleArrowKeyPress(key) {
             // Customize this based on your game's key bindings
             switch (key) {
