@@ -23,7 +23,7 @@ class Game:
 		self._ball = Ball(dictCanvas = self._dictCanvas, 
 			name ="ball",
 			position = {"x": 0,	"y":0}, speed = {"x" : 0, "y" : 0},
-				size = {"x" : 10, "y" : 10})
+				size = {"x" : 30, "y" : 30})
 		self.resetPosition()
 		self._leftPaddle = Paddle(keyboard=self._dictKeyboard,
 			dictCanvas = self._dictCanvas, name = "leftPaddle",
@@ -55,6 +55,24 @@ class Game:
 
 	def pointLoop(self):
 		self.runDelayedActions()
+		self._ball.draw()
+		ballState = self._ball.updatePosition()
+		if ballState == 1:
+			self._leftPlayer.goal()
+			self.reportScore()
+			self.resetPosition()
+		elif ballState == -1:
+			self._rightPlayer.goal()
+			self.reportScore()
+			self.resetPosition()
+		else:
+			self._leftPaddle.draw()
+			self._leftPaddle.updatePosition()
+			self._rightPaddle.draw()
+			self._rightPaddle.updatePosition()
+		self._frame += 1
+  
+	def pointLoop2(self):
 		self._ball.draw()
 		ballState = self._ball.updatePosition()
 		if ballState == 1:
