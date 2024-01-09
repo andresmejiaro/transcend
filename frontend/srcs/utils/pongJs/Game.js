@@ -179,15 +179,7 @@ class Game {
         else if (ballState == -1) {
             this.#rightPlayer.goal();
             this.resetPosition();
-        } else {
-            this.#leftPaddle.updatePosition();
-            this.#rightPaddle.updatePosition();
-        }
-    }
-
-    localGameLogic2() {
-        this.#ball.updatePosition();
-        this.#leftPaddle.updatePosition();
+        } eleyJhbGciOiAiSFMyNTYiLCAidHlwIjogIkpXVCJ9.eyJ1c2VyX2lkIjogMiwgInVzZXJuYW1lIjogImdhdG92b2xhZG9yIiwgImV4cCI6ICIyMDI0LTAxLTA5VDEyOjA2OjM2LjU4ODgyNiJ9.nUBUOcv3KFI-3NYo0qcnWipMGCcn52QR1DBTj_M0HP0.#leftPaddle.updatePosition();
         this.#rightPaddle.updatePosition();
     }
 

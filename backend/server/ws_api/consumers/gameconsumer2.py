@@ -284,7 +284,6 @@ class PongConsumer(AsyncWebsocketConsumer):
                
     async def receive(self, text_data):
         try:
-            await asyncio.sleep(0.1)
             data = json.loads(text_data)
             print(f'Received data: {data}')
             if data['command'] == 'keyboard':
