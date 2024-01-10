@@ -43,6 +43,8 @@ class HomePage(Widget):
         self.game_task = None
         
         self.match_id = None
+        self.left_score = 0
+        self.right_score = 0
 
         self.game_update = None
         
@@ -232,7 +234,6 @@ class HomePage(Widget):
                 self.game_update = data.get("game_update")
                 self.left_score = data.get("left_score")
                 self.right_score = data.get("right_score")
-
 
         except Exception as e:
             log_message(f"Error in process_game_input: {e}", level=logging.ERROR)
