@@ -129,7 +129,7 @@ const removeToggleFriendNav = () => {
 const handleCloseFriendsModalMsg = (msg) => {
   const closeModalBtn = document.querySelector(".btn-close.btn-close-white.btn-friends-close");
   closeModalBtn.click();
-  showToast(msg)
+  showSimpleToast(msg);
 }
 
 const handleCloseFriendsModal = () => {

@@ -636,11 +636,17 @@ def user_all_matches(request, pk):
             for match in matches:
                 match_list.append({
                     'id': match.id,
-                    'player1': match.player1.id,
-                    'player2': match.player2.id,
+                    'player1': {
+                        "id": match.player1.id,
+                        "username": match.player1.username,
+                    },
+                    'player2': {
+                        "id": match.player2.id,
+                        "username": match.player2.username,
+                    },
                     'player1_score': match.player1_score,
                     'player2_score': match.player2_score,
-                    'winner': match.winner.id if match.winner else None,
+                    'winner': match.winner.username if match.winner else None,
                     'date_played': match.date_played,
                     'active': match.active
                     })
