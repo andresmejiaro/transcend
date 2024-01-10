@@ -10,6 +10,7 @@ from django.db import transaction                           # Used to make datab
 from django.utils.module_loading import import_string       # Used to import models from other apps to avoid circular imports
 import logging                                              # Used to log errors
 from api.jwt_utils import get_user_id_from_jwt_token
+from api.tournaments.models import Tournament, Match
 
 class LobbyConsumer(AsyncWebsocketConsumer):
 
@@ -18,6 +19,7 @@ class LobbyConsumer(AsyncWebsocketConsumer):
     list_of_online_users = {}
     queue = {}
     lobby_name = 'lobby'
+    tournaments = {}
 
 # Endpoints and commands (Client -> Server)
     LIST_OF_USERS = 'list_of_users'                     # Command to send the list of online users (Connected to the socket)
@@ -46,6 +48,54 @@ class LobbyConsumer(AsyncWebsocketConsumer):
     JOIN_QUEUE = 'join_queue'                           # Command to join the queue arguments: pass the values as of 'client_id' eg: {'command': 'join_queue', 'data': {'queue_name': 'global'}}
     LEAVE_QUEUE = 'leave_queue'                         # Command to leave the queue arguments: pass the values as of 'client_id' eg: {'command': 'leave_queue', 'data': {'queue_name': 'tournament_26'}}
 # ---------------------------------------
+
+    async def join_tournament(self, tournament_id):
+        try:
+            tournament = Tournament.objects.get(pk=tournament_id)
+        except Tournament.DoesNotExist as e:
+            # TODO: send error message
+            print(f'{e.__name__}: {str(e)}')
+            return
+
+        if not self.tournaments.get(tournament_id):
+            self.tournaments[tournament_id] = dict()
+            self.tournaments[tournament_id]['tournament_object'] = tournament
+            self.tournaments[tournament_id]['players'] = []
+
+        if self.client_id in self.tournaments[tournament_id]['players']:
+            # TODO: send error message (duplicate join)
+            print("You are alreadyd in this tournament")
+            return
+        self.tournaments[tournament_id]['players'].append(self.client_id)
+
+    async def leave_tournament(self, tournament_id):
+        if not self.tournaments.get(tournament_id):
+            # TODO: return error msg
+            print("Tournament does not exist")
+            return
+        if self.client_id not in self.tournaments[tournament_id]['players']:
+            # TODO: fix
+            print("You are not in this tournament.")
+            return
+        self.tournaments[tournament_id]['players'].remove(self.client_id)
+
+    async def make_tournament_pairs(self, tournament_id):
+        # TODO: extra protection
+        players = self.tournaments[tournament_id]['players']
+        pairs = [(players[i], players[i + 1]) for i in range(0, len(players), 2)]
+        self.tournaments[tournament_id]['current_round'] = pairs
+
+    async def create_match_for_tournament(self, players):
+        match = Match(player1=players[0], player2=players[1])
+        return match.id
+
+    async def start_next_round(self, tournament_id):
+        for pairs in self.tournaments[tournament_id]['current_round']:
+            match_id = await self.create_match_for_tournament(pairs)
+            # Send match_id to the clients
+
+    async def start_tournament(self, tournament_id):
+        pass
 
     async def join_queue(self, queue_name, user_id):
         try:
