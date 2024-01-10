@@ -64,12 +64,12 @@ class HomePage(Widget):
         try:
             self._clear_screen()
 
-            self.frame_rate[0] = 2
+            self.frame_rate[0] = 30
 
             max_y, max_x = self.stdscr.getmaxyx()
             self.update_terminal_size()
 
-            if self.rows < 30 or self.cols < 120:
+            if self.rows < 30 or self.cols < 70:
                 self.print_screen_too_small()
                 return
 
@@ -82,7 +82,17 @@ class HomePage(Widget):
 
             self.print_online_users(max_y, max_x)
 
-            self.print_input_box("Input Command: ", self.input_string)
+            if self.game_update:
+                self.rectdrawer(self.game_update, "ball", self.stdscr)
+                self.rectdrawer(self.game_update, "leftPaddle", self.stdscr)
+                self.rectdrawer(self.game_update, "rightPaddle", self.stdscr)
+            
+            if self.left_score:
+                self._addstr(max_y - 1, 0, f"Left Score: {self.left_score}")
+            if self.right_score:
+                self._addstr(max_y - 1, max_x - len(f"Right Score: {self.right_score}"), f"Right Score: {self.right_score}")
+
+            # self.print_input_box("Input Command: ", self.input_string)
 
             self._refresh_screen()
 
@@ -94,7 +104,7 @@ class HomePage(Widget):
     # Input Processing Handler
     async def process_input(self):
         try:
-            self.process_speed[0] = 300
+            self.process_speed[0] = 200
 
             user_input = await self.ui_controller.check_and_process_inputs_filterd(["lobby", "keyboard", f'game_{self.match_id}'])
 
@@ -213,17 +223,16 @@ class HomePage(Widget):
             if message_type == "message":
                 log_message(f"Message from game: {data}", level=logging.DEBUG)
                 message = data.get("message")
+                self.print_message_bottom(message)
                 log_message(f"Message: {message}", level=logging.DEBUG)
 
 
             elif message_type == "screen_report":
                 log_message(f"Screen Report from game: {data}", level=logging.DEBUG)
                 self.game_update = data.get("game_update")
-                self._clear_screen()
-                self.rectdrawer(self.game_update, "ball", self.stdscr)
-                self.rectdrawer(self.game_update, "leftPaddle", self.stdscr)
-                self.rectdrawer(self.game_update, "rightPaddle", self.stdscr)
-                self._refresh_screen()
+                self.left_score = data.get("left_score")
+                self.right_score = data.get("right_score")
+
 
         except Exception as e:
             log_message(f"Error in process_game_input: {e}", level=logging.ERROR)

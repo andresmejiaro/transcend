@@ -118,4 +118,10 @@ class Widget:
         for i in range(round(startY), round(endY)):
             for j in range(round(startX), round(endX)):
                 stdscr.addstr(i, j, "x")
+
+    def print_score(self, score):
+        scoreb = ''
+        for key, value in score.items():
+            scoreb += f"{key}: {value} "
+        self._addstr(2, int((self.cols - len(scoreb)) / 2), scoreb)
         
