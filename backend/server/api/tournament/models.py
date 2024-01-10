@@ -21,6 +21,7 @@ class Match(models.Model):
     player2 = models.ForeignKey(User, on_delete=models.CASCADE, related_name='player2', null=True)
     player1_score = models.IntegerField(default=0)
     player2_score = models.IntegerField(default=0)
+    tournament = models.ForeignKey(Tournament, blank=True, default=None, on_delete=models.CASCADE, related_name='tournament')
     winner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='winner', blank=True, null=True)
     date_played = models.DateTimeField(blank=True, null=True)
     active = models.BooleanField(default=False)
