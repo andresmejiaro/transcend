@@ -47,6 +47,7 @@ class LobbyConsumer(AsyncWebsocketConsumer):
     JOIN_QUEUE = 'join_queue'                           # Command to join the queue arguments: pass the values as of 'client_id' eg: {'command': 'join_queue', 'data': {'queue_name': 'global'}}
     LEAVE_QUEUE = 'leave_queue'                         # Command to leave the queue arguments: pass the values as of 'client_id' eg: {'command': 'leave_queue', 'data': {'queue_name': 'tournament_26'}}
     JOIN_TOURNAMENT = 'join_tournament'                 # Command to join a tournament
+    START_TOURNAMENT = 'start_tournament'               # Command to start a tournament
 # ---------------------------------------
 
     async def join_tournament(self, tournament_id):
@@ -98,13 +99,18 @@ class LobbyConsumer(AsyncWebsocketConsumer):
 
     async def create_match_for_tournament(self, players, tournament_id):
         from api.tournament.models import Match
+        from api.userauth.models import CustomUser
+        player1 = await database_sync_to_async(CustomUser.objects.get)(pk=players[0])
+        player2 = await database_sync_to_async(CustomUser.objects.get)(pk=players[1])
         match = Match(
-            player1=players[0],
-            player2=players[1],
-            tourament=self.tournaments[tournament_id]["tourament_object"])
+            player1=player1,
+            player2=player2,
+            tournament=self.tournaments[tournament_id]["tournament_object"])
+        await database_sync_to_async(match.save)()
         return match.id
 
     async def start_next_round(self, tournament_id):
+        await self.make_tournament_pairs(tournament_id)
         for pairs in self.tournaments[tournament_id]['current_round']:
             match_id = await self.create_match_for_tournament(pairs, tournament_id)
             # Send match_id to the clients
@@ -113,7 +119,8 @@ class LobbyConsumer(AsyncWebsocketConsumer):
             }))
 
     async def start_tournament(self, tournament_id):
-        if len(self.tournaments[tournament_id]['players']) != 4:
+        tournament_id = int(tournament_id)
+        if len(self.tournaments[tournament_id]['players']) != 2:
             await self.send(text_data=json.dumps({"error": "Not all members are connected."}))
             return
         await self.start_next_round(tournament_id)
@@ -381,6 +388,8 @@ class LobbyConsumer(AsyncWebsocketConsumer):
                 await self.leave_queue(data['queue_name'], self.client_id)
             elif command == self.JOIN_TOURNAMENT:
                 await self.join_tournament(data['tournament_id'])
+            elif command == self.START_TOURNAMENT:
+                await self.start_tournament(data['tournament_id'])
             else:
                 await self.send_info_to_client(self.CMD_NOT_FOUND, text_data)
 
