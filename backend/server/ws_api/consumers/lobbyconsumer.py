@@ -10,7 +10,6 @@ from django.db import transaction                           # Used to make datab
 from django.utils.module_loading import import_string       # Used to import models from other apps to avoid circular imports
 import logging                                              # Used to log errors
 from api.jwt_utils import get_user_id_from_jwt_token
-from api.tournaments.models import Tournament, Match
 
 class LobbyConsumer(AsyncWebsocketConsumer):
 
@@ -47,26 +46,37 @@ class LobbyConsumer(AsyncWebsocketConsumer):
     CANCEL_TOURNAMENT = 'cancel_tournament'             # Command to cancel a tournament arguments: pass the values as of 'client_id' and 'tournament_id' eg: {'command': 'cancel_tournament', 'data': {'client_id': '1', 'tournament_id': '1'}}
     JOIN_QUEUE = 'join_queue'                           # Command to join the queue arguments: pass the values as of 'client_id' eg: {'command': 'join_queue', 'data': {'queue_name': 'global'}}
     LEAVE_QUEUE = 'leave_queue'                         # Command to leave the queue arguments: pass the values as of 'client_id' eg: {'command': 'leave_queue', 'data': {'queue_name': 'tournament_26'}}
+    JOIN_TOURNAMENT = 'join_tournament'                 # Command to join a tournament
 # ---------------------------------------
 
     async def join_tournament(self, tournament_id):
+        from api.tournament.models import Tournament, Match
         try:
-            tournament = Tournament.objects.get(pk=tournament_id)
+            tournament = await database_sync_to_async(Tournament.objects.get)(pk=tournament_id)
         except Tournament.DoesNotExist as e:
             # TODO: send error message
             print(f'{e.__name__}: {str(e)}')
             return
 
         if not self.tournaments.get(tournament_id):
-            self.tournaments[tournament_id] = dict()
-            self.tournaments[tournament_id]['tournament_object'] = tournament
-            self.tournaments[tournament_id]['players'] = []
+            LobbyConsumer.tournaments[tournament_id] = dict()
+            LobbyConsumer.tournaments[tournament_id]['tournament_object'] = tournament
+            LobbyConsumer.tournaments[tournament_id]['players'] = []
 
+        self.tournaments = LobbyConsumer.tournaments
         if self.client_id in self.tournaments[tournament_id]['players']:
             # TODO: send error message (duplicate join)
-            print("You are alreadyd in this tournament")
+            print("You are already in this tournament")
             return
+        await self.channel_layer.group_add(f'tournament_{tournament_id}', self.channel_name)
         self.tournaments[tournament_id]['players'].append(self.client_id)
+
+        await self.send(text_data=json.dumps({
+            "message": f"Joined tournament {tournament_id}",
+            "detail": {
+                "list_of_players": self.tournaments[tournament_id]['players']
+            }
+        }))
 
     async def leave_tournament(self, tournament_id):
         if not self.tournaments.get(tournament_id):
@@ -77,6 +87,7 @@ class LobbyConsumer(AsyncWebsocketConsumer):
             # TODO: fix
             print("You are not in this tournament.")
             return
+        await self.channel_layer.group_discard(f'tournament_{tournament_id}', self.channel_name)
         self.tournaments[tournament_id]['players'].remove(self.client_id)
 
     async def make_tournament_pairs(self, tournament_id):
@@ -85,17 +96,27 @@ class LobbyConsumer(AsyncWebsocketConsumer):
         pairs = [(players[i], players[i + 1]) for i in range(0, len(players), 2)]
         self.tournaments[tournament_id]['current_round'] = pairs
 
-    async def create_match_for_tournament(self, players):
-        match = Match(player1=players[0], player2=players[1])
+    async def create_match_for_tournament(self, players, tournament_id):
+        from api.tournament.models import Match
+        match = Match(
+            player1=players[0],
+            player2=players[1],
+            tourament=self.tournaments[tournament_id]["tourament_object"])
         return match.id
 
     async def start_next_round(self, tournament_id):
         for pairs in self.tournaments[tournament_id]['current_round']:
-            match_id = await self.create_match_for_tournament(pairs)
+            match_id = await self.create_match_for_tournament(pairs, tournament_id)
             # Send match_id to the clients
+            await self.send(text_data=json.dumps({
+                "match_id": match_id
+            }))
 
     async def start_tournament(self, tournament_id):
-        pass
+        if len(self.tournaments[tournament_id]['players']) != 4:
+            await self.send(text_data=json.dumps({"error": "Not all members are connected."}))
+            return
+        await self.start_next_round(tournament_id)
 
     async def join_queue(self, queue_name, user_id):
         try:
@@ -258,6 +279,8 @@ class LobbyConsumer(AsyncWebsocketConsumer):
             await self.channel_layer.group_add(self.lobby_name, self.channel_name)
             await self.channel_layer.group_add(self.client_id, self.channel_name)
 
+            await self.channel_layer.group_add("test", self.channel_name)
+
             # Predifined arrival method
             await self.announce_arrival()
 
@@ -286,6 +309,12 @@ class LobbyConsumer(AsyncWebsocketConsumer):
             print(error_message)
             logging.error(error_message)
             await self.close()
+
+    async def post_match_tournament(self, text_data):
+        data = json.loads(text_data)
+        detail = data.get('message')
+
+
 
     async def receive(self, text_data):
         try:
@@ -350,6 +379,8 @@ class LobbyConsumer(AsyncWebsocketConsumer):
                 await self.join_queue(data['queue_name'], self.client_id)
             elif command == self.LEAVE_QUEUE:
                 await self.leave_queue(data['queue_name'], self.client_id)
+            elif command == self.JOIN_TOURNAMENT:
+                await self.join_tournament(data['tournament_id'])
             else:
                 await self.send_info_to_client(self.CMD_NOT_FOUND, text_data)
 
