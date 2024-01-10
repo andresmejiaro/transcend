@@ -154,6 +154,20 @@ class PongConsumer(AsyncWebsocketConsumer):
             match_object.active = False
             match_object.save()
 
+            if match_object.tournament:
+                self.channel_layer.group_send(
+                    "tournament",
+                    {
+                        "type": "post_match_tournament",
+                        "message": {
+                            "detail": "Match finished",
+                            "match_id": match_object.id,
+                            "tournament_id": match_object.tournament.id,
+                            "winner": match_object.winner.id if match_object.winner is not None else None
+                        }
+                    }
+                )
+
             if match_object.winner:
                 winner_id = match_object.winner.id
                 loser_id = match_object.loser().id
@@ -171,7 +185,7 @@ class PongConsumer(AsyncWebsocketConsumer):
 
                 winner_object.save()
                 loser_object.save()
-                
+
                 print(f"Match finalized. Winner ID: {winner_id}, Loser ID: {loser_id}, Winner ELO: {winner_object.ELO}, Loser ELO: {loser_object.ELO}")
                 
                 # Send the match results back to the client
@@ -238,7 +252,8 @@ class PongConsumer(AsyncWebsocketConsumer):
                 await self.close()
                 
             await self.accept()
-                        
+
+
             print(f'List of Players: {PongConsumer.list_of_players}')
             
             await self.broadcast_to_group(f"{self.match_id}", "message", {
