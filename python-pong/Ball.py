@@ -56,7 +56,7 @@ class Ball(MovingRectangle):
 		x2 = abs(self.getCorners()["xh"] - colider.getCorners()["xl"])
 		y1 = abs(self.getCorners()["yl"] - colider.getCorners()["yh"])
 		y2 = abs(self.getCorners()["yh"] - colider.getCorners()["yl"])
-		if min(x1,x1) < min(y1,y2):
+		if min(x1,x2) < min(y1,y2):
 			self.setSpeed(x = -self.getSpeed()["x"], 
 				  y = self.getSpeed()["y"] + 0.5 * colider.getSpeed()["y"])
 		else:
