@@ -59,7 +59,7 @@ const updateStats = async () => {
 		// Set just the number without any accompanying text
 		gamesPlayedElement.innerText = statsData.games_played;
 		winsElement.innerText = statsData.wins;
-		winRateElement.innerText = Math.round(statsData.winrate);
+		winRateElement.innerText = Math.round(statsData.winrate) + "%";
 		tournamentsWonElement.innerText = statsData.tournaments_won;
 		
     } catch (error) {
