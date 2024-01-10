@@ -9,10 +9,11 @@ from app.class_views.home_view import HomePage
 
 
 class SplashView(Widget):
-    def __init__(self, stdscr, ui_controller, frame_rate, process_speed):
+    def __init__(self, stdscr, ui_controller, frame_rate, process_speed, task_manager):
         super().__init__(stdscr)
         self.ui_controller = ui_controller
         self.file_manager = FileManager()
+        self.task_manager = task_manager
         self.next_view = None
         self.frame_rate = frame_rate
         self.process_speed = process_speed
@@ -54,7 +55,7 @@ class SplashView(Widget):
         user_input = await self.ui_controller.handle_keyboard_input_directly()
         if user_input == 32:
             log_message(f"Splash screen user input: {user_input}", level=logging.DEBUG)
-            self.next_view = HomePage(self.stdscr, self.ui_controller, self.frame_rate, self.process_speed)
+            self.next_view = HomePage(self.stdscr, self.ui_controller, self.frame_rate, self.process_speed, self.task_manager)
         elif user_input == 27:
             self.next_view = "exit"
 

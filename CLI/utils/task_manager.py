@@ -5,13 +5,13 @@ import asyncio
 class TaskManager:
     def __init__(self):
         self._tasks = {}  # Use a dictionary to map task names to tasks
-        self._running = False
+        self._running = True
 
     def create_task(self, task_name, task_func, data=None):
         task = asyncio.create_task(task_func(data))
         self._tasks[task_name] = {"task": task, "data": data}  # Save task and its data with the given name
         return task
-
+        
     def get_task_data_by_name(self, task_name):
         # Retrieve data for a task by its name
         task_info = self._tasks.get(task_name)
@@ -75,3 +75,4 @@ class TaskManager:
             task_name = next((name for name, info in self._tasks.items() if info["task"] == task), None)
             if task_name:
                 self._tasks.pop(task_name, None)
+
