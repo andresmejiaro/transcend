@@ -1,5 +1,3 @@
-from pygments.lexers import data
-
 from ..user import CustomUser
 
 class UserUpdateValidator:
