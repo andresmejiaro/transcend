@@ -38,8 +38,9 @@ class Game {
         
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         if (this.#backgroundLoaded) {
-            if (this.statusToText() == "ai")
-                    this.setupAI();
+            this.statusToText()
+            if (this.#remote == "ai")
+                this.setupAI();
             if (this.#remote == 0 || this.#remote == 2)
                 requestAnimationFrame(() => this.gameSetup());
             else {
@@ -103,7 +104,7 @@ class Game {
             this.localGameLogic();
         this.drawInteractive();
         this.drawScore();
-        if (this.#remote != 1 && (
+        if ((
             this.#leftPlayer.score >= this.#scoreLimit
             || this.#rightPlayer.score >= this.#scoreLimit) || 
                 this.#endGame == 1)
@@ -206,7 +207,7 @@ class Game {
         
     async remoteGameSetup(){
         try{
-            const url = `${window.DJANGO_API_BASE_URL}/api/match/${matchIdInput.value}/`;
+            const url = `${window.DJANGO_API_BASE_URL}/api/match/${matchId}/`;
             const options = {
                 method: "GET",
                 mode: "cors",
@@ -214,6 +215,7 @@ class Game {
                 headers: {
                     "Content-Type": "application/json",
                   }};
+                console.log(url)
             const response = await makeRequest(true,url, options,"");
             this.#leftPlayer.name = response.player1.username;
             this.#rightPlayer.name = response.player2.username;

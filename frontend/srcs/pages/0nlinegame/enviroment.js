@@ -8,8 +8,6 @@ canvas.width = 858;
 canvas.height= 525;
 ctx.font = '20px Arial';
 ctx.fillStyle = 'white';
-console.log(sessionStorage.getItem("jwt"));
 const keysPressed = {};
 
-let ws;
 

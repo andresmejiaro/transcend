@@ -1,41 +1,41 @@
+let matchId = null;
+let gameSock;
 
-function SetUpListeners() {
+const connectGameSocket = async (gameInfo) => {
+	const authToken = sessionStorage.getItem("jwt");
+	matchId = gameInfo.match_id;
 	
-		const uri = `ws://localhost:8001/ws/pong2/${matchIdInput.value}/?token=${sessionStorage.getItem("jwt")}`;
+	return new Promise((resolve, reject) => {
+		gameSock = new WebSocket(`${window.DAPHNE_BASE_URL}/ws/pong2/${matchId}/?token=${authToken}`);
 
-		ws = new WebSocket(uri);
-
-		ws.addEventListener("open", () => {
-			console.log("WebSocket connection opened.");
+		gameSock.addEventListener("open", (event) => {
+			resolve(gameSock);
 		});
 
-		ws.addEventListener("close", () => {
-			console.log("WebSocket connection closed.");
-		});
-
-		ws.addEventListener("message", (event) => {
+		gameSock.addEventListener("message", (event) => {
 			const data = JSON.parse(event.data);
-			//console.log(data);
 			updateGameCanvas(data, game);
 		});
 
-}
+		gameSock.addEventListener("close", (event) => {
+			console.log("WebSocket connection closed:", event);
+			reject(new Error("WebSocket connection closed."));
+		});
+	});
+};
 
 function sendJson(jsonMessage) {
-	//console.log("WebSocket readyState:", ws.readyState);
-
-	if (ws && ws.readyState === WebSocket.OPEN) {
-		ws.send(jsonMessage);
-		//console.log("Sent JSON message:", jsonMessage);
+	if (gameSock && gameSock.readyState === WebSocket.OPEN) {
+		gameSock.send(jsonMessage);
 	} else {
-		//console.error("WebSocket connection not open.");
+		console.error("WebSocket connection not open.");
 	}
 }
 
 function updateGameCanvas(data, game) {
 	//console.log("Updating game canvas with data:", data);
 	//console.log(data)
-	if (data.type == "message"){
+	if (data.type == "message") {
 		game.connStatus = data.data.message;
 		if (data.type === "player_list") {
 			//console.log("Received player list:", data.data);
@@ -54,15 +54,14 @@ function updateGameCanvas(data, game) {
 			// Handle game update data
 			//console.log("game data:", data.data);
 			game.remoteGameEnd();
-		 } 
-		} else if (data.type == "screen_report"){
-			game.receiveRemoteCanvas(data);
 		}
-		 else {
-	    	// Handle game update data
-	    	console.log("game data:", data.data);
-	    	console.error("Invalid message type:", data.type);
-	    }
+	} else if (data.type == "screen_report") {
+		game.receiveRemoteCanvas(data);
+	} else if (data.type == "match_results") {
+		handleFinishedMatchUpdate(data.data)
+	} else {
+		console.error("Invalid message type:", data.type);
+	}
 }
 
 function sendKeyPress(key, side, frame) {
@@ -75,8 +74,8 @@ function sendKeyPress(key, side, frame) {
 	});
 
 	// Send the JSON message to the server
-	if (ws && ws.readyState === WebSocket.OPEN) {
-		ws.send(jsonMessage);
+	if (gameSock && gameSock.readyState === WebSocket.OPEN) {
+		gameSock.send(jsonMessage);
 		//console.log("Sent JSON message:", jsonMessage);
 	} else {
 		console.error("WebSocket connection not open.");
@@ -93,8 +92,8 @@ function sendRelease(key, side, frame) {
 	});
 
 	// Send the JSON message to the server
-	if (ws && ws.readyState === WebSocket.OPEN) {
-		ws.send(jsonMessage);
+	if (gameSock && gameSock.readyState === WebSocket.OPEN) {
+		gameSock.send(jsonMessage);
 		//console.log("Sent JSON message:", jsonMessage);
 	} else {
 		console.error("WebSocket connection not open.");
@@ -106,17 +105,17 @@ function sendRelease(key, side, frame) {
 function handleArrowKeyRelease(key) {
 	// Customize this based on your game's key bindings
 	switch (key) {
-		case 'ArrowUp':
-			sendRelease('up');
+		case "ArrowUp":
+			sendRelease("up");
 			break;
-		case 'ArrowDown':
-			sendRelease('down');
+		case "ArrowDown":
+			sendRelease("down");
 			break;
-		case 'ArrowLeft':
-			sendRelease('left');
+		case "ArrowLeft":
+			sendRelease("left");
 			break;
-		case 'ArrowRight':
-			sendRelease('right');
+		case "ArrowRight":
+			sendRelease("right");
 			break;
 	}
 }
@@ -130,17 +129,17 @@ function handleArrowKeyPress(key) {
 	// Customize this based on your game's key bindings
 	//console.log(key);
 	switch (key) {
-		case 'ArrowUp':
-			sendKeyPress('up');
+		case "ArrowUp":
+			sendKeyPress("up");
 			break;
-		case 'ArrowDown':
-			sendKeyPress('down');
+		case "ArrowDown":
+			sendKeyPress("down");
 			break;
-		case 'ArrowLeft':
-			sendKeyPress('left');
+		case "ArrowLeft":
+			sendKeyPress("left");
 			break;
-		case 'ArrowRight':
-			sendKeyPress('right');
+		case "ArrowRight":
+			sendKeyPress("right");
 			break;
 	}
 }
