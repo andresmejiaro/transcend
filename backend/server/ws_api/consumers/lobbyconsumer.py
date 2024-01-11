@@ -69,7 +69,9 @@ class LobbyConsumer(AsyncWebsocketConsumer):
             # TODO: send error message (duplicate join)
             print("You are already in this tournament")
             return
-        await self.channel_layer.group_add(f'tournament_{tournament_id}', self.channel_name)
+        # await self.channel_layer.group_add(f'tournament_{tournament_id}', self.channel_name)
+        # await self.channel_layer.group_add(f'test', self.channel_name)
+        # TODO: discard channel
         self.tournaments[tournament_id]['players'].append(self.client_id)
 
         await self.send(text_data=json.dumps({
@@ -115,6 +117,8 @@ class LobbyConsumer(AsyncWebsocketConsumer):
             match_id = await self.create_match_for_tournament(pairs, tournament_id)
             # Send match_id to the clients
             await self.send(text_data=json.dumps({
+                "detail": "Tournament match started",
+                "type": "match_started",
                 "match_id": match_id
             }))
 
@@ -208,6 +212,7 @@ class LobbyConsumer(AsyncWebsocketConsumer):
                     opponent_id = self.queue[queue_name][1]
                     
                 match_id = await self.create_match(user_id, opponent_id)
+                print(f'Match id: {match_id}')
                 
                 await self.send_info_to_client(
                     'found_opponent',
@@ -238,10 +243,7 @@ class LobbyConsumer(AsyncWebsocketConsumer):
             print(f'Exception in find_opponent {e}')
             await self.disconnect(1000)
             
-            
-            
-            
-            
+
             
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -279,7 +281,7 @@ class LobbyConsumer(AsyncWebsocketConsumer):
                 )
                 await self.close()
                 return
-
+            await self.channel_layer.group_add("test", self.channel_name)
             await self.accept()
 
             # Channel layer groups
@@ -317,9 +319,20 @@ class LobbyConsumer(AsyncWebsocketConsumer):
             logging.error(error_message)
             await self.close()
 
-    async def post_match_tournament(self, text_data):
+    # async def post_match_tournament(self, text_data):
+    async def jaja(self, text_data):
         data = json.loads(text_data)
         detail = data.get('message')
+        print(detail)
+
+        winner_id = str(detail.get('winner')) if detail.get('winner') else None
+        player1_id = str(detail.get('player1'))
+        player2_id = str(detail.get('player2'))
+
+        player_to_remove = player1_id if player1_id == winner_id else player2_id
+        self.tournaments[detail.get('tournament_id')]['players'].remove(player_to_remove)
+        print(f'Player removed: {player_to_remove}')
+        print(f"Current players: {self.tournaments[detail.get('tournament_id')]['players']}")
 
 
 

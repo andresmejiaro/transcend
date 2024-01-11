@@ -155,14 +155,18 @@ class PongConsumer(AsyncWebsocketConsumer):
             match_object.save()
 
             if match_object.tournament:
+                print("Tournament object yes")
                 self.channel_layer.group_send(
-                    "tournament",
+                    # f"tournament_{match_object.tournament.id}",
+                    f"test",
                     {
-                        "type": "post_match_tournament",
+                        "type": "jaja",
                         "message": {
                             "detail": "Match finished",
                             "match_id": match_object.id,
                             "tournament_id": match_object.tournament.id,
+                            "player1": match_object.player1.id,
+                            "player2": match_object.player2.id,
                             "winner": match_object.winner.id if match_object.winner is not None else None
                         }
                     }
@@ -348,6 +352,11 @@ class PongConsumer(AsyncWebsocketConsumer):
         try:
             while PongConsumer.run_game[self.match_id] is True:
                 PongConsumer.shared_game[self.match_id].pointLoop2()
+                left_score = PongConsumer.shared_game[self.match_id]._leftPlayer.getScore()
+                right_score = PongConsumer.shared_game[self.match_id]._rightPlayer.getScore()
+                if left_score == 2 or right_score == 2:  # TODO: change to 7 or 11
+                    await self.save_models(1000)
+                    return
                 await self.broadcast_to_group(f"{self.match_id}", "screen_report", {
                     "game_update": PongConsumer.shared_game[self.match_id].reportScreen(),
                     "left_score": PongConsumer.shared_game[self.match_id]._leftPlayer.getScore(),
