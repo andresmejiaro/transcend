@@ -1,13 +1,6 @@
 let lobbySocket;
 
-const sendWebSocketMessage = (messageType, payload) => {
-	console.log(lobbySocket);
-	console.log(
-		JSON.stringify({
-			type: messageType,
-			...payload,
-		})
-	);
+const sendWebSocketMessage = (messageType, payload) => {;
 	return new Promise((resolve, reject) => {
 		if (lobbySocket && lobbySocket.readyState === WebSocket.OPEN) {
 			lobbySocket.send(

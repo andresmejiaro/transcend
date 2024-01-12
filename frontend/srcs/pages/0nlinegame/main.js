@@ -1,6 +1,6 @@
 const handleFoundOpponent = async (data) => {
 	data = data.data;
-
+	console.log(data)
 	const me = await getPlayerInfo(data.client_id);
 	const other = await getPlayerInfo(data.opponent_id);
 
