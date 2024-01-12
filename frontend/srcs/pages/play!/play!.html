@@ -1,24 +1,27 @@
-<div class="container-fluid">
-  <div class="d-flex align-items-center justify-content-around">
-    <div class="col-md-4 text-center">
-      <img src="./srcs/assets/imgs/play!.svg" class="img-fluid" />
-    </div>
-    <div class="col-md-4 text-white text-center">
-      <div>
-        <button type="button" class="btn" onclick="window.location.href='/onlinegame'">
-          <img src="./srcs/assets/buttons/play/online.png" alt="Button Online Game Image" class="img-fluid btn-image">
-        </button>
-      </div>
-      <div>
-        <button type="button" class="btn" onclick="window.location.href='/1plygame'">
-          <img src="./srcs/assets/buttons/play/singleplayer.png" alt="Button One Player Game Image" class="img-fluid btn-image">
-        </button>
-      </div>
-      <div>
-        <button type="button" class="btn" onclick="window.location.href='/2plygame'">
-          <img src="./srcs/assets/buttons/play/two-players.png" alt="Button Two Players Game Image" class="img-fluid btn-image">
-        </button>
-      </div>
-    </div>
-  </div>
+<div class="my-play-container" style="min-height: 70vh">
+	<div class="d-flex justify-content-around h-100">
+		<div class="col-md-4 d-flex align-items-center justify-content-center text-center">
+			<img src="./srcs/assets/imgs/play!.svg" class="img-fluid" />
+		</div>
+		<div class="col-md-4 text-white text-center d-flex flex-column justify-content-around">
+			<div class="mb-3">
+				<button type="button" class="btn" onclick="window.location.href='/onlinegame'">
+					<img src="./srcs/assets/buttons/play/online.png" alt="Button Online Game Image" class="img-fluid btn-image" />
+				</button>
+			</div>
+			<div class="mb-3">
+				<button type="button" class="btn" onclick="window.location.href='/1plygame'">
+					<img src="./srcs/assets/buttons/play/singleplayer.png" alt="Button One Player Game Image" class="img-fluid btn-image" />
+				</button>
+			</div>
+			<div>
+				<button type="button" class="btn" onclick="window.location.href='/2plygame'">
+					<img src="./srcs/assets/buttons/play/two-players.png" alt="Button Two Players Game Image" class="img-fluid btn-image" />
+				</button>
+			</div>
+		</div>
+	</div>
 </div>
+<footer class="fixed-bottom text-center">
+  <img src="./srcs/assets/imgs/marvin.png" alt="Footer Image">
+</footer>

@@ -1,4 +1,25 @@
 .container-fluid {
-    margin-top: 200px; /* Adjust top margin as needed */
+  margin-top: 200px;
+  /* Adjust top margin as needed */
+}
+
+.my-play-container {
+  margin: auto;
+  width: 70% !important;
+}
+
+/* Media query for small screens (e.g., phones) */
+@media (max-width: 576px) {
+  .my-play-container {
+    width: 90% !important;
+    /* Adjust the width for smaller screens */
   }
-  
+}
+
+/* Media query for medium screens (e.g., tablets) */
+@media (min-width: 577px) and (max-width: 992px) {
+  .my-play-container {
+    width: 85% !important;
+    /* Adjust the width for medium screens */
+  }
+}
