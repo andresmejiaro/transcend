@@ -5,7 +5,7 @@
 		<a class="nav-link-logged-pong d-block d-lg-none" onclick="navigateToProfile()">
 			<div class="d-flex align-items-center">
 				<img src="./srcs/assets/imgs/default-avatar.jpeg" id="avatarImageNav" alt="Avatar" class="img-fluid" style="max-width: 40px" />
-				<p id="usernameNav" style="margin: 0; font-size: 16px; padding-left: 1rem;">username</p>
+				<p id="usernameNav" style="margin: 0; font-size: 16px; padding-left: 1rem">username</p>
 			</div>
 		</a>
 	</div>
@@ -13,8 +13,8 @@
 	<button class="navbar-toggler me-4 ms-auto navbar-dark" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 		<span class="navbar-toggler-icon"></span>
 	</button>
-	<div class="collapse navbar-collapse rounded" id="navbarSupportedContent" style="background: #15142e !important">
-		<div class="mx-auto d-flex align-items-center" id="navContentClass">
+	<div class="collapse navbar-collapse rounded" id="navbarSupportedContent" style="background: #15142e !important; max-height: 100% !important; height: 100% !important">
+		<div class="mx-auto d-flex align-items-center h-100" id="navContentClass">
 			<ul class="navbar-nav" style="font-size: 1.75rem">
 				<li class="nav-item">
 					<a class="nav-link nav-link-logged-pong" href="/play!">Play!</a>
@@ -38,11 +38,10 @@
 					<button class="nav-link nav-link-logged-pong" id="logoutButton">Logout</button>
 				</li>
 			</ul>
-
-			<a class="nav-link-logged-pong d-flex align-items-center d-none d-lg-block" onclick="navigateToProfile()">
-				<div class="d-flex align-items-center">
-					<p id="usernameNav2"  style="margin: 0; font-size: 16px; padding-right: 1rem;">username</p>
-					<img src="./srcs/assets/imgs/default-avatar.jpeg" id="avatarImageNav2" alt="Avatar" class="img-fluid" style="max-width: 40px" />
+			<a class="d-flex align-items-center d-none d-lg-block" onclick="navigateToProfile()" style="color: #fefee9 !important">
+				<div class="d-flex align-items-center flex-column">
+					<img src="./srcs/assets/imgs/default-avatar.jpeg" id="avatarImageNav2" alt="Avatar" class="img-fluid rounded" style="max-width: 36px" />
+					<p id="usernameNav2" style="margin: 0; font-size: 16px"></p>
 				</div>
 			</a>
 		</div>
@@ -77,7 +76,7 @@
 					<p class="text-decoration-underline mt-5">Pendind Match invitations...</p>
 					<div id="match-invitation-list"></div>
 				</div>
-				<div id="modal-body-friends-invite" style="display: none;">
+				<div id="modal-body-friends-invite" style="display: none">
 					<div class="text-center">
 						<div class="mt-2"><input type="text" id="invitationInput" placeholder="Enter friend's name" /></div>
 						<div class="mt-3"><button id="sendInvitationBtn" class="btn btn-success">Send Invitation</button></div>

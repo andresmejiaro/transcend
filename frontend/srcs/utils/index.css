@@ -79,7 +79,7 @@ p {
     right: 0; /* Ensures the navbar extends to the right edge of the viewport */
     z-index: 11; /* Ensures the navbar stays on top of other elements */
     width: 97% !important;
-    height: 60px !important;
+    height: 80px !important;
     border-radius: 68px !important;
     background: #15142E !important; /* Solid background color */
     color: #FEFEE9 !important;
@@ -88,6 +88,21 @@ p {
     transition: border-color 0.2s ease-in-out !important;
     margin: auto !important;
     margin-top: 15px !important; /* Adjust this value to increase or decrease the top space */
+	padding: 0;
+}
+
+/* Responsive height for medium-sized screens (adjust the height as needed) */
+@media (max-width: 991px) {
+    .navbar-logged-pong {
+        height: 70px !important;
+    }
+}
+
+/* Responsive height for small-sized screens (adjust the height as needed) */
+@media (max-width: 767px) {
+    .navbar-logged-pong {
+        height: 60px !important;
+    }
 }
 
 /* Custom styles for collapsed navbar and dropdown background color */
