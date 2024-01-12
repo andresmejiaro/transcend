@@ -68,8 +68,10 @@ class PongConsumer(AsyncWebsocketConsumer):
             self.player_2_id = str(self.match_object.player2.id)
             self.scorelimit = 7
             print(f'Player 1 ID: {self.player_1_id}, Player 2 ID: {self.player_2_id}, score_limit: {self.scorelimit}')
-                            
-            PongConsumer.list_of_players[self.client_id] = self
+
+            if not PongConsumer.list_of_players.get(self.match_id):
+                PongConsumer.list_of_players[self.match_id] = dict()
+            PongConsumer.list_of_players[self.match_id][self.client_id] = self
             print(f'List of Players in all PongConsumer Instances: {PongConsumer.list_of_players}')
             self.list_of_players[self.player_1_id] = User.objects.get(id=self.player_1_id)
             self.list_of_players[self.player_2_id] = User.objects.get(id=self.player_2_id)
@@ -111,7 +113,7 @@ class PongConsumer(AsyncWebsocketConsumer):
     
     @database_sync_to_async
     @transaction.atomic
-    def save_models(self, close_code):
+    def save_models(self, close_code=1000):
         from api.tournament.models import Match
         from api.userauth.models import CustomUser as User
 
@@ -194,20 +196,37 @@ class PongConsumer(AsyncWebsocketConsumer):
 # -----------------------------
   
 # Websocket Methods
+    async def check_reconnect(self):
+        for seconds in range(6):
+            print("Waiting for reconnect...")
+            await asyncio.sleep(1)
+            if len(PongConsumer.list_of_players[self.match_id].keys()) == 2:
+                PongConsumer.run_game[self.match_id] = True
+                return
+        return
+        # await self.save_models()
+        # await self.close()
+
     async def disconnect(self, close_code=1000):
-        await self.discard_channels()
-        await self.broadcast_to_group(f"{self.match_id}", "message", {
-            "message": "User Disconnected",
-            "client_id": self.client_id,
-        })
-        
-        if self.client_id in PongConsumer.list_of_players:
-            del PongConsumer.list_of_players[self.client_id]
-            
-        if self.client_id == self.player_1_id or self.client_id == self.player_2_id:
-            PongConsumer.run_game[self.match_id] = False
-            result = await self.save_models(close_code)
-            await self.broadcast_to_group(result[0], result[1], result[2])
+
+        if self.client_id in PongConsumer.list_of_players[self.match_id]:
+            del PongConsumer.list_of_players[self.match_id][self.client_id]
+
+        PongConsumer.run_game[self.match_id] = False
+        await asyncio.create_task(self.check_reconnect())
+
+        if PongConsumer.run_game[self.match_id] == False:
+            await self.save_models()
+            await self.discard_channels()
+            await self.broadcast_to_group(f"{self.match_id}", "message", {
+                "message": "User Disconnected",
+                "client_id": self.client_id,
+            })
+
+        # if self.client_id == self.player_1_id or self.client_id == self.player_2_id:
+        #     PongConsumer.run_game[self.match_id] = False
+        #     result = await self.save_models(close_code)
+        #     await self.broadcast_to_group(result[0], result[1], result[2])
             
         await self.close()
         
@@ -244,7 +263,7 @@ class PongConsumer(AsyncWebsocketConsumer):
             await self.broadcast_to_group(f"{self.match_id}", "message", {
                 "message": "User Connected",
                 "client_id": self.client_id,
-                "connected_users": list(PongConsumer.list_of_players.keys()),
+                "connected_users": list(PongConsumer.list_of_players[self.match_id].keys()),
                 })
             
             if self.player_1_id in PongConsumer.list_of_players and self.player_2_id in PongConsumer.list_of_players:
