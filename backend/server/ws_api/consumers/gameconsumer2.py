@@ -197,17 +197,27 @@ class PongConsumer(AsyncWebsocketConsumer):
   
 # Websocket Methods
     async def check_reconnect(self):
-        for seconds in range(6):
+        seconds_to_wait = 6
+        for seconds in range(seconds_to_wait):
             print("Waiting for reconnect...")
+            await self.broadcast_to_group(f"{self.match_id}", "message", {
+                "message": "Waiting for opponent to reconnect",
+                "seconds_left": f"{seconds_to_wait - seconds - 1} seconds"
+            })
             await asyncio.sleep(1)
             if len(PongConsumer.list_of_players[self.match_id].keys()) == 2:
                 PongConsumer.run_game[self.match_id] = True
+                PongConsumer.shared_game_task = asyncio.create_task(self.start_game(None))
                 return
         return
         # await self.save_models()
         # await self.close()
 
     async def disconnect(self, close_code=1000):
+        await self.broadcast_to_group(f"{self.match_id}", "message", {
+            "message": "User Disconnected",
+            "client_id": self.client_id,
+        })
 
         if self.client_id in PongConsumer.list_of_players[self.match_id]:
             del PongConsumer.list_of_players[self.match_id][self.client_id]
@@ -218,10 +228,6 @@ class PongConsumer(AsyncWebsocketConsumer):
         if PongConsumer.run_game[self.match_id] == False:
             await self.save_models()
             await self.discard_channels()
-            await self.broadcast_to_group(f"{self.match_id}", "message", {
-                "message": "User Disconnected",
-                "client_id": self.client_id,
-            })
 
         # if self.client_id == self.player_1_id or self.client_id == self.player_2_id:
         #     PongConsumer.run_game[self.match_id] = False
