@@ -216,7 +216,7 @@ class PongConsumer(AsyncWebsocketConsumer):
             query_string = self.scope['query_string'].decode('utf-8')
             query_params = parse_qs(query_string)
             self.match_id = self.scope['url_route']['kwargs']['match_id']
-            
+
             if not query_params.get('token'):
                 await self.close()
             print(f'JWT Token: {query_params.get("token")}')
@@ -284,7 +284,6 @@ class PongConsumer(AsyncWebsocketConsumer):
                
     async def receive(self, text_data):
         try:
-            await asyncio.sleep(0.1)
             data = json.loads(text_data)
             print(f'Received data: {data}')
             if data['command'] == 'keyboard':
@@ -338,7 +337,7 @@ class PongConsumer(AsyncWebsocketConsumer):
                     "left_score": PongConsumer.shared_game[self.match_id]._leftPlayer.getScore(),
                     "right_score": PongConsumer.shared_game[self.match_id]._rightPlayer.getScore(),
                 })
-                await asyncio.sleep(set_frame_rate(40))
+                await asyncio.sleep(set_frame_rate(60))
         except asyncio.CancelledError:
             print('Game stopped')
         except Exception as e:

@@ -23,7 +23,7 @@ class Game:
 		self._ball = Ball(dictCanvas = self._dictCanvas, 
 			name ="ball",
 			position = {"x": 0,	"y":0}, speed = {"x" : 0, "y" : 0},
-				size = {"x" : 30, "y" : 30})
+				size = {"x" : 10, "y" : 10})
 		self.resetPosition()
 		self._leftPaddle = Paddle(keyboard=self._dictKeyboard,
 			dictCanvas = self._dictCanvas, name = "leftPaddle",
