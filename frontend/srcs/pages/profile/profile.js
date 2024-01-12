@@ -28,6 +28,7 @@ const getMeSettingsInfoProfile = async () => {
 			// Get user ID from local storage token
 
 			updateStats();
+			updateMatchHistory();
 		}
 	} catch (error) {
 		console.error("Error:", error.message);
@@ -66,5 +67,47 @@ const updateStats = async () => {
         console.error("Error fetching stats:", error.message);
     }
 };
+
+const updateMatchHistory = async () => {
+    try {
+        const matchHistoryUrl = `${window.DJANGO_API_BASE_URL}/api/user/match/`;
+
+        const options = {
+            method: "GET",
+            mode: "cors",
+            credentials: "include",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        };
+
+        const matchHistoryData = await makeRequest(true, matchHistoryUrl, options);
+        console.log(matchHistoryData);
+
+        const matchHistoryList = document.getElementById("matchHistoryList");
+
+        // Clear existing items
+        matchHistoryList.innerHTML = "";
+
+        // Check if matchHistoryData.data is an array
+        if (Array.isArray(matchHistoryData.data)) {
+            // Limit the number of matches to 20
+            const limitedMatches = matchHistoryData.data.slice(0, 100);
+
+            // Populate match history list
+            limitedMatches.forEach(match => {
+                const listItem = document.createElement("li");
+                listItem.classList.add("list-group-item");
+                listItem.textContent = `Match ID: ${match.id}, Winner: ${match.winner}, Scores: ${match.player1_score} - ${match.player2_score}`;
+                matchHistoryList.appendChild(listItem);
+            });
+        } else {
+            console.error("Error: matchHistoryData.data is not an array");
+        }
+    } catch (error) {
+        console.error("Error fetching match history:", error.message);
+    }
+};
+
 
 getMeSettingsInfoProfile();
