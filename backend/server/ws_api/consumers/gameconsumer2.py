@@ -368,11 +368,18 @@ class PongConsumer(AsyncWebsocketConsumer):
     async def start_game(self, data):
         try:
             while PongConsumer.run_game[self.match_id] is True:
+                left_score = PongConsumer.shared_game[self.match_id]._leftPlayer.getScore(),
+                right_score = PongConsumer.shared_game[self.match_id]._rightPlayer.getScore(),
+
+                if left_score == self.scorelimit or right_score == self.scorelimit:
+                    await self.save_models()
+                    return
+
                 PongConsumer.shared_game[self.match_id].pointLoop2()
                 await self.broadcast_to_group(f"{self.match_id}", "screen_report", {
                     "game_update": PongConsumer.shared_game[self.match_id].reportScreen(),
-                    "left_score": PongConsumer.shared_game[self.match_id]._leftPlayer.getScore(),
-                    "right_score": PongConsumer.shared_game[self.match_id]._rightPlayer.getScore(),
+                    "left_score": left_score,
+                    "right_score": right_score
                 })
                 await asyncio.sleep(set_frame_rate(60))
         except asyncio.CancelledError:
