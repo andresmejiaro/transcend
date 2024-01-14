@@ -14,7 +14,6 @@ from network.http_api import http_api
 
 api = http_api()
 
-
 async def main(stdscr):
     exit_status = 0
     try:
@@ -41,6 +40,9 @@ async def main(stdscr):
     except KeyboardInterrupt:
         log_message('Keyboard interrupt detected.')
         exit_status = 0
+    finally:
+        log_message(f'Exit Status: {exit_status}', logging.INFO)
+        sys.exit(exit_status)
 
 
 def cli():

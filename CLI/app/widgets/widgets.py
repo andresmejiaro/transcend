@@ -13,7 +13,6 @@ class Widget:
         self.file_manager = FileManager()
         self.last_frame_time = time.time()
         self.update_terminal_size()
-        
         self.color_counter = 1
 
     def update_terminal_size(self):
@@ -76,7 +75,7 @@ class Widget:
         # Print message 1 row above the bottom of the screen
         row = self.rows - 2
         col = self.cols // 2 - len(message) // 2
-        self._addstr(row, col, message, curses.color_pair(6) | curses.A_DIM | curses.A_BOLD | curses.A_BLINK)
+        self._addstr(row, col, message, curses.color_pair(6) | curses.A_BOLD)
 
     def print_frame_rate(self):
         try:
@@ -97,11 +96,83 @@ class Widget:
         except Exception as e:
             log_message(f"Error printing current time: {e}", level=logging.ERROR)
 
-    def print_input_box(self, prompt, input_text):
-        row = self.rows - 1
-        self._addstr(row, 0, prompt, curses.color_pair(6) | curses.A_DIM | curses.A_BOLD)
-        col = 0 + len(prompt)
-        self._addstr(row, col, input_text, curses.color_pair(6) | curses.A_DIM | curses.A_BOLD | curses.A_BLINK)
+
+
+    async def print_input_box(self, prompt, input_text, location="bottom"):
+        try:
+            # We will get inputs from the keyboard directly and print them on screen storing it in input_text
+            # We will also print the prompt on the screen at the required location
+            self.stdscr.nodelay(False)
+            while True:
+                # Clear the screen
+                self._clear_screen()
+                self.update_terminal_size()
+                if self.rows < 3 or self.cols < 50:
+                    self.print_screen_too_small(size_required=(3, 50))
+                    continue
+
+                # Print the prompt with resizing
+                if location == "bottom":
+                    row = self.rows - 1
+                    self._addstr(row, 0, prompt, curses.color_pair(6) | curses.A_DIM | curses.A_BOLD)
+                    self._addstr(row, len(prompt), input_text, curses.color_pair(6) | curses.A_BOLD)
+                elif location == "top":
+                    row = 0
+                    self._addstr(row, 0, prompt, curses.color_pair(6) | curses.A_DIM | curses.A_BOLD)
+                    self._addstr(row, len(prompt), input_text, curses.color_pair(6) | curses.A_BOLD)
+                elif location == "center":
+                    row = self.rows // 2
+                    self._addstr(row, 0, prompt, curses.color_pair(6) | curses.A_DIM | curses.A_BOLD)
+                    self._addstr(row, len(prompt), input_text, curses.color_pair(6) | curses.A_BOLD)
+                else:
+                    raise ValueError(f"Invalid location: {location}")
+
+                # Refresh the screen
+                self._refresh_screen()
+
+                # Get input from the keyboard
+                key = self.stdscr.getch()
+                if len(input_text) > 100:
+                    input_text = input_text[:-1]
+
+                # If the user presses enter, return the input text
+                if key == curses.KEY_ENTER or key in [10, 13]:
+                    if input_text == "":
+                        continue
+                    if input_text == "help":
+                        input_text = ""
+                        # self.display_help()
+                        continue
+                    
+                    self.stdscr.nodelay(True)
+                    return input_text
+
+                # If the user presses backspace, remove the last character from input_text
+                elif key == curses.KEY_BACKSPACE or key == 127:
+                    input_text = input_text[:-1]
+
+                # If the user presses escape, return None
+                elif key == 27:
+                    return None
+                
+                # If the user presses any printable character, add it to input_text
+                elif key >= 32 and key <= 126:
+                    input_text += chr(key)
+                    
+                # If the user presses any other key, continue
+                else:
+                    continue
+            
+        except Exception as e:
+            log_message(f"Error printing input box: {e}", level=logging.ERROR)
+            self.stdscr.nodelay(True)
+        
+        
+        
+        # row = self.rows - 1
+        # self._addstr(row, 0, prompt, curses.color_pair(6) | curses.A_DIM | curses.A_BOLD)
+        # col = 0 + len(prompt)
+        # self._addstr(row, col, input_text, curses.color_pair(6) | curses.A_DIM | curses.A_BOLD | curses.A_BLINK)
 
 
 
@@ -119,9 +190,15 @@ class Widget:
             for j in range(round(startX), round(endX)):
                 stdscr.addstr(i, j, "x")
 
-    def print_score(self, score):
-        scoreb = ''
-        for key, value in score.items():
-            scoreb += f"{key}: {value} "
-        self._addstr(2, int((self.cols - len(scoreb)) / 2), scoreb)
+    def print_score(self, left_score, right_score):
+        score = f"{left_score} - {right_score}"
+        row = self.rows - 1
+        col = self.cols // 2 - len(score) // 2
+        self._addstr(row, col, score, curses.color_pair(6) | curses.A_BOLD)
         
+    def print_usernames(self, left_username, right_username):
+        # We'll print the score at the bottom center of the screen
+        usernames = f"{left_username} - {right_username}"
+        row = self.rows - 2
+        col = self.cols // 2 - len(usernames) // 2
+        self._addstr(row, col, usernames, curses.color_pair(6) | curses.A_BOLD)

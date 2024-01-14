@@ -49,6 +49,8 @@ class TaskManager:
         task = self.get_task_by_name(task_name)
         if task:
             task.cancel()
+            # Delete the task from the dictionary and its data
+            self._tasks.pop(task_name, None)
 
     def start_all_tasks(self):
         # Start all tasks in the loop
@@ -66,13 +68,18 @@ class TaskManager:
 
     def is_running(self):
         return self._running
+    
+    def cleanup(self):
+        self._running = False
+        self._tasks.clear()
+        
 
     def _task_done_callback(self, task):
         if not task.cancelled():
             exception = task.exception()
             if exception:
                 print(f'Task failed: {exception}')
-            task_name = next((name for name, info in self._tasks.items() if info["task"] == task), None)
-            if task_name:
-                self._tasks.pop(task_name, None)
+            # task_name = next((name for name, info in self._tasks.items() if info["task"] == task), None)
+            # if task_name:
+            #     self._tasks.pop(task_name, None)
 

@@ -1,6 +1,7 @@
 # app/function_views/splash_view.py
 
 import logging
+import asyncio
 
 from utils.logger import log_message
 from utils.file_manager import FileManager
@@ -22,6 +23,22 @@ class SplashView(Widget):
         # Return a string representing the current view
         return "splash"
 
+
+    # Keyboard Input Handler
+    async def process_keyboard_input(self, keyboard_input):
+        try:
+            log_message(f"Keyboard Input from UI Controller: {keyboard_input}", level=logging.DEBUG)
+            if keyboard_input == 27:
+                self.next_view = "exit"
+            elif keyboard_input == 32:
+                self.next_view = HomePage(self.stdscr, self.ui_controller, self.frame_rate, self.process_speed, self.task_manager)
+            else:
+                self.next_view = self
+                
+        except Exception as e:
+            log_message(f"Error processing keyboard input: {e}", level=logging.ERROR)
+            self.next_view = self
+        
     # Screen Updating
     async def draw(self):
         try:
@@ -35,7 +52,7 @@ class SplashView(Widget):
                 self.print_screen_too_small()
                 return
 
-            # self.print_current_time()
+            self.print_current_time()
             self.print_frame_rate()
             self.print_header("Welcome to Pong!")
             self.print_logo_centered(self.file_manager.load_texture("pong.txt"))
@@ -46,26 +63,14 @@ class SplashView(Widget):
         except Exception as e:
             log_message(f"Error displaying splash screen: {e}", level=logging.ERROR)
             self.next_view = self
-
-    # -----------------------------
-
+    
     # Input Processing
     async def process_input(self):
         self.process_speed[0] = 1
-        user_input = await self.ui_controller.handle_keyboard_input_directly()
-        if user_input == 32:
-            log_message(f"Splash screen user input: {user_input}", level=logging.DEBUG)
-            self.next_view = HomePage(self.stdscr, self.ui_controller, self.frame_rate, self.process_speed, self.task_manager)
-        elif user_input == 27:
-            self.next_view = "exit"
-
-    # -----------------------------
-
+            
     # Next View
     def get_next_view(self):
         return self.next_view
-
-    # -----------------------------
 
     # Cleanup
     def cleanup(self):
