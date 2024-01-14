@@ -10,48 +10,41 @@ class Game {
     #remote
     #remoteCanvas
     #ai
-    #playersConnected
-    #remoteIAM
     #defLocalBinds
     #defRemoteBinds
     #frame
-    #remoteCanvasQ
-    #delay
     #endGame
-    #actualframe;
+    #connStatus;
 
     constructor(leftPlayer, rightPlayer, remote = 0) {
         this.#leftPlayer = leftPlayer;
         this.#rightPlayer = rightPlayer;
         this.#scoreLimit = 11;
         this.#background = new Image();
-        this.#background.src = './srcs/assets/game/table.svg';
+        this.#background.src = './srcs/assets/game/table.png';
         this.#backgroundLoaded = false;
         this.#background.onload = () => { this.#backgroundLoaded = true; };
         this.#remote = remote; 
-        this.#playersConnected = 0;
-        this.#remoteIAM = "none";
         this.#defLocalBinds = {up : "w", down : "s",
             left : "UNUSED_DEFAULT_KEY", right : "UNUSED_DEFAULT_KEY"};
         this.#defRemoteBinds = {up : "ru", down : "rd",
             left : "UNUSED_DEFAULT_KEY", right : "UNUSED_DEFAULT_KEY"};
         this.#frame = -5;
-        this.#remoteCanvasQ = {};
-        this.#delay = 0;
         this.#endGame = 0;
-        this.#actualframe = 0; 
+        this.#connStatus = "Waiting for Match ..."; 
     }
     
     startScreen() {
         
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         if (this.#backgroundLoaded) {
-            if (this.statusToText() == "ai")
-                    this.setupAI();
+            this.statusToText()
+            if (this.#remote == "ai")
+                this.setupAI();
             if (this.#remote == 0 || this.#remote == 2)
                 requestAnimationFrame(() => this.gameSetup());
             else {
-                handleMatchmaking(this);
+                //handleMatchmaking(this);
                 requestAnimationFrame(() => this.conectingScreen());
             }
         }
@@ -65,11 +58,12 @@ class Game {
 
     conectingScreen(){
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.fillText("Waiting for opponent ...", 50, 30);
-        if (this.#playersConnected < 2){
+        ctx.fillText(`${this.#connStatus} ... `, 50, 30);
+        if (this.#connStatus != 'Game Ready'){
             requestAnimationFrame(() => this.conectingScreen());
         }
         else{ 
+            //console.log("going to setup");
             requestAnimationFrame(() => this.gameSetup());
             activateGame();
         }
@@ -103,51 +97,29 @@ class Game {
     // game loop
     pointLoop() {
         this.drawNonInteractive();
-        if (this.statusToText() == "remote")
+        if (this.statusToText() == "remote"){
             this.remoteGameLogic();
+        }
         else 
             this.localGameLogic();
         this.drawInteractive();
         this.drawScore();
-        if (this.#leftPlayer.score >= this.#scoreLimit
-            || this.#rightPlayer.score >= this.#scoreLimit || 
+        if ((
+            this.#leftPlayer.score >= this.#scoreLimit
+            || this.#rightPlayer.score >= this.#scoreLimit) || 
                 this.#endGame == 1)
             requestAnimationFrame(() => this.endScreen());
         else
             requestAnimationFrame(() => this.pointLoop());
+		this.#frame += 1;
     }
+ 
     
-    updateRemoteCanvas(){
-        //try to print from memory
-        if (this.#remoteCanvasQ[this.#actualframe]){
-            this.#remoteCanvas= this.#remoteCanvasQ[this.#actualframe];
-            this.#actualframe += 1;
-            this.#delay = 0;
-            // console.log("printing from memory");
-            return;
-        } else{
-            // try to find if skipped
-            let lowestHigherNumber = Math.min(...Object.keys(this.#remoteCanvasQ).
-            map(Number).filter(key => key > this.#actualframe));
-            if (isFinite(lowestHigherNumber)){
-                this.#actualframe = lowestHigherNumber;
-                this.#remoteCanvas= this.#remoteCanvasQ[this.#actualframe];
-                return;
-            }
+    remoteGameLogic() {
+       // this.updateRemoteCanvas();
+       let canvas = this.#remoteCanvas;
+       //console.log("remote game logic", canvas)
         
-        }
-        if (!this.#remoteCanvasQ[this.#actualframe + this.#delay]){
-            this.#delay = Math.max(...Object.keys(this.#remoteCanvasQ).map(Number)) - this.#actualframe;
-            // console.log(this.#delay);
-        }
-        if (isFinite(this.#delay)){
-            this.#remoteCanvas = this.#remoteCanvasQ[this.#frame + this.#delay]
-        }
-    }
-    
-    async remoteGameLogic() {
-        this.updateRemoteCanvas();
-        let canvas = this.#remoteCanvas;
         if (canvas === undefined){
             // console.log("undefined canvas");
             return;
@@ -159,14 +131,6 @@ class Game {
         this.#leftPaddle.setSize(canvas["leftPaddle"]["size"]);
         this.#rightPaddle.setPosition(canvas["rightPaddle"]["position"]);
         this.#rightPaddle.setSize(canvas["rightPaddle"]["size"]);
-        if (isFinite(this.#delay) && this.#delay < 0){
-                for (let i = 0; i < Math.max(0, -this.#delay); i++){
-                this.localGameLogic2();
-            }
-        }
-        
-        
-        this.#frame += 1;
     }
 
     localGameLogic() {
@@ -181,15 +145,9 @@ class Game {
         else if (ballState == -1) {
             this.#rightPlayer.goal();
             this.resetPosition();
-        } else {
-            this.#leftPaddle.updatePosition();
-            this.#rightPaddle.updatePosition();
-        }
-    }
-
-    localGameLogic2() {
-        this.#ball.updatePosition();
-        this.#leftPaddle.updatePosition();
+        } 
+       //console.log(keysPressed);
+		this.#leftPaddle.updatePosition();
         this.#rightPaddle.updatePosition();
     }
 
@@ -241,6 +199,9 @@ class Game {
             this.#rightPlayer.binds);
             if (this.#remote == 1)
                 this.remoteGameSetup();
+			if(this.#remote == 2){
+				this.setupAI();
+			}
             this.#rightPlayer.resetScore();
             this.#leftPlayer.resetScore();
             this.#ball.addColider(this.#leftPaddle);
@@ -248,31 +209,35 @@ class Game {
             requestAnimationFrame(() => this.pointLoop());
         }
         
-    remoteGameSetup(){
-        if (this.#remote == 1 && this.#remoteIAM == "right"){
-            this.#rightPaddle.binds = this.#defLocalBinds;
-            this.#leftPaddle.binds = this.#defRemoteBinds;
+    async remoteGameSetup(){
+        try{
+            const url = `${window.DJANGO_API_BASE_URL}/api/match/${matchId}/`;
+            const options = {
+                method: "GET",
+                mode: "cors",
+                credentials: "include",
+                headers: {
+                    "Content-Type": "application/json",
+                  }};
+                console.log(url)
+            const response = await makeRequest(true,url, options,"");
+            this.#leftPlayer.name = response.player1.username;
+            this.#rightPlayer.name = response.player2.username;
+            //console.log(response);
         }
-        if (this.#remote == 1 && this.#remoteIAM == "left"){
-            this.#leftPaddle.binds = this.#defLocalBinds;
-            this.#rightPaddle.binds = this.#defRemoteBinds;
+        catch (error)
+        {
+            console.error(error);
         }
-        this.#leftPaddle.initializePaddleKeys();
-        this.#rightPaddle.initializePaddleKeys();
-        if(this.#remote == 1){
-            document.addEventListener('keydown', (event) => {
-                if (event.key == "w")
-                    sendKeyPress("up",this.#remoteIAM, this.#frame);
-                if(event.key == "s")
-                    sendKeyPress("down",this.#remoteIAM, this.#frame);
-            });
-            document.addEventListener('keyup', (event) => {
-                if (event.key == "w")
-                    sendRelease("up", this.#remoteIAM, this.#frame);
-                if(event.key == "s")
-                    sendRelease("down",  this.#remoteIAM, this.#frame);
-            });
-        }
+        document.addEventListener('keydown', (event) => {
+            // Handle arrow key presses and send messages to the server
+            handleArrowKeyPress(event.key);
+        });
+
+        document.addEventListener('keyup', (event) => {
+            // Handle arrow key releases and send messages to the server
+            handleArrowKeyRelease(event.key);
+        });
     }
 
     conexionSetup() {
@@ -306,41 +271,13 @@ class Game {
         lcanvas["rightPaddle"]["size"] = this.#rightPaddle.getSize;
         return lcanvas;
     }
-
-    async updatePlayerNames(data){
-        let names = Object.keys(data.data);
-        let name1 = await getPlayerInfo(names[0]);
-        let name2;
-        this.#leftPlayer.name = name1.username;
-        if (names.length > 1){
-            
-            try{
-                name2 = await getPlayerInfo(names[1]);
-                this.#rightPlayer.name = name2.username;
-            }
-            catch(error){
-                console.error(error);
-                console.error(names, names.length,data)
-            }
-        }
-        this.#playersConnected = names.length; 
-
-       
-        if (name1.username == sessionStorage.getItem("username")){
-            this.#remoteIAM = "left";
-        }
-        if (name2 && name2.username == sessionStorage.getItem("username")){
-            this.#remoteIAM = "right";
-        }
-    }
-
+   
     receiveRemoteCanvas(data){
-
-        data.data.forEach(item => {
-            let frame = item.frame;
-            let gameUpdate = item.game_update;
-            this.#remoteCanvasQ[frame] = gameUpdate; 
-        });
+        //console.log("recieving", data.data.game_update)
+        this.#remoteCanvas = data.data.game_update; 
+        this.#leftPlayer.score = data.data.left_score;
+        this.#rightPlayer.score = data.data.right_score;
+        
     }
 
     scoreUpdate(data){
@@ -349,35 +286,17 @@ class Game {
         this.#rightPlayer.score = data["right"];
     }
 
-    remoteKeyUpHandling(data){
-        if (["left", "right"].includes(data.data.side)){
-            if (data.data.side != this.#remoteIAM){
-                // console.log(data);
-                let keyToPress;
-                if (data.data.key == "down"){
-                    keyToPress = this.#defRemoteBinds["down"];
-                    
-                }
-                if (data.data.key == "up"){
-                    keyToPress = this.#defRemoteBinds["up"];
-                    
-                }
-                let status;
-                if (data.data.key_status == "on_press")
-                    status = true;
-                if (data.data.key_status == "on_release")
-                    status = false;
-                keysPressed[keyToPress] = status;
-               // console.log(keyToPress,data.data.key,keysPressed[keyToPress], data.data.key_status);
-            }
-        }
-    }
-
+   
     remoteGameEnd(){
         this.#endGame = 1;
     }
     
+    set connStatus (data){
+        this.#connStatus = data;
+    }
+
+	get frame(){
+		return this.#frame;
+	}
+
 }
-
-
-
