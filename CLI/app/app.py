@@ -162,4 +162,3 @@ class CLIApp:
             self.task_manager.stop_all_tasks()
             return self.exit_status
 
-    # -------------------------------------

@@ -2,6 +2,8 @@
 
 import asyncio
 
+from utils.logger import log_message
+
 class TaskManager:
     def __init__(self):
         self._tasks = {}  # Use a dictionary to map task names to tasks
@@ -73,13 +75,10 @@ class TaskManager:
         self._running = False
         self._tasks.clear()
         
-
     def _task_done_callback(self, task):
         if not task.cancelled():
             exception = task.exception()
             if exception:
-                print(f'Task failed: {exception}')
-            # task_name = next((name for name, info in self._tasks.items() if info["task"] == task), None)
-            # if task_name:
-            #     self._tasks.pop(task_name, None)
+                log_message(f"Task {task.get_name()} raised an exception: {exception}", level=logging.ERROR)
+
 
