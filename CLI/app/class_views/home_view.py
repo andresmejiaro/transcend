@@ -99,8 +99,8 @@ class HomePage(Widget):
 
             elif keyboard_input == curses.KEY_UP and self.game_task:
                     if self.game_task:
-                        asyncio.ensure_future(self.send_to_websocket_by_name(f'game_{self.match_id}', "keyboard", {'command':'keyboard', 'key_status': 'on_press', 'key': 'up'}))
-                        asyncio.ensure_future(self.send_to_websocket_by_name(f'game_{self.match_id}', "keyboard", {'command':'keyboard', 'key_status': 'on_release', 'key': 'up'}))
+                        asyncio.create_task(self.send_to_websocket_by_name(f'game_{self.match_id}', "keyboard", {'command':'keyboard', 'key_status': 'on_press', 'key': 'up'}))
+                        asyncio.create_task(self.send_to_websocket_by_name(f'game_{self.match_id}', "keyboard", {'command':'keyboard', 'key_status': 'on_release', 'key': 'up'}))
             
             elif keyboard_input == curses.KEY_DOWN and self.game_task:
                     if self.game_task:
@@ -126,6 +126,8 @@ class HomePage(Widget):
         try:
             self._clear_screen()
 
+            self.frame_rate[0] = 30
+            
             max_y, max_x = self.stdscr.getmaxyx()
             self.update_terminal_size()
 
@@ -136,8 +138,7 @@ class HomePage(Widget):
             
             # If we're in a game, draw the game
             if self.game_update and self.game_task:
-                self.frame_rate[0] = 20
-                # Draw the nav bar
+
                 self.nav_bar.draw()
                 
                 self.rectdrawer(self.game_update, "ball", self.stdscr)
@@ -147,8 +148,8 @@ class HomePage(Widget):
                 
                 if self.game_message:
                     self.print_message_bottom(self.game_message)
-                    asyncio.sleep(10)
-                    self.game_message = None                
+                    # asyncio.sleep(10)
+                    # self.game_message = None                
             else:
                 # Draw the nav bar
                 self.frame_rate[0] = 5
@@ -168,7 +169,7 @@ class HomePage(Widget):
     # Input Processing Handler
     async def process_input(self):
         try:
-            self.process_speed[0] = 200
+            self.process_speed[0] = 500
 
             user_input = await self.ui_controller.check_and_process_inputs_filterd(["lobby", f'game_{self.match_id}'])
 
@@ -269,7 +270,6 @@ class HomePage(Widget):
                         self.game_update = data.get("game_update")
                         self.left_score = data.get("left_score")
                         self.right_score = data.get("right_score")
-
 
         except Exception as e:
             log_message(f"Error in process_game_input: {e}", level=logging.ERROR)
