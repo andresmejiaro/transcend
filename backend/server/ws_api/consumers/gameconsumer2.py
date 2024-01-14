@@ -33,6 +33,7 @@ class PongConsumer(AsyncWebsocketConsumer):
     shared_game_task = {}       # Holds the task for the shared game, in order to cancel it when the game is stopped.
     shared_game = {}            # Holds the shared game object for the match.
     run_game = {}               # Boolean to run/pause the game.
+    finished = {}               # Boolean to determine if the game is finished or not
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -229,7 +230,9 @@ class PongConsumer(AsyncWebsocketConsumer):
         if self.client_id in PongConsumer.list_of_players[self.match_id]:
             del PongConsumer.list_of_players[self.match_id][self.client_id]
 
-        if not self.match_object.active:
+        print(f'Active: {self.match_object.active}')
+
+        if not self.match_object.active or PongConsumer.finished[self.match_id] == True:
             await self.discard_channels()
             await self.close()
             return
@@ -270,6 +273,8 @@ class PongConsumer(AsyncWebsocketConsumer):
                 await self.close()
                 
             await self.accept()
+
+            PongConsumer.finished[self.match_id] = False
 
             if not self.match_object.active:
                 await self.send(text_data=json.dumps({
@@ -368,25 +373,38 @@ class PongConsumer(AsyncWebsocketConsumer):
     async def start_game(self, data):
         try:
             while PongConsumer.run_game[self.match_id] is True:
-                left_score = PongConsumer.shared_game[self.match_id]._leftPlayer.getScore(),
-                right_score = PongConsumer.shared_game[self.match_id]._rightPlayer.getScore(),
+                PongConsumer.shared_game[self.match_id].pointLoop2()
 
-                if left_score == self.scorelimit or right_score == self.scorelimit:
-                    await self.save_models()
+                left_score = PongConsumer.shared_game[self.match_id]._leftPlayer.getScore()
+                right_score = PongConsumer.shared_game[self.match_id]._rightPlayer.getScore()
+
+                print(f'Left Score: {left_score}')
+                print(f'Right Score: {right_score}')
+
+                if left_score >= self.scorelimit or right_score >= self.scorelimit:
+                    PongConsumer.run_game[self.match_id] = False
+                    PongConsumer.finished[self.match_id] = True
+                    await self.broadcast_to_group(str(self.match_id), "message", await self.save_models())
+                    await asyncio.sleep(0.5)
+                    await self.close()
                     return
 
-                PongConsumer.shared_game[self.match_id].pointLoop2()
                 await self.broadcast_to_group(f"{self.match_id}", "screen_report", {
                     "game_update": PongConsumer.shared_game[self.match_id].reportScreen(),
                     "left_score": left_score,
                     "right_score": right_score
                 })
                 await asyncio.sleep(set_frame_rate(60))
+
+            await asyncio.sleep(0.5)
+            if PongConsumer.finished[self.match_id] == True:
+                await self.close()
         except asyncio.CancelledError:
             print('Game stopped')
         except Exception as e:
             print(e)
-            await self.close()   
+            await self.close()
+
 # -----------------------------
 
 # Channel Methods
