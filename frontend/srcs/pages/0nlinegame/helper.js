@@ -40,12 +40,11 @@ function updateGameCanvas(data, game) {
 		game.receiveRemoteCanvas(data);
 	} else if (data.type == "match_results") {
 		handleFinishedMatchUpdate(data.data)
-	} else if (data.type == "match finished"){
-		console.log(data)
-		game.recieveRemoteEnd(data);
+	} else if (data.type == "match_finished"){
+		game.remoteGameEnd(data);
 	}
 	else{
-		console.error("Invalid message type:", data.type);
+		console.error("Invalid message type:", data);
 	}
 }
 
@@ -91,15 +90,23 @@ function handleArrowKeyRelease(key) {
 	// Customize this based on your game's key bindings
 	switch (key) {
 		case "ArrowUp":
+		case "w":
+		case "W":
 			sendRelease("up");
 			break;
 		case "ArrowDown":
+		case "s":
+		case "S":
 			sendRelease("down");
 			break;
 		case "ArrowLeft":
+		case "a":
+		case "A":
 			sendRelease("left");
 			break;
 		case "ArrowRight":
+		case "d":
+		case "D":
 			sendRelease("right");
 			break;
 	}
@@ -115,16 +122,24 @@ function handleArrowKeyPress(key) {
 	//console.log(key);
 	switch (key) {
 		case "ArrowUp":
+		case "w":
+		case "W":
 			sendKeyPress("up");
 			break;
 		case "ArrowDown":
+		case "s":
+		case "S":
 			sendKeyPress("down");
 			break;
 		case "ArrowLeft":
+		case "a":
+		case "A":
 			sendKeyPress("left");
 			break;
 		case "ArrowRight":
+		case "d":
+		case "D":
 			sendKeyPress("right");
-			break;
+			break;	
 	}
 }

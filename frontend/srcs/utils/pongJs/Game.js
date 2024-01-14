@@ -91,11 +91,11 @@ class Game {
         } else{
             ctx.fillText(`Winner: ${this.#endState["winner_username"]}`, 100, 100);
         }
-        ctx.fillText(`Thanks for playing to play again press Enter`, 50, 30);
+        ctx.fillText(`Thanks for playing! To play again press Enter`, 50, 30);
         if (keysPressed["Enter"])
             //requestAnimationFrame(() => this.gameSetup());
             // Using location.assign()
-            window.location.href('/play');
+            window.location.href='/play!';
          else
             requestAnimationFrame(() => this.endScreen());
     }
@@ -308,8 +308,7 @@ class Game {
    
     remoteGameEnd(data){
         this.#endGame = 1;
-        console.log(data);
-        this.#endState = data;
+        this.#endState = data.data;
     }
     
     set connStatus (data){
