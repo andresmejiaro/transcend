@@ -133,15 +133,10 @@ class HomePage(Widget):
             if self.rows < 30 or self.cols < 70:
                 self.print_screen_too_small()
                 return
-
-            if self.game_message:
-                self.print_message_bottom(self.game_message)
-                asyncio.sleep(2)
-                self.game_message = None                
-                
+            
             # If we're in a game, draw the game
             if self.game_update and self.game_task:
-                self.frame_rate[0] = 30
+                self.frame_rate[0] = 20
                 # Draw the nav bar
                 self.nav_bar.draw()
                 
@@ -150,6 +145,10 @@ class HomePage(Widget):
                 self.rectdrawer(self.game_update, "rightPaddle", self.stdscr)
                 self.print_score(self.left_score, self.right_score)
                 
+                if self.game_message:
+                    self.print_message_bottom(self.game_message)
+                    asyncio.sleep(10)
+                    self.game_message = None                
             else:
                 # Draw the nav bar
                 self.frame_rate[0] = 5
@@ -198,6 +197,7 @@ class HomePage(Widget):
     def cleanup(self):
         pass
 
+
     # Task Specific Input Processing
     def process_lobby_input(self, lobby_input):
         try:
@@ -242,17 +242,34 @@ class HomePage(Widget):
 
                 message_type = message_data.get("type")
                 data = message_data.get("data", {})
+
+                log_message(f"Game Input from UI Controller: {message_type} {data}", level=logging.DEBUG)
                 
                 if self.game_task:
-                    if message_type == "message":
+                    if self.left_score == 11 or self.right_score == 11:
+                        self.game_task = None
+                        self.game_update = None
+                        self.task_manager.stop_task_by_name(f'game_{self.match_id}')
+                        self.game_message = "Game Over!"
+                        asyncio.sleep(3)
+                        self.game_message = None
+                        self.left_score = 0
+                        self.right_score = 0
+                        self.match_id = None
+                        self.opponent_id = None
+                        self.opponent_username = None
+                    
+                    elif message_type == "message":
                         # log_message(f"Message from game: {data}", level=logging.DEBUG)
                         self.game_message = data.get("message")
+                        asyncio.create_task(self.send_to_websocket_by_name(f'game_{self.match_id}', "start_ball", {}))
 
                     elif message_type == "screen_report":
                         # log_message(f"Screen Report from game: {data}", level=logging.DEBUG)
                         self.game_update = data.get("game_update")
                         self.left_score = data.get("left_score")
                         self.right_score = data.get("right_score")
+
 
         except Exception as e:
             log_message(f"Error in process_game_input: {e}", level=logging.ERROR)

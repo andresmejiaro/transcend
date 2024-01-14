@@ -144,7 +144,8 @@ class CLIApp:
             while self.task_manager.is_running():
                 await asyncio.sleep(0.001)
                 self.task_manager.start_all_tasks()
-            # self.exit_status = asyncio.gather(*tasks)
+
+            # self.exit_status = await asyncio.gather(*tasks)
 
         except aiohttp.ClientError as e:
             log_message(f"AIOHTTP ERROR in app.start: {e}", level=logging.ERROR)
@@ -159,6 +160,6 @@ class CLIApp:
             log_message(f"ERROR in app.start {e}", level=logging.ERROR)
             self.exit_status = 1
         finally:
-            self.task_manager.stop_all_tasks()
+            # self.task_manager.stop_all_tasks()
             return self.exit_status
 

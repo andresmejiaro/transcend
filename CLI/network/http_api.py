@@ -141,6 +141,7 @@ class http_api:
         except Exception as e:
             log_message(f"Error registering: {e}", level=logging.ERROR)
             return False
+
 # -----------------------------
                     
 # Predifined API calls
