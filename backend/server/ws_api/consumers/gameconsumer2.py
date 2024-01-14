@@ -182,6 +182,11 @@ class PongConsumer(AsyncWebsocketConsumer):
                     "type": "match finished",
                     "data": {
                         "winner_id": winner_id,
+                        "winner_username": match_object.winner.username if match_object.winner else None,
+                        "player1_id": match_object.player1.id,
+                        "player1_username": match_object.player1.username,
+                        "player2_id": match_object.player2.id,
+                        "player2_username": match_object.player2.username,
                         "loser_id": loser_id,
                         "player1_score": match_object.player1_score,
                         "player2_score": match_object.player2_score,
