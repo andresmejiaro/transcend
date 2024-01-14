@@ -320,17 +320,15 @@ class PongConsumer(AsyncWebsocketConsumer):
         try:
             data = json.loads(text_data)
             print(f'Received data: {data}')
-            if data['command'] == 'keyboard':
+
+            if not data.get('command'):
+                return
+
+            if data['command'] == 'keyboard' and PongConsumer.run_game[self.match_id]:
                 await self.keyboard_input(data)
             elif data['command'] == 'start_ball':
                 PongConsumer.run_game[self.match_id] = True
                 PongConsumer.shared_game_task[self.match_id] = asyncio.create_task(self.start_game(data))
-            elif data['command'] == 'stop_ball':
-                PongConsumer.run_game[self.match_id] = False
-            elif data['command'] == 'save_models':
-                PongConsumer.run_game[self.match_id] = False
-                results = await self.save_models(data)
-                await self.broadcast_to_group(results[0], results[1], results[2])
 
         except Exception as e:
             print(e)
