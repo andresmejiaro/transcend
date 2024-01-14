@@ -34,7 +34,6 @@ function sendJson(jsonMessage) {
 
 function updateGameCanvas(data, game) {
 	//console.log("Updating game canvas with data:", data);
-	console.log(data)
 	if (data.type == "message") {
 		game.connStatus = data.data.message;
 	} else if (data.type == "screen_report") {
@@ -42,7 +41,8 @@ function updateGameCanvas(data, game) {
 	} else if (data.type == "match_results") {
 		handleFinishedMatchUpdate(data.data)
 	} else if (data.type == "match finished"){
-		game.recieveRemoteEnd();
+		console.log(data)
+		game.recieveRemoteEnd(data);
 	}
 	else{
 		console.error("Invalid message type:", data.type);

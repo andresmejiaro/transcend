@@ -102,7 +102,8 @@ class Game {
 
 
     checkStopCondition(){
-        if(this.statusToText != remote){
+        if(this.statusToText() != "remote"){
+            console.log("thsn");
             if(this.#leftPlayer.score >= this.#scoreLimit
                 || this.#rightPlayer.score >= this.#scoreLimit)
                 return true;
@@ -237,7 +238,7 @@ class Game {
                 headers: {
                     "Content-Type": "application/json",
                   }};
-                console.log(url)
+                //console.log(url)
             const response = await makeRequest(true,url, options,"");
             this.#leftPlayer.name = response.player1.username;
             this.#rightPlayer.name = response.player2.username;
