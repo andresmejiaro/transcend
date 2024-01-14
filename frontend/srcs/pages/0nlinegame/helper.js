@@ -34,32 +34,17 @@ function sendJson(jsonMessage) {
 
 function updateGameCanvas(data, game) {
 	//console.log("Updating game canvas with data:", data);
-	//console.log(data)
+	console.log(data)
 	if (data.type == "message") {
 		game.connStatus = data.data.message;
-		if (data.type === "player_list") {
-			//console.log("Received player list:", data.data);
-			game.updatePlayerNames(data);
-		} else if (data.type === "update_buffer") {
-			// Handle game update data
-			//console.log("game data:", data.data);
-			k = data.data.length;
-			game.receiveRemoteCanvas(data);
-			game.scoreUpdate(data.data[k - 1]["score_update"]);
-		} else if (data.type === "keyup") {
-			// Handle game update data
-			//console.log("game data:", data.data);
-			game.remoteKeyUpHandling(data);
-		} else if (data.type === "game_end") {
-			// Handle game update data
-			//console.log("game data:", data.data);
-			game.remoteGameEnd();
-		}
 	} else if (data.type == "screen_report") {
 		game.receiveRemoteCanvas(data);
 	} else if (data.type == "match_results") {
 		handleFinishedMatchUpdate(data.data)
-	} else {
+	} else if (data.type == "match finished"){
+		game.recieveRemoteEnd();
+	}
+	else{
 		console.error("Invalid message type:", data.type);
 	}
 }
