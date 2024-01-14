@@ -180,20 +180,17 @@ class PongConsumer(AsyncWebsocketConsumer):
                 
                 # Send the match results back to the client
                 return {
-                    "type": "match finished",
-                    "data": {
-                        "winner_id": winner_id,
-                        "winner_username": match_object.winner.username if match_object.winner else None,
-                        "player1_id": match_object.player1.id,
-                        "player1_username": match_object.player1.username,
-                        "player2_id": match_object.player2.id,
-                        "player2_username": match_object.player2.username,
-                        "loser_id": loser_id,
-                        "player1_score": match_object.player1_score,
-                        "player2_score": match_object.player2_score,
-                        "winner_elo": winner_object.ELO,
-                        "loser_elo": loser_object.ELO,
-                    }
+                    "winner_id": winner_id,
+                    "winner_username": match_object.winner.username if match_object.winner else None,
+                    "player1_id": match_object.player1.id,
+                    "player1_username": match_object.player1.username,
+                    "player2_id": match_object.player2.id,
+                    "player2_username": match_object.player2.username,
+                    "loser_id": loser_id,
+                    "player1_score": match_object.player1_score,
+                    "player2_score": match_object.player2_score,
+                    "winner_elo": winner_object.ELO,
+                    "loser_elo": loser_object.ELO,
                 }
                 
         except Match.DoesNotExist as e:
@@ -241,7 +238,7 @@ class PongConsumer(AsyncWebsocketConsumer):
         await asyncio.create_task(self.check_reconnect())
 
         if PongConsumer.run_game[self.match_id] == False:
-            await self.broadcast_to_group(str(self.match_id), "message", await self.save_models())
+            await self.broadcast_to_group(str(self.match_id), "match_finished", await self.save_models())
             await self.discard_channels()
 
         await self.close()
@@ -384,7 +381,7 @@ class PongConsumer(AsyncWebsocketConsumer):
                 if left_score >= self.scorelimit or right_score >= self.scorelimit:
                     PongConsumer.run_game[self.match_id] = False
                     PongConsumer.finished[self.match_id] = True
-                    await self.broadcast_to_group(str(self.match_id), "message", await self.save_models())
+                    await self.broadcast_to_group(str(self.match_id), "match_finished", await self.save_models())
                     await asyncio.sleep(0.5)
                     await self.close()
                     return
