@@ -14,7 +14,8 @@ class Game {
     #defRemoteBinds
     #frame
     #endGame
-    #connStatus;
+    #connStatus
+    #endState
 
     constructor(leftPlayer, rightPlayer, remote = 0) {
         this.#leftPlayer = leftPlayer;
@@ -32,6 +33,7 @@ class Game {
         this.#frame = -5;
         this.#endGame = 0;
         this.#connStatus = "Waiting for Match ..."; 
+        this.#endState = {};
     }
     
     startScreen() {
@@ -70,7 +72,7 @@ class Game {
     }
     
        
-        statusToText() {
+    statusToText() {
         if (this.#remote == 0)
             return "local";
         if (this.#remote == 1)
@@ -81,17 +83,37 @@ class Game {
 
     endScreen() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        if (this.#leftPlayer.score > this.#rightPlayer.score)
-            ctx.fillText(`Winner: ${this.#leftPlayer.name}`, 100, 100);
-        else
+        if (this.statusToText() != "remote"){
+            if (this.#leftPlayer.score > this.#rightPlayer.score)
+                ctx.fillText(`Winner: ${this.#leftPlayer.name}`, 100, 100);
+            else
             ctx.fillText(`Winner: ${this.#rightPlayer.name}`, 100, 100);
-        ctx.fillText(`Thanks for playing to play again press Enter`, 50, 30);
+        } else{
+            ctx.fillText(`Winner: ${this.#endState["winner_username"]}`, 100, 100);
+        }
+        ctx.fillText(`Thanks for playing! To play again press Enter`, 50, 30);
         if (keysPressed["Enter"])
             //requestAnimationFrame(() => this.gameSetup());
             // Using location.assign()
-            window.location.href('/play');
+            window.location.href='/play!';
          else
             requestAnimationFrame(() => this.endScreen());
+    }
+
+
+    checkStopCondition(){
+        if(this.statusToText() != "remote"){
+            console.log("thsn");
+            if(this.#leftPlayer.score >= this.#scoreLimit
+                || this.#rightPlayer.score >= this.#scoreLimit)
+                return true;
+            return false
+        }   
+        else{
+            if(this.#endGame == 1)
+                return true;
+            return false;
+        } 
     }
 
     // game loop
@@ -104,10 +126,7 @@ class Game {
             this.localGameLogic();
         this.drawInteractive();
         this.drawScore();
-        if ((
-            this.#leftPlayer.score >= this.#scoreLimit
-            || this.#rightPlayer.score >= this.#scoreLimit) || 
-                this.#endGame == 1)
+        if (this.checkStopCondition())
             requestAnimationFrame(() => this.endScreen());
         else
             requestAnimationFrame(() => this.pointLoop());
@@ -219,7 +238,7 @@ class Game {
                 headers: {
                     "Content-Type": "application/json",
                   }};
-                console.log(url)
+                //console.log(url)
             const response = await makeRequest(true,url, options,"");
             this.#leftPlayer.name = response.player1.username;
             this.#rightPlayer.name = response.player2.username;
@@ -287,8 +306,9 @@ class Game {
     }
 
    
-    remoteGameEnd(){
+    remoteGameEnd(data){
         this.#endGame = 1;
+        this.#endState = data.data;
     }
     
     set connStatus (data){

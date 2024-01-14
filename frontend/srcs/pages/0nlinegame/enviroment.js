@@ -9,5 +9,10 @@ canvas.height= 525;
 ctx.font = '20px Arial';
 ctx.fillStyle = 'white';
 const keysPressed = {};
-
+document.addEventListener('keydown', (event) => {
+    keysPressed[event.key] = true;
+});
+document.addEventListener('keyup', (event) => {
+    keysPressed[event.key] = false;
+});
 

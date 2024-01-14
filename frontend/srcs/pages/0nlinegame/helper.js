@@ -34,33 +34,17 @@ function sendJson(jsonMessage) {
 
 function updateGameCanvas(data, game) {
 	//console.log("Updating game canvas with data:", data);
-	//console.log(data)
 	if (data.type == "message") {
 		game.connStatus = data.data.message;
-		if (data.type === "player_list") {
-			//console.log("Received player list:", data.data);
-			game.updatePlayerNames(data);
-		} else if (data.type === "update_buffer") {
-			// Handle game update data
-			//console.log("game data:", data.data);
-			k = data.data.length;
-			game.receiveRemoteCanvas(data);
-			game.scoreUpdate(data.data[k - 1]["score_update"]);
-		} else if (data.type === "keyup") {
-			// Handle game update data
-			//console.log("game data:", data.data);
-			game.remoteKeyUpHandling(data);
-		} else if (data.type === "game_end") {
-			// Handle game update data
-			//console.log("game data:", data.data);
-			game.remoteGameEnd();
-		}
 	} else if (data.type == "screen_report") {
 		game.receiveRemoteCanvas(data);
 	} else if (data.type == "match_results") {
 		handleFinishedMatchUpdate(data.data)
-	} else {
-		console.error("Invalid message type:", data.type);
+	} else if (data.type == "match_finished"){
+		game.remoteGameEnd(data);
+	}
+	else{
+		console.error("Invalid message type:", data);
 	}
 }
 
@@ -106,15 +90,23 @@ function handleArrowKeyRelease(key) {
 	// Customize this based on your game's key bindings
 	switch (key) {
 		case "ArrowUp":
+		case "w":
+		case "W":
 			sendRelease("up");
 			break;
 		case "ArrowDown":
+		case "s":
+		case "S":
 			sendRelease("down");
 			break;
 		case "ArrowLeft":
+		case "a":
+		case "A":
 			sendRelease("left");
 			break;
 		case "ArrowRight":
+		case "d":
+		case "D":
 			sendRelease("right");
 			break;
 	}
@@ -130,16 +122,24 @@ function handleArrowKeyPress(key) {
 	//console.log(key);
 	switch (key) {
 		case "ArrowUp":
+		case "w":
+		case "W":
 			sendKeyPress("up");
 			break;
 		case "ArrowDown":
+		case "s":
+		case "S":
 			sendKeyPress("down");
 			break;
 		case "ArrowLeft":
+		case "a":
+		case "A":
 			sendKeyPress("left");
 			break;
 		case "ArrowRight":
+		case "d":
+		case "D":
 			sendKeyPress("right");
-			break;
+			break;	
 	}
 }
