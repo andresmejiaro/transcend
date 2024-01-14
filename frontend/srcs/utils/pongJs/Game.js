@@ -21,7 +21,7 @@ class Game {
         this.#rightPlayer = rightPlayer;
         this.#scoreLimit = 11;
         this.#background = new Image();
-        this.#background.src = './srcs/assets/game/table.svg';
+        this.#background.src = './srcs/assets/game/table.png';
         this.#backgroundLoaded = false;
         this.#background.onload = () => { this.#backgroundLoaded = true; };
         this.#remote = remote; 
@@ -111,6 +111,7 @@ class Game {
             requestAnimationFrame(() => this.endScreen());
         else
             requestAnimationFrame(() => this.pointLoop());
+		this.#frame += 1;
     }
  
     
@@ -130,7 +131,6 @@ class Game {
         this.#leftPaddle.setSize(canvas["leftPaddle"]["size"]);
         this.#rightPaddle.setPosition(canvas["rightPaddle"]["position"]);
         this.#rightPaddle.setSize(canvas["rightPaddle"]["size"]);
-        this.#frame += 1;
     }
 
     localGameLogic() {
@@ -146,7 +146,8 @@ class Game {
             this.#rightPlayer.goal();
             this.resetPosition();
         } 
-        this.#leftPaddle.updatePosition();
+       //console.log(keysPressed);
+		this.#leftPaddle.updatePosition();
         this.#rightPaddle.updatePosition();
     }
 
@@ -198,6 +199,9 @@ class Game {
             this.#rightPlayer.binds);
             if (this.#remote == 1)
                 this.remoteGameSetup();
+			if(this.#remote == 2){
+				this.setupAI();
+			}
             this.#rightPlayer.resetScore();
             this.#leftPlayer.resetScore();
             this.#ball.addColider(this.#leftPaddle);
@@ -290,5 +294,9 @@ class Game {
     set connStatus (data){
         this.#connStatus = data;
     }
+
+	get frame(){
+		return this.#frame;
+	}
 
 }
