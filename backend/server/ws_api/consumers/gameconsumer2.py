@@ -286,7 +286,7 @@ class PongConsumer(AsyncWebsocketConsumer):
                 "connected_users": list(PongConsumer.list_of_players[self.match_id].keys()),
                 })
             
-            if self.player_1_id in PongConsumer.list_of_players and self.player_2_id in PongConsumer.list_of_players:
+            if self.player_1_id in PongConsumer.list_of_players[self.match_id] and self.player_2_id in PongConsumer.list_of_players[self.match_id]:
                 await self.broadcast_to_group(f"{self.match_id}", "message", {
                     "message": 'Game Ready',
                 })
