@@ -46,7 +46,7 @@ class LobbyConsumer(AsyncWebsocketConsumer):
     JOIN_QUEUE = 'join_queue'                           # Command to join the queue arguments: pass the values as of 'client_id' eg: {'command': 'join_queue', 'data': {'queue_name': 'global'}}
     LEAVE_QUEUE = 'leave_queue'                         # Command to leave the queue arguments: pass the values as of 'client_id' eg: {'command': 'leave_queue', 'data': {'queue_name': 'tournament_26'}}
 
-    CREATE_3v3 = 'create_3v3'                           # Command to create a 3v3 match arguments: pass the values as of 'client_id' eg: {'command': 'create_3v3', 'data': {'opponent_id': '1', "tournament_name": "cawabonga"}}
+    CREATE_3v3 = 'create_3v3'                           # Command to create a 3v3 match arguments: pass the values as of 'client_id' eg: {'command': 'create_3v3', 'data': {"tournament_name": "cawabonga"}}
 # ---------------------------------------
 
     async def join_queue(self, queue_name, user_id):
@@ -303,7 +303,7 @@ class LobbyConsumer(AsyncWebsocketConsumer):
             elif command == self.LEAVE_QUEUE:
                 await self.leave_queue(data['queue_name'], self.client_id)
             elif command == self.CREATE_3v3:
-                await self.create_3v3(self.client_id, data['opponent_id'], data['tournament_name'])
+                await self.create_3v3(self.client_id, data['tournament_name'])
             else:
                 await self.send_info_to_client(self.CMD_NOT_FOUND, text_data)
 
@@ -1053,18 +1053,17 @@ class LobbyConsumer(AsyncWebsocketConsumer):
             return None
 
     @database_sync_to_async
-    def create_3v3(self, user_id, opponent_id, tournament_name):
+    def create_3v3(self, user_id, tournament_name):
         try:
             BestofThree = import_string('api.best_of_three.models.BestofThree')
             User = import_string('api.userauth.models.CustomUser')
             
             user = get_object_or_404(User, pk=user_id)
-            opponent = get_object_or_404(User, pk=opponent_id)
             
             tournament = BestofThree.objects.create(
                 name=tournament_name,
                 player1 = user,
-                player2 = opponent,
+                player2 = None, 
                 match1 = None,
                 match2 = None,
                 match3 = None,
