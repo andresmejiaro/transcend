@@ -63,11 +63,15 @@ const urlLocationHandler = async () => {
     });
   }
 
+  if (isLogged())
+    loadLobbyScripts();
+
   if (route.js) {
     route.js.forEach((jsFile) => {
       if (jsFile && !document.querySelector(`script[src="${jsFile}"]`)) {
         const body = document.body;
         const script = document.createElement("script");
+        // console.log(jsFile)
 
         script.type = "text/javascript";
         script.src = jsFile;
@@ -91,10 +95,7 @@ const urlLocationHandler = async () => {
   } else {
     console.error("Element with id 'nav-router' not found in the DOM");
   }
-
   loadNavScripts();
-  if (isLogged()) 
-    loadLobbyScripts();
 };
 
 const loadNavScripts = () => {
@@ -149,6 +150,7 @@ const loadLobbyScripts = () => {
       body.appendChild(script);
     }
   });
+
 }
 
 // add an event listener to the window that watches for url changes
