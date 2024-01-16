@@ -1,7 +1,6 @@
 from django.db import models
 from api.userauth.models import CustomUser as User
-from api.tournaments.models import Match
-
+from api.tournament.models import Match
 
 # Create your models here.
 class BestofThree(models.Model):
