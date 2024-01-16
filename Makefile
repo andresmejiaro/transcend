@@ -51,4 +51,6 @@ status:
 	@echo "\n\033[1;33mNetworks\033[0m"
 	@$(DOCKER) network ls
 
+daphne:
+	($(COMPOSE) down daphne && $(COMPOSE) up daphne) || ($(COMPOSE) down daphne || $(COMPOSE) up daphne)
 

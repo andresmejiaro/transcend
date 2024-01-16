@@ -15,6 +15,7 @@ from django.utils.text import slugify
 from urllib import request as urllib_request
 from django.views.decorators.csrf import requires_csrf_token
 from api.jwt_utils import get_user_id_from_jwt_token
+from .utils.validate_update import UserUpdateValidator
 
 
 @requires_csrf_token
@@ -214,3 +215,39 @@ def user_friends_list(request):
         except Exception as e:
             return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
     return JsonResponse({'status': 'error', 'message': 'Only GET requests are allowed'}, status=400)
+
+
+def update_user_information(request, *args, **kwargs):
+    if request.method == 'PUT':
+        return JsonResponse({"message": "Not allowed"}, status=405)
+    authorization_header = request.headers.get('Authorization')
+    if not authorization_header:
+        return JsonResponse({"message": "Authorization header missing"}, status=401)
+    try:
+        _, token = authorization_header.split()
+        user_id = get_user_id_from_jwt_token(token)
+        user = CustomUser.objects.get(id=user_id)
+    except Exception as e:
+        return JsonResponse({'error': "Invalid token"}, status=401)
+
+    try:
+        data = json.loads(request.body)
+    except json.JSONDecodeError:
+        return JsonResponse({'error': "Invalid JSON"}, status=400)
+
+    input_errors = UserUpdateValidator(data).validate()
+    if input_errors:
+        return JsonResponse({"message": "Something went wrong", "details": input_errors}, status=403)
+
+    username = data.get("username")
+    email = data.get("email")
+    full_name = data.get("full_name")
+
+    if username:
+        user.username = username
+    if email:
+        user.email = email
+    if full_name:
+        user.fullname = full_name
+    user.save()
+    return JsonResponse({"message": "User updated successfully"}, status=200)

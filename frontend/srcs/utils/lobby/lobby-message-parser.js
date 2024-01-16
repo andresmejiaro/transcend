@@ -30,11 +30,11 @@ const handleMessage = async (message) => {
             break;
 
         case "cancel_friend_request":
-            await handleCancelFriendRequest(data);
+            // await handleCancelFriendRequest(data);
             break;
 
         case "friend_request_cancelled":
-            await handleCanceledAFriendRequest(data);
+            // await handleCanceledAFriendRequest(data);
             break;
 
         case "accept_friend_request":
@@ -61,6 +61,23 @@ const handleMessage = async (message) => {
 
         case "recieved_match_invite":
             await handleRecievedFriendMatchRequest(data);
+            break;
+
+        // QUEUE && MATCH REQUESTS        
+        case "joined_queue":
+            await handleJoinedQueue(data);
+            break;
+
+        case "left_queue":
+            await handleLeftQueue(data);
+            break;
+
+        case "found_opponent":
+            await handleFoundOpponent(data);
+            break;
+
+        case "match_results":
+            await handleMatchResults(data);
             break;
 
         // TOURNAMENT REQUESTS

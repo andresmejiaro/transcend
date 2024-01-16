@@ -121,7 +121,7 @@ const urlRoutes = {
     description: "This is the local pong page",
     js: [directory + "0nlinegame/enviroment.js","./srcs/utils/pongJs/MovingRectangle.js",
      "./srcs/utils/pongJs/Ball.js","./srcs/utils/pongJs/Paddle.js","./srcs/utils/pongJs/Player.js", 
-     "./srcs/utils/pongJs/Game.js",directory + "0nlinegame/helper.js", directory + "0nlinegame/main.js"],
+     "./srcs/utils/pongJs/Game.js", directory + "0nlinegame/helper.js", directory + "0nlinegame/finish-helper.js", directory + "0nlinegame/main.js"],
     css: [directory + "0nlinegame/onlinegame.css"]
   },
 

@@ -12,7 +12,7 @@ class Ball(MovingRectangle):
 				   size = size, enclousure = enclousure)
 		self._collide = []
   
-		self.speed_multiplier = 2.0	
+		self.speed_multiplier = 1.0	
 
 	def checkCollision(self, colider: MovingRectangle) -> bool:
 		# Check if upper right corner is touching the collider
@@ -58,7 +58,7 @@ class Ball(MovingRectangle):
 		x2 = abs(self.getCorners()["xh"] - colider.getCorners()["xl"])
 		y1 = abs(self.getCorners()["yl"] - colider.getCorners()["yh"])
 		y2 = abs(self.getCorners()["yh"] - colider.getCorners()["yl"])
-		if min(x1,x1) < min(y1,y2):
+		if min(x2,x1) < min(y1,y2):
 			self.setSpeed(x = -self.getSpeed()["x"], 
 				  y = self.getSpeed()["y"] + 0.5 * colider.getSpeed()["y"])
 		else:
