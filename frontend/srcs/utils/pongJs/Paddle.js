@@ -26,11 +26,14 @@ class Paddle extends MovingRectangle{
      updatePosition() {
         let xSpeed = 0;
         let ySpeed = 0;
+		
     
         xSpeed = (keysPressed[this.#binds.right]
             - keysPressed[this.#binds.left])*this.getMaxSpeed.x;
         ySpeed = (keysPressed[this.#binds.down]
             - keysPressed[this.#binds.up])*this.getMaxSpeed.y;
+		
+		//console.log(this.#binds.down,keysPressed, "1");
         if (Number.isNaN(xSpeed)){
 			xSpeed = 0;
 		}
@@ -59,7 +62,7 @@ class Paddle extends MovingRectangle{
             yNewPos = 0;
         if (yNewPos + this.getSize.y > canvas.height)
             yNewPos = canvas.height - this.getSize.y;
-        super.setPosition({x: xNewPos, 
+		super.setPosition({x: xNewPos, 
                     y : yNewPos});
     }
 
