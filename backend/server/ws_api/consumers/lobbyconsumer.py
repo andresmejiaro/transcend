@@ -1057,19 +1057,22 @@ class LobbyConsumer(AsyncWebsocketConsumer):
         try:
             BestofThree = import_string('api.best_of_three.models.BestofThree')
             User = import_string('api.userauth.models.CustomUser')
+            
             user = get_object_or_404(User, pk=user_id)
             opponent = get_object_or_404(User, pk=opponent_id)
+            
             tournament = BestofThree.objects.create(
                 name=tournament_name,
-                player1=user,
-                player2=opponent,
-                match1=None,
-                match2=None,
-                match3=None,
-                winner=None,
+                player1 = user,
+                player2 = opponent,
+                match1 = None,
+                match2 = None,
+                match3 = None,
+                winner = None,
                 date_played=None,
                 active=True
             )
+            
             tournament.save()
             return tournament.id
         
