@@ -38,7 +38,7 @@ urlpatterns = [
     path('oauth-init/', oauth_start, name="oauth-start"),
     path('oauth/login/', oauth_login, name="oauth-login"),
 
-    path('user/<int:user_id>/stats/', get_kpi, name="get_kpi"),
+    path('user/stats/', get_kpi, name="get_kpi"),
     path('user/update/', update_user_information, name="update_user_info"),
 
 ]
