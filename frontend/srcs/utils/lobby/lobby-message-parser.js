@@ -63,12 +63,21 @@ const handleMessage = async (message) => {
             await handleRecievedFriendMatchRequest(data);
             break;
 
-        case "reject_match":
-            await handleMeRejectedMatchRequest(data);
+        // QUEUE && MATCH REQUESTS        
+        case "joined_queue":
+            await handleJoinedQueue(data);
             break;
-            
-        case "match_rejected":
-            await handleRejectedMatchRequest(data);
+
+        case "left_queue":
+            await handleLeftQueue(data);
+            break;
+
+        case "found_opponent":
+            await handleFoundOpponent(data);
+            break;
+
+        case "match_results":
+            await handleMatchResults(data);
             break;
 
         // TOURNAMENT REQUESTS
