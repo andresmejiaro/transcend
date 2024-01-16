@@ -115,7 +115,7 @@ class PongConsumer(AsyncWebsocketConsumer):
     
     @database_sync_to_async
     @transaction.atomic
-    def save_models(self, close_code=1000):
+    def save_models(self, disconnect=False, close_code=1000):
         from api.tournament.models import Match
         from api.userauth.models import CustomUser as User
 
@@ -129,7 +129,10 @@ class PongConsumer(AsyncWebsocketConsumer):
 
             print(f"Player 1 Score: {match_object.player1_score}, Player 2 Score: {match_object.player2_score}")
 
-            if match_object.player1_score == match_object.player2_score:
+            if disconnect:
+                winner = self.player_1_id if int(self.client_id) == self.player_2_id else self.player_2_id
+                match_object.winner = User.objects.get(id=winner)
+            elif match_object.player1_score == match_object.player2_score:
                 # Handle tie by comparing ELO scores
                 player1_elo = User.objects.get(id=player1_id).ELO
                 player2_elo = User.objects.get(id=player2_id).ELO
@@ -227,19 +230,9 @@ class PongConsumer(AsyncWebsocketConsumer):
         if self.client_id in PongConsumer.list_of_players[self.match_id]:
             del PongConsumer.list_of_players[self.match_id][self.client_id]
 
-        print(f'Active: {self.match_object.active}')
-
-        if not self.match_object.active or PongConsumer.finished[self.match_id] == True:
-            await self.discard_channels()
-            await self.close()
-            return
-
         PongConsumer.run_game[self.match_id] = False
-        await asyncio.create_task(self.check_reconnect())
-
-        if PongConsumer.run_game[self.match_id] == False:
-            await self.broadcast_to_group(str(self.match_id), "match_finished", await self.save_models())
-            await self.discard_channels()
+        await self.broadcast_to_group(str(self.match_id), "match_finished", await self.save_models(disconnect=True))
+        await self.discard_channels()
 
         await self.close()
         
