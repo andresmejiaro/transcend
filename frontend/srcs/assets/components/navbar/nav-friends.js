@@ -95,20 +95,20 @@ const listFriendsNav = async () => {
     pElement.classList.add("pm0");
     pElement.textContent = friend.username;
 
-    const inviteButton = document.createElement("button");
-    inviteButton.type = "button";
-    inviteButton.classList.add("btn", "ms-5");
-    inviteButton.style = "background: #fffeee; color: #4CA2BB";
-    inviteButton.textContent = "Friendly Battle";
+    //const inviteButton = document.createElement("button");
+    //inviteButton.type = "button";
+    //inviteButton.classList.add("btn", "ms-5");
+    //inviteButton.style = "background: #fffeee; color: #4CA2BB";
+    //inviteButton.textContent = "Friendly Battle";
   
-    inviteButton.addEventListener("click", () => {
-      handleInviteFriendToMatch(friend);
-    });
+    //inviteButton.addEventListener("click", () => {
+    //  handleInviteFriendToMatch(friend);
+    //});
 
     friendElement.appendChild(circleElement);
     friendElement.appendChild(mxElement);
     friendElement.appendChild(pElement);
-    friendElement.appendChild(inviteButton);
+    //friendElement.appendChild(inviteButton);
 
     friendsListContainer.appendChild(friendElement);
   });
