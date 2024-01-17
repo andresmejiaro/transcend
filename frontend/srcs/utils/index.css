@@ -82,7 +82,7 @@ p {
     height: 60px !important;
     border-radius: 68px !important;
     background: #15142E !important; /* Solid background color */
-    color: #FEFEE9 !important;
+    color: #ffffff !important;
     border: none !important;
     background-clip: padding-box !important;
     transition: border-color 0.2s ease-in-out !important;
@@ -127,7 +127,7 @@ p {
 
 .nav-link-logged-pong {
     padding: 5px 10px; /* Similar to .nav-link, adjust as needed */
-    color: #FEFEE9 !important;
+    color: #ffffff !important;
 }
 
 .accept-btn {
