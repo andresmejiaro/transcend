@@ -1146,9 +1146,10 @@ class LobbyConsumer(AsyncWebsocketConsumer):
             return None
 
     async def join_3v3(self):
-        # We will scan the tournament list to see if the tournament exists and then we will add the player to the tournament
-        # We must also check if the client trying to join a tournament is not already in a tournament
         try:
+            BestofThree = import_string('api.best_of_three.models.BestofThree')
+            User = import_string('api.userauth.models.CustomUser')
+
             if LobbyConsumer.tournament.get(self.client_id):
                 await self.send_info_to_client(
                     'already_in_tournament',
@@ -1189,6 +1190,14 @@ class LobbyConsumer(AsyncWebsocketConsumer):
                     )
                     
                     LobbyConsumer.tournament[tournament_name]["open"] = False
+                    # Add the joining player to the object
+                    user = await database_sync_to_async(get_object_or_404)(User, pk=int(self.client_id))
+                    
+                    tournament = await database_sync_to_async(get_object_or_404)(BestofThree, pk=tournament["id"])
+                    tournament.player2 = user
+                    await database_sync_to_async(tournament.save)()
+                    print(LobbyConsumer.tournament[tournament_name])
+
                     return
                     
                 else:
