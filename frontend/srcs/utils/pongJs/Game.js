@@ -84,14 +84,22 @@ class Game {
     endScreen() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         if (this.statusToText() != "remote"){
-            if (this.#leftPlayer.score > this.#rightPlayer.score)
-                ctx.fillText(`Winner: ${this.#leftPlayer.name}`, 100, 100);
+            if (this.#leftPlayer.score > this.#rightPlayer.score) {
+                ctx.fillText(`Winner ${this.#leftPlayer.name}`, 100, 100);
+            }
             else
-            ctx.fillText(`Winner: ${this.#rightPlayer.name}`, 100, 100);
+            ctx.fillText(`Winner ${this.#rightPlayer.name}`, 100, 100);
         } else{
-            ctx.fillText(`Winner: ${this.#endState["winner_username"]}`, 100, 100);
+            ctx.font = '80pt VT323';
+            ctx.fillText(`Winner`, 310, 60);
+            ctx.font = '30pt VT323';
+            ctx.fillText(`${this.#endState["winner_username"]}`, 380, 340, 200);
+            //ctx.drawImage("/", 200, 200, canvas.width / 2, canvas.height /2);
         }
-        ctx.fillText(`Thanks for playing! To play again press Enter`, 50, 30);
+        ctx.font = '26pt VT323';
+        ctx.fillText(`Thanks for playing!`, 305, 450);
+        ctx.font = '18pt VT323';
+        ctx.fillText(`To play again press Enter`, 310, 500);
         if (keysPressed["Enter"])
             //requestAnimationFrame(() => this.gameSetup());
             // Using location.assign()
