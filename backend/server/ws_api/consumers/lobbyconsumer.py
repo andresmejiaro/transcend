@@ -50,6 +50,7 @@ class LobbyConsumer(AsyncWebsocketConsumer):
     CREATE_3v3 = 'create_3v3'                           # Command to create a 3v3 match arguments: pass the values as of 'client_id' eg: {'command': 'create_3v3', 'data': {"tournament_name": "cawabonga"}}
     JOIN_3v3 = 'join_3v3'
     START_3v3 = 'start_3v3'
+    NEXT_MATCH = 'next_match'
 # ---------------------------------------
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -307,6 +308,8 @@ class LobbyConsumer(AsyncWebsocketConsumer):
                 await self.join_3v3()
             elif command == self.START_3v3:
                 await self.start_3v3()
+            elif command == self.NEXT_MATCH:
+                await self.get_next_match_or_winner()
             else:
                 await self.send_info_to_client(self.CMD_NOT_FOUND, text_data)
 
@@ -1143,13 +1146,9 @@ class LobbyConsumer(AsyncWebsocketConsumer):
             tournament.match2 = LobbyConsumer.tournament[self.client_id]["matches"][1]
             tournament.match3 = LobbyConsumer.tournament[self.client_id]["matches"][2]
             await database_sync_to_async(tournament.save)()
-            
-            print(LobbyConsumer.tournament[self.client_id])
 
             # Remove the tournament from the list
-            del LobbyConsumer.tournament[self.client_id]
-            
-            print (LobbyConsumer.tournament)
+            # del LobbyConsumer.tournament[self.client_id]
             
             return None
         
@@ -1302,6 +1301,139 @@ class LobbyConsumer(AsyncWebsocketConsumer):
         
         except Exception as e:
             print(f'Exception in create_match {e}')
+            return None
+
+    async def get_next_match_or_winner(self):
+        try:
+            # This method will check if the client is admin of a tournament and then check if the matches are active
+            # If the matches are not active, it will return the next match
+            # When no more matches are available, it will return the winner
+            # If the client is not admin, it will return the next match
+            BestofThree = import_string('api.best_of_three.models.BestofThree')
+            Match = import_string('api.tournament.models.Match')
+            User = import_string('api.userauth.models.CustomUser')
+            
+            if not LobbyConsumer.tournament.get(self.client_id):
+                await self.send_info_to_client(
+                    'no_tournament',
+                    {
+                        "message": "You are not in a tournament"
+                    }
+                )
+                return None
+            
+            tournament = await database_sync_to_async(get_object_or_404)(BestofThree, pk=LobbyConsumer.tournament[self.client_id]["id"])
+            
+            print(tournament)
+            print(tournament.match1)
+            print(tournament.match2)
+            print(tournament.match3)
+            
+            if tournament.match1 is None:
+                await self.send_info_to_client(
+                    'no_matches',
+                    {
+                        "message": "There are no matches"
+                    }
+                )
+                return None
+            
+            if tournament.match1 is not None:
+                match1 = await database_sync_to_async(get_object_or_404)(Match, pk=tournament.match1.id)
+                if match1.active:
+                    await self.send_info_to_client(
+                        'match_active',
+                        {
+                            "message": "Match is active",
+                            "data": {
+                                "match_id": match1.id,
+                                "player1": match1.player1.username,
+                                "player2": match1.player2.username,
+                                "winner": match1.winner,
+                            }
+                        }
+                    )
+                    return None
+                else:
+                    await self.send_info_to_client(
+                        'match_not_active',
+                        {
+                            "message": "Match is not active",
+                            "data": {
+                                "match_id": match1.id,
+                                "player1": match1.player1.username,
+                                "player2": match1.player2.username,
+                                "winner": match1.winner,
+                            }
+                        }
+                    )
+                    return None
+                
+            if tournament.match2 is not None:
+                match2 = await database_sync_to_async(get_object_or_404)(Match, pk=tournament.match2.id)
+                if match2.active:
+                    await self.send_info_to_client(
+                        'match_active',
+                        {
+                            "message": "Match is active",
+                            "data": {
+                                "match_id": match2.id,
+                                "player1": match2.player1.username,
+                                "player2": match2.player2.username,
+                                "winner": match2.winner,
+                            }
+                        }
+                    )
+                    return None
+                else:
+                    await self.send_info_to_client(
+                        'match_not_active',
+                        {
+                            "message": "Match is not active",
+                            "data": {
+                                "match_id": match2.id,
+                                "player1": match2.player1.username,
+                                "player2": match2.player2.username,
+                                "winner": match2.winner,
+                            }
+                        }
+                    )
+                    return None
+                
+            if tournament.match3 is not None:
+                match3 = await database_sync_to_async(get_object_or_404)(Match, pk=tournament.match3.id)
+                if match3.active:
+                    await self.send_info_to_client(
+                        'match_active',
+                        {
+                            "message": "Match is active",
+                            "data": {
+                                "match_id": match3.id,
+                                "player1": match3.player1.username,
+                                "player2": match3.player2.username,
+                                "winner": match3.winner,
+                            }
+                        }
+                    )
+                    return None
+                else:
+                    await self.send_info_to_client(
+                        'match_not_active',
+                        {
+                            "message": "Match is not active",
+                            "data": {
+                                "match_id": match3.id,
+                                "player1": match3.player1.username,
+                                "player2": match3.player2.username,
+                                "winner": match3.winner,
+                            }
+                        }
+                    )
+                    return None
+                
+            
+        except Exception as e:
+            print(f'Exception in get_next_match_or_winner {e}')
             return None
 # ---------------------------------------
 
