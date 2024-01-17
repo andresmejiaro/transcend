@@ -48,8 +48,8 @@ class LobbyConsumer(AsyncWebsocketConsumer):
     LEAVE_QUEUE = 'leave_queue'                         # Command to leave the queue arguments: pass the values as of 'client_id' eg: {'command': 'leave_queue', 'data': {'queue_name': 'tournament_26'}}
 
     CREATE_3v3 = 'create_3v3'                           # Command to create a 3v3 match arguments: pass the values as of 'client_id' eg: {'command': 'create_3v3', 'data': {"tournament_name": "cawabonga"}}
-    JOIN_3v3 = 'join_3v3'                               # Command to join a 3v3 match arguments: pass the values as of 'client_id' eg: {'command': 'join_3v3', 'data': {"tournament_name": "cawabonga"}}
-    START_3v3 = 'start_3v3'                             # Command to start a 3v3 match arguments: pass the values as of 'client_id' eg: {'command': 'start_3v3', 'data': {"tournament_name": "cawabonga"}}
+    JOIN_3v3 = 'join_3v3'
+    START_3v3 = 'start_3v3'
 # ---------------------------------------
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -1054,7 +1054,7 @@ class LobbyConsumer(AsyncWebsocketConsumer):
             print(f'Exception in create_match {e}')
             return None
 
-
+# Best of Three methods
     async def start_3v3(self):
         try:
             Match = import_string('api.tournament.models.Match')
