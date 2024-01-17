@@ -1135,6 +1135,9 @@ class LobbyConsumer(AsyncWebsocketConsumer):
                     }
                 }
             )
+
+            # Remove the tournament from the list
+            del LobbyConsumer.tournament[self.client_id]
             
             return None
         
