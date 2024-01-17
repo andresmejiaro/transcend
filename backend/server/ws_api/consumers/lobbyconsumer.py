@@ -56,6 +56,7 @@ class LobbyConsumer(AsyncWebsocketConsumer):
         self.client_id = None
         self.client_username = None
 
+# Matchmaking methods
     async def join_queue(self, queue_name, user_id):
         try:
             if self.queue.get(queue_name) is None:
@@ -168,7 +169,7 @@ class LobbyConsumer(AsyncWebsocketConsumer):
         except Exception as e:
             print(f'Exception in find_opponent {e}')
             await self.disconnect(1000)
-
+# ---------------------------------------
 
 # Channel methods (Connect, Disconnect, Receive)
     async def connect(self):
