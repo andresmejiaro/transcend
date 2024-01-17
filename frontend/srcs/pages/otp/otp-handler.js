@@ -29,4 +29,18 @@ document.getElementById("removeGA").addEventListener("click", function (e) {
   removeGA();
 });
 
+const handleVerifiyingOTP = async () => {
+  const res = await verifyTOTP();
+  if (res ){
+    setTimeout(function () {
+      window.location.href = "play!";
+    }, 1000);
+  }
+}
+
+document.getElementById("verifyGAotp").addEventListener("click", function (e) {
+  e.preventDefault();
+  handleVerifiyingOTP();
+});
+
 

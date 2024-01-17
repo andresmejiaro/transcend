@@ -71,7 +71,7 @@ def enable_2fa(request):
 	secret_key = pyotp.random_base32()
 	img_path = generate_qr_code(secret_key, user.id)
 	user.enable_2fa(secret_key)
-	return JsonResponse({'qrcode_path': img_path, 'message': 'Scan the QR code with your authenticator app to enable 2FA.'})
+	return JsonResponse({'qrcode_path': img_path, 'success': 'Scan the QR code with your authenticator app to enable 2FA.'})
 
 def disable_2fa(request):
 	authorization_header = request.headers.get('Authorization')
