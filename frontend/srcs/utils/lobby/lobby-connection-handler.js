@@ -1,6 +1,14 @@
 let lobbySocket;
 
-const sendWebSocketMessage = (messageType, payload) => {;
+const sendWebSocketMessage = async(messageType, payload) => {
+	const sleep = (duration) => new Promise(resolve => setTimeout(resolve, duration));
+
+    // Loop until the WebSocket is open
+    while (!lobbySocket || lobbySocket.readyState !== WebSocket.OPEN) {
+        // Wait for a short period before checking again
+        await sleep(50);
+    }
+
 	return new Promise((resolve, reject) => {
 		if (lobbySocket && lobbySocket.readyState === WebSocket.OPEN) {
 			lobbySocket.send(
@@ -27,6 +35,7 @@ const connectWebSocket = async () => {
 
 	return new Promise((resolve, reject) => {
 		lobbySocket = new WebSocket(`${window.DAPHNE_BASE_URL}/ws/lobby/?token=${authToken}`);
+		console.log("LobbySocket connection....")
 
 		lobbySocket.addEventListener("open", (event) => {
 			resolve(lobbySocket); // Resolve with the WebSocket object
@@ -99,4 +108,5 @@ const joinLobby = async () => {
 	}
 };
 
+console.log("joining lobby")
 joinLobby();
