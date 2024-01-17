@@ -1136,8 +1136,20 @@ class LobbyConsumer(AsyncWebsocketConsumer):
                 }
             )
 
+            # Add matches to the Best of Three Object
+            BestofThree = import_string('api.best_of_three.models.BestofThree')
+            tournament = await database_sync_to_async(get_object_or_404)(BestofThree, pk=LobbyConsumer.tournament[self.client_id]["id"])
+            tournament.match1 = LobbyConsumer.tournament[self.client_id]["matches"][0]
+            tournament.match2 = LobbyConsumer.tournament[self.client_id]["matches"][1]
+            tournament.match3 = LobbyConsumer.tournament[self.client_id]["matches"][2]
+            await database_sync_to_async(tournament.save)()
+            
+            print(LobbyConsumer.tournament[self.client_id])
+
             # Remove the tournament from the list
             del LobbyConsumer.tournament[self.client_id]
+            
+            print (LobbyConsumer.tournament)
             
             return None
         
