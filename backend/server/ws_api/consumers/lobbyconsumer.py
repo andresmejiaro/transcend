@@ -1167,7 +1167,7 @@ class LobbyConsumer(AsyncWebsocketConsumer):
                             "data": {
                                 "tournament_name": tournament_name,
                                 "tournament_id": tournament["id"],
-                                "admin": tournament["admin"],
+                                "admin": str(tournament["admin"]),
                             }
                         }
                     )
