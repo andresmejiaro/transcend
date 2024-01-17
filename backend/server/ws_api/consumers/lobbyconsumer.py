@@ -46,11 +46,10 @@ class LobbyConsumer(AsyncWebsocketConsumer):
     CANCEL_TOURNAMENT = 'cancel_tournament'             # Command to cancel a tournament arguments: pass the values as of 'client_id' and 'tournament_id' eg: {'command': 'cancel_tournament', 'data': {'client_id': '1', 'tournament_id': '1'}}
     JOIN_QUEUE = 'join_queue'                           # Command to join the queue arguments: pass the values as of 'client_id' eg: {'command': 'join_queue', 'data': {'queue_name': 'global'}}
     LEAVE_QUEUE = 'leave_queue'                         # Command to leave the queue arguments: pass the values as of 'client_id' eg: {'command': 'leave_queue', 'data': {'queue_name': 'tournament_26'}}
-
     CREATE_3v3 = 'create_3v3'                           # Command to create a 3v3 match arguments: pass the values as of 'client_id' eg: {'command': 'create_3v3', 'data': {"tournament_name": "cawabonga"}}
-    JOIN_3v3 = 'join_3v3'
-    START_3v3 = 'start_3v3'
-    NEXT_MATCH = 'next_match'
+    JOIN_3v3 = 'join_3v3'                               # Command to join a 3v3 match arguments: pass the values as of 'client_id' eg: {'command': 'join_3v3'}
+    START_3v3 = 'start_3v3'                             # Command to start a 3v3 match arguments: pass the values as of 'client_id' eg: {'command': 'start_3v3'}
+    NEXT_MATCH = 'next_match'                           # Command to get the next match or winner arguments: pass the values as of 'client_id' eg: {'command': 'next_match'}
 # ---------------------------------------
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -1196,7 +1195,7 @@ class LobbyConsumer(AsyncWebsocketConsumer):
                             "data": {
                                 "tournament_name": tournament_name,
                                 "tournament_id": tournament["id"],
-                                "oppoent": self.client_id,
+                                "opponent": self.client_id,
                             }
                         }
                     )
@@ -1347,20 +1346,7 @@ class LobbyConsumer(AsyncWebsocketConsumer):
                         return None
                     else:
                         continue
-                        # await self.send_info_to_client(
-                        #     'match_not_active',
-                        #     {
-                        #         "message": "Match is not active",
-                        #         "data": {
-                        #             "match_id": match.id,
-                        #             "player1": player1_username,
-                        #             "player2": player2_username,
-                        #             "winner": match.winner,
-                        #         }
-                        #     }
-                        # )
-                        # return None
-            # Once all matches have been played, get the winner
+
             winner = await database_sync_to_async(lambda: tournament.winner)()
             
             if winner is None:
