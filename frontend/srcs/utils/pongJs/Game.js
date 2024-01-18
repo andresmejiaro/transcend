@@ -85,16 +85,22 @@ class Game {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         if (this.statusToText() != "remote"){
             if (this.#leftPlayer.score > this.#rightPlayer.score) {
-                ctx.fillText(`Winner ${this.#leftPlayer.name}`, 100, 100);
+                ctx.font = '80pt VT323';
+                ctx.fillText(`Winner`, 310, 60);
+                ctx.font = '30pt VT323';
+                ctx.fillText(`${this.#leftPlayer.name}`, 380, 340, 200);
+            } else {
+                ctx.font = '80pt VT323';
+                ctx.fillText(`Winner`, 310, 60);
+                ctx.font = '30pt VT323';
+                ctx.fillText(`${this.#rightPlayer.name}`, 380, 340, 200);
             }
-            else
-            ctx.fillText(`Winner ${this.#rightPlayer.name}`, 100, 100);
-        } else{
+        } else {
             ctx.font = '80pt VT323';
             ctx.fillText(`Winner`, 310, 60);
             ctx.font = '30pt VT323';
             ctx.fillText(`${this.#endState["winner_username"]}`, 380, 340, 200);
-            ctx.drawImage(`${this.#endState["winner_avatar"]}`, 200, 200, canvas.width / 2, canvas.height /2);
+            //ctx.drawImage(`${this.#endState["winner_avatar"]}`, 200, 200, canvas.width / 2, canvas.height /2);
         }
         //ctx.drawImage("/", 200, 200, canvas.width / 2, canvas.height /2);
         ctx.font = '26pt VT323';
