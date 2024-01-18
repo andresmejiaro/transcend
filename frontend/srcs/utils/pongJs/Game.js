@@ -94,8 +94,9 @@ class Game {
             ctx.fillText(`Winner`, 310, 60);
             ctx.font = '30pt VT323';
             ctx.fillText(`${this.#endState["winner_username"]}`, 380, 340, 200);
-            //ctx.drawImage("/", 200, 200, canvas.width / 2, canvas.height /2);
+            ctx.drawImage(`${this.#endState["winner_avatar"]}`, 200, 200, canvas.width / 2, canvas.height /2);
         }
+        //ctx.drawImage("/", 200, 200, canvas.width / 2, canvas.height /2);
         ctx.font = '26pt VT323';
         ctx.fillText(`Thanks for playing!`, 305, 450);
         ctx.font = '18pt VT323';
