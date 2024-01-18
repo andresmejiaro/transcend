@@ -92,11 +92,27 @@ p {
 }
 
 /* Custom styles for collapsed navbar and dropdown background color */
-@media (max-width: 991px) {
+@media (max-width: 1200px) {
 	.navbar-nav .nav-link {
-	  color: white !important; /* Set the color of the navigation links in the dropdown */
+		color: white !important; /* Set the color of the navigation links in the dropdown */
 	}
-  
+	.nav-item {
+		margin-right: 0px; /* Adjust the space between navigation items */
+	}
+	.navbar-nav .nav-link:hover,
+	.navbar-nav .nav-link:focus {
+	  background-color: black; /* Set the background color of the hovered/focused navigation links in the dropdown */
+	  color: white !important;
+	}
+}
+
+@media (min-width: 1200px) {
+	.navbar-nav .nav-link {
+		color: white !important; /* Set the color of the navigation links in the dropdown */
+	}
+	.nav-item {
+		margin-right: 80px; /* Adjust the space between navigation items */
+	}
 	.navbar-nav .nav-link:hover,
 	.navbar-nav .nav-link:focus {
 	  background-color: black; /* Set the background color of the hovered/focused navigation links in the dropdown */
@@ -118,9 +134,7 @@ p {
 	margin-top: 10rem;
 }
 
-.nav-item {
-    margin-right: 80px; /* Adjust the space between navigation items */
-}
+
 
 .nav-link {
     padding: 5px 10px; /* Add padding to make each link larger and more clickable */
