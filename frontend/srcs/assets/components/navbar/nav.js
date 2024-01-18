@@ -39,6 +39,7 @@ document.getElementById("logoutButton").addEventListener("click", function (e) {
 });
 
 var navbar = document.getElementById("navbarSupportedContent");
+var menuButton = document.querySelector(".navbar-toggler");
 
 navbar.addEventListener("show.bs.collapse", function () {
 	// Navbar is about to collapse
@@ -49,6 +50,7 @@ navbar.addEventListener("show.bs.collapse", function () {
 	navbar.style.maxHeight = null;
 });
 
+
 navbar.addEventListener("hidden.bs.collapse", function () {
 	// Navbar is about to expand
 	document.getElementById("navContentClass").classList.remove("text-center");
@@ -56,8 +58,15 @@ navbar.addEventListener("hidden.bs.collapse", function () {
 	document.getElementById("logoutButton").style.margin = "0";
 	document.getElementById("rightNavBall").style.display = "block";
 	navbar.style.maxHeight = "100%";
+
 });
 
 function navigateToProfile() {
 	window.location.pathname = '/profile';
 }
+
+window.addEventListener("resize", function () {
+	if (window.innerWidth > 800 && !navbar.classList.contains("collapsing") && navbar.classList.contains("show")) {
+	  menuButton.click();
+	}
+  });
