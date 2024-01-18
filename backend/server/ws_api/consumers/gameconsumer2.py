@@ -184,7 +184,7 @@ class PongConsumer(AsyncWebsocketConsumer):
                 # Send the match results back to the client
                 return {
                     "winner_id": winner_id,
-                    "winner_avatar": match_object.winner.avatar.url,
+                    "winner_avatar": match_object.winner.username.url,
                     "winner_username": match_object.winner.username if match_object.winner else None,
                     "player1_id": match_object.player1.id,
                     "player1_username": match_object.player1.username,
