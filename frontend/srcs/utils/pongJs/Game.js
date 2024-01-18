@@ -10,6 +10,7 @@ class Game {
     #remote
     #remoteCanvas
     #ai
+    #marvin
     #defLocalBinds
     #defRemoteBinds
     #frame
@@ -22,7 +23,9 @@ class Game {
         this.#rightPlayer = rightPlayer;
         this.#scoreLimit = 11;
         this.#background = new Image();
+        this.#marvin = new Image();
         this.#background.src = './srcs/assets/game/table.svg';
+        this.#marvin.src = './srcs/assets/imgs/marvin.png';
         this.#backgroundLoaded = false;
         this.#background.onload = () => { this.#backgroundLoaded = true; };
         this.#remote = remote; 
@@ -93,6 +96,9 @@ class Game {
                 ctx.font = '80pt VT323';
                 ctx.fillText(`Winner`, 310, 60);
                 ctx.font = '30pt VT323';
+                if (this.#rightPlayer.name == "Marvin") {
+                    ctx.drawImage(this.#marvin, 360, 130, 140, 140);
+                }
                 ctx.fillText(`${this.#rightPlayer.name}`, 380, 340, 200);
             }
         } else {
@@ -186,6 +192,7 @@ class Game {
     }
 
     drawNonInteractive() {
+        ctx.font = '20pt VT323';
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.drawImage(this.#background, 0, 0, canvas.width, canvas.height);
         ctx.fillStyle = "white";
