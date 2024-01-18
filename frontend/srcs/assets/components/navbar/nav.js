@@ -38,7 +38,9 @@ document.getElementById("logoutButton").addEventListener("click", function (e) {
 	handleLogout();
 });
 
-var navbar = document.getElementById("navbarSupportedContent");
+const navbar = document.getElementById("navbarSupportedContent");
+const menuButton = document.querySelector(".navbar-toggler");
+const navLinks = document.querySelectorAll(".nav-link");
 
 navbar.addEventListener("show.bs.collapse", function () {
 	// Navbar is about to collapse
@@ -49,6 +51,7 @@ navbar.addEventListener("show.bs.collapse", function () {
 	navbar.style.maxHeight = null;
 });
 
+
 navbar.addEventListener("hidden.bs.collapse", function () {
 	// Navbar is about to expand
 	document.getElementById("navContentClass").classList.remove("text-center");
@@ -56,8 +59,20 @@ navbar.addEventListener("hidden.bs.collapse", function () {
 	document.getElementById("logoutButton").style.margin = "0";
 	document.getElementById("rightNavBall").style.display = "block";
 	navbar.style.maxHeight = "100%";
+
 });
 
 function navigateToProfile() {
 	window.location.pathname = '/profile';
 }
+
+function closeNavbar() {
+	if (window.innerWidth > 0 && !navbar.classList.contains("collapsing") && navbar.classList.contains("show")) {
+		menuButton.click();
+	}
+}
+window.addEventListener("resize", closeNavbar);
+
+navLinks.forEach((link) => {
+	link.addEventListener("click", closeNavbar);
+  });

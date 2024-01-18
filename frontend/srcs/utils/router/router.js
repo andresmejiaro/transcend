@@ -63,7 +63,7 @@ const urlLocationHandler = async () => {
     });
   }
 
-  if (isLogged())
+  if (isLogged() && route !== urlRoutes["404"])
     loadLobbyScripts();
 
   if (route.js) {
@@ -86,7 +86,7 @@ const urlLocationHandler = async () => {
   if (navRouter) {
     const existingContent = navRouter.innerHTML.trim();
     if (!existingContent) {
-      if (isLogged()) {
+      if (isLogged() && route !== urlRoutes["404"]) {
         navRouter.innerHTML = await fetch(
           direc + "assets/components/navbar/nav-logged.html"
         ).then((response) => response.text());
@@ -95,7 +95,8 @@ const urlLocationHandler = async () => {
   } else {
     console.error("Element with id 'nav-router' not found in the DOM");
   }
-  loadNavScripts();
+  if (route !== urlRoutes["404"])
+    loadNavScripts();
 };
 
 const loadNavScripts = () => {
