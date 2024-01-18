@@ -97,29 +97,24 @@ p {
 		color: white !important; /* Set the color of the navigation links in the dropdown */
 	}
 	.nav-item {
-		margin-right: 0px; /* Adjust the space between navigation items */
+		margin-right: 0px;
 	}
 	.navbar-nav .nav-link:hover,
 	.navbar-nav .nav-link:focus {
 	  background-color: black; /* Set the background color of the hovered/focused navigation links in the dropdown */
 	  color: white !important;
+	}
+	.nav-expanded {
+		margin-top: 12px;
 	}
 }
 
 @media (min-width: 1200px) {
-	.navbar-nav .nav-link {
-		color: white !important; /* Set the color of the navigation links in the dropdown */
-	}
 	.nav-item {
-		margin-right: 80px; /* Adjust the space between navigation items */
-	}
-	.navbar-nav .nav-link:hover,
-	.navbar-nav .nav-link:focus {
-	  background-color: black; /* Set the background color of the hovered/focused navigation links in the dropdown */
-	  color: white !important;
+		margin-right: 80px;
 	}
 }
-  
+
 
 .pm0 {
 	padding: 0!important;
@@ -133,8 +128,6 @@ p {
 .mt-10r {
 	margin-top: 10rem;
 }
-
-
 
 .nav-link {
     padding: 5px 10px; /* Add padding to make each link larger and more clickable */
