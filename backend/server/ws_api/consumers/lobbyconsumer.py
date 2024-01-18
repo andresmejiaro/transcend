@@ -1,6 +1,8 @@
 from channels.generic.websocket import AsyncWebsocketConsumer
 import json                                                 # Used to encode and decode JSON data
 import asyncio
+import time
+import random
 from urllib.parse import parse_qs                           # Used to parse the query string
 from channels.db import database_sync_to_async              # Used to make database calls asynchronously
 from django.shortcuts import get_object_or_404              # Used to get an object from the database
@@ -46,9 +48,9 @@ class LobbyConsumer(AsyncWebsocketConsumer):
     CANCEL_TOURNAMENT = 'cancel_tournament'             # Command to cancel a tournament arguments: pass the values as of 'client_id' and 'tournament_id' eg: {'command': 'cancel_tournament', 'data': {'client_id': '1', 'tournament_id': '1'}}
     JOIN_QUEUE = 'join_queue'                           # Command to join the queue arguments: pass the values as of 'client_id' eg: {'command': 'join_queue', 'data': {'queue_name': 'global'}}
     LEAVE_QUEUE = 'leave_queue'                         # Command to leave the queue arguments: pass the values as of 'client_id' eg: {'command': 'leave_queue', 'data': {'queue_name': 'tournament_26'}}
-    CREATE_3v3 = 'create_3v3'                           # Command to create a 3v3 match arguments: pass the values as of 'client_id' eg: {'command': 'create_3v3', 'data': {"tournament_name": "cawabonga"}}
-    JOIN_3v3 = 'join_3v3'                               # Command to join a 3v3 match arguments: pass the values as of 'client_id' eg: {'command': 'join_3v3'}
-    START_3v3 = 'start_3v3'                             # Command to start a 3v3 match arguments: pass the values as of 'client_id' eg: {'command': 'start_3v3'}
+    CREATE_3v3 = 'create_tournament'                    # Command to create a 3v3 match arguments: pass the values as of 'client_id' eg: {'command': 'create_3v3', 'data': {"tournament_name": "cawabonga"}}
+    JOIN_3v3 = 'join_tournament'                        # Command to join a 3v3 match arguments: pass the values as of 'client_id' eg: {'command': 'join_3v3'}
+    START_3v3 = 'start_tournament'                      # Command to start a 3v3 match arguments: pass the values as of 'client_id' eg: {'command': 'start_3v3'}
     NEXT_MATCH = 'next_match'                           # Command to get the next match or winner arguments: pass the values as of 'client_id' eg: {'command': 'next_match'}
 # ---------------------------------------
     def __init__(self, *args, **kwargs):
@@ -302,11 +304,11 @@ class LobbyConsumer(AsyncWebsocketConsumer):
             elif command == self.LEAVE_QUEUE:
                 await self.leave_queue(data['queue_name'], self.client_id)
             elif command == self.CREATE_3v3:
-                await self.create_3v3(self.client_id, data['tournament_name'])
+                await self.create_tournament(self.client_id, data['tournament_name'])
             elif command == self.JOIN_3v3:
-                await self.join_3v3()
+                await self.join_tournament()
             elif command == self.START_3v3:
-                await self.start_3v3()
+                await self.start_tournament()
             elif command == self.NEXT_MATCH:
                 await self.get_next_match_or_winner()
             else:
@@ -1057,9 +1059,10 @@ class LobbyConsumer(AsyncWebsocketConsumer):
             print(f'Exception in create_match {e}')
             return None
 
-# Best of Three methods
-    async def start_3v3(self):
+# Multiplayer Tournament methods
+    async def start_tournament(self):
         try:
+            BestofThree = import_string('api.best_of_three.models.BestofThree')
             Match = import_string('api.tournament.models.Match')
             User = import_string('api.userauth.models.CustomUser')
 
@@ -1085,7 +1088,10 @@ class LobbyConsumer(AsyncWebsocketConsumer):
 
             print(LobbyConsumer.tournament[self.client_id]["players"])
 
-            if len(LobbyConsumer.tournament[self.client_id]["players"]) != 2:
+            players_ids = LobbyConsumer.tournament[self.client_id]["players"]
+            players = await database_sync_to_async(User.objects.filter)(id__in=players_ids)
+
+            if len(players) < 2:
                 await self.send_info_to_client(
                     'not_enough_players',
                     {
@@ -1094,25 +1100,24 @@ class LobbyConsumer(AsyncWebsocketConsumer):
                 )
                 return None
 
-            print(LobbyConsumer.tournament[self.client_id]["players"])
+            print(f'Players: {players}')
 
-            player1 = await database_sync_to_async(get_object_or_404)(User, pk=int(self.client_id))
-            player2 = await database_sync_to_async(get_object_or_404)(User, pk=LobbyConsumer.tournament[self.client_id]["players"][-1])
+            # Shuffle the players to create random pairs
+            random.shuffle(players)
+            num_matches = len(players) // 2
 
-            print(f'Player 1: {player1} Player 2: {player2}')
+            matches = []
 
-            LobbyConsumer.tournament[self.client_id]["matches"] = []
-
-            for i in range(3):
+            for i in range(num_matches):
                 match = await database_sync_to_async(Match.objects.create)(
-                    player1 = player1,
-                    player2 = player2,
-                    active = True,
-                    best_of_three_id = int(LobbyConsumer.tournament[self.client_id]["id"])
+                    player1=players[i * 2],
+                    player2=players[i * 2 + 1],
+                    active=True,
+                    best_of_three_id=int(LobbyConsumer.tournament[self.client_id]["id"])
                 )
                 await database_sync_to_async(match.save)()
-                LobbyConsumer.tournament[self.client_id]["matches"].append(match)
-                print(LobbyConsumer.tournament[self.client_id]["matches"])
+                matches.append(match)
+                print(f'Match {match.id} - Player 1: {match.player1} Player 2: {match.player2}')
 
             await self.send_info_to_client(
                 'tournament_started',
@@ -1121,42 +1126,39 @@ class LobbyConsumer(AsyncWebsocketConsumer):
                     "data": {
                         "tournament_name": LobbyConsumer.tournament[self.client_id]["name"],
                         "tournament_id": LobbyConsumer.tournament[self.client_id]["id"],
-                        "matches": [match.id for match in LobbyConsumer.tournament[self.client_id]["matches"]],
+                        "matches": [match.id for match in matches],
                     }
                 }
             )
 
-            await self.message_another_player(
-                str(LobbyConsumer.tournament[self.client_id]["players"][-1]),
-                'tournament_started',
-                {
-                    "message": "The tournament has started",
-                    "data": {
-                        "tournament_name": LobbyConsumer.tournament[self.client_id]["name"],
-                        "tournament_id": LobbyConsumer.tournament[self.client_id]["id"],
-                        "matches": [match.id for match in LobbyConsumer.tournament[self.client_id]["matches"]],
+            for player in players:
+                await self.message_another_player(
+                    str(player.id),
+                    'tournament_started',
+                    {
+                        "message": "The tournament has started",
+                        "data": {
+                            "tournament_name": LobbyConsumer.tournament[self.client_id]["name"],
+                            "tournament_id": LobbyConsumer.tournament[self.client_id]["id"],
+                            "matches": [match.id for match in matches],
+                        }
                     }
-                }
-            )
+                )
 
-            # Add matches to the Best of Three Object
-            BestofThree = import_string('api.best_of_three.models.BestofThree')
+            # Update BestofThree object with match information
             tournament = await database_sync_to_async(get_object_or_404)(BestofThree, pk=LobbyConsumer.tournament[self.client_id]["id"])
-            tournament.match1 = LobbyConsumer.tournament[self.client_id]["matches"][0]
-            tournament.match2 = LobbyConsumer.tournament[self.client_id]["matches"][1]
-            tournament.match3 = LobbyConsumer.tournament[self.client_id]["matches"][2]
-            await database_sync_to_async(tournament.save)()
+            tournament.matches.set(matches)
 
-            # Remove the tournament from the list
+            # Clear tournament information from the list
             # del LobbyConsumer.tournament[self.client_id]
-            
-            return None
-        
-        except Exception as e:
-            print(f'Exception in start_3v3 {e}')
+
             return None
 
-    async def join_3v3(self):
+        except Exception as e:
+            print(f'Exception in start_tournament {e}')
+            return None
+
+    async def join_tournament(self):
         try:
             BestofThree = import_string('api.best_of_three.models.BestofThree')
             User = import_string('api.userauth.models.CustomUser')
@@ -1176,7 +1178,7 @@ class LobbyConsumer(AsyncWebsocketConsumer):
                     print(LobbyConsumer.tournament[tournament_name])
 
                     await self.send_info_to_client(
-                        'joined_3v3',
+                        'joined_tournament',
                         {
                             "message": "You have joined the tournament",
                             "data": {
@@ -1186,6 +1188,7 @@ class LobbyConsumer(AsyncWebsocketConsumer):
                             }
                         }
                     )
+
                     # Send message to admin that someone joined and the tournament is ready to start
                     await self.message_another_player(
                         str(tournament["admin"]),
@@ -1199,18 +1202,18 @@ class LobbyConsumer(AsyncWebsocketConsumer):
                             }
                         }
                     )
-                    
+
                     LobbyConsumer.tournament[tournament_name]["open"] = False
-                    # Add the joining player to the object
+
+                    # Add the joining player to the BestofThree object
                     user = await database_sync_to_async(get_object_or_404)(User, pk=int(self.client_id))
-                    
-                    tournament = await database_sync_to_async(get_object_or_404)(BestofThree, pk=tournament["id"])
-                    tournament.player2 = user
-                    await database_sync_to_async(tournament.save)()
+                    tournament_obj = await database_sync_to_async(get_object_or_404)(BestofThree, pk=tournament["id"])
+                    tournament_obj.players.add(user)
+                    await database_sync_to_async(tournament_obj.save)()
                     print(LobbyConsumer.tournament[tournament_name])
 
                     return
-                    
+
                 else:
                     await self.send_info_to_client(
                         'no_tournaments_available',
@@ -1219,17 +1222,17 @@ class LobbyConsumer(AsyncWebsocketConsumer):
                         }
                     )
                     return
-                
+
         except Exception as e:
-            print(f'Exception in join_3v3 {e}')
+            print(f'Exception in join_tournament {e}')
             return None
 
-    async def create_3v3(self, user_id, tournament_name):
-        print("Creating 3v3")
+    async def create_tournament(self, user_id, tournament_name):
+        print("Creating tournament")
         try:
             BestofThree = import_string('api.best_of_three.models.BestofThree')
             User = import_string('api.userauth.models.CustomUser')
-            
+
             user = await database_sync_to_async(get_object_or_404)(User, pk=user_id)
 
             if not tournament_name:
@@ -1249,8 +1252,8 @@ class LobbyConsumer(AsyncWebsocketConsumer):
                     }
                 )
                 return None
-            
-            # Check if they are already in a tournament another tournament
+
+            # Check if the user is already in another tournament
             for tournament_name, tournament in LobbyConsumer.tournament.items():
                 if int(self.client_id) in tournament["players"]:
                     await self.send_info_to_client(
@@ -1260,28 +1263,24 @@ class LobbyConsumer(AsyncWebsocketConsumer):
                         }
                     )
                     return None
-            
-            tournament = await database_sync_to_async(BestofThree.objects.create)(
-                name = tournament_name,
-                player1 = user,
-                player2 = None,
-                match1 = None,
-                match2 = None,
-                match3 = None,
-                winner = None,
-                date_played = None,
-                active = True
+
+            tournament_obj = await database_sync_to_async(BestofThree.objects.create)(
+                name=tournament_name,
+                admin=user,
+                winner=None,
+                date_played=None,
+                active=True
             )
 
             LobbyConsumer.tournament[self.client_id] = {
-                "id": tournament.id,
-                "name": tournament.name,
+                "id": tournament_obj.id,
+                "name": tournament_obj.name,
                 "admin": int(self.client_id),
                 "players": [int(self.client_id)],
                 "open": True
             }
 
-            await database_sync_to_async(tournament.save)()
+            await database_sync_to_async(tournament_obj.save)()
 
             print(LobbyConsumer.tournament[self.client_id])
             print(LobbyConsumer.tournament)
@@ -1291,19 +1290,19 @@ class LobbyConsumer(AsyncWebsocketConsumer):
                 {
                     "message": "Tournament created",
                     "data": {
-                        "tournament_name": tournament.name,
-                        "tournament_id": tournament.id
+                        "tournament_name": tournament_obj.name,
+                        "tournament_id": tournament_obj.id
                     }
                 }
             )
-            
-            return tournament.id
-        
+
+            return tournament_obj.id
+
         except Exception as e:
-            print(f'Exception in create_match {e}')
+            print(f'Exception in create_tournament {e}')
             return None
 
-    async def get_next_match_or_winner(self):
+    async def get_next_round_or_winner(self):
         try:
             BestofThree = import_string('api.best_of_three.models.BestofThree')
             Match = import_string('api.tournament.models.Match')
@@ -1313,60 +1312,102 @@ class LobbyConsumer(AsyncWebsocketConsumer):
                 return None
 
             print("Getting tournament...")
-            tournament = await database_sync_to_async(get_object_or_404)(BestofThree, pk=LobbyConsumer.tournament[self.client_id]["id"])
+            tournament_id = LobbyConsumer.tournament[self.client_id]["id"]
+            tournament = await database_sync_to_async(get_object_or_404)(BestofThree, pk=tournament_id)
 
             get_match = database_sync_to_async(get_object_or_404)
             print("Getting matches...")
-            matches = [await get_match(Match, pk=match_id) for match_id in [tournament.match1_id, tournament.match2_id, tournament.match3_id] if match_id is not None]
+            matches = await database_sync_to_async(Match.objects.filter)(best_of_three=tournament)
 
-            print("Checking if all matches are None...")
-            if all(match is None for match in matches):
-                await self.send_info_to_client('no_matches', {"message": "There are no matches"})
-                return None
-
-            for match in matches:
-                if match is not None:
-                    print(f"Checking if match {match.id} is active...")
-                    is_active = await database_sync_to_async(lambda: match.active)()
-                    player1_username = await database_sync_to_async(lambda: match.player1.id)()
-                    player2_username = await database_sync_to_async(lambda: match.player2.id)()
-                    if is_active:
+            print("Checking if all matches are not active...")
+            if all(not match.active for match in matches):
+                # All matches are not active
+                if tournament.is_finished():
+                    # Tournament is finished, determine the winner
+                    winner = await database_sync_to_async(lambda: tournament.winner)()
+                    if winner:
                         await self.send_info_to_client(
-                            'match_active',
+                            'tournament_winner',
                             {
-                                "message": "Match is active",
+                                "message": "Tournament winner",
                                 "data": {
-                                    "match_id": match.id,
-                                    "player1": player1_username,
-                                    "player2": player2_username,
-                                    "winner": match.winner,
+                                    "winner": winner.id,
                                 }
                             }
                         )
-                        return None
                     else:
-                        continue
+                        await self.send_info_to_client('no_winner', {"message": "There is no winner"})
+                else:
+                    # Start the next round
+                    await self.start_next_round(tournament)
+            else:
+                # Some matches are still active
+                await self.send_info_to_client('matches_active', {"message": "Some matches are still active"})
 
-            winner = await database_sync_to_async(lambda: tournament.winner)()
-            
-            if winner is None:
-                await self.send_info_to_client('no_winner', {"message": "There is no winner"})
-                return None
-            
+        except Exception as e:
+            print(f'Exception in get_next_round_or_winner {e}')
+            return None
+
+    async def start_next_round(self, tournament):
+        try:
+            Match = import_string('api.tournament.models.Match')
+            User = import_string('api.userauth.models.CustomUser')
+
+            players = await database_sync_to_async(tournament.players.all)()
+
+            if len(players) % 2 != 0:
+                # Handle odd number of players if needed
+                # Possibly add a bye to a random player
+                pass
+
+            # Shuffle the players to create random pairs
+            random.shuffle(players)
+            num_matches = len(players) // 2
+
+            matches = []
+
+            for i in range(num_matches):
+                match = await database_sync_to_async(Match.objects.create)(
+                    player1=players[i * 2],
+                    player2=players[i * 2 + 1],
+                    active=True,
+                    best_of_three=tournament
+                )
+                await database_sync_to_async(match.save)()
+                matches.append(match)
+                print(f'Match {match.id} - Player 1: {match.player1} Player 2: {match.player2}')
+
+            tournament.matches.set(matches)
+
             await self.send_info_to_client(
-                'tournament_winner',
+                'next_round_started',
                 {
-                    "message": "Tournament winner",
+                    "message": "The next round has started",
                     "data": {
-                        "winner": winner,
+                        "tournament_name": tournament.name,
+                        "tournament_id": tournament.id,
+                        "matches": [match.id for match in matches],
                     }
                 }
             )
 
-        except Exception as e:
-            print(f'Exception in get_next_match_or_winner {e}')
-            return None
+            for player in players:
+                await self.message_another_player(
+                    str(player.id),
+                    'next_round_started',
+                    {
+                        "message": "The next round has started",
+                        "data": {
+                            "tournament_name": tournament.name,
+                            "tournament_id": tournament.id,
+                            "matches": [match.id for match in matches],
+                        }
+                    }
+                )
 
+        except Exception as e:
+            print(f'Exception in start_next_round {e}')
+            return None
 # ---------------------------------------
 
 
