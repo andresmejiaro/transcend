@@ -2,7 +2,7 @@ class Game {
     #leftPlayer
     #rightPlayer
     #scoreLimit
-    #ball
+    #ball 
     #leftPaddle
     #rightPaddle
     #background

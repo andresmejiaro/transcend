@@ -1,5 +1,5 @@
 .landing-div {
-  cursor: none;
+  cursor: url('../../assets/imgs/mouse.png'), auto;
   margin: 0;
   position: fixed;
   top: 0;
