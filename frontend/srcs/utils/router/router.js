@@ -73,17 +73,20 @@ const urlLocationHandler = async () => {
     loadLobbyScripts();
 
   if (route.js) {
-    route.js.forEach((jsFile) => {
-      if (jsFile && !document.querySelector(`script[src="${jsFile}"]`)) {
+    route.js.forEach(({file, loadedCallback}) => {
+      if (file && !document.querySelector(`script[src="${file}"]`)) {
         const body = document.body;
         const script = document.createElement("script");
-        // console.log(jsFile)
+        // console.log(file)
 
         script.type = "text/javascript";
-        script.src = jsFile;
+        script.src = file;
         script.async = false;
 
         body.appendChild(script);
+      }
+      else {
+        loadedCallback?.();
       }
     });
     console.log({route})
