@@ -2,6 +2,9 @@ const direc = "./srcs/";
 
 document.addEventListener("click", (e) => {
   const { target } = e;
+  debugger
+  
+  // if (!(target.matches("nav a") || target.matches("nav a *"))) {
   if (!target.matches("nav a")) {
     return;
   }
@@ -24,6 +27,7 @@ const ifLoggedRedirect = (location) => {
 
 const urlRoute = (event) => {
   event = event || window.event;
+  debugger
   event.preventDefault();
   // window.history.pushState(state, unused, target link);
   window.history.pushState({}, "", event.target.href);
@@ -38,6 +42,8 @@ const urlLocationHandler = async () => {
   }
 
   ifLoggedRedirect(location);
+
+  console.log(urlRoutes)
 
   const route = urlRoutes[location] || urlRoutes["404"];
   const html = await fetch(route.template).then((response) => response.text());
@@ -80,6 +86,7 @@ const urlLocationHandler = async () => {
         body.appendChild(script);
       }
     });
+    console.log({route})
   }
 
   const navRouter = document.getElementById("nav-router");
