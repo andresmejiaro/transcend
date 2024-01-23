@@ -1,5 +1,4 @@
 const getMeSettingsInfoProfile = async () => {
-	console.log("hola mundo")
 	try {
 		const url = `${window.DJANGO_API_BASE_URL}/api/user/info-me/`;
 
