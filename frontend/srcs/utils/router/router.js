@@ -1,15 +1,25 @@
 const direc = "./srcs/";
 
+
 document.addEventListener("click", (e) => {
   const { target } = e;
   
-  // if (!(target.matches("nav a") || target.matches("nav a *"))) {
-  if (!target.matches("nav a")) {
-    return;
+  if (target.matches("a")) {
+    handleRouting(e);
   }
-  e.preventDefault();
-  urlRoute();
 });
+
+const navigateTo = async (target) => {
+  window.history.pushState({}, "", target);
+  await urlLocationHandler();
+};
+
+const handleRouting = async (event) => {
+  event.preventDefault();
+  const target = event.target.href;
+  await navigateTo(target);
+};
+
 
 const ifLoggedRedirect = (location) => {
   if (!isLogged()) {
@@ -32,78 +42,99 @@ const urlRoute = (event) => {
   urlLocationHandler();
 };
 
-const urlLocationHandler = async () => {
-  let location = window.location.pathname;
 
-  if (location.length == 0) {
-    location = "/";
-  }
+// Common function to load scripts
+const loadScripts = async (scripts) => {
+  const body = document.body;
+
+  await Promise.all(
+    scripts.map(async (script) => {
+      const { file, loadedCallback } = script;
+
+      if (file && !document.querySelector(`script[src="${file}"]`)) {
+        return new Promise((resolve, reject) => {
+          const scriptElement = document.createElement("script");
+
+          scriptElement.type = "text/javascript";
+          scriptElement.src = file;
+          scriptElement.async = false;
+
+          scriptElement.onload = () => {
+            loadedCallback?.();
+            resolve();
+          };
+          scriptElement.onerror = reject;
+
+          body.appendChild(scriptElement);
+        });
+      } else {
+        loadedCallback?.();
+        return Promise.resolve();
+      }
+    })
+  );
+};
+
+// Common function to load styles
+const loadStyles = (styles) => {
+  const head = document.head;
+
+  styles.forEach((styleFile) => {
+    const link = document.createElement("link");
+
+    link.type = "text/css";
+    link.rel = "stylesheet";
+    link.href = styleFile;
+
+    head.appendChild(link);
+  });
+};
+
+
+
+const urlLocationHandler = async () => {
+  const location = window.location.pathname || "/";
 
   ifLoggedRedirect(location);
 
-
   const route = urlRoutes[location] || urlRoutes["404"];
-  const html = await fetch(route.template).then((response) => response.text());
-  document.getElementById("content").innerHTML = html;
-  document.title = route.title;
 
-  // set the description of the document to the description of the route
-  document
-    .querySelector('meta[name="description"]')
-    .setAttribute("content", route.description);
+  try {
+    const [html, styles] = await Promise.all([
+      fetch(route.template).then((response) => response.text()),
+      Promise.resolve(route.css || []),
+    ]);
 
-  if (route.css) {
-    const head = document.head;
+    document.getElementById("content").innerHTML = html;
+    document.title = route.title;
 
-    route.css.forEach((cssFile) => {
-      const link = document.createElement("link");
+    document.querySelector('meta[name="description"]').setAttribute("content", route.description);
 
-      link.type = "text/css";
-      link.rel = "stylesheet";
-      link.href = cssFile;
+    loadStyles(styles);
 
-      head.appendChild(link);
-    });
-  }
-
-  if (isLogged() && route !== urlRoutes["404"])
-    loadLobbyScripts();
-
-  if (route.js) {
-    route.js.forEach(({file, loadedCallback}) => {
-      if (file && !document.querySelector(`script[src="${file}"]`)) {
-        const body = document.body;
-        const script = document.createElement("script");
-        // console.log(file)
-
-        script.type = "text/javascript";
-        script.src = file;
-        script.async = false;
-
-        body.appendChild(script);
-      }
-      else {
-        loadedCallback?.();
-      }
-    });
-  }
-
-  const navRouter = document.getElementById("nav-router");
-  if (navRouter) {
-    const existingContent = navRouter.innerHTML.trim();
-    if (!existingContent) {
-      if (isLogged() && route !== urlRoutes["404"]) {
-        navRouter.innerHTML = await fetch(
-          direc + "assets/components/navbar/nav-logged.html"
-        ).then((response) => response.text());
-      }
+    if (isLogged() && route !== urlRoutes["404"]) {
+      loadLobbyScripts();
     }
-  } else {
-    console.error("Element with id 'nav-router' not found in the DOM");
+
+    if (route.js) {
+      await loadScripts(route.js);
+    }
+
+    const navRouter = document.getElementById("nav-router");
+
+    if (navRouter && navRouter.innerHTML.trim() === "" && isLogged() && route !== urlRoutes["404"]) {
+      navRouter.innerHTML = await fetch(direc + "assets/components/navbar/nav-logged.html").then((response) => response.text());
+    }
+  } catch (error) {
+    console.error("Error loading content:", error);
   }
-  if (route !== urlRoutes["404"])
+
+  if (route !== urlRoutes["404"]) {
     loadNavScripts();
+  }
 };
+
+
 
 const loadNavScripts = () => {
   const navDirec = `${direc}assets/components/navbar`;

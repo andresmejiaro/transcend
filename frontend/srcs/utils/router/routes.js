@@ -21,7 +21,7 @@ const urlRoutes = {
     template: directory + "home/home.html",
     title: urlPageTitle,
     description: "This is the home page",
-    js: [{ file: directory + "home/intra-handler.js"}],
+    js: [{ file: directory + "home/intra-handler.js"}, { file: directory + "home/home.js"}],
     css: [directory + "home/home.css"]
   },
 
