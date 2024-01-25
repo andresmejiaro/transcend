@@ -1,20 +1,15 @@
 const load2FA = async () => {
 	try {
-		const id = await getUserId();
-		if (id !== null) {
-			const url = `${window.DJANGO_API_BASE_URL}/api/display_qr_code/${id}/`;
-			const response = await makeRequest(true, url, {
-				method: "GET",
-				mode: "cors",
-				credentials: "include",
-			});
-			if (response) {
-				document.getElementById("qrcodeImage").src = `${window.DJANGO_API_BASE_URL}/${response.qrcode_path}`;
-			} else {
-				console.error("Error loading 2FA:", response.message);
-			}
+		const url = `${window.DJANGO_API_BASE_URL}/api/display_qr_code/`;
+		const response = await makeRequest(true, url, {
+			method: "GET",
+			mode: "cors",
+			credentials: "include",
+		});
+		if (response) {
+			document.getElementById("qrcodeImage").src = `${window.DJANGO_API_BASE_URL}/${response.qrcode_path}`;
 		} else {
-			console.error("User ID is null");
+			console.error("Error loading 2FA:", response.message);
 		}
 	} catch (error) {
 		console.error("Error loading 2FA:", error.message);

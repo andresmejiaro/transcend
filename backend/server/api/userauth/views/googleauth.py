@@ -22,13 +22,20 @@ def generate_secret_key():
 
 
 def generate_qr_code(secret_key, user_id):
-	totp = pyotp.TOTP(secret_key)
-	uri = totp.provisioning_uri(
-		name=f"user_{user_id}", issuer_name="Pixel Pong")
-	img = qrcode.make(uri)
-	img_path = f'static/qrcode_{user_id}.png'
-	img.save(img_path)
-	return img_path
+    static_folder = 'static'
+    if not os.path.exists(static_folder):
+        os.makedirs(static_folder)
+
+    totp = pyotp.TOTP(secret_key)
+    uri = totp.provisioning_uri(
+        name=f"user_{user_id}", issuer_name="Pixel Pong")
+    
+    img = qrcode.make(uri)
+    
+    img_path = os.path.join(static_folder, f'qrcode_{user_id}.png')
+    img.save(img_path)
+    
+    return img_path
 
 
 def save_secret_key_in_database(user_id, secret_key):
@@ -44,17 +51,7 @@ def get_secret_key_from_database(user_id):
 	return user_profile.secret_key
 
 
-def display_qr_code(request, user_id):
-	user = CustomUser.objects.get(id=user_id)
-	if not user.is_2fa_enabled:
-		return JsonResponse({'message': '2FA is already disabled.'})
-	secret_key = generate_secret_key()
-	img_path = generate_qr_code(secret_key, user_id)
-	save_secret_key_in_database(user_id, secret_key)
-	return JsonResponse({'qrcode_path': img_path, 'user_id': user_id})
-
-@requires_csrf_token
-def enable_2fa(request):
+def display_qr_code(request):
 	authorization_header = request.headers.get('Authorization')
 	if authorization_header:
 		try:
@@ -65,6 +62,24 @@ def enable_2fa(request):
 		except Exception as e:
 			return JsonResponse({'error': str(e)}, status=401)
 		
+	if not user.is_2fa_enabled:
+		return JsonResponse({'message': '2FA is already disabled.'})
+	secret_key = generate_secret_key()
+	img_path = generate_qr_code(secret_key, user_id)
+	user.enable_2fa(secret_key)
+	return JsonResponse({'qrcode_path': img_path, 'user_id': user_id})
+
+@requires_csrf_token
+def enable_2fa(request):
+	authorization_header = request.headers.get('Authorization')
+	if authorization_header:
+		try:
+			_, token = authorization_header.split()
+			user_id = get_user_id_from_jwt_token(token)
+			user = CustomUser.objects.get(id=user_id)
+		except Exception as e:
+			return JsonResponse({'error': str(e)}, status=401)
+	print("enable secret key: ", user.secret_key)
 	if user.is_2fa_enabled:
 		return JsonResponse({'message': '2FA is already enabled.'})
 
@@ -100,14 +115,17 @@ def verify_totp_code(request):
 
 			if not user.is_2fa_enabled:
 				return JsonResponse({'message': '2FA is not enabled for this user.'}, status=400)
-
+			
+			print("secret key: ", user.secret_key)
 			totp = pyotp.TOTP(user.secret_key)
 			is_valid = totp.verify(totp_code)
-
+			print("secret key: ", user.secret_key)
+			print("Is valid: ", is_valid)
 			if is_valid:
 				user.is_2fa_setup_complete = True
 				user.save()
-				return JsonResponse({'status': 'ok', 'message': 'TOTP is valid'})
+				jwt_token = create_jwt_token(user.id, user.username)
+				return JsonResponse({'status': 'ok', 'message': 'TOTP is valid', 'token': jwt_token})
 			else:
 				return JsonResponse({'status': 'error', 'message': 'Invalid TOTP'})
 		except CustomUser.DoesNotExist:
