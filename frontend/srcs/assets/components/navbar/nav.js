@@ -11,6 +11,7 @@ const infoToNavHome = async () => {
 		};
 
 		const data = await makeRequest(true, url, options, "");
+		console.log(data)
 		if (data.status === "ok") {
 			const usernameH = document.getElementById("usernameNav");
 			const avatarImage = document.getElementById("avatarImageNav");
