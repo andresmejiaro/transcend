@@ -60,7 +60,8 @@ const urlRoutes = {
     template: directory + "play!/play!.html",
     title: urlPageTitle,
     description: "This is the home page",
-    css: [directory + "play!/play!.css"]
+    css: [directory + "play!/play!.css"],
+    js: [{ file: directory + "play!/play!.js"}],
   },
 
   "/profile": {
