@@ -146,3 +146,17 @@ const checkIfGoogleAuthActivated = async () => {
 };
 
 checkIfGoogleAuthActivated();
+
+const handleVerifyTotpProfileSettings = async () => {
+	const res = await verifyTOTP();
+	if (res) {
+		setTimeout(function () {
+			handleGoogleAuthActivated();
+		}, 1000);
+	}
+};
+
+document.getElementById("totpForm").addEventListener("submit", function (event) {
+	event.preventDefault();
+	handleVerifyTotpProfileSettings();
+});

@@ -17,7 +17,7 @@ async function validateOTP(username, userId, jwt) {
 		});
 
 		if (response.status == "ok") {
-			sessionStorage.setItem("jwt", jwt);
+			sessionStorage.setItem("jwt", response.token);
 			window.location.href = "/play!";
 		} else {
 			displayGAError(response.message);
@@ -28,11 +28,11 @@ async function validateOTP(username, userId, jwt) {
 	}
 }
 
-const handle2fA = async (username, userId, jwt) => {
+const handle2fA = async (username, userId) => {
 	var loginModal = new bootstrap.Modal(document.getElementById("loginModal"));
 	loginModal.show();
 	document.getElementById("checkOTP").addEventListener("click", function () {
-		validateOTP(username, userId, jwt);
+		validateOTP(username, userId);
 	});
 };
 
@@ -41,7 +41,7 @@ function validateUsername() {
 	const usernameHelp = document.getElementById("usernameHelp");
 	const username = usernameInput.value;
 
-	const maxCharLimit = 20; // Set the maximum character limit
+	const maxCharLimit = 20;
 
 	if (username.length < 4) {
 	  usernameHelp.innerText = "Username must be at least 4 characters";
@@ -109,8 +109,7 @@ const tryFormPost = async () => {
 			sessionStorage.setItem("jwt", response.token);
 			window.location.href = "/play!";
 		} else if (response.status === "2FA") {
-			// sessionStorage.setItem("jwt", response.token);
-			handle2fA(username, response.user_id, response.token);
+			handle2fA(username, response.user_id);
 		} else {
 			console.error("Error:", response.message);
 			displayError(response.message);
