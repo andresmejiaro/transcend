@@ -5,18 +5,20 @@ WORKDIR /app
 
 RUN apk update && apk add --no-cache gcc bash musl-dev jpeg-dev zlib-dev libffi-dev cairo-dev pango-dev gdk-pixbuf-dev
 
-RUN pip install --no-cache-dir \
-    daphne \
-    django \
-    psycopg2-binary \
-    django-cors-headers \
-    passlib \
-    Pillow \
-    pyotp \
-    qrcode \
-    requests \
-    channels \
-    channels-redis
+# RUN pip install --no-cache-dir \
+#     daphne \
+#     django \
+#     psycopg2-binary \
+#     django-cors-headers \
+#     passlib \
+#     Pillow \
+#     pyotp \
+#     qrcode \
+#     requests \
+#     channels \
+#     channels-redis
+
+RUN pip install daphne
 
 RUN pip install --upgrade pip
 

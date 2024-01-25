@@ -4,29 +4,30 @@ PROJECT_DIR="/app/server/server"
 
 ./wait-for-it.sh db:5432
 
-python3 -m venv django_venv
+# python3 -m venv django_venv
 
-source django_venv/bin/activate
-
-pip install --upgrade pip
-
-python3 -m pip install --upgrade pip setuptools wheel
-
-pip install django
-pip install psycopg2-binary
-pip install django-cors-headers
-pip install passlib
-pip install Pillow
-pip install pyotp
-pip install qrcode
-pip install channels
-pip install channels-redis
-pip install icecream
-pip install requests
-
-pip freeze > requirements.txt
+# source django_venv/bin/activate
 
 pip install --upgrade pip
+pip install -r requirements.txt
+
+# python3 -m pip install --upgrade pip setuptools wheel
+
+# pip install django
+# pip install psycopg2-binary
+# pip install django-cors-headers
+# pip install passlib
+# pip install Pillow
+# pip install pyotp
+# pip install qrcode
+# pip install channels
+# pip install channels-redis
+# pip install icecream
+# pip install requests
+
+# pip freeze > requirements.txt
+
+# pip install --upgrade pip
 
 # Check if the project directory already exists
 if [ ! -d "$PROJECT_DIR" ]; then

@@ -184,6 +184,7 @@ class PongConsumer(AsyncWebsocketConsumer):
                 # Send the match results back to the client
                 return {
                     "winner_id": winner_id,
+                    # "winner_avatar": match_object.winner.avatar.url,
                     "winner_username": match_object.winner.username if match_object.winner else None,
                     "player1_id": match_object.player1.id,
                     "player1_username": match_object.player1.username,
@@ -346,13 +347,13 @@ class PongConsumer(AsyncWebsocketConsumer):
             await asyncio.sleep(0.01)
 
             if key_status == 'on_press':
-                print(f'Key Pressed: {formatted_key}')
+                # print(f'Key Pressed: {formatted_key}')
                 PongConsumer.shared_game_keyboard[self.match_id][formatted_key] = True
-                print(f'Game Keyboard Status: {PongConsumer.shared_game_keyboard[self.match_id]}')
+                # print(f'Game Keyboard Status: {PongConsumer.shared_game_keyboard[self.match_id]}')
             elif key_status == 'on_release':
-                print(f'Key Released: {formatted_key}')
+                # print(f'Key Released: {formatted_key}')
                 PongConsumer.shared_game_keyboard[self.match_id][formatted_key] = False
-                print(f'Game Keyboard Status: {PongConsumer.shared_game_keyboard[self.match_id]}')
+                # print(f'Game Keyboard Status: {PongConsumer.shared_game_keyboard[self.match_id]}')
             else:
                 print(f'Unknown key status: {key_status}, {formatted_key}')
                     
@@ -367,9 +368,6 @@ class PongConsumer(AsyncWebsocketConsumer):
 
                 left_score = PongConsumer.shared_game[self.match_id]._leftPlayer.getScore()
                 right_score = PongConsumer.shared_game[self.match_id]._rightPlayer.getScore()
-
-                print(f'Left Score: {left_score}')
-                print(f'Right Score: {right_score}')
 
                 if left_score >= self.scorelimit or right_score >= self.scorelimit:
                     PongConsumer.run_game[self.match_id] = False

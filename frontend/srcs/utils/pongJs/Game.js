@@ -2,7 +2,7 @@ class Game {
     #leftPlayer
     #rightPlayer
     #scoreLimit
-    #ball
+    #ball 
     #leftPaddle
     #rightPaddle
     #background
@@ -10,6 +10,7 @@ class Game {
     #remote
     #remoteCanvas
     #ai
+    #marvin
     #defLocalBinds
     #defRemoteBinds
     #frame
@@ -22,7 +23,9 @@ class Game {
         this.#rightPlayer = rightPlayer;
         this.#scoreLimit = 11;
         this.#background = new Image();
-        this.#background.src = './srcs/assets/game/table.png';
+        this.#marvin = new Image();
+        this.#background.src = './srcs/assets/game/table.svg';
+        this.#marvin.src = './srcs/assets/imgs/marvin.png';
         this.#backgroundLoaded = false;
         this.#background.onload = () => { this.#backgroundLoaded = true; };
         this.#remote = remote; 
@@ -84,14 +87,32 @@ class Game {
     endScreen() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         if (this.statusToText() != "remote"){
-            if (this.#leftPlayer.score > this.#rightPlayer.score)
-                ctx.fillText(`Winner: ${this.#leftPlayer.name}`, 100, 100);
-            else
-            ctx.fillText(`Winner: ${this.#rightPlayer.name}`, 100, 100);
-        } else{
-            ctx.fillText(`Winner: ${this.#endState["winner_username"]}`, 100, 100);
+            if (this.#leftPlayer.score > this.#rightPlayer.score) {
+                ctx.font = '80pt VT323';
+                ctx.fillText(`Winner`, 310, 60);
+                ctx.font = '30pt VT323';
+                ctx.fillText(`${this.#leftPlayer.name}`, 380, 340, 200);
+            } else {
+                ctx.font = '80pt VT323';
+                ctx.fillText(`Winner`, 310, 60);
+                ctx.font = '30pt VT323';
+                if (this.#rightPlayer.name == "Marvin") {
+                    ctx.drawImage(this.#marvin, 360, 130, 140, 140);
+                }
+                ctx.fillText(`${this.#rightPlayer.name}`, 380, 340, 200);
+            }
+        } else {
+            ctx.font = '80pt VT323';
+            ctx.fillText(`Winner`, 310, 60);
+            ctx.font = '30pt VT323';
+            ctx.fillText(`${this.#endState["winner_username"]}`, 380, 340, 200);
+            //ctx.drawImage(`${this.#endState["winner_avatar"]}`, 200, 200, canvas.width / 2, canvas.height /2);
         }
-        ctx.fillText(`Thanks for playing! To play again press Enter`, 50, 30);
+        //ctx.drawImage("/", 200, 200, canvas.width / 2, canvas.height /2);
+        ctx.font = '26pt VT323';
+        ctx.fillText(`Thanks for playing!`, 305, 450);
+        ctx.font = '18pt VT323';
+        ctx.fillText(`To play again press Enter`, 310, 500);
         if (keysPressed["Enter"])
             //requestAnimationFrame(() => this.gameSetup());
             // Using location.assign()
@@ -171,6 +192,7 @@ class Game {
     }
 
     drawNonInteractive() {
+        ctx.font = '20pt VT323';
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.drawImage(this.#background, 0, 0, canvas.width, canvas.height);
         ctx.fillStyle = "white";

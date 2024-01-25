@@ -11,6 +11,8 @@ RUN apk add --no-cache bash \
 
 COPY server .
 
+COPY requirements.txt .
+
 COPY django_project_setup.sh /app/django_project_setup.sh
 COPY wait-for-it.sh /app/wait-for-it.sh
 RUN chmod +x /app/django_project_setup.sh
