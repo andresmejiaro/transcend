@@ -69,6 +69,7 @@ const urlLocationHandler = async () => {
 
 	if (route !== urlRoutes["404"]) {
 		loadNavScripts();
+		loadDocumentEventListeners();
 	}
 };
 

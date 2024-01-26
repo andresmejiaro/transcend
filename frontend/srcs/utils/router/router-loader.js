@@ -80,3 +80,22 @@ const loadStyles = (styles) => {
 		head.appendChild(link);
 	});
 };
+
+const loadDocumentEventListeners = () => {
+	const evDirec = `${direc}utils/`;
+	const scriptPaths = [`${evDirec}document-listeners.js`,];
+	const body = document.body;
+
+	scriptPaths.forEach((path) => {
+		const scriptSrc = `${path}`;
+
+		if (isLogged() && !document.querySelector(`script[src="${scriptSrc}"]`)) {
+			const script = document.createElement("script");
+			script.type = "text/javascript";
+			script.src = scriptSrc;
+			script.async = false;
+
+			body.appendChild(script);
+		}
+	});
+};
