@@ -152,7 +152,7 @@ class TournamentConsumer(AsyncWebsocketConsumer):
                         'info': 'Tournament admin disconnected.',
                     }
                 )
-                await self.close()                
+                await self.close()             
                 return
             else:
                 print(f'Player {self.client_id} disconnected')
@@ -238,9 +238,9 @@ class TournamentConsumer(AsyncWebsocketConsumer):
         try:
             #TODO: Commented to test matchmaking without all players connected
             # Check if the tournament has ended and if the tournament is ready
-            if self.tournament_ended or self.tournament_ready is False:
-                print('Tournament has ended or not ready')
-                return
+            # if self.tournament_ended or self.tournament_ready is False:
+            #     print('Tournament has ended or not ready')
+            #     return
             
             sit_out_player = self.get_sit_out_player(self.list_of_registered_players)
             if sit_out_player:
