@@ -218,7 +218,7 @@ def user_friends_list(request):
 
 
 def update_user_information(request, *args, **kwargs):
-    if request.method == 'PUT':
+    if request.method != 'PUT':
         return JsonResponse({"message": "Not allowed"}, status=405)
     authorization_header = request.headers.get('Authorization')
     if not authorization_header:
@@ -241,7 +241,7 @@ def update_user_information(request, *args, **kwargs):
 
     username = data.get("username")
     email = data.get("email")
-    full_name = data.get("full_name")
+    full_name = data.get("fullname")
 
     if username:
         user.username = username
@@ -250,4 +250,5 @@ def update_user_information(request, *args, **kwargs):
     if full_name:
         user.fullname = full_name
     user.save()
-    return JsonResponse({"message": "User updated successfully"}, status=200)
+    jwt_token = create_jwt_token(user.id, user.username)
+    return JsonResponse({"message": "User updated successfully", 'status': 'ok', "token": jwt_token}, status=200)
