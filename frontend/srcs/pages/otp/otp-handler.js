@@ -43,4 +43,12 @@ document.getElementById("verifyGAotp").addEventListener("click", function (e) {
   handleVerifiyingOTP();
 });
 
+const skipGaNavigate = async () => {
+  const targetUrl = "/play!";
+  await navigateTo(targetUrl);
+}
 
+document.getElementById("skipGAuth").addEventListener("click", function (e) {
+    e.preventDefault();
+    skipGaNavigate();
+});
