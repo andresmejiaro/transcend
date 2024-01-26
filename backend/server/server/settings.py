@@ -71,7 +71,7 @@ if DOCKERIZED:
         'api',
         'api.userauth',
         'api.tournament',
-        'api.best_of_three',
+        # 'api.best_of_three',
         'channels',
         'ws_api',
     ]

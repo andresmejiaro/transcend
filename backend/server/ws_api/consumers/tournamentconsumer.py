@@ -152,7 +152,7 @@ class TournamentConsumer(AsyncWebsocketConsumer):
                         'info': 'Tournament admin disconnected.',
                     }
                 )
-                await self.close()
+                await self.close()                
                 return
             else:
                 print(f'Player {self.client_id} disconnected')
@@ -238,9 +238,9 @@ class TournamentConsumer(AsyncWebsocketConsumer):
         try:
             #TODO: Commented to test matchmaking without all players connected
             # Check if the tournament has ended and if the tournament is ready
-            # if self.tournament_ended or self.tournament_ready is False:
-            #     print('Tournament has ended or not ready')
-            #     return
+            if self.tournament_ended or self.tournament_ready is False:
+                print('Tournament has ended or not ready')
+                return
             
             sit_out_player = self.get_sit_out_player(self.list_of_registered_players)
             if sit_out_player:
@@ -306,6 +306,7 @@ class TournamentConsumer(AsyncWebsocketConsumer):
             
             self.current_round += 1
             print(f'Round launched next round is: {self.current_round}')
+            print(f'Matches played so far: {self.list_of_matches}')
 
         except ValueError as ve:
             print(f"ValueError in matchmaking_logic: {ve}")
@@ -454,6 +455,7 @@ class TournamentConsumer(AsyncWebsocketConsumer):
     @database_sync_to_async
     def save_tournament_results(self):
         try:
+            # TODO: Implement this method correctly, currently not working as intended
             Tournament = import_string('api.tournament.models.Tournament')
             tournament = get_object_or_404(Tournament, pk=self.tournament_id)
 

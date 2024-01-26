@@ -12,6 +12,7 @@ class Tournament(models.Model):
     tournament_admin = models.ForeignKey(User, on_delete=models.CASCADE, related_name='tournament_admin', blank=True, null=True)
     players = models.ManyToManyField(User, blank=True)
     observers = models.ManyToManyField(User, blank=True, related_name='observers')
+    joinable = models.BooleanField(default=True)
 
     def __str__(self):
         return f"Tournament {self.id} - {self.name}"
