@@ -17,35 +17,50 @@ from django.utils.module_loading import import_string
 
 class TournamentConsumer(AsyncWebsocketConsumer):
 
-    list_of_player_channels = {}
-    list_of_player_objects = {}
-    list_of_matches = {}
-    list_of_rounds = {}
-    tournament_admin_id = None
-    tournament_object = None
-    tournament_rounds_to_complete = 0
-    current_round = 0
-    tournament_id = None
-    tournament_ended = False
+    connected_clients = set()  # Class-level variable to store connected clients
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.client_id = None
-        self.player_object = None
-        self.player_score = 0
+        self.client_id = None                   # Client ID
+        self.player_object = None               # Player object
+        self.player_score = 0                   # Player score to keep track of ELO
+        self.tournament_id = None               # Tournament ID unique to each tournament
+        self.tournament_ended = False           # Flag to indicate if the tournament has ended
+        self.tournament_ready = False           # Flag to indicate if all the players are connected
+        self.current_round = 0                  # Current round of the tournament
+        self.tournament_admin_id = None         # Tournament admin ID - admin can start the tournament
+        self.tournament_object = None           # Tournament object - contains all the tournament info
+        self.tournament_rounds_to_complete = 0  # Number of rounds to complete the tournament
+        self.list_of_matches = {}               # List of matches during the entire tournament
+        self.list_of_rounds = {}                # List of rounds during the entire tournament
+        self.list_of_registered_players = {}    # List of registered players for the tournament
 
 # Define constants for commands
-
-    START_TOURNAMENT = 'start_tournament'
     START_ROUND = 'start_round'
     LIST_PLAYERS = 'list_players'
     CMD_NOT_FOUND = 'command_not_found'
     CLOSE_CONNECTION = 'close_connection'
+# ---------------------------------------
+
+# Class methods
+    @classmethod
+    def add_connected_client(cls, client_id):
+        cls.connected_clients.add(client_id)
+
+    @classmethod
+    def remove_connected_client(cls, client_id):
+        cls.connected_clients.discard(client_id)
+
+    @classmethod
+    def get_connected_clients(cls):
+        return list(cls.connected_clients)
+# ---------------------------------------
 
 # Channel methods (Connect, Disconnect, Receive)
     async def connect(self):
         query_string = self.scope['query_string'].decode('utf-8')
         query_params = parse_qs(query_string)
+        self.tournament_id = self.scope['url_route']['kwargs']['tournament_id']
 
         if not query_params.get('token'):
                 await self.close()
@@ -59,16 +74,19 @@ class TournamentConsumer(AsyncWebsocketConsumer):
         except Exception as e:
             await self.close()
 
-        self.tournament_id = self.scope['url_route']['kwargs']['tournament_id']
-
         # Get the user and see if they exist before accepting the connection
-        self.player_object = await self.init_player_obj(self.client_id)
-        if self.player_object is None:
-            await self.close()
-            return
+        user = await self.init_player_obj(self.client_id)
+        tournament = await self.init_tour_obj(self.tournament_id)
+        print(f'Player object: {self.player_object} and tournament object: {self.tournament_object}')
 
         await self.accept()
 
+        # If the user or tournament does not exist, close the connection
+        if user is None or tournament is None:
+            await self.send_info_to_client("message", "Tournament or User not found or registered for the tournament.")
+            await self.close()
+            return
+        
         # Add client to the group channel
         print(f'Adding {self.client_id} to group {self.tournament_id}')
         await self.channel_layer.group_add(
@@ -80,17 +98,27 @@ class TournamentConsumer(AsyncWebsocketConsumer):
             self.channel_name
         )
 
-        list_of_current_players = list(self.list_of_player_channels.keys())
+        # Add client to class-level variable to keep track of connected clients
+        self.add_connected_client(self.client_id)
 
-        await self.broadcast_to_group(
-            self.tournament_id,
-            'new_player',
-            {
-                'player_id': self.client_id,
-                'tournament_id': self.tournament_id,
-                'players': list_of_current_players,
-            }
-        )
+        # Check if all the players are actually connected if true send message to start tournament
+        for player in self.list_of_registered_players:
+            if str(player['id']) not in self.get_connected_clients():
+                self.tournament_ready = False
+                break
+            else:
+                self.tournament_ready = True
+        
+        # If all the players are connected, send message to start tournament
+        if self.tournament_ready:
+            await self.broadcast_to_group(
+                str(self.tournament_id),
+                'tournament_ready',
+                {
+                    'tournament_id': self.tournament_id,
+                    'registered_players': self.list_of_registered_players,
+                }
+            )
 
     async def disconnect(self, close_code):
         try:
@@ -104,32 +132,41 @@ class TournamentConsumer(AsyncWebsocketConsumer):
                 str(self.client_id),
                 self.channel_name
             )
-            # Remove client from the list of players or observers
-            if self.client_id in self.list_of_player_channels:
-                del self.list_of_player_channels[self.client_id]
+            
+            # Remove client from class-level variable to keep track of connected clients
+            self.remove_connected_client(self.client_id)
 
-            # Send info of group status every time a client leaves
-            await self.broadcast_to_group(
-                str(self.tournament_id),
-                'player_left',
-                {
-                    'player_id': self.client_id,
-                }
-            )
-
-            # If the tournament admin leaves, end the tournament and kick everyone out save current state
-            if self.client_id == self.tournament_admin_id:
+            # If the tournament has ended, close the connection
+            if self.tournament_ended:
+                await self.close()
+                return
+            
+            # If the tournament has not ended, check if the client is the tournament admin
+            if self.client_id == str(self.tournament_admin_id):
+                print(f'Tournament admin {self.client_id} disconnected')
                 await self.broadcast_to_group(
                     str(self.tournament_id),
-                    'tournament_ended',
+                    'tournament_admin_disconnected',
                     {
                         'tournament_id': self.tournament_id,
-                        'info': 'Tournament admin left the tournament. The tournament has ended.',
+                        'info': 'Tournament admin disconnected.',
                     }
                 )
-                self.tournament_ended = True
-
-            self.close()
+                await self.close()
+                return
+            else:
+                print(f'Player {self.client_id} disconnected')
+                await self.broadcast_to_group(
+                    str(self.tournament_id),
+                    'player_disconnected',
+                    {
+                        'tournament_id': self.tournament_id,
+                        'player_id': self.client_id,
+                        'info': 'Player disconnected.',
+                    }
+                )
+                await self.close()
+                return
 
         except Exception as e:
             print(f"Error in disconnect method: {e}")
@@ -140,13 +177,14 @@ class TournamentConsumer(AsyncWebsocketConsumer):
             command = data.get('command')
 
             if command == self.START_ROUND:
-                await self.matchmaking_logic()
-            elif command == self.START_TOURNAMENT:
-                await self.start_tournament()
+                if self.client_id == str(self.tournament_admin_id):
+                    await self.matchmaking_logic()
+                else:
+                    await self.send_info_to_client(self.CMD_NOT_FOUND, text_data)
             elif command == self.CLOSE_CONNECTION:
                 await self.disconnect(1000)
             elif command == self.LIST_PLAYERS:
-                list_of_current_players = list(self.list_of_player_channels.keys())
+                list_of_current_players = self.get_connected_clients()
                 await self.send_info_to_client(self.LIST_PLAYERS, list_of_current_players)
             else:
                 await self.send_info_to_client(self.CMD_NOT_FOUND, text_data)
@@ -195,46 +233,31 @@ class TournamentConsumer(AsyncWebsocketConsumer):
         }))
 # ---------------------------------------
 
-# Tournament Initialization
-    async def start_tournament(self):
-        try:
-            list_of_registered_players = await self.init_tour_obj(self.tournament_id)
-            await self.broadcast_to_group(
-                str(self.tournament_id),
-                'tournament_started',
-                {
-                    'tournament_id': self.tournament_id,
-                    'registered_players': list_of_registered_players,
-                }
-            )
-        except Exception as e:
-            print(f'Exception in start_tournament {e}')
-            await self.disconnect(1000)
-# ---------------------------------------
-
 # Round Generator
     async def matchmaking_logic(self):
         try:
-            tournament = await self.get_tournament_object()
-            if not tournament:
-                raise ValueError("Tournament not found.")
+            #TODO: Commented to test matchmaking without all players connected
+            # Check if the tournament has ended and if the tournament is ready
+            # if self.tournament_ended or self.tournament_ready is False:
+            #     print('Tournament has ended or not ready')
+            #     return
+            
+            sit_out_player = self.get_sit_out_player(self.list_of_registered_players)
+            if sit_out_player:
+                players_this_round = [player for player in self.list_of_registered_players if player['id'] != sit_out_player['id']]
+            else:
+                players_this_round = [player for player in self.list_of_registered_players]
 
-            players = await self.get_tournament_players(tournament)
-            if not players:
-                raise ValueError("No players found for the tournament.")
-
-            sit_out_player = self.get_sit_out_player(players)
-            if not sit_out_player and len(players) % 2 != 0:
-                raise ValueError("No sit-out player found for an odd number of players.")
-
-            self.tournament_rounds_to_complete = max(1, math.ceil(math.log2(len(players))))
+            self.tournament_rounds_to_complete = max(1, math.ceil(math.log2(len(self.list_of_registered_players))))
+            print(f'Tournament rounds to complete: {self.tournament_rounds_to_complete}')
 
             if self.current_round >= self.tournament_rounds_to_complete:
                 print('Tournament has ended')
                 self.tournament_ended = True
-                await self.save_tournament_results()
-                print(f'Tournament {tournament} saved successfully')
 
+                # TODO: Uncomment this line when save tournament results is implemented correctly
+                # await self.save_tournament_results()
+                
                 await self.broadcast_to_group(
                     self.tournament_id,
                     'tournament_ended',
@@ -247,15 +270,17 @@ class TournamentConsumer(AsyncWebsocketConsumer):
                 )
                 return
             
-            sorted_players = sorted(players, key=lambda player: player.ELO, reverse=True)
+            # Randomize the list of players
+            sorted_players = random.sample(players_this_round, len(players_this_round))
 
             matches = await self.create_matches(sorted_players)
-            self.list_of_matches = {match.id: match for match in matches}
-            rounds = await self.create_round(tournament, matches, current_round=self.current_round)
-            print(f'Matches and rounds created: {matches}, {rounds}')
+            print(f'Matches created: {matches}')
 
-            await database_sync_to_async(tournament.save)()
-            print(f'Saved object tournament {tournament} saved successfully')
+            self.list_of_matches = {match.id: match for match in matches}
+            print(f'List of matches: {self.list_of_matches}')
+
+            rounds = await self.create_round(matches, current_round=self.current_round)
+            print(f'Matches and rounds created: {matches}, {rounds}')
 
             matches_info = {
                 str(match.id): {
@@ -271,7 +296,7 @@ class TournamentConsumer(AsyncWebsocketConsumer):
                 str(self.tournament_id),
                 'matchmaking_info',
                 {
-                    'sit_out_player': sit_out_player.id if sit_out_player else None,
+                    'sit_out_player': sit_out_player,
                     'matches': matches_info,
                     'rounds': list(self.list_of_rounds.keys()),
                     'total_rounds': self.tournament_rounds_to_complete,
@@ -294,43 +319,12 @@ class TournamentConsumer(AsyncWebsocketConsumer):
             await self.disconnect()
 # ---------------------------------------
 
-# Object Getters
-    async def get_tournament_object(self):
-        try:
-            Tournament = import_string('api.tournament.models.Tournament')
-            tournament = await database_sync_to_async(Tournament.objects.get)(pk=self.tournament_id)
-            print(f'Found tournament with info {tournament}')
-            return tournament
-
-        except Tournament.DoesNotExist:
-            print(f'Tournament with id {self.tournament_id} does not exist.')
-            raise
-
-        except Exception as e:
-            print(f'Error getting tournament: {str(e)}')
-            raise
-
-    async def get_tournament_players(self, tournament):
-        # Extract the logic for retrieving tournament players
-        players = await database_sync_to_async(list)(tournament.players.all())
-        print(f'Found players with info {players}')
-        return players
-# ---------------------------------------
-
 # Matchmaking Helper Methods
     def get_sit_out_player(self, players):
         # Extract the logic for determining the sit-out player
         sit_out_player = random.choice(players) if len(players) % 2 != 0 else None
         print(f'Sit out player is {sit_out_player}')
         return sit_out_player
-
-    def get_player_role(self, match):
-        if match.player1.id == self.client_id:
-            return 'player1'
-        elif match.player2.id == self.client_id:
-            return 'player2'
-        else:
-            return None
 
     @database_sync_to_async
     def calculate_player_score(self, player_id):
@@ -358,13 +352,20 @@ class TournamentConsumer(AsyncWebsocketConsumer):
     @database_sync_to_async
     def create_matches(self, sorted_players):
         from api.tournament.models import Match
+        from api.userauth.models import CustomUser as User
+
         matches = []
         num_players = len(sorted_players)
 
         # Adjust the range to handle odd number of players
         for i in range(0, num_players - 1, 2):
-            player1 = sorted_players[i]
-            player2 = sorted_players[i + 1]
+            player1_data = sorted_players[i]
+            player2_data = sorted_players[i + 1]
+            print(f'Creating match between {player1_data} and {player2_data}')
+
+            player1 = User.objects.get(pk=player1_data['id'])
+            player2 = User.objects.get(pk=player2_data['id'])
+            print(f'Player 1: {player1} and Player 2: {player2}')
 
             player1_score = 0
             player2_score = 0
@@ -387,9 +388,13 @@ class TournamentConsumer(AsyncWebsocketConsumer):
         return matches
 
     @database_sync_to_async
-    def create_round(self, tournament, matches, current_round=None):
+    def create_round(self, matches, current_round=None):
         from api.tournament.models import Round
+        from api.tournament.models import Tournament
+
+        tournament = Tournament.objects.get(pk=self.tournament_id)
         print(f'Creating round for tournament {tournament}')
+
         new_round = Round(tournament=tournament, round_number=current_round)
         new_round.save()
 
@@ -411,9 +416,9 @@ class TournamentConsumer(AsyncWebsocketConsumer):
                 return None
             print(f'Found user with info {user}')
             self.player_object = user
-            # self.list_of_player_objects[self.client_id] = self.player_object
-            self.list_of_player_channels[self.client_id] = self.channel_name
-            return user
+
+            return True
+
         except Exception as e:
             print(e)
             return None
@@ -422,30 +427,24 @@ class TournamentConsumer(AsyncWebsocketConsumer):
     def init_tour_obj(self, pk):
         try:
             Tournament = import_string('api.tournament.models.Tournament')
-            tournament = get_object_or_404(Tournament, pk=pk)
+            self.tournament_object = get_object_or_404(Tournament, pk=pk)
 
-            if tournament is None:
+            if self.tournament_object is None:
                 print(f'Could not find tournament with id {pk}')
                 return None
             
             # Extracting relevant information from CustomUser objects
-            players = list(tournament.players.values('id', 'username'))
-            tournament_admin_id = tournament.tournament_admin.id if tournament.tournament_admin else None
+            self.list_of_registered_players = list(self.tournament_object.players.all().values('id', 'username'))
+            self.tournament_admin_id = self.tournament_object.tournament_admin.id if self.tournament_object.tournament_admin else None  
+            self.current_round = self.tournament_object.round
+            print(f'List of registered players: {self.list_of_registered_players} and tournament admin id: {self.tournament_admin_id}')
 
-            tournament.players.add(self.player_object)
-            tournament.tournament_admin = self.player_object
-            tournament.save()
-
-            self.tournament_object = tournament
-            self.tournament_admin_id = self.client_id
-
-            return {
-                'players': players,
-                'tournament_admin_id': tournament_admin_id,
-            }
-
-            # Broadcast the list of players assigned to this tournament object
-                
+            # Check if the client is in the list of registered players
+            if self.client_id not in [str(player['id']) for player in self.list_of_registered_players]:
+                print(f'Client {self.client_id} not registered for tournament {self.tournament_id}')
+                return None
+            
+            return True
 
         except Exception as e:
             print(e)
@@ -474,4 +473,5 @@ class TournamentConsumer(AsyncWebsocketConsumer):
         except Exception as e:
             print(f'Error saving tournament results: {e}')
             return None
+
 # ---------------------------------------

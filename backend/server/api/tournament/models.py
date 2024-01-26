@@ -24,7 +24,7 @@ class Match(models.Model):
     winner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='winner', blank=True, null=True)
     date_played = models.DateTimeField(blank=True, null=True)
     active = models.BooleanField(default=False)
-    best_of_three_id = models.IntegerField(blank=True, null=True)
+    # best_of_three_id = models.IntegerField(blank=True, null=True)
 
     def loser(self):
         return self.player1 if self.winner == self.player2 else self.player2
