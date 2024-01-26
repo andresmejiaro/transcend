@@ -18,6 +18,7 @@ from django.utils.module_loading import import_string
 class TournamentConsumer(AsyncWebsocketConsumer):
 
     connected_clients = set()  # Class-level variable to store connected clients
+    tournament_ready = {}      # Class-level variable to store tournaments ready status
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -26,7 +27,6 @@ class TournamentConsumer(AsyncWebsocketConsumer):
         self.player_score = 0                   # Player score to keep track of ELO
         self.tournament_id = None               # Tournament ID unique to each tournament
         self.tournament_ended = False           # Flag to indicate if the tournament has ended
-        self.tournament_ready = False           # Flag to indicate if all the players are connected
         self.current_round = 0                  # Current round of the tournament
         self.tournament_admin_id = None         # Tournament admin ID - admin can start the tournament
         self.tournament_object = None           # Tournament object - contains all the tournament info
@@ -54,6 +54,7 @@ class TournamentConsumer(AsyncWebsocketConsumer):
     @classmethod
     def get_connected_clients(cls):
         return list(cls.connected_clients)
+
 # ---------------------------------------
 
 # Channel methods (Connect, Disconnect, Receive)
@@ -101,22 +102,28 @@ class TournamentConsumer(AsyncWebsocketConsumer):
         # Add client to class-level variable to keep track of connected clients
         self.add_connected_client(self.client_id)
 
-        # Check if all the players are actually connected if true send message to start tournament
-        for player in self.list_of_registered_players:
-            if str(player['id']) not in self.get_connected_clients():
-                self.tournament_ready = False
-                break
-            else:
-                self.tournament_ready = True
-        
-        # If all the players are connected, send message to start tournament
-        if self.tournament_ready:
+        # If we have 4 players, close the tournament and start the tournament otherwise just announce the new player
+        if len(self.list_of_registered_players) == 4:
+            TournamentConsumer.tournament_ready[self.tournament_id] = True
             await self.broadcast_to_group(
                 str(self.tournament_id),
                 'tournament_ready',
                 {
                     'tournament_id': self.tournament_id,
                     'registered_players': self.list_of_registered_players,
+                    'tournament_admin_id': self.tournament_admin_id,
+                }
+            )
+        else:
+            TournamentConsumer.tournament_ready[self.tournament_id] = False
+            await self.broadcast_to_group(
+                str(self.tournament_id),
+                'player_joined',
+                {
+                    'tournament_id': self.tournament_id,
+                    'player_id': self.client_id,
+                    'registered_players': self.list_of_registered_players,
+                    'tournament_admin_id': self.tournament_admin_id,
                 }
             )
 
@@ -177,8 +184,11 @@ class TournamentConsumer(AsyncWebsocketConsumer):
             command = data.get('command')
 
             if command == self.START_ROUND:
-                if self.client_id == str(self.tournament_admin_id):
+                if self.client_id == str(self.tournament_admin_id) and TournamentConsumer.tournament_ready[self.tournament_id]:
                     await self.matchmaking_logic()
+                    # We create a task that will check if the matches have been completed
+                    TournamentConsumer.tournament_ready[self.tournament_id] = False
+                    asyncio.create_task(self.check_match_finished())
                 else:
                     await self.send_info_to_client(self.CMD_NOT_FOUND, text_data)
             elif command == self.CLOSE_CONNECTION:
@@ -237,10 +247,18 @@ class TournamentConsumer(AsyncWebsocketConsumer):
     async def matchmaking_logic(self):
         try:
             #TODO: Commented to test matchmaking without all players connected
-            # Check if the tournament has ended and if the tournament is ready
-            # if self.tournament_ended or self.tournament_ready is False:
-            #     print('Tournament has ended or not ready')
-            #     return
+            # Check if the tournament has ended
+            if self.tournament_ended:
+                print(f"Tournament has ended: {self.tournament_ended}")
+                return
+            
+            # Check if all the players are connected
+            for player in self.list_of_registered_players:
+                if str(player['id']) not in self.get_connected_clients():
+                    print(f"Player {player['id']} not connected")
+                    return
+            
+            # asyncio.create_task(self.check_match_finished())
             
             sit_out_player = self.get_sit_out_player(self.list_of_registered_players)
             if sit_out_player:
@@ -320,6 +338,46 @@ class TournamentConsumer(AsyncWebsocketConsumer):
             await self.disconnect()
 # ---------------------------------------
 
+    async def check_match_finished(self):
+        try:
+            # This method will loop through the matches and once they are all complete will set the tournament_ready flag to True
+            while True:
+                await asyncio.sleep(1)
+                print(f'Checking if matches are finished')
+                matches_finished = True
+                for match in self.list_of_matches.values():
+                    print(f"Checking if the mathces in {self.list_of_matches} are finished. Currently checking match {match}")
+                    active = await self.check_match_status(match.id)
+                    if active:
+                        print(f"Match {match} is active")
+                        matches_finished = False
+                        break
+                    
+                if matches_finished:
+                    print(f'Matches are finished')
+                    TournamentConsumer.tournament_ready[self.tournament_id] = True
+                    await self.broadcast_to_group(
+                        str(self.tournament_id),
+                        'matches_finished',
+                        {
+                            'tournament_id': self.tournament_id,
+                            'info': 'Matches are finished.',
+                        }
+                    )
+                    break
+                
+        except asyncio.CancelledError as ce:
+            print(f"CancelledError in check_match_finished: {ce}")
+            await self.disconnect()
+        except ValueError as ve:
+            print(f"ValueError in matchmaking_logic: {ve}")
+            await self.disconnect()
+        except Exception as e:
+            print(f"Error in matchmaking_logic: {e}")
+            await self.disconnect()
+
+
+
 # Matchmaking Helper Methods
     def get_sit_out_player(self, players):
         # Extract the logic for determining the sit-out player
@@ -347,6 +405,26 @@ class TournamentConsumer(AsyncWebsocketConsumer):
         except Exception as e:
             print(f'Error calculating player score: {e}')
             return 0
+
+    @database_sync_to_async
+    def check_match_status(self, match_id):
+        try:
+            from api.tournament.models import Match
+            match = get_object_or_404(Match, pk=match_id)
+            
+            if match is None:
+                print(f'Could not find match with id {match_id}')
+                return None
+            
+            if match.active:
+                return True
+            else:
+                return False
+            
+        except Exception as e:
+            print(f'Error checking match status: {e}')
+            return None
+        
 # ---------------------------------------
 
 # Object initialization/save methods
@@ -438,6 +516,18 @@ class TournamentConsumer(AsyncWebsocketConsumer):
             self.list_of_registered_players = list(self.tournament_object.players.all().values('id', 'username'))
             self.tournament_admin_id = self.tournament_object.tournament_admin.id if self.tournament_object.tournament_admin else None  
             self.current_round = self.tournament_object.round
+            
+            # The admin will always be in the list of registered players. We will accept new players till there are 4 players. At that point we close the tournament and kick out any new players.
+            # If there are less than 4 players new clients will be added to the tournament object and we will save the tournament object.
+            if len(self.list_of_registered_players) <= 4 and self.tournament_object.joinable:
+                self.tournament_object.players.add(self.player_object)
+                self.tournament_object.save()
+                self.list_of_registered_players = list(self.tournament_object.players.all().values('id', 'username'))
+                if len(self.list_of_registered_players) == 4:
+                    self.tournament_object.joinable = False
+                    self.tournament_object.save()
+                    print(f'Tournament {self.tournament_id} is now closed. No new players can join.')
+                
             print(f'List of registered players: {self.list_of_registered_players} and tournament admin id: {self.tournament_admin_id}')
 
             # Check if the client is in the list of registered players
