@@ -11,11 +11,12 @@ p {
 }
 
 body {
+	cursor: url('../assets/imgs/mouse.png'), auto;
 	margin: 0;
 	padding: 0;
 	font-family: 'Open Sans', sans-serif;
 	font-family: 'VT323', monospace;
-	background-color: black;
+	background-color: rgb(0, 0, 0);
 }
 
 body::-webkit-scrollbar {
@@ -82,7 +83,7 @@ p {
     height: 60px !important;
     border-radius: 68px !important;
     background: #15142E !important; /* Solid background color */
-    color: #FEFEE9 !important;
+    color: #ffffff !important;
     border: none !important;
     background-clip: padding-box !important;
     transition: border-color 0.2s ease-in-out !important;
@@ -91,18 +92,29 @@ p {
 }
 
 /* Custom styles for collapsed navbar and dropdown background color */
-@media (max-width: 991px) {
+@media (max-width: 1200px) {
 	.navbar-nav .nav-link {
-	  color: white !important; /* Set the color of the navigation links in the dropdown */
+		color: white !important; /* Set the color of the navigation links in the dropdown */
 	}
-  
+	.nav-item {
+		margin-right: 0px;
+	}
 	.navbar-nav .nav-link:hover,
 	.navbar-nav .nav-link:focus {
 	  background-color: black; /* Set the background color of the hovered/focused navigation links in the dropdown */
 	  color: white !important;
 	}
+	.nav-expanded {
+		margin-top: 12px;
+	}
 }
-  
+
+@media (min-width: 1200px) {
+	.nav-item {
+		margin-right: 80px;
+	}
+}
+
 
 .pm0 {
 	padding: 0!important;
@@ -117,17 +129,13 @@ p {
 	margin-top: 10rem;
 }
 
-.nav-item {
-    margin-right: 80px; /* Adjust the space between navigation items */
-}
-
 .nav-link {
     padding: 5px 10px; /* Add padding to make each link larger and more clickable */
 }
 
 .nav-link-logged-pong {
     padding: 5px 10px; /* Similar to .nav-link, adjust as needed */
-    color: #FEFEE9 !important;
+    color: #ffffff !important;
 }
 
 .accept-btn {

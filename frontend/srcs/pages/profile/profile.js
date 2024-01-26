@@ -16,8 +16,6 @@ const getMeSettingsInfoProfile = async () => {
 			const usernameElement = document.getElementById("user-username");
 			const avatarImage = document.getElementById("avatarImageUser");
 
-			console.log(data);
-
 			usernameElement.innerHTML = data.user.username;
 			
 			if (data.user.avatar_url) {
@@ -82,7 +80,6 @@ const updateMatchHistory = async () => {
         };
 
         const matchHistoryData = await makeRequest(true, matchHistoryUrl, options);
-        console.log(matchHistoryData);
 
         const matchHistoryList = document.getElementById("matchHistoryList");
 
@@ -108,6 +105,5 @@ const updateMatchHistory = async () => {
         console.error("Error fetching match history:", error.message);
     }
 };
-
 
 getMeSettingsInfoProfile();

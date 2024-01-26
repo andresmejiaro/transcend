@@ -230,6 +230,12 @@ class LobbyConsumer(AsyncWebsocketConsumer):
             await self.channel_layer.group_discard(self.lobby_name, self.channel_name)
             await self.channel_layer.group_discard(self.client_id, self.channel_name)
 
+
+            for queue in LobbyConsumer.queue.keys():
+                if self.client_id in LobbyConsumer.queue[queue]:
+                    print(f"Leaving queue: {queue}")
+                    LobbyConsumer.queue[queue].remove(self.client_id)
+
             # Send info of group status every time a client leaves
             await self.announce_departure()
             self.close()
