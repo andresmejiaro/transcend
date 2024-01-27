@@ -13,6 +13,7 @@ class Tournament(models.Model):
     players = models.ManyToManyField(User, blank=True)
     observers = models.ManyToManyField(User, blank=True, related_name='observers')
     joinable = models.BooleanField(default=True)
+    public = models.BooleanField(default=True)
 
     def __str__(self):
         return f"Tournament {self.id} - {self.name}"

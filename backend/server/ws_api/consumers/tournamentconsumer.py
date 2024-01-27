@@ -156,8 +156,8 @@ class TournamentConsumer(AsyncWebsocketConsumer):
                     'tournament_admin_disconnected',
                     {
                         'tournament_id': self.tournament_id,
-                        'info': 'Tournament admin disconnected.',
                         'new_admin': new_admin,
+                        'info': 'Tournament admin disconnected.',
                     }
                 )
                 await self.close()
