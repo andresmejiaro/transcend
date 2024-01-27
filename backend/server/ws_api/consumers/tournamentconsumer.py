@@ -329,6 +329,7 @@ class TournamentConsumer(AsyncWebsocketConsumer):
             await self.disconnect()
 # ---------------------------------------
 
+# Matchmaking Helper Methods
     async def check_match_finished(self):
         try:
             # This coroutine will loop through the matches and once they are all complete will set the tournament_ready flag to True
@@ -372,8 +373,6 @@ class TournamentConsumer(AsyncWebsocketConsumer):
             print(f"Error in matchmaking_logic: {e}")
             await self.disconnect()
 
-
-# Matchmaking Helper Methods
     @database_sync_to_async
     def check_match_status(self, match_id):
         try:
