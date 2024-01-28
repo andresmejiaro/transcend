@@ -138,7 +138,7 @@ class TournamentConsumer(AsyncWebsocketConsumer):
                 str(self.client_id),
                 self.channel_name
             )
-            
+
             # Remove client from class-level variable to keep track of connected clients
             self.remove_connected_client(self.client_id)
 
@@ -146,11 +146,11 @@ class TournamentConsumer(AsyncWebsocketConsumer):
             if self.tournament_ended:
                 await self.close()
                 return
-            
+
             # If the tournament has not ended, check if the client is the tournament admin
             if self.client_id == str(self.tournament_admin_id):
                 print(f'Tournament admin {self.client_id} disconnected')
-                new_admin = await self.assign_new_tournament_admin()           
+                new_admin = await self.assign_new_tournament_admin()
                 await self.broadcast_to_group(
                     str(self.tournament_id),
                     'tournament_admin_disconnected',
@@ -160,8 +160,6 @@ class TournamentConsumer(AsyncWebsocketConsumer):
                         'info': 'Tournament admin disconnected.',
                     }
                 )
-                await self.close()
-                return
             else:
                 print(f'Player {self.client_id} disconnected')
                 await self.broadcast_to_group(
@@ -173,9 +171,8 @@ class TournamentConsumer(AsyncWebsocketConsumer):
                         'info': 'Player disconnected.',
                     }
                 )
-                await self.close()
-                return
-
+            await self.close()
+            return
         except Exception as e:
             print(f"Error in disconnect method: {e}")
 
@@ -189,9 +186,9 @@ class TournamentConsumer(AsyncWebsocketConsumer):
                     await self.matchmaking_logic()
                     # We create a task that will check if the matches have been completed
                     TournamentConsumer.tournament_ready[self.tournament_id] = False
-                    # If the tournament has ended, we will not create a task to check if the matches are finished
+                    # Only run the task if the tournament has not ended
                     if not self.tournament_ended:
-                        self.check_match_finished_task = asyncio.create_task(self.check_match_finished())
+                        asyncio.create_task(self.check_match_finished())
                 else:
                     await self.send_info_to_client(self.CMD_NOT_FOUND, text_data)
             elif command == self.CLOSE_CONNECTION:
@@ -253,14 +250,14 @@ class TournamentConsumer(AsyncWebsocketConsumer):
             if self.tournament_ended:
                 print(f"Tournament has ended: {self.tournament_ended}")
                 return
-            
+
             # Check if all the players are connected - commented out for testing purposes
             # for player in self.list_of_registered_players:
             #     if str(player['id']) not in self.get_connected_clients():
             #         print(f"Player {player['id']} not connected")
             #         return
-                        
-            players_this_round = [player for player in self.list_of_registered_players]
+
+            players_this_round = list(self.list_of_registered_players)
 
             print(f'Tournament rounds to complete: {self.tournament_rounds_to_complete}')
 
@@ -269,7 +266,7 @@ class TournamentConsumer(AsyncWebsocketConsumer):
                 self.tournament_ended = True
 
                 await self.save_tournament_results()
-                
+
                 await self.broadcast_to_group(
                     self.tournament_id,
                     'tournament_ended',
@@ -282,7 +279,7 @@ class TournamentConsumer(AsyncWebsocketConsumer):
                     }
                 )
                 return
-            
+
             # Randomize the list of players
             sorted_players = random.sample(players_this_round, len(players_this_round))
 
@@ -315,7 +312,7 @@ class TournamentConsumer(AsyncWebsocketConsumer):
                     'current_round': self.current_round + 1,
                 }
             )
-            
+
             self.current_round += 1
             print(f'Round launched next round is: {self.current_round}, Matches played so far: {self.list_of_matches}')
 
@@ -337,7 +334,7 @@ class TournamentConsumer(AsyncWebsocketConsumer):
             # This coroutine will loop through the matches and once they are all complete will set the tournament_ready flag to True
             while True:
                 await asyncio.sleep(1)
-                print(f'Checking if matches are finished')
+                print('Checking if matches are finished')
                 matches_finished = True
                 for match in self.list_of_matches.values():
                     print(f"Checking if the mathces in {self.list_of_matches} are finished. Currently checking match {match}")
@@ -346,9 +343,9 @@ class TournamentConsumer(AsyncWebsocketConsumer):
                         print(f"Match {match} is active")
                         matches_finished = False
                         break
-                    
+
                 if matches_finished:
-                    print(f'Matches are finished')
+                    print('Matches are finished')
                     await self.kick_losers()
                     TournamentConsumer.tournament_ready[self.tournament_id] = True
                     await self.broadcast_to_group(
@@ -364,7 +361,7 @@ class TournamentConsumer(AsyncWebsocketConsumer):
                     await asyncio.sleep(5)
                     await self.receive(json.dumps({'command': self.START_ROUND}))
                     break
-                
+
         except asyncio.CancelledError as ce:
             print(f"CancelledError in check_match_finished: {ce}")
             await self.disconnect()
@@ -380,16 +377,12 @@ class TournamentConsumer(AsyncWebsocketConsumer):
         try:
             from api.tournament.models import Match
             match = get_object_or_404(Match, pk=match_id)
-            
+
             if match is None:
                 print(f'Could not find match with id {match_id}')
                 return None
-            
-            if match.active:
-                return True
-            else:
-                return False
-            
+
+            return bool(match.active)
         except Exception as e:
             print(f'Error checking match status: {e}')
             return None
