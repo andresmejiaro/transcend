@@ -23,6 +23,7 @@ urlpatterns = [
     path('user/', user_list, name='user_list'),
     path('user/<int:pk>/', user_operations, name='user_detail'),
     path('user/match/', user_all_matches, name='user_match'),
+    path('user/match/<str:username>/', user_all_matches_username, name='user_match_username'),
     path('user/<int:pk>/tournament/', user_all_tournaments, name='user_tournament'),
     
     # Matchmaking for Tournaments

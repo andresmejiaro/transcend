@@ -265,7 +265,6 @@ def info_user_view(request, username):
                     _, token = authorization_header.split()
                 except Exception as e:
                     return JsonResponse({'error': str(e)}, status=401)
-
             user = get_object_or_404(CustomUser, username=username)
 
             user_data_response = {
