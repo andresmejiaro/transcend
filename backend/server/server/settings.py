@@ -250,3 +250,5 @@ CORS_ALLOW_METHODS = [
     'POST',
     'PUT',
 ]
+
+APPEND_SLASH = False
