@@ -130,7 +130,7 @@ def verify_totp_code(request):
 				return JsonResponse({'status': 'error', 'message': 'Invalid TOTP'})
 		except CustomUser.DoesNotExist:
 			return JsonResponse({'message': 'User not found'}, status=400)
-		except pyotp.OTPError as e:
+		except Exception as e:
 			return JsonResponse({'message': f'Error: {str(e)}'}, status=400)
 	return JsonResponse({'status': 'error', 'message': 'Only POST requests are allowed'}, status=400)
 
