@@ -189,7 +189,9 @@ class TournamentConsumer(AsyncWebsocketConsumer):
                     await self.matchmaking_logic()
                     # We create a task that will check if the matches have been completed
                     TournamentConsumer.tournament_ready[self.tournament_id] = False
-                    asyncio.create_task(self.check_match_finished())
+                    # If the tournament has ended, we will not create a task to check if the matches are finished
+                    if not self.tournament_ended:
+                        self.check_match_finished_task = asyncio.create_task(self.check_match_finished())
                 else:
                     await self.send_info_to_client(self.CMD_NOT_FOUND, text_data)
             elif command == self.CLOSE_CONNECTION:
