@@ -9,21 +9,21 @@ urlpatterns = [
     path('tournament/<int:pk>/', tournament_operations, name="detail"),
     path('tournament/<int:pk>/rounds/', tournament_rounds, name="round"),
     # Match
-    path('match/create/', match_create, name='creatematch'),
-    path('match/', match_list, name='listmatches'),
+    # path('match/create/', match_create, name='creatematch'),
+    # path('match/', match_list, name='listmatches'),
     # path('match/<int:match_id>/', match_list, name='listmatches'),
-    path('match/available/', match_available, name='available'),
-    path('match/<int:match_id>/', get_match_info, name="match_info"),
+    # path('match/available/', match_available, name='available'),
+    # path('match/<int:match_id>/', get_match_info, name="match_info"),
     # Round
-    path('round/create/', round_create, name='round_create'),
-    path('round/', round_list, name='round_list'),
-    path('round/<int:pk>/', round_operations, name="round_detail"),
+    # path('round/create/', round_create, name='round_create'),
+    # path('round/', round_list, name='round_list'),
+    # path('round/<int:pk>/', round_operations, name="round_detail"),
     # User
-    path('user/create/', user_create, name='user_create'),
+    # path('user/create/', user_create, name='user_create'),
     path('user/', user_list, name='user_list'),
     path('user/<int:pk>/', user_operations, name='user_detail'),
     path('user/match/', user_all_matches, name='user_match'),
-    path('user/<int:pk>/tournament/', user_all_tournaments, name='user_tournament'),
+    # path('user/<int:pk>/tournament/', user_all_tournaments, name='user_tournament'),
     
     # Matchmaking for Tournaments
     # <int:pk> is the tournament id
@@ -32,5 +32,6 @@ urlpatterns = [
     # It will then return the first round of matches
     # You can then call this again to get the next round of matches until there are no more rounds
     # If you call this again after all rounds have been played, it will return a the winner of the tournament
-    path('tournament/<int:pk>/matchmaking/', game_matchmaking, name='game_matchmaking'),
+
+    # path('tournament/<int:pk>/matchmaking/', game_matchmaking, name='game_matchmaking'),
 ]
