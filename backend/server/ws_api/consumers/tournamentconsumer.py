@@ -1,18 +1,13 @@
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
-from ws_api.python_pong.Player import Player
-from ws_api.python_pong.Game import Game
 from urllib.parse import parse_qs
 from channels.db import database_sync_to_async
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
-from django.db.models import Q
-import math
 import random
 import logging
 import asyncio
 from api.jwt_utils import get_user_id_from_jwt_token
-
 from django.utils.module_loading import import_string
 
 class TournamentConsumer(AsyncWebsocketConsumer):
@@ -443,6 +438,9 @@ class TournamentConsumer(AsyncWebsocketConsumer):
                     print(f'New tournament admin is {tournament.tournament_admin}')
                     return tournament.tournament_admin.id
 
+            print('Could not find a new tournament admin')
+            return None
+
         except Exception as e:
             print(f'Error assigning new tournament admin: {e}')
             return None    
@@ -580,4 +578,15 @@ class TournamentConsumer(AsyncWebsocketConsumer):
             print(f'Error saving tournament results: {e}')
             return None
 
+    @database_sync_to_async
+    def delete_tournament(self):
+        try:
+            print(f'Deleting tournament {self.tournament_id}')
+            Tournament = import_string('api.tournament.models.Tournament')
+            tournament = get_object_or_404(Tournament, pk=self.tournament_id)
+            tournament.delete()
+            return True
+        except Exception as e:
+            print(f'Error deleting tournament: {e}')
+            return None
 # ---------------------------------------
