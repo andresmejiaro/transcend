@@ -16,6 +16,7 @@ from urllib import request as urllib_request
 from django.views.decorators.csrf import requires_csrf_token
 from api.jwt_utils import get_user_id_from_jwt_token
 from .utils.validate_update import UserUpdateValidator
+from django.shortcuts import get_object_or_404
 
 
 @requires_csrf_token
@@ -251,3 +252,34 @@ def update_user_information(request, *args, **kwargs):
         user.fullname = full_name
     user.save()
     return JsonResponse({"message": "User updated successfully"}, status=200)
+
+
+
+@requires_csrf_token
+def info_user_view(request, username):
+    if request.method == 'GET':
+        try:
+            authorization_header = request.headers.get('Authorization')
+            if authorization_header:
+                try:
+                    _, token = authorization_header.split()
+                except Exception as e:
+                    return JsonResponse({'error': str(e)}, status=401)
+
+            user = get_object_or_404(CustomUser, username=username)
+
+            user_data_response = {
+                'username': user.username,
+                'fullname': user.fullname,
+                'email': user.email,
+                'avatar_url': user.avatar.url if user.avatar else None
+            }
+            return JsonResponse({'status': 'ok', 'user': user_data_response})
+
+        except CustomUser.DoesNotExist:
+            return JsonResponse({'status': 'not found'}, status=404)
+        except Exception as e:
+            # Handle token validation failure
+            return JsonResponse({'error': str(e)}, status=401)
+
+    return JsonResponse({'error': 'Only GET requests are allowed'}, status=400)

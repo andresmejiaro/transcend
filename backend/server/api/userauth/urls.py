@@ -3,7 +3,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from .views.auth import signup_view, login_view
 from .views.user import info_me_view, info_me_id_view, update_avatar_view, get_user_id, user_exists, user_intra_exists, \
-    user_friends_list
+    user_friends_list, info_user_view
 from .views.token import send_csrf_token_view, validate_jwt_token_view
 from .views.googleauth import enable_2fa, disable_2fa, display_qr_code, verify_totp_code, user_2fa_setup_complete
 from .views.auth import oauth_start, oauth_login
@@ -18,6 +18,8 @@ urlpatterns = [
     path('user/validate-jwt/', validate_jwt_token_view, name="validate jwt token"),
 
     path('user/info-me/', info_me_view, name='info-me'),
+    path('user/info-user/<str:username>/', info_user_view, name='info-user'),
+
     path('user/info-me-id/<int:user_id>/', info_me_id_view, name='info-me-id'),
     path('user/update-avatar/', update_avatar_view, name='update-avatar'),
     path('user/friendlist/', user_friends_list, name='user_friendlist'),
