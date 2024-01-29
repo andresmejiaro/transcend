@@ -557,9 +557,27 @@ class LobbyConsumer(AsyncWebsocketConsumer):
             print(f'Exception in send_friend_request {e}')
             await self.disconnect(1000)
 
+    @database_sync_to_async
+    def check_if_friend_request_exists(self, user_id):
+        from api.userauth.models import CustomUser
+        try:
+            user = CustomUser.objects.get(int(self.client_id))
+        except Exception:
+            return False
+        
+        friend_requests = dict(user.list_of_received_invites)
+        ids = [int(req.get('invite_id')) for req in friend_requests]
+        return int(user_id) in ids
+        
+
     async def accept_friend_request(self, user_id):
         try:
             # Add the current user as a friend for the other person
+
+            if not await self.check_if_friend_request_exists(user_id):
+                print("No such friend request")
+                return
+            
             message = await self.add_friendship(pk=user_id)
             print(message)
 
