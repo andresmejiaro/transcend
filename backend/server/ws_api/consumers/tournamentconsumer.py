@@ -29,6 +29,7 @@ class TournamentConsumer(AsyncWebsocketConsumer):
         self.list_of_matches = {}               # List of matches during the entire tournament
         self.list_of_rounds = {}                # List of rounds during the entire tournament
         self.list_of_registered_players = {}    # List of registered players for the tournament
+        self.match_monitor_task = None          # Task to monitor the matches
 
 # Define constants for commands
     START_ROUND = 'start_round'
@@ -56,18 +57,9 @@ class TournamentConsumer(AsyncWebsocketConsumer):
         query_string = self.scope['query_string'].decode('utf-8')
         query_params = parse_qs(query_string)
         self.tournament_id = self.scope['url_route']['kwargs']['tournament_id']
-
-        if not query_params.get('token'):
-                await self.close()
-        print(f'Token: {query_params.get("token")}')
         token = query_params['token'][0]
 
-        try:
-            user_id = get_user_id_from_jwt_token(token)
-            self.client_id = str(user_id)
-            print(self.client_id)
-        except Exception as e:
-            await self.close()
+        self.client_id = self.verifty_user_via_token(token)
 
         # Get the user and see if they exist before accepting the connection
         user = await self.init_player_obj(self.client_id)
@@ -84,14 +76,8 @@ class TournamentConsumer(AsyncWebsocketConsumer):
         
         # Add client to the group channel
         print(f'Adding {self.client_id} to group {self.tournament_id}')
-        await self.channel_layer.group_add(
-            self.tournament_id,
-            self.channel_name
-        )
-        await self.channel_layer.group_add(
-            self.client_id,
-            self.channel_name
-        )
+        await self.channel_layer.group_add(self.tournament_id, self.channel_name)
+        await self.channel_layer.group_add(self.client_id, self.channel_name)
 
         # Add client to class-level variable to keep track of connected clients
         self.add_connected_client(self.client_id)
@@ -125,14 +111,8 @@ class TournamentConsumer(AsyncWebsocketConsumer):
         try:
             print(f'Client {self.client_id} disconnected with code {close_code}')
             # Remove client from the group channel
-            await self.channel_layer.group_discard(
-                str(self.tournament_id),
-                self.channel_name
-            )
-            await self.channel_layer.group_discard(
-                str(self.client_id),
-                self.channel_name
-            )
+            await self.channel_layer.group_discard(str(self.tournament_id), self.channel_name)
+            await self.channel_layer.group_discard(str(self.client_id), self.channel_name)
 
             # Remove client from class-level variable to keep track of connected clients
             self.remove_connected_client(self.client_id)
@@ -145,13 +125,13 @@ class TournamentConsumer(AsyncWebsocketConsumer):
             # If the tournament has not ended, check if the client is the tournament admin
             if self.client_id == str(self.tournament_admin_id):
                 print(f'Tournament admin {self.client_id} disconnected')
-                new_admin = await self.assign_new_tournament_admin()
+                await self.assign_new_tournament_admin()
                 await self.broadcast_to_group(
                     str(self.tournament_id),
                     'tournament_admin_disconnected',
                     {
                         'tournament_id': self.tournament_id,
-                        'new_admin': new_admin,
+                        'new_admin': self.tournament_admin_id,
                         'info': 'Tournament admin disconnected.',
                     }
                 )
@@ -166,6 +146,18 @@ class TournamentConsumer(AsyncWebsocketConsumer):
                         'info': 'Player disconnected.',
                     }
                 )
+            if self.tournament_admin_id is None:
+                await self.delete_tournament()
+                await self.broadcast_to_group(
+                    str(self.tournament_id),
+                    'tournament_deleted',
+                    {
+                        'tournament_id': self.tournament_id,
+                        'info': 'Tournament deleted.',
+                    }
+                )
+                await self.close()
+                return
             await self.close()
             return
         except Exception as e:
@@ -179,13 +171,13 @@ class TournamentConsumer(AsyncWebsocketConsumer):
             if command == self.START_ROUND:
                 if self.client_id == str(self.tournament_admin_id) and TournamentConsumer.tournament_ready[self.tournament_id] and self.tournament_ended == False:
                     await self.matchmaking_logic()
-                    # We create a task that will check if the matches have been completed
                     TournamentConsumer.tournament_ready[self.tournament_id] = False
-                    # Only run the task if the tournament has not ended
                     if not self.tournament_ended:
-                        asyncio.create_task(self.check_match_finished())
+                        self.match_monitor_task = asyncio.create_task(self.check_match_finished())
+                        # asyncio.create_task(self.check_match_finished())
                 else:
-                    await self.send_info_to_client(self.CMD_NOT_FOUND, text_data)
+                    await self.send_info_to_client("message", "You are not the tournament admin or the tournament is not ready to start.")
+                    print(f'Client {self.client_id} is not the tournament admin. Tournament ready status: {TournamentConsumer.tournament_ready[self.tournament_id]}. Tournament ended: {self.tournament_ended}')
             elif command == self.CLOSE_CONNECTION:
                 await self.disconnect(1000)
             elif command == self.LIST_PLAYERS:
@@ -242,19 +234,9 @@ class TournamentConsumer(AsyncWebsocketConsumer):
     async def matchmaking_logic(self):
         try:
             # Check if the tournament has ended
-            if self.tournament_ended:
+            if self.tournament_ended or not list(self.list_of_registered_players):
                 print(f"Tournament has ended: {self.tournament_ended}")
                 return
-
-            # Check if all the players are connected - commented out for testing purposes
-            # for player in self.list_of_registered_players:
-            #     if str(player['id']) not in self.get_connected_clients():
-            #         print(f"Player {player['id']} not connected")
-            #         return
-
-            players_this_round = list(self.list_of_registered_players)
-
-            print(f'Tournament rounds to complete: {self.tournament_rounds_to_complete}')
 
             if self.current_round >= self.tournament_rounds_to_complete:
                 print('Tournament has ended')
@@ -275,10 +257,7 @@ class TournamentConsumer(AsyncWebsocketConsumer):
                 )
                 return
 
-            # Randomize the list of players
-            sorted_players = random.sample(players_this_round, len(players_this_round))
-
-            matches = await self.create_matches(sorted_players)
+            matches = await self.create_matches(list(self.list_of_registered_players))
             print(f'Matches created: {matches}')
 
             self.list_of_matches = {match.id: match for match in matches}
@@ -329,7 +308,6 @@ class TournamentConsumer(AsyncWebsocketConsumer):
             # This coroutine will loop through the matches and once they are all complete will set the tournament_ready flag to True
             while True:
                 await asyncio.sleep(1)
-                print('Checking if matches are finished')
                 matches_finished = True
                 for match in self.list_of_matches.values():
                     print(f"Checking if the mathces in {self.list_of_matches} are finished. Currently checking match {match}")
@@ -433,12 +411,14 @@ class TournamentConsumer(AsyncWebsocketConsumer):
             # Check which players are actually connected and assign the first one as the new tournament admin
             for player in players:
                 if str(player.id) in self.get_connected_clients():
-                    tournament.tournament_admin = player
+                    self.tournament_admin_id = player.id
                     tournament.save()
-                    print(f'New tournament admin is {tournament.tournament_admin}')
-                    return tournament.tournament_admin.id
+                    print(f'New tournament admin is {self.tournament_admin_id}')
+                    return self.tournament_admin_id
 
             print('Could not find a new tournament admin')
+            self.tournament_ended = True
+            self.tournament_admin_id = None
             return None
 
         except Exception as e:
@@ -590,3 +570,13 @@ class TournamentConsumer(AsyncWebsocketConsumer):
             print(f'Error deleting tournament: {e}')
             return None
 # ---------------------------------------
+
+# Helper methods
+    def verifty_user_via_token(self, token):
+        try:
+            user_id = get_user_id_from_jwt_token(token)
+            print(f'Verified user with id {user_id}')
+            return str(user_id)
+        except Exception as e:
+            print(f'Error verifying user: {e}')
+            return None

@@ -762,21 +762,38 @@ def get_match_info(request, *args, **kwargs):
         "message": "Method not allowed"
     }, status=405)
 
+def list_joinable_tournaments(request, *args, **kwargs):
+    if request.method == 'GET':
+        try:
+            tournaments = Tournament.objects.filter(joinable=True, public=True)
+            tournament_list = [
+                {
+                    'id': tournament.id,
+                    'name': tournament.name,
+                    'players': list(tournament.players.values_list('id', flat=True)),
+                }
+                for tournament in tournaments
+            ]
+            return JsonResponse({'status': 'ok', 'data': tournament_list}, status=200)
+        except Tournament.DoesNotExist:
+            return JsonResponse({'status': 'error', 'message': 'Tournament not found'}, status=404)
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': 'An unexpected error occurred'}, status=500)
 
-@require_http_methods(["GET"])
-def list_joinable_tournaments(requests, *args, **kwargs):
-    try:
-        tournaments = Tournament.objects.filter(joinable=True, public=True)
-        tournament_list = [
-            {
+def get_tournament_by_name(request, *args, **kwargs):
+    if request.method == 'GET':
+        try:
+            tournament = Tournament.objects.get(name=kwargs['name'])
+            # If tournament is not joinable, return error
+            if not tournament.joinable:
+                return JsonResponse({'status': 'error', 'message': 'Tournament is not joinable or full'}, status=400)
+            tournament_info = {
                 'id': tournament.id,
                 'name': tournament.name,
                 'players': list(tournament.players.values_list('id', flat=True)),
             }
-            for tournament in tournaments
-        ]
-        return JsonResponse({'status': 'ok', 'data': tournament_list})
-    except Tournament.DoesNotExist:
-        return JsonResponse({'status': 'error', 'message': 'Tournament not found'}, status=404)
-    except Exception as e:
-        return JsonResponse({'status': 'error', 'message': 'An unexpected error occurred'}, status=500)
+            return JsonResponse({'status': 'ok', 'data': tournament_info}, status=200)
+        except Tournament.DoesNotExist:
+            return JsonResponse({'status': 'error', 'message': 'Tournament not found'}, status=404)
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': 'An unexpected error occurred'}, status=500)

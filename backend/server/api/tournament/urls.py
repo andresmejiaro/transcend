@@ -26,5 +26,6 @@ urlpatterns = [
     path('user/<int:pk>/tournament/', user_all_tournaments, name='user_tournament'),
     
     # Matchmaking for Tournaments
-    path('tournament/', list_joinable_tournaments, name="list"),
+    path('tournament/', list_joinable_tournaments, name="list_joinable_tournaments"),
+    path('tournament/<str:name>/', get_tournament_by_name, name="get_tournament_by_name"),
 ]
