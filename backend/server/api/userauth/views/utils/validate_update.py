@@ -34,6 +34,8 @@ class UserUpdateValidator:
 
     def validate_full_name(self):
         full_name = self.raw_data.get('full_name')
+        if not full_name:
+            return
         if len(full_name) > 50:
             self.set_error(key='full_name', reason='Name too long')
 
