@@ -561,11 +561,11 @@ class LobbyConsumer(AsyncWebsocketConsumer):
     def check_if_friend_request_exists(self, user_id):
         from api.userauth.models import CustomUser
         try:
-            user = CustomUser.objects.get(int(self.client_id))
+            user = CustomUser.objects.get(pk=int(self.client_id))
         except Exception:
             return False
         
-        friend_requests = dict(user.list_of_received_invites)
+        friend_requests = user.list_of_received_invites
         ids = [int(req.get('invite_id')) for req in friend_requests]
         return int(user_id) in ids
         
