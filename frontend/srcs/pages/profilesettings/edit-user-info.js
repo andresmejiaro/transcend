@@ -108,6 +108,10 @@ const userEditInfo = async () => {
 		if (response.status === "ok") {
 			sessionStorage.setItem("jwt", response.token);
 		}
+		if (response.message && response.message === "Something went wrong") {
+			// TODO: show better message
+			showAlertDanger(response.message);
+		}
 	} catch (error) {
 		console.error("Error:", error.message);
 		//displayError("Invalid credentials. Please try again.");
