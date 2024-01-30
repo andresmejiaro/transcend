@@ -130,8 +130,11 @@ function searchUser() {
 function closeUserInfoPopup() {
     // Remove the modal container if it exists
     const modalContainer = document.querySelector(".user-info-modal");
+    const overlay = document.querySelector(".overlay");
+
     if (modalContainer) {
         document.body.removeChild(modalContainer);
+        document.body.removeChild(overlay); // Remove the overlay
         isModalOpen = false;
     }
 }
@@ -169,6 +172,7 @@ async function fetchUserStats(username) {
         console.error("Error:", error.message);
     }
 }
+
 function displayUserInfoPopup(userData, statsData, matchHistoryData) {
     console.log("Displaying user info and stats:", userData, statsData, matchHistoryData);
 
@@ -178,6 +182,16 @@ function displayUserInfoPopup(userData, statsData, matchHistoryData) {
     // Create a modal container
     const modalContainer = document.createElement("div");
     modalContainer.classList.add("user-info-modal");
+
+    // Create the overlay element
+    const overlay = document.createElement("div");
+    overlay.classList.add("overlay");
+
+    // Add the overlay to the document body
+    document.body.appendChild(overlay);
+
+    // Show the overlay
+    overlay.style.display = "block";
 
     // Create elements to display user info
     const usernameElement = document.createElement("p");

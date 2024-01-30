@@ -181,11 +181,14 @@ p {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background-color: #7e6969;
+    background-color: #545753;
     padding: 20px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
     z-index: 1000;
 	color: #000; /* Set text color to black */
+	border-radius: 5%;
+	border-color: aqua;
+	border: 1cm;
 }
 
 .close-modal {
@@ -193,4 +196,15 @@ p {
     top: 10px;
     right: 10px;
     cursor: pointer;
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Adjust the opacity as needed */
+    z-index: 1000; /* Ensure the overlay is on top of other elements */
+    display: none; /* Initially hide the overlay */
 }
