@@ -174,3 +174,23 @@ p {
     scrollbar-width: thin;
     scrollbar-color: transparent transparent; /* scrollbar color and track color */
 }
+
+.user-info-modal {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #7e6969;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+	color: #000; /* Set text color to black */
+}
+
+.close-modal {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+}

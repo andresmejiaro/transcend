@@ -66,4 +66,4 @@ def get_kpi_username(request, username):
         "tournaments_won": len(tournament_wins),
     }
 
-    return JsonResponse(res)
+    return JsonResponse({'status': 'ok', 'data': res})
