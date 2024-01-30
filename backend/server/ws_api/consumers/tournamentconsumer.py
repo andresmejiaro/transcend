@@ -335,7 +335,7 @@ class TournamentConsumer(AsyncWebsocketConsumer):
                         }
                     )
                     # To avoid admin trolling, we will wait for 5 seconds before starting the next round
-                    await asyncio.sleep(5)
+                    await asyncio.sleep(30)
                     await self.receive(json.dumps({'command': self.START_ROUND}))
                     break
 

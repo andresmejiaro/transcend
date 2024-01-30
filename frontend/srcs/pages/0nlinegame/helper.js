@@ -1,9 +1,8 @@
 let matchId = null;
 let gameSock;
 
-const connectGameSocket = async (gameInfo) => {
+const connectGameSocket = async (matchId) => {
 	const authToken = sessionStorage.getItem("jwt");
-	matchId = gameInfo.match_id;
 	
 	return new Promise((resolve, reject) => {
 		gameSock = new WebSocket(`${window.DAPHNE_BASE_URL}/ws/pong2/${matchId}/?token=${authToken}`);
