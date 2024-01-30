@@ -85,7 +85,8 @@ const updateMatchHistory = async () => {
 			limitedMatches.forEach((match) => {
 				const listItem = document.createElement("li");
 				listItem.classList.add("list-group-item");
-				listItem.textContent = `Match ID: ${match.id}, Winner: ${match.winner}, Scores: ${match.player1_score} - ${match.player2_score}`;
+				const formattedDate = new Date(match.date_played).toLocaleDateString();
+				listItem.textContent = `Date: ${formattedDate}, Winner: ${match.winner}, Scores: ${match.player1_score} - ${match.player2_score}`;
 				matchHistoryList.appendChild(listItem);
 			});
 		} else {
@@ -238,7 +239,8 @@ function displayUserInfoPopup(userData, statsData, matchHistoryData) {
 		limitedMatches.forEach(match => {
 			const listItem = document.createElement("li");
 			listItem.classList.add("list-group-item");
-			listItem.textContent = `Match ID: ${match.id}, Winner: ${match.winner}, Scores: ${match.player1_score} - ${match.player2_score}`;
+			const formattedDate = new Date(match.date_played).toLocaleDateString();
+			listItem.textContent = `Date: ${formattedDate}, Winner: ${match.winner}, Scores: ${match.player1_score} - ${match.player2_score}`;
 			matchHistoryList.appendChild(listItem);
 		}
 		);
