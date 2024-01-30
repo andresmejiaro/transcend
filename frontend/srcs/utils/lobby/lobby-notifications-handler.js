@@ -62,7 +62,7 @@ const handleCancelFriendRequest = async (data) => {
     const clientIdToRemove = data.data.client_id;
     const newData = invitationListFriendsData.filter(user => user.id !== clientIdToRemove);
     await handleListSentInvites(newData);
-    showToast("Invite canceled succesfully")
+    handleCloseFriendsModalMsg("Friend Request Removed Succesfully");
 };
 
 
