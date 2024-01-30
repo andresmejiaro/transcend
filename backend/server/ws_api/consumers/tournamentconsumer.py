@@ -106,7 +106,7 @@ class TournamentConsumer(AsyncWebsocketConsumer):
                     'player_id': self.client_id,
                     'registered_players': self.list_of_registered_players,
                     'tournament_admin_id': self.tournament_admin_id,
-                    'tournament_name': self.tou
+                    'tournament_name': self.tournament_name
                 }
             )
 
@@ -271,6 +271,7 @@ class TournamentConsumer(AsyncWebsocketConsumer):
 
             matches_info = {
                 str(match.id): {
+                    'match_id': match.id,
                     'player1': match.player1.id,
                     'player2': match.player2.id,
                     'active': match.active,
