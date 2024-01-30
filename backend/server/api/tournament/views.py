@@ -10,6 +10,7 @@ from api.jwt_utils import get_user_id_from_jwt_token
 import json
 import math
 import random
+from api.userauth.models import CustomUser
 
 # Create your views here.
 
@@ -670,6 +671,46 @@ def user_all_matches(request):
                     return JsonResponse({'error': str(e)}, status=401)
                 
             # user = User.objects.get(id=pk)
+                
+            matches = Match.objects.filter(player1=user) | Match.objects.filter(player2=user)
+                
+            match_list = []
+            for match in matches:
+                match_list.append({
+                    'id': match.id,
+                    'player1': {
+                        "id": match.player1.id,
+                        "username": match.player1.username,
+                    },
+                    'player2': {
+                        "id": match.player2.id,
+                        "username": match.player2.username,
+                    },
+                    'player1_score': match.player1_score,
+                    'player2_score': match.player2_score,
+                    'winner': match.winner.username if match.winner else None,
+                    'date_played': match.date_played,
+                    'active': match.active
+                })
+            return JsonResponse({'status': 'ok', 'data': match_list})
+        except User.DoesNotExist:
+            return JsonResponse({'status': 'error', 'message': 'User does not exist'}, status=400)
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
+    return JsonResponse({'status': 'error', 'message': 'Only GET requests are allowed'}, status=400)
+
+
+def user_all_matches_username(request, username):
+    if request.method == 'GET':
+        try:
+            authorization_header = request.headers.get('Authorization')
+            if authorization_header:
+                try:
+                    _, token = authorization_header.split()
+                except Exception as e:
+                    return JsonResponse({'error': str(e)}, status=401)
+                
+            user = get_object_or_404(CustomUser, username=username)
                 
             matches = Match.objects.filter(player1=user) | Match.objects.filter(player2=user)
                 
