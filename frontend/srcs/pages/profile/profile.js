@@ -156,7 +156,7 @@ async function fetchUserStats(username) {
             displayUserInfoPopup(infoData.user, statsData.data, matchHistoryData.data);
         } else {
             // User not found or error in fetching stats, show a message
-            alert('User not found or error in fetching stats');
+            showAlertDanger('User not found or error in fetching stats');
         }
     } catch (error) {
         console.error("Error:", error.message);
