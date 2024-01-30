@@ -29,7 +29,11 @@ def validate_and_get_user_from_token(token):
         username = payload.get('username')
         
         from api.userauth.models import CustomUser
-        user = CustomUser.objects.get(id=user_id, username=username)
+        try:
+            user = CustomUser.objects.get(id=user_id, username=username)
+        except CustomUser.DoesNotExist:
+            raise Exception('CustomUser not found')
+        
         user_data = {
             'username': user.username,
             'fullname': user.fullname

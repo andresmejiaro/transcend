@@ -31,14 +31,14 @@ urlpatterns = [
 
     path('verify_totp_code/', verify_totp_code, name='verify_totp_code'),  # @csrf_exempt
     path('enable_2fa/', enable_2fa, name='enable_2fa'),
-    path('disable_2fa/<int:user_id>/', disable_2fa, name='disable_2fa'),
-    path('display_qr_code/<int:user_id>/', display_qr_code, name='display_qr_code'),
+    path('disable_2fa/', disable_2fa, name='disable_2fa'),
+    path('display_qr_code/', display_qr_code, name='display_qr_code'),
     path('is_2fa_setup_complete/', user_2fa_setup_complete, name="is_2fa_setup_complete"),
 
     path('oauth-init/', oauth_start, name="oauth-start"),
     path('oauth/login/', oauth_login, name="oauth-login"),
 
-    path('user/<int:user_id>/stats/', get_kpi, name="get_kpi"),
+    path('user/stats/', get_kpi, name="get_kpi"),
     path('user/update/', update_user_information, name="update_user_info"),
 
 ]

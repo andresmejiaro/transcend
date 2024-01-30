@@ -1,6 +1,6 @@
 const handleMessage = async (message) => {
     const data = JSON.parse(message);
-    // console.log(data);
+    //console.log(data);
 
     switch (data.type) {
         case "list_of_users":
@@ -30,11 +30,11 @@ const handleMessage = async (message) => {
             break;
 
         case "cancel_friend_request":
-            // await handleCancelFriendRequest(data);
+            await handleCancelFriendRequest(data);
             break;
 
         case "friend_request_cancelled":
-            // await handleCanceledAFriendRequest(data);
+            await handleCanceledAFriendRequest(data);
             break;
 
         case "accept_friend_request":
