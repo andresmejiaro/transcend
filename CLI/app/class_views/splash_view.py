@@ -56,7 +56,7 @@ class SplashView(Widget):
             self.print_frame_rate()
             self.print_header("Welcome to Pong!")
             self.print_logo_centered(self.file_manager.load_texture("pong.txt"))
-            self.print_message_bottom("Press any key to continue...")
+            self.print_message_bottom("Press space to continue...")
 
             self._refresh_screen()
 
