@@ -11,6 +11,8 @@ import json
 import math
 import random
 from api.userauth.models import CustomUser
+from django.http import JsonResponse
+from django.views.decorators.http import require_http_methods
 
 # Create your views here.
 
@@ -766,132 +768,6 @@ def user_all_tournaments(request, pk):
 # -----------------------------
 
 # Tournament Matchmaking
-
-
-def create_matches(sorted_players):
-    matches = []
-    num_players = len(sorted_players)
-
-    # Adjust the range to handle odd number of players
-    for i in range(0, num_players - 1, 2):
-        player1 = sorted_players[i]
-        player2 = sorted_players[i + 1]
-
-        player1_score = 0
-        player2_score = 0
-        winner = None
-
-        match = Match(
-            player1=player1,
-            player2=player2,
-            player1_score=player1_score,
-            player2_score=player2_score,
-            winner=winner,
-            date_played=timezone.now(),
-            active=True
-        )
-
-        match.save()
-        matches.append(match)
-
-    return matches
-
-
-def create_round(tournament, matches):
-    new_round = Round(tournament=tournament, round_number=tournament.round + 1)
-    new_round.save()
-    new_round.matches.set(matches)
-
-
-def calculate_rounds(num_players):
-    return math.ceil(math.log2(num_players))
-
-
-def calculate_player_score(player, tournament=None):
-    if not tournament:
-        return 0
-
-    latest_round = tournament.rounds.last()  # Get the latest round
-
-    if latest_round:
-        matches = latest_round.matches.filter(
-            Q(player1=player) | Q(player2=player))
-        player_score = sum(1 for match in matches if match.winner == player)
-    else:
-        player_score = 0
-
-    return player_score
-
-
-# Actual matchmaking view
-def game_matchmaking(request, pk):
-    if request.method == 'GET':
-        try:
-            tournament = Tournament.objects.get(id=pk)
-
-            if tournament is None:
-                return JsonResponse({'status': 'error', 'message': 'Tournament does not exist'}, status=400)
-
-            players = tournament.players.all()
-
-            # Determine if there is a player sitting out
-            if players.count() % 2 != 0:
-                sit_out_player = random.choice(players)
-            else:
-                sit_out_player = None
-
-            num_rounds = calculate_rounds(players.count())
-            if tournament.round >= num_rounds:
-                winner = max(players, key=lambda player: calculate_player_score(
-                    player, tournament=tournament))
-                tournament.winner = winner
-                tournament.end_date = timezone.now()
-                tournament.save()
-                return JsonResponse({'status': 'ok', 'message': f'Tournament winner is {winner.username}'})
-
-            sorted_players = players.order_by('id')
-
-            if sit_out_player:
-                sorted_players = [
-                    player for player in sorted_players if player != sit_out_player]
-            print(sit_out_player)
-            print(sorted_players)
-
-            matches = []
-            if tournament.round == 1:
-                matches = create_matches(sorted_players)
-            else:
-                player_scores = {player.id: calculate_player_score(
-                    player, tournament=tournament) for player in players}
-                sorted_players = sorted(
-                    sorted_players, key=lambda player: player_scores[player.id])
-                matches = create_matches(sorted_players)
-
-            create_round(tournament, matches)
-
-            tournament.round += 1
-            tournament.save()
-
-            # Prepare the response with match details
-            match_list = [{'match_id': match.id, 'total_rounds': num_rounds,
-                           'player1_id': match.player1.id, 'player2_id': match.player2.id} for match in matches]
-
-            return JsonResponse({
-                'status': 'ok', 'message': 'Matchmaking successful',
-                'sit_out_player': sit_out_player.id if sit_out_player else None,
-                'matches': match_list,
-                'total_rounds': num_rounds,
-            })
-
-        except Tournament.DoesNotExist:
-            return JsonResponse({'status': 'error', 'message': 'Tournament does not exist'}, status=377)
-        except Exception as e:
-            return JsonResponse({'status': 'error', 'message': str(e)}, status=366)
-
-    return JsonResponse({'status': 'error', 'message': 'Only GET requests are allowed'}, status=355)
-# -----------------------------
-
-
 def get_match_info(request, *args, **kwargs):
     if request.method == 'GET':
         try:
@@ -928,3 +804,39 @@ def get_match_info(request, *args, **kwargs):
     return JsonResponse({
         "message": "Method not allowed"
     }, status=405)
+
+def list_joinable_tournaments(request, *args, **kwargs):
+    if request.method == 'GET':
+        try:
+            tournaments = Tournament.objects.filter(joinable=True, public=True)
+            tournament_list = [
+                {
+                    'id': tournament.id,
+                    'name': tournament.name,
+                    'players': list(tournament.players.values_list('id', flat=True)),
+                }
+                for tournament in tournaments
+            ]
+            return JsonResponse({'status': 'ok', 'data': tournament_list}, status=200)
+        except Tournament.DoesNotExist:
+            return JsonResponse({'status': 'error', 'message': 'Tournament not found'}, status=404)
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': 'An unexpected error occurred'}, status=500)
+
+def get_tournament_by_name(request, *args, **kwargs):
+    if request.method == 'GET':
+        try:
+            tournament = Tournament.objects.get(name=kwargs['name'])
+            # If tournament is not joinable, return error
+            if not tournament.joinable:
+                return JsonResponse({'status': 'error', 'message': 'Tournament is not joinable or full'}, status=400)
+            tournament_info = {
+                'id': tournament.id,
+                'name': tournament.name,
+                'players': list(tournament.players.values_list('id', flat=True)),
+            }
+            return JsonResponse({'status': 'ok', 'data': tournament_info}, status=200)
+        except Tournament.DoesNotExist:
+            return JsonResponse({'status': 'error', 'message': 'Tournament not found'}, status=404)
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': 'An unexpected error occurred'}, status=500)
