@@ -106,6 +106,7 @@ const updateMatchHistory = async () => {
     }
 };
 
+let isModalOpen = false;
 
 function searchUser() {
     // Get the entered username from the input field
@@ -117,8 +118,22 @@ function searchUser() {
         return;
     }
 
+    // Check if a modal is already open
+    if (isModalOpen) {
+        closeUserInfoPopup();
+    }
+
     // Call your API endpoint to fetch user stats based on the entered username
     fetchUserStats(username);
+}
+
+function closeUserInfoPopup() {
+    // Remove the modal container if it exists
+    const modalContainer = document.querySelector(".user-info-modal");
+    if (modalContainer) {
+        document.body.removeChild(modalContainer);
+        isModalOpen = false;
+    }
 }
 
 async function fetchUserStats(username) {
@@ -157,6 +172,8 @@ async function fetchUserStats(username) {
 function displayUserInfoPopup(userData, statsData, matchHistoryData) {
     console.log("Displaying user info and stats:", userData, statsData, matchHistoryData);
 
+    // Set isModalOpen to true
+    isModalOpen = true;
 
     // Create a modal container
     const modalContainer = document.createElement("div");
@@ -248,15 +265,15 @@ function displayUserInfoPopup(userData, statsData, matchHistoryData) {
     // Show the modal
     modalContainer.style.display = "block";
 
-    // Close the modal when clicking the close button or outside the modal
-    closeButton.onclick = () => {
-        document.body.removeChild(modalContainer);
-    };
+	// Close the modal when clicking the close button or outside the modal
+	closeButton.onclick = () => {
+		closeUserInfoPopup();
+	};
 
-    window.onclick = (event) => {
-        if (event.target === modalContainer) {
-            document.body.removeChild(modalContainer);
-        }
+	window.onclick = (event) => {
+		if (event.target === modalContainer) {
+			closeUserInfoPopup();
+		}
     };
 }
 
