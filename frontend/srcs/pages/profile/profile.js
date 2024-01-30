@@ -225,10 +225,12 @@ function displayUserInfoPopup(userData, statsData, matchHistoryData) {
 		console.error("Error: matchHistoryData is not an array");
 	}
 	
-    // Create close button
-    const closeButton = document.createElement("span");
-    closeButton.classList.add("close-modal");
-    closeButton.innerHTML = "&times;"; // Use the 'times' character (X)
+	// Create close button
+	const closeButton = document.createElement("span");
+	closeButton.classList.add("close-modal");
+	closeButton.innerHTML = "&times;"; // Use the 'times' character (X)
+	closeButton.style.fontSize = "24px"; // Set the font size
+	closeButton.style.padding = "10px"; // Set padding to provide more clickable area
 
     // Add elements to the modal container
     modalContainer.appendChild(closeButton);
