@@ -28,7 +28,6 @@ def info_me_view(request):
                 try:
                     _, token = authorization_header.split()
                     user_id = get_user_id_from_jwt_token(token)
-                    print(user_id)
                     user = CustomUser.objects.get(id=user_id)
                 except Exception as e:
                     return JsonResponse({'error': str(e)}, status=401)

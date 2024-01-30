@@ -22,19 +22,29 @@ from django.views.decorators.http import require_http_methods
 def tournament_create(request):
     if request.method == 'POST':
         try:
+
+            authorization_header = request.headers.get('Authorization')
+            if authorization_header:
+                try:
+                    _, token = authorization_header.split()
+                    user_id = get_user_id_from_jwt_token(token)
+                    user = CustomUser.objects.get(id=user_id)
+                except Exception as e:
+                    return JsonResponse({'error': str(e)}, status=401)
+
+            tournament_admin = user
+
             data = json.loads(request.body)
             name = data.get('name')
             type = data.get('type', '1v1')
             end_date = data.get('end_date', None)
             round = data.get('round', 0)
-            tournament_admin_id = data.get('tournament_admin')
 
-            tournament_admin = get_object_or_404(User, pk=tournament_admin_id)
 
             if not name:
                 return JsonResponse({"status": "error", "message": "The 'name' field is required"}, status=422)
 
-            players_ids = data.get('players', [])
+            players_ids = data.get('players', [user_id])
             valid_players = validate_users_existence(players_ids)
             if not valid_players[0]:
                 return valid_players[1]

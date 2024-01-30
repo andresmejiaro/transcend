@@ -1,13 +1,11 @@
 .tournament-div {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column; /* Optional: To stack elements vertically */
+  text-align: center;
   margin: 0;
   background: url("../../assets/imgs/tournament-background.svg") center center no-repeat;
   background-size: 80%; /* Set the background size to 80% of the viewport */
   background-attachment: fixed; /* Keeps the background fixed while scrolling */
   height: 100vh; /* Set height to cover the entire viewport */
+  margin-top: 8rem;
 }
 
 .tournaments-box {
@@ -17,4 +15,24 @@
 
 .user-in-tournament {
 	background-color: blue;
+}
+
+.btn.join-tournament-btn {
+  background: url('./srcs/assets/buttons/join-tournament.svg') no-repeat center center;
+  background-size: cover; /* or contain, depending on your preference */
+  width: 100px; /* Set the width of your button */
+  height: 50px; /* Set the height of your button */
+  position: relative;
+  border: none; /* Remove default button styling if needed */
+  cursor: pointer;
+}
+
+.button-join-tor-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-weight: bold;
+  z-index: 1;
 }

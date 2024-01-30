@@ -30,6 +30,8 @@ class TournamentConsumer(AsyncWebsocketConsumer):
         self.list_of_rounds = {}                # List of rounds during the entire tournament
         self.list_of_registered_players = {}    # List of registered players for the tournament
         self.match_monitor_task = None          # Task to monitor the matches
+        self.tournament_name = None             # Name of tournament
+
 
 # Define constants for commands
     START_ROUND = 'start_round'
@@ -104,6 +106,7 @@ class TournamentConsumer(AsyncWebsocketConsumer):
                     'player_id': self.client_id,
                     'registered_players': self.list_of_registered_players,
                     'tournament_admin_id': self.tournament_admin_id,
+                    'tournament_name': self.tou
                 }
             )
 
@@ -515,6 +518,7 @@ class TournamentConsumer(AsyncWebsocketConsumer):
             self.list_of_registered_players = list(self.tournament_object.players.all().values('id', 'username'))
             self.tournament_admin_id = self.tournament_object.tournament_admin.id if self.tournament_object.tournament_admin else None  
             self.current_round = self.tournament_object.round
+            self.tournament_name = self.tournament_object.name
             
             # The admin will always be in the list of registered players. We will accept new players till there are 4 players. At that point we close the tournament and kick out any new players.
             # If there are less than 4 players new clients will be added to the tournament object and we will save the tournament object.

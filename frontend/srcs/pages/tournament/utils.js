@@ -36,8 +36,8 @@ const changeParticipants = async (players) => {
     //     listParticipantsDiv.removeChild(listParticipantsDiv.firstChild);
     // }
 	
-	for (const id of players) {
-        const playerData = await getPlayerInfo(id);
+	for (const player of players) {
+        const playerData = await getPlayerInfo(player.id);
         let listItem = document.createElement("div");
         listItem.className = "list-group-item";
         listItem.textContent = playerData.username;

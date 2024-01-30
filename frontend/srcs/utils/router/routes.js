@@ -81,7 +81,7 @@ const urlRoutes = {
 		template: directory + "tournaments/create-tournament.html",
 		title: urlPageTitle + " - Tournaments",
 		description: "This is the create tournament page",
-		js: [{ file: directory + "tournaments/create-tor.js" }, { file: directory + "tournaments/join-tor.js" }],
+		js: [{ file: directory + "tournaments/tournaments.js" }, { file: directory + "tournaments/tournament-creation-handler.js" }, { file: directory + "tournaments/tournament-join-handler.js" },],
 		css: [directory + "tournaments/tournaments.css"],
 	},
 

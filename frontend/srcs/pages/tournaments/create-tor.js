@@ -1,8 +1,8 @@
-const tournamentsContainer = document.getElementById("tournaments");
-const matchesContainer = document.getElementById("matches");
-const usersContainer = document.getElementById("user");
+// const tournamentsContainer = document.getElementById("tournaments");
+// const matchesContainer = document.getElementById("matches");
+// const usersContainer = document.getElementById("user");
 
-const form = document.getElementById("createTornForm");
+// const form = document.getElementById("createTornForm");
 
 
 const createRequest = async () => {
@@ -372,12 +372,12 @@ const deleteUser = async (userId) => {
 
 // getListofUsers();
 // getListofMatches();
-getListofTournaments();
+// getListofTournaments();
 
-form.addEventListener("submit", function (event) {
-  event.preventDefault();
-  console.log("From submitted!");
-  let closeButton = document.querySelector("#exampleModal .btn-close");
-  closeButton.click();
-  createRequest();
-});
+// form.addEventListener("submit", function (event) {
+//   event.preventDefault();
+//   console.log("From submitted!");
+//   let closeButton = document.querySelector("#exampleModal .btn-close");
+//   closeButton.click();
+//   createRequest();
+// });

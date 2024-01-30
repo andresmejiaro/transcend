@@ -36,5 +36,5 @@ const getTournamentInfo = async (tournamentId) => {
   }
 };
 
-getTournamentInfo(tournamentId);
+// getTournamentInfo(tournamentId);
 joinTournamentLobby(tournamentId);

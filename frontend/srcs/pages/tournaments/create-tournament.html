@@ -1,4 +1,4 @@
-<div class="justify-content-center text-center pt-3 tournament-div">
+<div class="tournament-div">
   <h2>Tournaments</h2>
   <div class="col-md-6 mt-2 tournaments-box mx-auto">
     <div id="tournaments"></div>
@@ -21,10 +21,10 @@
     aria-labelledby="exampleModalLabel"
     aria-hidden="true"
   >
-    <div class="modal-dialog">
-      <div class="modal-content">
+    <div class="modal-dialog modal-dialog-centered">
+		<div class="modal-content" style="background: #191f38; border: 5px solid #fffeee">
         <div class="modal-header">
-          <h5 class="modal-title text-black" id="exampleModalLabel">
+          <h5 class="modal-title text-light" id="exampleModalLabel">
             Create a Tournament
           </h5>
           <button
@@ -43,24 +43,6 @@
                 class="form-control"
                 id="nameTournament"
                 placeholder="Enter a name"
-              />
-            </div>
-            <div class="form-group">
-              <label for="dateTournament">The date</label>
-              <input
-                type="datetime-local"
-                class="form-control"
-                id="dateTournament"
-                placeholder="Enter a date"
-              />
-            </div>
-            <div class="form-group">
-              <label for="endTournament">The end date</label>
-              <input
-                type="datetime-local"
-                class="form-control"
-                id="endTournament"
-                placeholder="Enter a date"
               />
             </div>
           </div>
