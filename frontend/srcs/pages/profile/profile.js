@@ -126,6 +126,7 @@ async function fetchUserStats(username) {
 		// Construct the API endpoint URLs
 		const infoUrl = `${window.DJANGO_API_BASE_URL}/api/user/info-user/${username}/`;
 		const statsUrl = `${window.DJANGO_API_BASE_URL}/api/user/stats/${username}/`;
+		const matchHistoryUrl = `${window.DJANGO_API_BASE_URL}/api/user/match/${username}/`;
 
         // Create the request options
         const options = {
@@ -140,11 +141,11 @@ async function fetchUserStats(username) {
         // Make the API calls
         const infoData = await makeRequest(true, infoUrl, options);
         const statsData = await makeRequest(true, statsUrl, options);
+		const matchHistoryData = await makeRequest(true, matchHistoryUrl, options);
 		
-
-        if (infoData.status === "ok" && statsData.status === "ok") {
+        if (infoData.status === "ok" && statsData.status === "ok" && matchHistoryData.status === "ok") {
             // User found, display the user info and stats
-            displayUserInfoPopup(infoData.user, statsData.data);
+            displayUserInfoPopup(infoData.user, statsData.data, matchHistoryData.data);
         } else {
             // User not found or error in fetching stats, show a message
             alert('User not found or error in fetching stats');
@@ -153,8 +154,8 @@ async function fetchUserStats(username) {
         console.error("Error:", error.message);
     }
 }
-function displayUserInfoPopup(userData, statsData) {
-    console.log("Displaying user info and stats:", userData, statsData);
+function displayUserInfoPopup(userData, statsData, matchHistoryData) {
+    console.log("Displaying user info and stats:", userData, statsData, matchHistoryData);
 
 
     // Create a modal container
@@ -201,6 +202,29 @@ function displayUserInfoPopup(userData, statsData) {
 	const tournamentsWonElement = document.createElement("p");
 	tournamentsWonElement.textContent = `Tournaments Won: ${statsData.tournaments_won}`;
 
+	// Create element to display match history similar to the one on the profile page
+	const matchHistoryList = document.createElement("ul");
+	matchHistoryList.classList.add("list-group");
+	matchHistoryList.style.height = "300px"; // Set a fixed height for the scrollable area
+	matchHistoryList.style.overflowY = "auto"; // Enable vertical scrolling
+
+	// Check if matchHistoryData is an array
+	if (Array.isArray(matchHistoryData)) {
+		// Limit the number of matches to 20
+		const limitedMatches = matchHistoryData.slice(0, 100);
+
+		// Populate match history list
+		limitedMatches.forEach(match => {
+			const listItem = document.createElement("li");
+			listItem.classList.add("list-group-item");
+			listItem.textContent = `Match ID: ${match.id}, Winner: ${match.winner}, Scores: ${match.player1_score} - ${match.player2_score}`;
+			matchHistoryList.appendChild(listItem);
+		}
+		);
+	} else {
+		console.error("Error: matchHistoryData is not an array");
+	}
+	
     // Create close button
     const closeButton = document.createElement("span");
     closeButton.classList.add("close-modal");
@@ -214,7 +238,8 @@ function displayUserInfoPopup(userData, statsData) {
     modalContainer.appendChild(winsElement);
 	modalContainer.appendChild(winRateElement);
 	modalContainer.appendChild(tournamentsWonElement);
-
+	modalContainer.appendChild(matchHistoryList);
+	
     // Add the modal container to the document body
     document.body.appendChild(modalContainer);
 
