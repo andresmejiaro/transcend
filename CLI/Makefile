@@ -7,7 +7,7 @@ VENV_ACTIVATE := $(VENV_NAME)/bin/activate
 
 run: venv
 	@mkdir -p db/files
-	@. $(VENV_ACTIVATE); python main.py
+	@. $(VENV_ACTIVATE); python main.py --login
 
 install: venv
 	@. $(VENV_ACTIVATE); pip install -r requirements.txt

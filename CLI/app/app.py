@@ -15,12 +15,10 @@ from app.class_views.splash_view import SplashView
 
 
 def set_frame_rate(frame_rate):
-    frame_delay = 1 / frame_rate
-    return frame_delay
+    return 1 / frame_rate
 
 def set_process_speed(process_speed):
-    process_delay = 1 / process_speed
-    return process_delay
+    return 1 / process_speed
 
 class CLIApp:
     def __init__(self, stdscr):
@@ -52,8 +50,6 @@ class CLIApp:
 
         except asyncio.CancelledError:
             log_message("Keyboard Task cancelled", level=logging.DEBUG)
-            pass
-
         except Exception as e:
             log_message(f"An error occurred in Keyboard Input Task: {e}", level=logging.ERROR)
             self.exit_status = 1

@@ -38,7 +38,7 @@ class HomePage(Widget):
         self.online_users = {}
 
         # Initialize the nav bar
-        self.nav_bar_items = ["Home", "Join Queue", "Settings", "Exit"]
+        self.nav_bar_items = ["Home", "Join Queue", "Exit"]
         self.nav_bar = NavBar(stdscr, self.nav_bar_items)
 
         # Input Box
@@ -76,21 +76,21 @@ class HomePage(Widget):
             # log_message(f"Keyboard Input from UI Controller: {keyboard_input}", level=logging.DEBUG)
             key_name = curses.keyname(keyboard_input).decode('utf-8')
 
-            if keyboard_input == curses.KEY_ENTER or keyboard_input == 10:
+            if keyboard_input in [curses.KEY_ENTER, 10]:
                 # Handle Enter key press
                 selected_item = self.nav_bar.get_selected_item()
 
                 if selected_item == "Exit":
                     log_message("Exiting", level=logging.DEBUG)
                     self.next_view = "exit"
-                    
+
                 elif selected_item == "Join Queue":
                     log_message("Joining Queue", level=logging.DEBUG)
                     asyncio.create_task(self.send_to_websocket_by_name("lobby", "join_queue", {'queue_name': 'global'}))
-                
+
                 elif selected_item == "Settings":
                     self.next_view = "settings"
-                    
+
                 elif selected_item == "Home":
                     if self.game_task:
                         self.game_task = None
@@ -98,19 +98,17 @@ class HomePage(Widget):
                         self.task_manager.stop_task_by_name(f'game_{self.match_id}')
 
             elif keyboard_input == curses.KEY_UP and self.game_task:
-                    if self.game_task:
-                        asyncio.create_task(self.send_to_websocket_by_name(f'game_{self.match_id}', "keyboard", {'command':'keyboard', 'key_status': 'on_press', 'key': 'up'}))
-                        asyncio.create_task(self.send_to_websocket_by_name(f'game_{self.match_id}', "keyboard", {'command':'keyboard', 'key_status': 'on_release', 'key': 'up'}))
-            
-            elif keyboard_input == curses.KEY_DOWN and self.game_task:
-                    if self.game_task:
-                        asyncio.create_task(self.send_to_websocket_by_name(f'game_{self.match_id}', "keyboard", {'command':'keyboard', 'key_status': 'on_press', 'key': 'down'}))
-                        asyncio.create_task(self.send_to_websocket_by_name(f'game_{self.match_id}', "keyboard", {'command':'keyboard', 'key_status': 'on_release', 'key': 'down'}))
+                asyncio.create_task(self.send_to_websocket_by_name(f'game_{self.match_id}', "keyboard", {'command':'keyboard', 'key_status': 'on_press', 'key': 'up'}))
+                asyncio.create_task(self.send_to_websocket_by_name(f'game_{self.match_id}', "keyboard", {'command':'keyboard', 'key_status': 'on_release', 'key': 'up'}))
 
-            elif keyboard_input == curses.KEY_BACKSPACE or keyboard_input == 127:
+            elif keyboard_input == curses.KEY_DOWN and self.game_task:
+                asyncio.create_task(self.send_to_websocket_by_name(f'game_{self.match_id}', "keyboard", {'command':'keyboard', 'key_status': 'on_press', 'key': 'down'}))
+                asyncio.create_task(self.send_to_websocket_by_name(f'game_{self.match_id}', "keyboard", {'command':'keyboard', 'key_status': 'on_release', 'key': 'down'}))
+
+            elif keyboard_input in [curses.KEY_BACKSPACE, 127]:
                 # Handle Backspace key press
                 self.input_string = self.input_string[:-1]
-                
+
             elif key_name.isprintable():
                 # Handle other key presses
                 self.input_string += key_name
@@ -270,6 +268,20 @@ class HomePage(Widget):
                         self.game_update = data.get("game_update")
                         self.left_score = data.get("left_score")
                         self.right_score = data.get("right_score")
+
+                    elif message_type == "match_finished":
+                        # log_message(f"Match Finished from game: {data}", level=logging.DEBUG)
+                        self.game_task = None
+                        self.game_update = None
+                        self.game_message = "Game Over!"
+                        asyncio.sleep(10)
+                        self.task_manager.stop_task_by_name(f'game_{self.match_id}')
+                        self.game_message = None
+                        self.left_score = 0
+                        self.right_score = 0
+                        self.match_id = None
+                        self.opponent_id = None
+                        self.opponent_username = None
 
         except Exception as e:
             log_message(f"Error in process_game_input: {e}", level=logging.ERROR)
