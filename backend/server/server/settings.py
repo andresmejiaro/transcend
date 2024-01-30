@@ -229,6 +229,8 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://127.0.0.1:3000",
     os.getenv('FRONTEND_URL'),
+    "https://c3r1s3.42madrid.com:3000",
+    "https://c3r1s5.42madrid.com:3000"
 ]
 
 CORS_ALLOW_CREDENTIALS = True
@@ -250,3 +252,8 @@ CORS_ALLOW_METHODS = [
     'POST',
     'PUT',
 ]
+
+
+CSRF_COOKIE_SAMESITE = 'None'
+SESSION_COOKIE_SAMESITE = 'None'
+CSRF_COOKIE_SECURE = True
