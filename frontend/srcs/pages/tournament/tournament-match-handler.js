@@ -1,6 +1,8 @@
+const torInfoContent = document.getElementById("tor-cont-one")
+const torMatchContent = document.getElementById("tor-cont-two");
 const joinTorMatch = async (match_id, player1Id, player2Id) => {
-	document.getElementById("tor-cont-one").style.display = "none";
-	document.getElementById("tor-cont-two").style.display = "block";
+	torInfoContent.style.display = "none";
+	torMatchContent.style.display = "block";
 	
 	const me = await getPlayerInfo(player1Id);
 	const other = await getPlayerInfo(player2Id);
@@ -13,3 +15,8 @@ const joinTorMatch = async (match_id, player1Id, player2Id) => {
 
 	await game.start();
 };
+
+const leaveTorMatch = () => {
+	torInfoContent.style.display = "block";
+	torMatchContent.style.display = "none";
+}

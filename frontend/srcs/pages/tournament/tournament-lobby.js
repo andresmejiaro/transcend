@@ -83,6 +83,8 @@ const handleTorData = async (data) => {
 		handleNewPlayer(data.data.registered_players);
 	} else if (data.type == "matchmaking_info") {
         await handleMatchmakingTor(data.data);
+    } else if (data.type == "matches_finished") {
+        leaveTorMatch();
     }
 
 
