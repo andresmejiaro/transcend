@@ -86,7 +86,7 @@ def login_user(username, password):
         print(f"Login successful. Welcome, {username}!")
         cli()  # Start the CLI
     else:
-        print(f"Server did not respond.")
+        print("Server did not respond.")
         sys.exit(1)
 
 
@@ -106,7 +106,7 @@ def register_user(username, password, full_name, email):
         print(f"Login successful. Welcome, {username}!")
         cli()  # Start the CLI
     else:
-        print(f"Server did not respond.")
+        print("Server did not respond.")
         sys.exit(1)
 
 
