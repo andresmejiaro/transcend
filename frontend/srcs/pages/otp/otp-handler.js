@@ -29,4 +29,26 @@ document.getElementById("removeGA").addEventListener("click", function (e) {
   removeGA();
 });
 
+const handleVerifiyingOTP = async () => {
+  const res = await verifyTOTP();
+  if (res ){
+    setTimeout(function () {
+      window.location.href = "play!";
+    }, 1000);
+  }
+}
 
+document.getElementById("verifyGAotp").addEventListener("click", function (e) {
+  e.preventDefault();
+  handleVerifiyingOTP();
+});
+
+const skipGaNavigate = async () => {
+  const targetUrl = "/play!";
+  await navigateTo(targetUrl);
+}
+
+document.getElementById("skipGAuth").addEventListener("click", function (e) {
+    e.preventDefault();
+    skipGaNavigate();
+});

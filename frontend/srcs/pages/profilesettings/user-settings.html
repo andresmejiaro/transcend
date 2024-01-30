@@ -50,9 +50,8 @@
             class="form-control input-signup"
             id="userSettingsUsername"
             placeholder="Enter your username"
-            required
-            readonly
           />
+          <div class="invalid-feedback" id="userSettingsUsernameHelp"></div>
         </div>
         <div class="form-group col-md-5 mb-3">
           <label for="userSettingsFullname" class="form-label white-text"
@@ -62,11 +61,9 @@
             type="text"
             class="form-control input-signup"
             id="userSettingsFullname"
-            placeholder="Enter your username"
-            required
-            readonly
+            placeholder="Enter your fullname"
           />
-          <div class="invalid-feedback" id="usernameHelp2"></div>
+          <div class="invalid-feedback" id="userSettingsFullnameHelp"></div>
         </div>
       </div>
       <div class="row justify-content-center">
@@ -78,13 +75,12 @@
             type="text"
             class="form-control input-signup"
             id="userSettingsEmail"
-            placeholder="Enter your username"
-            required
-            readonly
+            placeholder="Enter your email"
           />
-          <div class="invalid-feedback" id="usernameHelp1"></div>
+          <div class="invalid-feedback" id="userSettingsEmailHelp"></div>
         </div>
       </div>
+      <button class="btn btn-light" type="submit">Edit</button>
     </form>
 
     <div>
@@ -99,7 +95,7 @@
         <div class="mt-4 text-center" style="display: none" id="gaDiv">
           <img src="" alt="QR Code" id="qrcodeImage" style="width: 200px" />
           <p id="statusMessage"></p>
-          <form id="totpForm" onsubmit="verifyTOTP(); return false;">
+          <form id="totpForm">
             <div class="row justify-content-center">
               <div class="col-md-6">
                 <div>
@@ -108,10 +104,11 @@
                     class="input-signup"
                     id="totpCode"
                     placeholder="Enter TOTP code"
-                    onkeydown="if(event.key==='Enter'){verifyTOTP(); return false;}"
+                    onkeydown="if(event.key==='Enter'){handleVerifyTotpProfileSettings(); return false;}"
                   />
                 </div>
                 <div>
+                  <p id="statusMessage"></p>
                   <button
                     class="btn mt-5"
                     type="submit"
@@ -122,7 +119,7 @@
                 </div>
               </div>
             </div>
-          </form>
+          </form>          
         </div>
       </div>
       <div id="div-ga-active" style="display: none;">

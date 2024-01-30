@@ -60,7 +60,11 @@ const handleSendFriendRequest = async (data) => {
 };
 
 const handleReceivedFriendRequest = async (data) => {
-	showToast(data.type);
+	const user = await getPlayerInfo(data.data.client_id);
+	const title = user.username
+	const image = user.avatar_url;
+	const toastMessage = `${user.username} sent you a friend request`;
+	showToast(title, image, toastMessage);
 	await getPendingNotifications();
 };
 
@@ -85,7 +89,7 @@ const updateFriendStatusNow = async (data) => {
 };
 
 const handleMeAcceptedFriendRequest = async (data) => {
-	showToast(data.type);
+	showSimpleToast("successfully accepted friend request")
 	await updateFriendStatusNow(data);
 	handleCloseNotificationModal();
 	receivedFriendsNotifications = receivedFriendsNotifications.filter((user) => user.id !== data.data.client_id);
@@ -93,12 +97,16 @@ const handleMeAcceptedFriendRequest = async (data) => {
 };
 
 const handleAcceptedFriendRequest = async (data) => {
-	showToast(data.type);
+	const user = await getPlayerInfo(data.data.client_id);
+	const title = user.username
+	const image = user.avatar_url;
+	const toastMessage = `${user.username} accepted the friend request`;
+	showToast(title, image, toastMessage);
 	await updateFriendStatusNow(data);
 };
 
 const handleMeRejectedFriendRequest = async (data) => {
-	showToast(data.type);
+	showSimpleToast("successfully rejected friend request")
 	await updateFriendStatusNow(data);
 	handleCloseNotificationModal();
 	receivedFriendsNotifications = receivedFriendsNotifications.filter((user) => user.id !== data.data.client_id);
@@ -106,9 +114,28 @@ const handleMeRejectedFriendRequest = async (data) => {
 };
 
 const handleRejectedFriendRequest = async (data) => {
-	const userObj = await getPlayerInfo(data.data.client_id);
-	const toastMessage = `${userObj.username} rejected the friend request`;
-	showToast(toastMessage);
+	const user = await getPlayerInfo(data.data.client_id);
+	const title = user.username
+	const image = user.avatar_url;
+	const toastMessage = `${user.username} rejected the friend request`;
+	showToast(title, image, toastMessage);
 	invitationListFriendsData = invitationListFriendsData.filter((user) => user.id !== data.data.client_id);
 	listInvitationFriendsNav();
+};
+
+const handleMeRejectedMatchRequest = async (data) => {
+	showSimpleToast("successfully rejected match request")
+	handleCloseNotificationModal();
+	receivedFriendsNotifications = receivedFriendsNotifications.filter((user) => user.id !== data.data.client_id);
+	handleModalForNotifications();
+};
+
+const handleRejectedMatchRequest = async (data) => {
+	const user = await getPlayerInfo(data.data.client_id);
+	const title = user.username
+	const image = user.avatar_url;
+	const toastMessage = `${user.username} rejected the match request`;
+	showToast(title, image, toastMessage);
+	invitationListFriendsData = invitationListFriendsData.filter((user) => user.id !== data.data.client_id);
+	handleModalForNotifications();
 };

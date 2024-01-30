@@ -16,7 +16,7 @@ body {
 }
 
 .image-container img {
-  max-width: 100%;
+  width: 100%;
   max-height: 100%;
   object-fit: contain;
 }
@@ -26,98 +26,95 @@ body {
   top: 30%;
   left: 50%;
   transform: translate(-50%, -50%);
-  display: flex; /* Aligns children in a row */
-  justify-content: center; /* Center children horizontally */
-  align-items: center; /* Center children vertically */
+  display: flex;
+  justify-content: center; 
+  align-items: center; 
   z-index: 2;
-  gap: 170px; /* Increase the gap between buttons */
+  gap: 170px;
 }
 
 .button img {
-  max-width: 10vw; /* Ensure the image inside the button doesn't exceed the button's size */
+  max-width: 10vw;
   max-height: 100%;
-  width: auto; /* Set width to auto to maintain image aspect ratio */
-  height: auto; /* Set height to auto to maintain image aspect ratio */
+  width: auto;
+  height: auto;
 }
 
 .button {
-  width: fit-content; /* Set button width based on content (image) */
-  height: fit-content; /* Set button height based on content (image) */
+  width: fit-content;
+  height: fit-content;
 }
 
 .button:nth-child(2) img {
-  width: 8vw; /* Adjust the size of the middle button's image */
+  width: 8vw;
 }
 
-/* Media query for small screens */
 @media (max-height: 600px) {
   .button img {
-    width: 10vw; /* Adjust for small screens */
+    width: 10vw;
     gap: 100px;
   }
 }
 
-/* Media query for smaller screens */
 @media (max-height: 400px) {
   .button img {
-    width: 5vw; /* Adjust for very small screens */
+    width: 5vw;
     gap: 70px;
   }
 }
 
 @media (max-height: 290px) {
   .button img {
-    width: 3vw; /* Adjust for very small screens */
+    width: 3vw;
     gap: 50px;
   }
 }
 
 @media (max-height: 180px) {
   .button img {
-    width: 1vw; /* Adjust for very small screens */
+    width: 1vw;
     gap: 30px;
   }
 }
 
 @media (max-height: 100px) {
   .button img {
-    width: 0vw; /* Adjust for very small screens */
+    width: 0vw;
     gap: 10px;
   }
 }
 
 @media (max-height: 600px) {
   .button:nth-child(2) img {
-    width: 8vw; /* Adjust for small screens */
+    width: 8vw;
     gap: 100px;
   }
 }
 
-/* Media query for smaller screens */
 @media (max-height: 400px) {
   .button:nth-child(2) img {
-    width: 5vw; /* Adjust for very small screens */
+    width: 5vw;
     gap: 70px;
   }
 }
 
 @media (max-height: 290px) {
   .button:nth-child(2) img {
-    width: 3vw; /* Adjust for very small screens */
+    width: 3vw;
     gap: 50px;
   }
 }
 
 @media (max-height: 180px) {
   .button:nth-child(2) img {
-    width: 1vw; /* Adjust for very small screens */
+    width: 1vw;
     gap: 30px;
   }
 }
 
 @media (max-height: 100px) {
   .button:nth-child(2) img {
-    width: 0vw; /* Adjust for very small screens */
+    width: 0vw;
     gap: 10px;
   }
 }

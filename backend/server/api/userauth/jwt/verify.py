@@ -15,7 +15,6 @@ def verify(jwt, secret):
     encoded_header, encoded_payload, signature = jwt.split('.')
 
     if verify_signature(encoded_header, encoded_payload, signature, secret):
-        # Remove any padding characters ('=') and decode the base64 strings
         encoded_header += '=' * ((4 - len(encoded_header) % 4) % 4)
         encoded_payload += '=' * ((4 - len(encoded_payload) % 4) % 4)
 

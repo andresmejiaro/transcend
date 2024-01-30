@@ -81,10 +81,10 @@ def login_view(request):
             user = CustomUser.objects.get(username=username)
 			
             if user.check_password(password):
-                jwt_token = create_jwt_token(user.id, user.username)
                 if user.is_2fa_enabled and user.is_2fa_setup_complete:
-                    response = JsonResponse({'status': '2FA', 'message': 'Login successful', 'token': jwt_token, 'user_id': user.id})
+                    response = JsonResponse({'status': '2FA', 'message': 'Login successful', 'user_id': user.id})
                 else:
+                    jwt_token = create_jwt_token(user.id, user.username)
                     response = JsonResponse({'status': 'ok', 'message': 'Login successful', 'token': jwt_token})
                 response['Access-Control-Allow-Methods'] = 'POST, OPTIONS'
                 response['Access-Control-Allow-Headers'] = 'Content-Type'

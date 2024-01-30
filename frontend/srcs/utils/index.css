@@ -11,11 +11,12 @@ p {
 }
 
 body {
+	cursor: url('../assets/imgs/mouse.png'), auto;
 	margin: 0;
 	padding: 0;
 	font-family: 'Open Sans', sans-serif;
 	font-family: 'VT323', monospace;
-	background-color: black;
+	background-color: rgb(0, 0, 0);
 }
 
 body::-webkit-scrollbar {
@@ -82,7 +83,7 @@ p {
     height: 60px !important;
     border-radius: 68px !important;
     background: #15142E !important; /* Solid background color */
-    color: #FEFEE9 !important;
+    color: #ffffff !important;
     border: none !important;
     background-clip: padding-box !important;
     transition: border-color 0.2s ease-in-out !important;
@@ -91,18 +92,29 @@ p {
 }
 
 /* Custom styles for collapsed navbar and dropdown background color */
-@media (max-width: 991px) {
+@media (max-width: 1200px) {
 	.navbar-nav .nav-link {
-	  color: white !important; /* Set the color of the navigation links in the dropdown */
+		color: white !important; /* Set the color of the navigation links in the dropdown */
 	}
-  
+	.nav-item {
+		margin-right: 0px;
+	}
 	.navbar-nav .nav-link:hover,
 	.navbar-nav .nav-link:focus {
 	  background-color: black; /* Set the background color of the hovered/focused navigation links in the dropdown */
 	  color: white !important;
 	}
+	.nav-expanded {
+		margin-top: 12px;
+	}
 }
-  
+
+@media (min-width: 1200px) {
+	.nav-item {
+		margin-right: 80px;
+	}
+}
+
 
 .pm0 {
 	padding: 0!important;
@@ -117,17 +129,13 @@ p {
 	margin-top: 10rem;
 }
 
-.nav-item {
-    margin-right: 80px; /* Adjust the space between navigation items */
-}
-
 .nav-link {
     padding: 5px 10px; /* Add padding to make each link larger and more clickable */
 }
 
 .nav-link-logged-pong {
     padding: 5px 10px; /* Similar to .nav-link, adjust as needed */
-    color: #FEFEE9 !important;
+    color: #ffffff !important;
 }
 
 .accept-btn {
@@ -145,4 +153,58 @@ p {
 .accept-btn i,
 .reject-btn i {
     margin-right: 5px; /* Adjust as needed */
+}
+
+.match-history-container {
+    max-width: 500px;
+    max-height: 200px;
+    overflow-y: auto;
+    border: 1px solid #ffffff;
+    padding: 10px;
+    margin-bottom: 30px; /* Add margin at the bottom */
+}
+
+/* Hide scrollbar for Chrome, Safari, and Opera */
+.match-history-container::-webkit-scrollbar {
+    display: none;
+}
+
+/* Optional: Add scrollbar styles for Firefox and Edge if needed */
+.match-history-container {
+    scrollbar-width: thin;
+    scrollbar-color: transparent transparent; /* scrollbar color and track color */
+}
+
+.user-info-modal {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #545753;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+	color: #000; /* Set text color to black */
+	border-radius: 5%;
+	border-color: aqua;
+	border: 1cm;
+}
+
+.close-modal {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Adjust the opacity as needed */
+    z-index: 1000; /* Ensure the overlay is on top of other elements */
+    display: none; /* Initially hide the overlay */
 }

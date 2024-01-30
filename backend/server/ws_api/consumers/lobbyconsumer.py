@@ -227,6 +227,12 @@ class LobbyConsumer(AsyncWebsocketConsumer):
             await self.channel_layer.group_discard(self.lobby_name, self.channel_name)
             await self.channel_layer.group_discard(self.client_id, self.channel_name)
 
+
+            for queue in LobbyConsumer.queue.keys():
+                if self.client_id in LobbyConsumer.queue[queue]:
+                    print(f"Leaving queue: {queue}")
+                    LobbyConsumer.queue[queue].remove(self.client_id)
+
             # Send info of group status every time a client leaves
             await self.announce_departure()
             self.close()
@@ -551,9 +557,27 @@ class LobbyConsumer(AsyncWebsocketConsumer):
             print(f'Exception in send_friend_request {e}')
             await self.disconnect(1000)
 
+    @database_sync_to_async
+    def check_if_friend_request_exists(self, user_id):
+        from api.userauth.models import CustomUser
+        try:
+            user = CustomUser.objects.get(pk=int(self.client_id))
+        except Exception:
+            return False
+        
+        friend_requests = user.list_of_received_invites
+        ids = [int(req.get('invite_id')) for req in friend_requests]
+        return int(user_id) in ids
+        
+
     async def accept_friend_request(self, user_id):
         try:
             # Add the current user as a friend for the other person
+
+            if not await self.check_if_friend_request_exists(user_id):
+                print("No such friend request")
+                return
+            
             message = await self.add_friendship(pk=user_id)
             print(message)
 
