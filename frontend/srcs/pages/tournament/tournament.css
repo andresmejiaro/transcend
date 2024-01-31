@@ -1,0 +1,24 @@
+#start-round-btn:disabled {
+	background-color: #cccccc;
+	/* Use the desired shade of grey */
+	color: #666666;
+	/* Use a contrasting text color */
+	cursor: not-allowed;
+	/* Change the cursor to indicate it's disabled */
+}
+
+.tournament-round {
+	border: 1px solid black;
+	padding: 5px;
+	margin: 5px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+
+.match {
+	border: 1px solid black;
+	padding: 5px;
+	margin: auto 5px;
+}

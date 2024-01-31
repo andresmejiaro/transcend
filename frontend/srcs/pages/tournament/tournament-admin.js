@@ -6,11 +6,21 @@ startNextRound.addEventListener("click", function () {
 	});
 });
 
-function showTournamentAdmin(data) {
+function showTournamentAdmin(canStartMatches, data) {
 	let tournamentAdminDiv = document.getElementById("tournament-admin");
 	if (tournamentAdminDiv) {
 		tournamentAdminDiv.classList.remove("d-none");
 		tournamentAdminDiv.classList.add("d-block");
+	}
+
+	if (!canStartMatches && !data.winner) {
+		document.getElementById("status-admin").innerHTML = "Waiting to be 4 players to be able to start the tournament";
+		startNextRound.disabled = true;
+	}
+
+	if (canStartMatches) {
+		document.getElementById("status-admin").innerHTML = "On your click, tournament starts";
+		startNextRound.disabled = false;
 	}
 
 	if (data.winner) {

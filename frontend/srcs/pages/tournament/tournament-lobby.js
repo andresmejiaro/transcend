@@ -32,14 +32,14 @@ const connectWebSocketTor = async () => {
 	});
 };
 
-const sendTorSocketMessage = async(messageType, payload) => {
-	const sleep = (duration) => new Promise(resolve => setTimeout(resolve, duration));
+const sendTorSocketMessage = async (messageType, payload) => {
+	const sleep = (duration) => new Promise((resolve) => setTimeout(resolve, duration));
 
-    // Loop until the WebSocket is open
-    while (!torSocket || torSocket.readyState !== WebSocket.OPEN) {
-        // Wait for a short period before checking again
-        await sleep(50);
-    }
+	// Loop until the WebSocket is open
+	while (!torSocket || torSocket.readyState !== WebSocket.OPEN) {
+		// Wait for a short period before checking again
+		await sleep(50);
+	}
 
 	return new Promise((resolve, reject) => {
 		if (torSocket && torSocket.readyState === WebSocket.OPEN) {
@@ -73,29 +73,44 @@ const getInfo = async (tournamentId) => {
 };
 
 const handleTorData = async (data) => {
+	let canStartMatches = 0;
+
 	console.log("Tor WebSocket message received:", data);
-	if (data.type == "new_player") 
-        handleNewPlayer(data.data.players);
+
+	if (data.type == "new_player") handleNewPlayer(data.data.players);
 	else if (data.type == "player_joined") {
 		handleNewPlayer(data.data.registered_players);
 		changeTournamentName(data.data.tournament_name);
 	} else if (data.type == "tournament_ready") {
+		canStartMatches = 1;
 		handleNewPlayer(data.data.registered_players);
 	} else if (data.type == "matchmaking_info") {
-        await handleMatchmakingTor(data.data);
-    } else if (data.type == "matches_finished") {
-        leaveTorMatch();
-    }
+		await handleMatchmakingTor(data.data);
+	} else if (data.type == "matches_finished") {
+		leaveTorMatch();
+		const playersss = data.data.registered_players;
+		console.log(playersss)
+		console.log(playersss.length)
+		if (playersss.length >= 2)
+			showSecondTorTable(playersss);
+		else
+			showlastTorTable(playersss);
+	}
+	else if (data.type == "match_finished") {
+		console.log(data)
+	}
 
-
-    const userId = await getUserId();
-	if (data.data.tournament_admin_id == userId) {
-		showTournamentAdmin(data);
+	const userId = await getUserId();
+	if (data?.data?.tournament_admin_id) {
+		if (data.data.tournament_admin_id == userId) {
+			showTournamentAdmin(canStartMatches, data);
+		} else {
+			changeTournamentStatus(null, canStartMatches);
+		}
 	}
 };
 
 const handleNewPlayer = (data) => {
-	console.log(data);
 	changeParticipants(data);
 };
 

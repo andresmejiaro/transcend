@@ -3,7 +3,6 @@ const matchesContainer = document.getElementById("matches");
 const usersContainer = document.getElementById("user");
 
 const getListofTournaments = async () => {
-	console.log("HEHEHE")
 	try {
 		const url = `${window.DJANGO_API_BASE_URL}/api/tournament/`;
 		const options = {
@@ -16,7 +15,6 @@ const getListofTournaments = async () => {
 		};
 
 		const data = await makeRequest(true, url, options, "");
-		console.log(data);
 		if (data.data.length === 0) {
 			const tournamentElement = document.createElement("div");
 			tournamentElement.innerHTML = `<p>There are currently no tournaments</p>`;
@@ -34,8 +32,7 @@ const getListofTournaments = async () => {
 					tournamentElement.innerHTML = `
 			  <div class="d-flex justify-content-between align-items-center py-3 m-1">
 				<div class="d-flex align-items-center">
-				  <i class="bi bi-person me-2"></i>
-				  <p class="m-0">${tournament.name}</p>
+				  <p class="m-0 ms-3">${tournament.name}</p>
 				</div>
 				<div class="d-flex align-items-center">
 				  <p style="margin-bottom: 0 !important; margin-right: 8px;">${tournament.players.length}</p>
@@ -59,8 +56,7 @@ const getListofTournaments = async () => {
 					tournamentElement.innerHTML = `
 			  <div class="d-flex justify-content-between align-items-center py-3 m-1">
 				<div class="d-flex align-items-center">
-				  <i class="bi bi-person me-2"></i>
-				  <p class="m-0">${tournament.name}</p>
+				  <p class="m-0 ms-3">${tournament.name}</p>
 				</div>
 				<div class="d-flex align-items-center">
 				  <p style="margin-bottom: 0 !important; margin-right: 8px;">${tournament.players.length}</p>
@@ -84,12 +80,12 @@ const getListofTournaments = async () => {
 getListofTournaments();
 
 const addEventListenerButtons = () => {
-	let buttons = document.querySelectorAll('.join-tournament-btn');
-	buttons.forEach(function(button) {
-	  button.addEventListener('click', function() {
-		var tournamentId = this.getAttribute('data-tournament-id');
-		// console.log("CLICK ", tournamentId)
-		handleJoin(tournamentId);
-	  });
+	let buttons = document.querySelectorAll(".join-tournament-btn");
+	buttons.forEach(function (button) {
+		button.addEventListener("click", function () {
+			var tournamentId = this.getAttribute("data-tournament-id");
+			// console.log("CLICK ", tournamentId)
+			handleJoin(tournamentId);
+		});
 	});
-  }
+};
