@@ -112,3 +112,8 @@ const showlastTorTable = async (players) => {
 
 	tournamentRoundDiv.appendChild(matchDiv);
 };
+
+const handleTournamentFinished = (playerss) => {
+  const player = playerss[0];
+  alert(player.usename, "WON");
+};

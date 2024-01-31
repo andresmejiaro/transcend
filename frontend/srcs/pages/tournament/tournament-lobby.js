@@ -98,6 +98,8 @@ const handleTorData = async (data) => {
 	}
 	else if (data.type == "match_finished") {
 		console.log(data)
+	} else if (data.type == "tournament_ended") {
+		handleTournamentFinished(data.data.tournament_winner);
 	}
 
 	const userId = await getUserId();
