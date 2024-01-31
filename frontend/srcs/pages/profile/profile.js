@@ -203,12 +203,12 @@ function displayUserInfoPopup(userData, statsData, matchHistoryData) {
         };
         img.onerror = function () {
             // Image does not exist, set a default avatar or leave it blank
-            avatarImageElement.src = "http://localhost:3000/srcs/assets/imgs/default-avatar.jpeg"; // You can replace this with the path to your default avatar
+            avatarImageElement.src = `${window.DJANGO_API_BASE_URL}/srcs/assets/imgs/default-avatar.jpeg`; // You can replace this with the path to your default avatar
         };
         img.src = `${window.DJANGO_API_BASE_URL}${userData.avatar_url}`;
     } else {
         // User does not have an avatar URL, set a default avatar or leave it blank
-        avatarImageElement.src = "http://localhost:3000/srcs/assets/imgs/default-avatar.jpeg"; // You can replace this with the path to your default avatar
+        avatarImageElement.src = `${window.DJANGO_API_BASE_URL}/srcs/assets/imgs/default-avatar.jpeg`; // You can replace this with the path to your default avatar
     }
 
     // Create elements to display user stats
