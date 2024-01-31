@@ -98,15 +98,13 @@ const showlastTorTable = async (players) => {
 	const tournamentRoundDiv = document.getElementById("tournament-winner-round");
 	tournamentRoundDiv.innerHTML = "";
   const player = players[0];
-	const player1Data = await getPlayerInfo(player.id);
 
 	const matchDiv = document.createElement("div");
 	matchDiv.className = "match";
 
 	const player1Div = document.createElement("div");
 	player1Div.className = "player";
-	player1Div.id = `player${i + 1}tor`;
-	player1Div.textContent = player1Data.username;
+	player1Div.textContent = player.username;
 
 	matchDiv.appendChild(player1Div);
 

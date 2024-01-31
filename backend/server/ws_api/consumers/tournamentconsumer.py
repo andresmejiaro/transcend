@@ -96,6 +96,7 @@ class TournamentConsumer(AsyncWebsocketConsumer):
                     'tournament_admin_id': self.tournament_admin_id,
                 }
             )
+            await self.receive(json.dumps({'command': self.START_ROUND}))
         else:
             TournamentConsumer.tournament_ready[self.tournament_id] = False
             await self.broadcast_to_group(
@@ -172,7 +173,7 @@ class TournamentConsumer(AsyncWebsocketConsumer):
             command = data.get('command')
 
             if command == self.START_ROUND:
-                if self.client_id == str(self.tournament_admin_id) and TournamentConsumer.tournament_ready[self.tournament_id] and self.tournament_ended == False:
+                if TournamentConsumer.tournament_ready[self.tournament_id] and self.tournament_ended == False:
                     await self.matchmaking_logic()
                     TournamentConsumer.tournament_ready[self.tournament_id] = False
                     if not self.tournament_ended:
