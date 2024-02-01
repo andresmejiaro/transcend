@@ -186,12 +186,13 @@ function displayUserInfoPopup(userData, statsData, matchHistoryData) {
 
     // Create elements to display user info
     const usernameElement = document.createElement("p");
-    usernameElement.textContent = `Username: ${userData.username}`;
+	usernameElement.style.textAlign = "center";
+    usernameElement.textContent = `${userData.username}`;
 
     // Create avatar image element
     const avatarImageElement = document.createElement("img");
     avatarImageElement.alt = "User Avatar";
-    avatarImageElement.style.width = "350px";
+    avatarImageElement.style.width = "300px";
 
     // Check if the user has an avatar URL
     if (userData.avatar_url) {
@@ -227,8 +228,9 @@ function displayUserInfoPopup(userData, statsData, matchHistoryData) {
 	// Create element to display match history similar to the one on the profile page
 	const matchHistoryList = document.createElement("ul");
 	matchHistoryList.classList.add("list-group");
-	matchHistoryList.style.height = "300px"; // Set a fixed height for the scrollable area
+	matchHistoryList.style.height = "auto"; // Set a fixed height for the scrollable area
 	matchHistoryList.style.overflowY = "auto"; // Enable vertical scrolling
+
 
 	// Check if matchHistoryData is an array
 	if (Array.isArray(matchHistoryData)) {
@@ -253,6 +255,7 @@ function displayUserInfoPopup(userData, statsData, matchHistoryData) {
 	closeButton.classList.add("close-modal");
 	closeButton.innerHTML = "&times;"; // Use the 'times' character (X)
 	closeButton.style.fontSize = "24px"; // Set the font size
+	closeButton.style.color = "red";
 	closeButton.style.padding = "10px"; // Set padding to provide more clickable area
 
     // Add elements to the modal container
