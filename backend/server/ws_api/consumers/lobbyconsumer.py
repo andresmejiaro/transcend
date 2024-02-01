@@ -192,18 +192,19 @@ class LobbyConsumer(AsyncWebsocketConsumer):
                 await self.close()
 
             # Check if the user exists and add it to the list of online users/admins
-            if await self.does_not_exist(self.client_id):
-                await self.message_another_player(
-                    self.client_id,
-                    'duplicate_connection',
-                    {
-                        'time': timezone.now().isoformat(),
-                        'client_id': self.client_id,
-                        'message': 'Duplicate connection',
-                    }
-                )
-                await self.close()
-                return
+            # if await self.does_not_exist(self.client_id):
+            #     # print("WTF IS GOING ON")
+            #     await self.message_another_player(
+            #         self.client_id,
+            #         'duplicate_connection',
+            #         {
+            #             'time': timezone.now().isoformat(),
+            #             'client_id': self.client_id,
+            #             'message': 'Duplicate connection',
+            #         }
+            #     )
+            #     await self.close()
+            #     return
 
             await self.accept()
 

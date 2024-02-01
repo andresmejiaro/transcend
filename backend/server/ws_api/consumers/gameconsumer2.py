@@ -119,6 +119,9 @@ class PongConsumer(AsyncWebsocketConsumer):
         from api.tournament.models import Match
         from api.userauth.models import CustomUser as User
 
+        if PongConsumer.finished.get(self.match_id) == True:
+            return
+
         try:
             match_object = Match.objects.select_for_update().get(id=self.match_id)
             match_object.player1_score = PongConsumer.shared_game[self.match_id]._leftPlayer.getScore()
@@ -129,6 +132,7 @@ class PongConsumer(AsyncWebsocketConsumer):
 
             print(f"Player 1 Score: {match_object.player1_score}, Player 2 Score: {match_object.player2_score}")
             print(f"DISCONNECTED: {self.client_id}, bool: {disconnect}")
+            print(f'Match finished, scores: {match_object.player1_score}')
             if disconnect:
                 # winner = self.player_1_id if int(self.client_id) == self.player_2_id else self.player_2_id
                  
@@ -159,12 +163,21 @@ class PongConsumer(AsyncWebsocketConsumer):
 
             else:
                 # Determine the winner based on the score
-                match_object.winner = User.objects.get(id=player1_id) if match_object.player1_score > match_object.player2_score else User.objects.get(id=player2_id)
+                print("here")
+                # match_object.winner = User.objects.get(id=player1_id) if match_object.player1_score > match_object.player2_score else User.objects.get(id=player2_id)
+                if match_object.player1_score > match_object.player2_score:
+                    match_object.winner = User.objects.get(id=int(player1_id))
+                else:
+                    match_object.winner = User.objects.get(id=int(player2_id))
                 print(f"Winner: {match_object.winner}, Loser ID: {match_object.loser()}")
 
             match_object.date_played = timezone.now()
             match_object.active = False
             match_object.save()
+
+            PongConsumer.finished[self.match_id] = True
+
+            print(f'WINNER: {match_object.winner}')
 
             if match_object.winner:
                 winner_id = match_object.winner.id
@@ -185,7 +198,7 @@ class PongConsumer(AsyncWebsocketConsumer):
                 loser_object.save()
                 
                 print(f"Match finalized. Winner ID: {winner_id}, Loser ID: {loser_id}, Winner ELO: {winner_object.ELO}, Loser ELO: {loser_object.ELO}")
-                
+                match_object.save()
                 # Send the match results back to the client
                 return {
                     "winner_id": winner_id,
@@ -228,16 +241,21 @@ class PongConsumer(AsyncWebsocketConsumer):
         return
 
     async def disconnect(self, close_code=1000):
-        await self.broadcast_to_group(f"{self.match_id}", "message", {
-            "message": "User Disconnected",
-            "client_id": self.client_id,
-        })
+        # await self.broadcast_to_group(f"{self.match_id}", "message", {
+        #     "message": "User Disconnected",
+        #     "client_id": self.client_id,
+        # })
 
         if self.client_id in PongConsumer.list_of_players[self.match_id]:
             del PongConsumer.list_of_players[self.match_id][self.client_id]
 
         PongConsumer.run_game[self.match_id] = False
-        await self.broadcast_to_group(str(self.match_id), "match_finished", await self.save_models(disconnect=True))
+        try:
+            res = await self.save_models(disconnect=True)
+            if res:
+                await self.broadcast_to_group(str(self.match_id), "match_finished", res)
+        except:
+            pass
         await self.discard_channels()
 
         await self.close()
@@ -376,8 +394,8 @@ class PongConsumer(AsyncWebsocketConsumer):
 
                 if left_score >= self.scorelimit or right_score >= self.scorelimit:
                     PongConsumer.run_game[self.match_id] = False
-                    PongConsumer.finished[self.match_id] = True
                     await self.broadcast_to_group(str(self.match_id), "match_finished", await self.save_models())
+                    PongConsumer.finished[self.match_id] = True
                     await asyncio.sleep(0.5)
                     await self.close()
                     return
