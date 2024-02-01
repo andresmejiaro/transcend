@@ -1,6 +1,6 @@
 const changeTournamentName = async (name) => {
 	const tournamentName = document.getElementById("tournament-name");
-	tournamentName.innerHTML = `Name: ${name}`;
+	tournamentName.innerHTML = `${name}`;
 };
 
 const changeTournamentRound = (round) => {
@@ -22,7 +22,7 @@ const changeTournamentStatus = (winner, canStartMatches) => {
 	} else {
 		const tournamentStatusText = document.getElementById("tournament-status-t");
 		if (canStartMatches) tournamentStatusText.innerHTML = `waiting to start next round..`;
-		else tournamentStatusText.innerHTML = `waiting to be 4 players..`;
+		else tournamentStatusText.innerHTML = `Waiting for players..`;
 	}
 };
 

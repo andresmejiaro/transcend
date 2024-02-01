@@ -1,7 +1,7 @@
 #start-round-btn:disabled {
 	background-color: #cccccc;
 	/* Use the desired shade of grey */
-	color: #666666;
+	color: white;
 	/* Use a contrasting text color */
 	cursor: not-allowed;
 	/* Change the cursor to indicate it's disabled */
@@ -21,4 +21,23 @@
 	border: 1px solid black;
 	padding: 5px;
 	margin: auto 5px;
+}
+
+
+#tournament-name {
+    text-align: center;
+}
+
+.card{
+	text-align: center;
+	background-color: #15142E;
+	color: white;
+}
+
+#tournament-admin{
+	text-align: center;
+}
+
+#tournament-status{
+	text-align: center;
 }

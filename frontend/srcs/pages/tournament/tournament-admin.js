@@ -14,7 +14,7 @@ function showTournamentAdmin(canStartMatches, data) {
 	}
 
 	if (!canStartMatches && !data.winner) {
-		document.getElementById("status-admin").innerHTML = "Waiting to be 4 players to be able to start the tournament";
+		document.getElementById("status-admin").innerHTML = "Waiting for players...";
 		startNextRound.disabled = true;
 	}
 
