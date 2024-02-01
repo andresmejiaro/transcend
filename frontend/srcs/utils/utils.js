@@ -149,7 +149,7 @@ const showToast = (title, image, body) => {
 
 	if (image) {
 		const toastImage = document.getElementById("toast-image-top");
-		image = `http://localhost:8000${image}`;
+		image = `${window.DJANGO_API_BASE_URL}${image}`;
 		toastImage.src = image;
 	}
 
