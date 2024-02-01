@@ -17,6 +17,7 @@ from django.views.decorators.csrf import requires_csrf_token
 from api.jwt_utils import get_user_id_from_jwt_token
 from .utils.validate_update import UserUpdateValidator
 from django.shortcuts import get_object_or_404
+from api.userauth.models import CustomUser
 
 
 @requires_csrf_token
@@ -218,7 +219,7 @@ def user_friends_list(request):
 
 
 def update_user_information(request, *args, **kwargs):
-    if request.method == 'PUT':
+    if request.method != 'PUT':
         return JsonResponse({"message": "Not allowed"}, status=405)
     authorization_header = request.headers.get('Authorization')
     if not authorization_header:
@@ -241,7 +242,7 @@ def update_user_information(request, *args, **kwargs):
 
     username = data.get("username")
     email = data.get("email")
-    full_name = data.get("full_name")
+    full_name = data.get("fullname")
 
     if username:
         user.username = username
