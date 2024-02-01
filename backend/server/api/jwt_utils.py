@@ -30,7 +30,7 @@ def validate_and_get_user_from_token(token):
         
         from api.userauth.models import CustomUser
         try:
-            user = CustomUser.objects.get(id=user_id, username=username)
+            user = CustomUser.objects.get(id=user_id)
         except CustomUser.DoesNotExist:
             raise Exception('CustomUser not found')
         

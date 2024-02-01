@@ -1,5 +1,5 @@
-window.DJANGO_API_BASE_URL = "http://localhost:8000";
-window.DAPHNE_BASE_URL = "ws://localhost:8001";
+window.DJANGO_API_BASE_URL = "https://c2r18s1.42madrid.com:3000";
+window.DAPHNE_BASE_URL = "wss://c2r18s1.42madrid.com:3000";
 
 function getCSRFCookie() {
 	let name = "csrftoken" + "=";
@@ -149,7 +149,7 @@ const showToast = (title, image, body) => {
 
 	if (image) {
 		const toastImage = document.getElementById("toast-image-top");
-		image = `http://localhost:8000${image}`;
+		image = `${window.DJANGO_API_BASE_URL}${image}`;
 		toastImage.src = image;
 	}
 
