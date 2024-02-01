@@ -19,7 +19,7 @@ function showTournamentAdmin(canStartMatches, data) {
 	}
 
 	if (canStartMatches) {
-		document.getElementById("status-admin").innerHTML = "On your click, tournament starts";
+		document.getElementById("status-admin").innerHTML = "Starting tournament, wait!";
 		startNextRound.disabled = false;
 	}
 

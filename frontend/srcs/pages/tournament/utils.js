@@ -1,6 +1,7 @@
 const changeTournamentName = async (name) => {
 	const tournamentName = document.getElementById("tournament-name");
-	tournamentName.innerHTML = `${name}`;
+	const displayName = name.length > 17 ? name.substring(0, 17) + "..." : name;
+	tournamentName.innerHTML = `${displayName}`;
 };
 
 const changeTournamentRound = (round) => {
@@ -111,7 +112,7 @@ const showlastTorTable = async (players) => {
 	tournamentRoundDiv.appendChild(matchDiv);
 };
 
-const handleTournamentFinished = (playerss) => {
-  const player = playerss[0];
-  alert(player.usename, "WON");
+const handleTournamentFinished = (player_name) => {
+  const namess = player_name[0].username;
+  showAlertDanger(namess + "WON!");
 };
