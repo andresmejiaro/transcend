@@ -55,7 +55,7 @@ services:
     container_name: 'nginx'
     build:
       context: ./
-      dockerfile: nginx/Dockerfile
+      dockerfile: nginx/ssl-Dockerfile
     volumes:
       - ./frontend:/usr/share/nginx/html
     ports:
