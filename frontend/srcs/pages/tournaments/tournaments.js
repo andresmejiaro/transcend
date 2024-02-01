@@ -16,8 +16,6 @@ const getListofTournaments = async () => {
 
 		const data = await makeRequest(true, url, options, "");
 		if (data.data.length === 0) {
-			const tournamentElement = document.createElement("div");
-			tournamentElement.innerHTML = `<p>Be the first to create a tournament!</p>`;
 			tournamentsContainer.appendChild(tournamentElement);
 		} else {
 			tournamentsContainer.innerHTML = "";
@@ -32,7 +30,7 @@ const getListofTournaments = async () => {
 					tournamentElement.innerHTML = `
 			  <div class="d-flex justify-content-between align-items-center py-3 m-1">
 				<div class="d-flex align-items-center">
-				  <p class="m-0 ms-3">${tournament.name}</p>
+				<p class="m-0 ms-3">${tournament.name.length > 20 ? tournament.name.slice(0, 15) + '...' : tournament.name}</p>
 				</div>
 				<div class="d-flex align-items-center">
 				  <p style="margin-bottom: 0 !important; margin-right: 8px;">${tournament.players.length}</p>
@@ -56,7 +54,7 @@ const getListofTournaments = async () => {
 					tournamentElement.innerHTML = `
 			  <div class="d-flex justify-content-between align-items-center py-3 m-1">
 				<div class="d-flex align-items-center">
-				  <p class="m-0 ms-3">${tournament.name}</p>
+				  <p class="m-0 ms-3">${tournament.name.length > 20 ? tournament.name.slice(0, 20) + '...' : tournament.name}</p>
 				</div>
 				<div class="d-flex align-items-center">
 				  <p style="margin-bottom: 0 !important; margin-right: 8px;">${tournament.players.length}</p>
