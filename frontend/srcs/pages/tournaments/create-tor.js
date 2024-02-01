@@ -68,7 +68,7 @@ const getListofTournaments = async () => {
 
     if (data.data.length === 0) {
       const tournamentElement = document.createElement("div");
-      tournamentElement.innerHTML = `<p>There are currently no tournaments</p>`;
+      tournamentElement.innerHTML = `<p>Be the first to create a tournament!</p>`;
       tournamentsContainer.appendChild(tournamentElement);
     } else {
       // Update the content of the 'tournaments' div with the list of tournaments

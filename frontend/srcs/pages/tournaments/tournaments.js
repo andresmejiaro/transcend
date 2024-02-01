@@ -17,7 +17,7 @@ const getListofTournaments = async () => {
 		const data = await makeRequest(true, url, options, "");
 		if (data.data.length === 0) {
 			const tournamentElement = document.createElement("div");
-			tournamentElement.innerHTML = `<p>There are currently no tournaments</p>`;
+			tournamentElement.innerHTML = `<p>Be the first to create a tournament!</p>`;
 			tournamentsContainer.appendChild(tournamentElement);
 		} else {
 			tournamentsContainer.innerHTML = "";
@@ -38,7 +38,7 @@ const getListofTournaments = async () => {
 				  <p style="margin-bottom: 0 !important; margin-right: 8px;">${tournament.players.length}</p>
 				  <img src="./srcs/assets/imgs/adri.svg" style="margin-right: 8px;" />
 				  <button type="button" class="btn join-tournament-btn" data-tournament-id="${tournament.id}">
-					<img src="./srcs/assets/buttons/join-tournament.svg" alt="" class="img-fluid">
+				  <span class="button-join-tor-text">ENTER</span>
 				  </button> 
 				</div>        
 			  </div>
