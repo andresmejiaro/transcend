@@ -128,9 +128,14 @@ class PongConsumer(AsyncWebsocketConsumer):
             player2_id = self.player_2_id
 
             print(f"Player 1 Score: {match_object.player1_score}, Player 2 Score: {match_object.player2_score}")
-
+            print(f"DISCONNECTED: {self.client_id}, bool: {disconnect}")
             if disconnect:
-                winner = self.player_1_id if int(self.client_id) == self.player_2_id else self.player_2_id
+                # winner = self.player_1_id if int(self.client_id) == self.player_2_id else self.player_2_id
+                 
+                if int(self.client_id) == int(self.player_1_id):
+                    winner = int(self.player_2_id)
+                else:
+                    winner = int(self.player_1_id)
                 match_object.winner = User.objects.get(id=winner)
             elif match_object.player1_score == match_object.player2_score:
                 # Handle tie by comparing ELO scores
