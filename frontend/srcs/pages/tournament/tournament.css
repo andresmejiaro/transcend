@@ -19,7 +19,7 @@
 }
 
 .player {
-    font-size: 2em; /* Tamaño de fuente más grande para los nombres de usuario */
+    font-size: 1.5em; /* Tamaño de fuente más grande para los nombres de usuario */
     padding: 20px; /* Añade un relleno alrededor de los nombres de usuario */
     border: 2px solid rgb(255, 255, 255); /* Añade un borde alrededor de los nombres de usuario */
     border-radius: 5px; /* Redondea las esquinas del borde */

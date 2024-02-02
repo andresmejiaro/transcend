@@ -110,7 +110,7 @@ class TournamentConsumer(AsyncWebsocketConsumer):
                     'tournament_admin_id': self.tournament_admin_id,
                 }
             )
-            await asyncio.sleep(5)
+            await asyncio.sleep(0.5)
             await self.receive(json.dumps({'command': self.START_ROUND}))
         else:
             TournamentConsumer.tournament_ready[self.tournament_id] = False
