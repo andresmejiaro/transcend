@@ -1,20 +1,21 @@
 .tournament-div {
-  overflow: hidden;
   text-align: center;
   margin: 0;
   background: url("../../assets/imgs/tournament-background.svg") center center no-repeat;
-  background-size: 100%; /* Set the background size to 80% of the viewport */
+  background-size: 100%;
   background-position: fixed;
-  background-attachment: fixed; /* Keeps the background fixed while scrolling */
-  height: 100vh; /* Set height to cover the entire viewport */
-  margin-top: 8rem;
+  background-attachment: fixed;
+  height: 100vh;
 }
 
 .tournaments-box {
   position: fixed;
   border: solid 4px #fbd793;
   background: linear-gradient(180deg, rgba(25, 26, 50, 0.73) 0%, rgba(25, 26, 50, 0.55) 75.27%, rgba(25, 26, 50, 0.00) 92.64%);
+  max-height: 50vh; /* Set maximum height */
+  overflow-y: auto; /* Enable vertical scroll if content exceeds max-height */
 }
+
 
 
 .btn.join-tournament-btn {
@@ -40,7 +41,7 @@
 
 .center-fixed-heading {
   position: fixed;
-  top: 20%;
+  top: 17%;
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 1; /* Ensure it's above other content */
