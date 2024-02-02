@@ -191,20 +191,19 @@ class LobbyConsumer(AsyncWebsocketConsumer):
             except Exception as e:
                 await self.close()
 
-            # Check if the user exists and add it to the list of online users/admins
-            # if await self.does_not_exist(self.client_id):
-            #     # print("WTF IS GOING ON")
-            #     await self.message_another_player(
-            #         self.client_id,
-            #         'duplicate_connection',
-            #         {
-            #             'time': timezone.now().isoformat(),
-            #             'client_id': self.client_id,
-            #             'message': 'Duplicate connection',
-            #         }
-            #     )
-            #     await self.close()
-            #     return
+            if await self.does_not_exist(self.client_id):
+                # print("WTF IS GOING ON")
+                await self.message_another_player(
+                    self.client_id,
+                    'duplicate_connection',
+                    {
+                        'time': timezone.now().isoformat(),
+                        'client_id': self.client_id,
+                        'message': 'Duplicate connection',
+                    }
+                )
+                await self.close()
+                return
 
             await self.accept()
 
@@ -802,8 +801,8 @@ class LobbyConsumer(AsyncWebsocketConsumer):
             User = import_string('api.userauth.models.CustomUser')
             user = get_object_or_404(User, pk=pk)
             # Check if the user is already connected on another client
-            if self.list_of_online_users.get(self.client_id):
-                return True
+            # if self.list_of_online_users.get(self.client_id):
+            #     return True
 
             self.list_of_online_users[self.client_id] = user.username
             if user.is_superuser:
