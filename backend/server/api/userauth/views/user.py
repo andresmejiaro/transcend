@@ -68,8 +68,7 @@ def info_me_id_view(request, user_id):
     return JsonResponse({'error': 'Only GET requests are allowed'}, status=400)
 
 
-# @requires_csrf_token
-@csrf_exempt
+@requires_csrf_token
 def update_avatar_view(request):
     try:
         authorization_header = request.headers.get('Authorization')
