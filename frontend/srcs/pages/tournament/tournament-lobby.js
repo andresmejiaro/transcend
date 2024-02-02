@@ -83,7 +83,7 @@ const handleTorData = async (data) => {
 		changeTournamentName(data.data.tournament_name);
 	} else if (data.type == "tournament_ready") {
 		canStartMatches = 1;
-		handleNewPlayer(data.data.registered_players);
+		// handleNewPlayer(data.data.registered_players);
 	} else if (data.type == "matchmaking_info") {
 		await handleMatchmakingTor(data.data);
 	} else if (data.type == "matches_finished") {

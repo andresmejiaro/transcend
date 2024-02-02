@@ -68,6 +68,7 @@ class TournamentConsumer(AsyncWebsocketConsumer):
         tournament = await self.init_tour_obj(self.tournament_id)
         print(f'Player object: {self.player_object} and tournament object: {self.tournament_object}')
 
+
         await self.accept()
 
         # If the user or tournament does not exist, close the connection
@@ -84,19 +85,20 @@ class TournamentConsumer(AsyncWebsocketConsumer):
         # Add client to class-level variable to keep track of connected clients
         self.add_connected_client(self.client_id)
 
+        TournamentConsumer.tournament_ready[self.tournament_id] = False
+        await self.broadcast_to_group(
+            str(self.tournament_id),
+            'player_joined',
+            {
+                'tournament_id': self.tournament_id,
+                'player_id': self.client_id,
+                'registered_players': self.list_of_registered_players,
+                'tournament_admin_id': self.tournament_admin_id,
+                'tournament_name': self.tournament_name
+            }
+        )
         # If we have 4 players, close the tournament and start the tournament otherwise just announce the new player
         if len(self.list_of_registered_players) == 4:
-            await self.broadcast_to_group(
-                str(self.tournament_id),
-                'player_joined',
-                {
-                    'tournament_id': self.tournament_id,
-                    'player_id': self.client_id,
-                    'registered_players': self.list_of_registered_players,
-                    'tournament_admin_id': self.tournament_admin_id,
-                    'tournament_name': self.tournament_name
-                }
-            )
             TournamentConsumer.tournament_ready[self.tournament_id] = True
             await self.broadcast_to_group(
                 str(self.tournament_id),
@@ -109,19 +111,7 @@ class TournamentConsumer(AsyncWebsocketConsumer):
             )
             await asyncio.sleep(5)
             await self.receive(json.dumps({'command': self.START_ROUND}))
-        else:
-            TournamentConsumer.tournament_ready[self.tournament_id] = False
-            await self.broadcast_to_group(
-                str(self.tournament_id),
-                'player_joined',
-                {
-                    'tournament_id': self.tournament_id,
-                    'player_id': self.client_id,
-                    'registered_players': self.list_of_registered_players,
-                    'tournament_admin_id': self.tournament_admin_id,
-                    'tournament_name': self.tournament_name
-                }
-            )
+
 
     async def disconnect(self, close_code):
         try:
