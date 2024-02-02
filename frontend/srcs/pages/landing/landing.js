@@ -13,4 +13,5 @@ document.body.addEventListener('click', function () {
 
 window.addEventListener('focus', function() {
   document.body.classList.remove('fade-out');
+  window.location.href = '/';
 });
