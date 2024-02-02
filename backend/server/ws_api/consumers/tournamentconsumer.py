@@ -135,6 +135,8 @@ class TournamentConsumer(AsyncWebsocketConsumer):
                     'tournament_id': self.tournament_id,
                     'info': 'Tournament ended',
                 })
+            if self.match_monitor_task:
+                self.match_monitor_task.cancel()
             await self.delete_tournament()
             await self.close()
                 
