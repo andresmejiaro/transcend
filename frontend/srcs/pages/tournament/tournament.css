@@ -1,0 +1,77 @@
+#start-round-btn:disabled {
+	background-color: #cccccc;
+	/* Use the desired shade of grey */
+	color: white;
+	/* Use a contrasting text color */
+	cursor: not-allowed;
+	/* Change the cursor to indicate it's disabled */
+}
+
+.tournament-round {
+	height: 400px;
+	/* border: 1px solid white; */
+	width: 200wh;
+	padding: 5px;
+	margin: 5px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.player {
+    font-size: 1.5em; /* Tamaño de fuente más grande para los nombres de usuario */
+    padding: 20px; /* Añade un relleno alrededor de los nombres de usuario */
+    border: 2px solid rgb(255, 255, 255); /* Añade un borde alrededor de los nombres de usuario */
+    border-radius: 5px; /* Redondea las esquinas del borde */
+}
+
+.match {
+	border: 1px solid black;
+	padding: 5px;
+	margin: auto 5px;
+}
+
+
+#tournament-name {
+    text-align: center;
+}
+
+.card{
+	text-align: center;
+	background-color: #15142E;
+	color: white;
+}
+
+#tournament-admin{
+	text-align: center;
+}
+
+#tournament-status{
+	text-align: center;
+}
+
+canvas {
+    display: block;
+    background-color: #000;
+    max-width: 100%;
+  }
+
+.canvas-cont {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.game-over-container {
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+.container-game {
+	position: relative;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

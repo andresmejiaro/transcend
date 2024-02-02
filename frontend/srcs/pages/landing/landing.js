@@ -1,19 +1,17 @@
-
 const fadeOutAndNavigate = async (target) => {
   document.body.classList.add('fade-out');
 
-  await new Promise((resolve) => setTimeout(resolve, 700));
-
-  await navigateTo(target);
-
-  document.body.classList.remove('fade-out');
-
-  document.body.removeEventListener('click', clickHandler);
+  setTimeout(function () {
+    window.location.href = '/home';
+  }, 700);
 };
 
-const clickHandler = async function () {
+document.body.addEventListener('click', function () {
   const targetUrl = "/home";
-  await fadeOutAndNavigate(targetUrl);
-};
+  fadeOutAndNavigate(targetUrl);
+});
 
-document.body.addEventListener('click', clickHandler);
+window.addEventListener('focus', function() {
+  document.body.classList.remove('fade-out');
+  window.location.href = '/';
+});

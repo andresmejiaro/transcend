@@ -1,8 +1,8 @@
-const tournamentsContainer = document.getElementById("tournaments");
-const matchesContainer = document.getElementById("matches");
-const usersContainer = document.getElementById("user");
+// const tournamentsContainer = document.getElementById("tournaments");
+// const matchesContainer = document.getElementById("matches");
+// const usersContainer = document.getElementById("user");
 
-const form = document.getElementById("createTornForm");
+// const form = document.getElementById("createTornForm");
 
 
 const createRequest = async () => {
@@ -67,8 +67,6 @@ const getListofTournaments = async () => {
     const data = await makeRequest(true, url, options, "");
 
     if (data.data.length === 0) {
-      const tournamentElement = document.createElement("div");
-      tournamentElement.innerHTML = `<p>There are currently no tournaments</p>`;
       tournamentsContainer.appendChild(tournamentElement);
     } else {
       // Update the content of the 'tournaments' div with the list of tournaments
@@ -372,12 +370,12 @@ const deleteUser = async (userId) => {
 
 // getListofUsers();
 // getListofMatches();
-getListofTournaments();
+// getListofTournaments();
 
-form.addEventListener("submit", function (event) {
-  event.preventDefault();
-  console.log("From submitted!");
-  let closeButton = document.querySelector("#exampleModal .btn-close");
-  closeButton.click();
-  createRequest();
-});
+// form.addEventListener("submit", function (event) {
+//   event.preventDefault();
+//   console.log("From submitted!");
+//   let closeButton = document.querySelector("#exampleModal .btn-close");
+//   closeButton.click();
+//   createRequest();
+// });

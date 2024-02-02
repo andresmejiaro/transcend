@@ -15,22 +15,17 @@ document.getElementById("friendsModal").addEventListener("shown.bs.modal", funct
 const handleModalForInvite = async () => {
 	const modalBodyFriends = document.getElementById("modal-body-friends-invite");
 	const modalBodyList = document.getElementById("modal-body-friends-list");
-
 	// Toggle the visibility of modal bodies
 	if (modalBodyFriends.style.display === 'none') {
 		modalBodyFriends.style.display = 'block';
 		modalBodyList.style.display = 'none';
 		await listInvitationFriendsNav(); // Update content for friends if needed
-	} else {
-		modalBodyFriends.style.display = 'none';
-		modalBodyList.style.display = 'block';
 	}
 	
 	// Remove existing event listeners
 	const btn = document.getElementById("back-modal-btn");
 	btn.removeEventListener("click", handleBackButtonClick);
 	btn.addEventListener("click", handleBackButtonClick);
-
 	const sendInvitationBtn = document.getElementById("sendInvitationBtn");
 	sendInvitationBtn.removeEventListener("click", handleSendInvitationClick);
 	sendInvitationBtn.addEventListener("click", handleSendInvitationClick);
@@ -39,7 +34,6 @@ const handleModalForInvite = async () => {
 const handleBackButtonClick = async () => {
 	const modalBodyFriends = document.getElementById("modal-body-friends-invite");
 	const modalBodyList = document.getElementById("modal-body-friends-list");
-
 	modalBodyFriends.style.display = 'none';
 	modalBodyList.style.display = 'block';
 

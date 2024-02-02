@@ -110,13 +110,13 @@ class Game {
         }
         //ctx.drawImage("/", 200, 200, canvas.width / 2, canvas.height /2);
         ctx.font = '26pt VT323';
-        ctx.fillText(`Thanks for playing!`, 305, 450);
-        ctx.font = '18pt VT323';
-        ctx.fillText(`To play again press Enter`, 310, 500);
+        ctx.fillText(`Thanks for playing!`, 305, 470);
+        
         if (keysPressed["Enter"])
             //requestAnimationFrame(() => this.gameSetup());
             // Using location.assign()
-            window.location.href='/play!';
+            // window.location.href='/play!';
+            ;
          else
             requestAnimationFrame(() => this.endScreen());
     }

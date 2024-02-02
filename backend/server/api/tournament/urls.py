@@ -5,7 +5,7 @@ from .views import *
 urlpatterns = [
     # Tournament
     path('tournament/create/', tournament_create, name="create"),
-    path('tournament/', tournament_list, name="list"),
+    # path('tournament/', tournament_list, name="list"),
     path('tournament/<int:pk>/', tournament_operations, name="detail"),
     path('tournament/<int:pk>/rounds/', tournament_rounds, name="round"),
     # Match
@@ -27,11 +27,6 @@ urlpatterns = [
     path('user/<int:pk>/tournament/', user_all_tournaments, name='user_tournament'),
     
     # Matchmaking for Tournaments
-    # <int:pk> is the tournament id
-    # The first time you call this, it will determine the number of rounds needed per the amount of players
-    # It will then create the rounds and matches for each round
-    # It will then return the first round of matches
-    # You can then call this again to get the next round of matches until there are no more rounds
-    # If you call this again after all rounds have been played, it will return a the winner of the tournament
-    path('tournament/<int:pk>/matchmaking/', game_matchmaking, name='game_matchmaking'),
+    path('tournament/', list_joinable_tournaments, name="list_joinable_tournaments"),
+    path('tournament/<str:name>/', get_tournament_by_name, name="get_tournament_by_name"),
 ]

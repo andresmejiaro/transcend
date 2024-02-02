@@ -18,6 +18,7 @@ from api.jwt_utils import get_user_id_from_jwt_token
 from .utils.validate_update import UserUpdateValidator
 from django.shortcuts import get_object_or_404
 from api.userauth.models import CustomUser
+import magic
 
 
 @requires_csrf_token
@@ -29,7 +30,6 @@ def info_me_view(request):
                 try:
                     _, token = authorization_header.split()
                     user_id = get_user_id_from_jwt_token(token)
-                    print(user_id)
                     user = CustomUser.objects.get(id=user_id)
                 except Exception as e:
                     return JsonResponse({'error': str(e)}, status=401)
@@ -83,6 +83,12 @@ def update_avatar_view(request):
         if request.method == 'POST':
             if 'avatar' in request.FILES:
                 avatar = request.FILES['avatar']
+
+                mime = magic.Magic(mime=True)
+                mime_type = mime.from_buffer(avatar.read(1024))
+
+                if not mime_type.startswith('image'):
+                    return JsonResponse({'error': 'Invalid file format. Please upload a valid image.'}, status=400)
 
                 # Check if the uploaded file is an image
                 if not avatar.name.lower().endswith(('.png', '.jpg', '.jpeg')):

@@ -3,6 +3,8 @@ let gameSock;
 
 const connectGameSocket = async (gameInfo) => {
 	const authToken = sessionStorage.getItem("jwt");
+	console.log("Game info:")
+	console.log(gameInfo)
 	matchId = gameInfo.match_id;
 	
 	return new Promise((resolve, reject) => {

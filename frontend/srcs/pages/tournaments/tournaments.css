@@ -1,20 +1,48 @@
 .tournament-div {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column; /* Optional: To stack elements vertically */
-  margin: 0;
+  text-align: center;
   background: url("../../assets/imgs/tournament-background.svg") center center no-repeat;
-  background-size: 80%; /* Set the background size to 80% of the viewport */
-  background-attachment: fixed; /* Keeps the background fixed while scrolling */
-  height: 100vh; /* Set height to cover the entire viewport */
+  background-size: 100%;
+  background-position: fixed;
+  background-attachment: fixed;
+  height: 100vh;
 }
 
 .tournaments-box {
+  position: fixed;
   border: solid 4px #fbd793;
   background: linear-gradient(180deg, rgba(25, 26, 50, 0.73) 0%, rgba(25, 26, 50, 0.55) 75.27%, rgba(25, 26, 50, 0.00) 92.64%);
+  max-height: 40vh; /* Set maximum height */
+  overflow-y: auto; /* Enable vertical scroll if content exceeds max-height */
 }
 
-.user-in-tournament {
-	background-color: blue;
+
+
+.btn.join-tournament-btn {
+  
+  background: url('./srcs/assets/buttons/join-tournament.svg') no-repeat center center;
+  background-size: cover; /* or contain, depending on your preference */
+  width: 100px; /* Set the width of your button */
+  height: 50px; /* Set the height of your button */
+  position: relative;
+  border: none; /* Remove default button styling if needed */
+  cursor: pointer;
+}
+
+.button-join-tor-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-weight: bold;
+  z-index: 1;
+}
+
+.center-fixed-heading {
+  position: fixed;
+  top: 17%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1; /* Ensure it's above other content */
+  padding: 10px 20px; /* Optional: Add some padding */
 }

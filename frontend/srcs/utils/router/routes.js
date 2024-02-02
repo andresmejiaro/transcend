@@ -81,7 +81,7 @@ const urlRoutes = {
 		template: directory + "tournaments/create-tournament.html",
 		title: urlPageTitle + " - Tournaments",
 		description: "This is the create tournament page",
-		js: [{ file: directory + "tournaments/create-tor.js" }, { file: directory + "tournaments/join-tor.js" }],
+		js: [{ file: directory + "tournaments/tournaments.js" }, { file: directory + "tournaments/tournament-creation-handler.js" }, { file: directory + "tournaments/tournament-join-handler.js" },],
 		css: [directory + "tournaments/tournaments.css"],
 	},
 
@@ -89,7 +89,8 @@ const urlRoutes = {
 		template: directory + "tournament/tournament.html",
 		title: urlPageTitle + " - Tournament",
 		description: "This is the tournament page",
-		js: [{ file: directory + "tournament/tournament-lobby.js" }, { file: directory + "tournament/utils.js" }, { file: directory + "tournament/tournament.js" }, { file: directory + "tournament/tournament-admin.js" }],
+		js: [{ file: directory + "tournament/tournament-lobby.js" }, { file: directory + "tournament/utils.js" }, { file: directory + "tournament/tournament.js" }, { file: directory + "tournament/tournament-admin.js" }, { file: directory + "tournament/tournament-matchmaking-handler.js" }, { file: directory + "tournament/tournament-match-handler.js" },
+		{ file: directory + "0nlinegame/enviroment.js" }, { file: "./srcs/utils/pongJs/MovingRectangle.js" }, { file: "./srcs/utils/pongJs/Ball.js" }, { file: "./srcs/utils/pongJs/Paddle.js" }, { file: "./srcs/utils/pongJs/Player.js" }, { file: "./srcs/utils/pongJs/Game.js" }, { file: directory + "0nlinegame/helper.js" }, { file: directory + "0nlinegame/finish-helper.js" }],
 		css: [directory + "tournament/tournament.css"],
 	},
 

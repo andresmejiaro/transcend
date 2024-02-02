@@ -15,7 +15,7 @@ const listInvitationFriendsNav = async () => {
 
     const removeButton = document.createElement("button");
     removeButton.classList.add("btn", "btn-danger", "ms-2");
-    removeButton.innerHTML = '<i class="bi bi-x"></i> Remove Invitation';
+    removeButton.innerHTML = '<i class="bi bi-x"></i>Remove';
     removeButton.addEventListener("click", async () => {
       (async () => {
         await removeFriendRequest(friend);
@@ -114,7 +114,7 @@ const listFriendsNav = async () => {
   });
 
   document.getElementById("friendsModalLabel").innerHTML =
-    "Online: " + nowOnlineFriends;
+    "Online " + nowOnlineFriends;
 };
 
 const friendsIconNav = document.getElementById("nav-friends-icon");

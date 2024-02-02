@@ -1,36 +1,29 @@
-const startNextRoundTor = async (tourId) => {
-  const url = `${window.DJANGO_API_BASE_URL}/api/tournament/${tourId}/matchmaking`;
-  const options = {
-    method: "GET",
-    mode: "cors",
-    credentials: "include",
-  };
+// const startNextRound = document.getElementById("start-round-btn");
+// startNextRound.addEventListener("click", function () {
+// 	sendTorSocketMessage("command", {
+// 		command: "start_round",
+// 		data: {},
+// 	});
+// });
 
-  try {
-    const data = await makeRequest(true, url, options, "");
-    console.log(data);
-    if (data.status == "ok") {
-      window.location.reload;
-    }
-  } catch (error) {
-    console.log(error);
-  }
-};
+function showTournamentAdmin(canStartMatches, data) {
+	let tournamentAdminDiv = document.getElementById("tournament-admin");
+	if (tournamentAdminDiv) {
+		tournamentAdminDiv.classList.remove("d-none");
+		tournamentAdminDiv.classList.add("d-block");
+	}
 
-const startNextRound = document.getElementById("start-round-btn");
-startNextRound.addEventListener("click", function () {
-  startNextRoundTor(tournamentId);
-});
+	if (!canStartMatches && !data.winner) {
+		document.getElementById("status-admin").innerHTML = "Waiting for players...";
+		startNextRound.disabled = true;
+	}
 
-function showTournamentAdmin(data) {
-  let tournamentAdminDiv = document.getElementById("tournament-admin");
-  if (tournamentAdminDiv) {
-    tournamentAdminDiv.classList.remove("d-none");
-    tournamentAdminDiv.classList.add("d-block");
-  }
+	if (canStartMatches) {
+		document.getElementById("status-admin").innerHTML = "Starting tournament, wait!";
+		startNextRound.disabled = false;
+	}
 
-  if (data.winner) {
-    document.getElementById("status-admin").innerHTML =
-      "No ADMIN, tournament ended";
-  }
+	if (data.winner) {
+		document.getElementById("status-admin").innerHTML = "No ADMIN, tournament ended";
+	}
 }

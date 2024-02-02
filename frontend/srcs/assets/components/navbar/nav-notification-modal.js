@@ -8,8 +8,16 @@ const handleModalForNotifications = async () => {
 
 		const descriptionDiv = document.createElement("div");
 		const descriptionParagraph = document.createElement("p");
-		if (data.invite_type == "match") descriptionParagraph.textContent = `${data.username} invited you to a Match`;
-		else descriptionParagraph.textContent = `${data.username} wants to become friends`;
+		if (data.invite_type === "match") {
+			descriptionParagraph.textContent = `${data.username} invited you to a Match`;
+		} else {
+			if (data.username.length > 10) {
+				descriptionParagraph.textContent = `${data.username.substring(0, 10)}... wants to be your friend`;
+			} else {
+				descriptionParagraph.textContent = `${data.username} wants to be your friend`;
+			}
+		}
+		
 
 		descriptionDiv.appendChild(descriptionParagraph);
 

@@ -1,5 +1,4 @@
 .landing-div {
-  cursor: url('../../assets/imgs/mouse.png'), auto;
   margin: 0;
   position: fixed;
   top: 0;
@@ -13,9 +12,9 @@
 
 /* Style the image inside the container */
 .landing-div img {
-	width: 100%;
+	max-width: 100%;
 	max-height: 100%;
-  object-fit: cover;
+	object-fit: contain;
 }
 
 .fade-out {

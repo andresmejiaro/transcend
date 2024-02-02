@@ -17,3 +17,8 @@
 // // Example usage
 // addClickListener("signupButton", "/signup");
 // addClickListener("signinButton", "/signin");
+
+window.addEventListener('focus', function() {
+    window.location.href = '/home';
+  });
+  
