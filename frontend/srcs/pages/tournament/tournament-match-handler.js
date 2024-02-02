@@ -11,7 +11,7 @@ const joinTorMatch = async (match_id, player1Id, player2Id) => {
 	player2 = new Player(other.username, { up: "UNUSED_DEFAULT_KEY", down: "UNUSED_DEFAULT_KEY", left: "UNUSED_DEFAULT_KEY", right: "UNUSED_DEFAULT_KEY" }, "left");
 	game = new Game(player1, player2, (remote = 1));
 
-	gameSock = await connectGameSocket(match_id);
+	gameSock = await connectGameSocket({match_id: match_id});
 
 	await game.start();
 };
