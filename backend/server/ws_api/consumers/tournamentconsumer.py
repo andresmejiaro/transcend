@@ -86,6 +86,17 @@ class TournamentConsumer(AsyncWebsocketConsumer):
 
         # If we have 4 players, close the tournament and start the tournament otherwise just announce the new player
         if len(self.list_of_registered_players) == 4:
+            await self.broadcast_to_group(
+                str(self.tournament_id),
+                'player_joined',
+                {
+                    'tournament_id': self.tournament_id,
+                    'player_id': self.client_id,
+                    'registered_players': self.list_of_registered_players,
+                    'tournament_admin_id': self.tournament_admin_id,
+                    'tournament_name': self.tournament_name
+                }
+            )
             TournamentConsumer.tournament_ready[self.tournament_id] = True
             await self.broadcast_to_group(
                 str(self.tournament_id),
@@ -96,7 +107,7 @@ class TournamentConsumer(AsyncWebsocketConsumer):
                     'tournament_admin_id': self.tournament_admin_id,
                 }
             )
-            await asyncio.sleep(15)
+            await asyncio.sleep(5)
             await self.receive(json.dumps({'command': self.START_ROUND}))
         else:
             TournamentConsumer.tournament_ready[self.tournament_id] = False
@@ -310,6 +321,7 @@ class TournamentConsumer(AsyncWebsocketConsumer):
 
 # Matchmaking Helper Methods
     async def check_match_finished(self):
+        start_time = timezone.now()
         try:
             # This coroutine will loop through the matches and once they are all complete will set the tournament_ready flag to True
             while True:
@@ -337,7 +349,7 @@ class TournamentConsumer(AsyncWebsocketConsumer):
                         }
                     )
                     # To avoid admin trolling, we will wait for 5 seconds before starting the next round
-                    await asyncio.sleep(20)
+                    await asyncio.sleep(5)
                     await self.receive(json.dumps({'command': self.START_ROUND}))
                     break
 
