@@ -688,22 +688,24 @@ def user_all_matches(request):
                 
             match_list = []
             for match in matches:
-                match_list.append({
-                    'id': match.id,
-                    'player1': {
-                        "id": match.player1.id,
-                        "username": match.player1.username,
-                    },
-                    'player2': {
-                        "id": match.player2.id,
-                        "username": match.player2.username,
-                    },
-                    'player1_score': match.player1_score,
-                    'player2_score': match.player2_score,
-                    'winner': match.winner.username if match.winner else None,
-                    'date_played': match.date_played,
-                    'active': match.active
-                })
+                if match.winner:
+                    match_list.append({
+                        'id': match.id,
+                        'player1': {
+                            "id": match.player1.id,
+                            "username": match.player1.username,
+                        },
+                        'player2': {
+                            "id": match.player2.id,
+                            "username": match.player2.username,
+                        },
+                        'player1_score': match.player1_score,
+                        'player2_score': match.player2_score,
+                        'winner': match.winner.username if match.winner else None,
+                        'date_played': match.date_played,
+                        'active': match.active
+                    })
+            match_list.reverse()
             return JsonResponse({'status': 'ok', 'data': match_list})
         except User.DoesNotExist:
             return JsonResponse({'status': 'error', 'message': 'User does not exist'}, status=400)

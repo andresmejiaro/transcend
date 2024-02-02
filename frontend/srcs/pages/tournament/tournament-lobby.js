@@ -28,6 +28,7 @@ const connectWebSocketTor = async () => {
 		torSocket.addEventListener("error", (event) => {
 			console.error("WebSocket error:", event);
 			reject(new Error("WebSocket connection error."));
+			window.location.href = '/play!'
 		});
 	});
 };
@@ -106,6 +107,9 @@ const handleTorData = async (data) => {
 		window.location.href = '/play!'
 		await sleep(1000);
 		showAlertDanger("Player disconnected, tournament ended.");
+	} else if (data.type === "error") {
+		window.location.href = '/play!'
+		showAlertDanger("No such tournament")
 	}
 
 // 	const userId = await getUserId();
