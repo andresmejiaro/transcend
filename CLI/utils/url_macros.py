@@ -1,7 +1,10 @@
 # utils/url_macros.py
 
-API_BASE_URL = 'http://localhost:8000/api'
-WS_BASE_URL = 'ws://localhost:8001/ws'
+# API_BASE_URL = 'http://localhost:8000/api'
+# WS_BASE_URL = 'ws://localhost:8001/ws'
+
+API_BASE_URL = 'https://c3r1s1.42madrid.com:3000/api'
+WS_BASE_URL = 'wss://c3r1s1.42madrid.com:3000/ws'
 
 # WS Templates
 LOBBY_URI_TEMPLATE = WS_BASE_URL + '/lobby/?token={token}'

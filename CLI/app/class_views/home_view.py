@@ -14,7 +14,6 @@ from app.widgets.widgets import Widget
 from app.widgets.nav_bar import NavBar
 from app.class_views.game_view import GamePage
 
-
 class HomePage(Widget):
     def __init__(self, stdscr, ui_controller, frame_rate, process_speed, task_manager):
         super().__init__(stdscr)
@@ -353,7 +352,8 @@ class HomePage(Widget):
 
     async def connect_ws_task(self, data):
         try:
-            async with aiohttp.ClientSession() as session:
+            connector = aiohttp.TCPConnector(ssl=False)
+            async with aiohttp.ClientSession(connector=connector) as session:
                 uri = data['uri']
                 # formatted_uri = uri.format(token=token)
                 log_message(f"Connecting to websocket: {uri}", level=logging.INFO)

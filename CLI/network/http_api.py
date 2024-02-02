@@ -64,7 +64,7 @@ class http_api:
             else:
                 json_data = data
 
-            response = self.session.request(method, url, headers=headers, data=json_data, cookies=cookies)
+            response = self.session.request(method, url, headers=headers, data=json_data, cookies=cookies, verify=False)
 
             return response
         
