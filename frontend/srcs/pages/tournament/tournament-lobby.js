@@ -102,14 +102,14 @@ const handleTorData = async (data) => {
 		handleTournamentFinished(data.data.tournament_winner);
 	}
 
-	const userId = await getUserId();
-	if (data?.data?.tournament_admin_id) {
-		if (data.data.tournament_admin_id == userId) {
-			showTournamentAdmin(canStartMatches, data);
-		} else {
-			changeTournamentStatus(null, canStartMatches);
-		}
-	}
+// 	const userId = await getUserId();
+// 	if (data?.data?.tournament_admin_id) {
+// 		if (data.data.tournament_admin_id == userId) {
+// 			showTournamentAdmin(canStartMatches, data);
+// 		} else {
+// 			changeTournamentStatus(null, canStartMatches);
+// 		}
+// 	}
 };
 
 const handleNewPlayer = (data) => {
