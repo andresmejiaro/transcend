@@ -100,6 +100,12 @@ const handleTorData = async (data) => {
 		console.log(data)
 	} else if (data.type == "tournament_ended") {
 		handleTournamentFinished(data.data.tournament_winner);
+	} else if (data.type === "player_disconnected") {
+		const sleep = (duration) => new Promise(resolve => setTimeout(resolve, duration));
+		torSocket.close(1000);
+		window.location.href = '/play!'
+		await sleep(1000);
+		showAlertDanger("Player disconnected, tournament ended.");
 	}
 
 // 	const userId = await getUserId();
