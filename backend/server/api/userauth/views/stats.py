@@ -57,7 +57,9 @@ def get_kpi_username(request, username):
     user = get_object_or_404(CustomUser, username=username)
 
     matches = Match.objects.filter(Q(player1=user) | Q(player2=user))
-    wins = matches.filter(winner=user)
+    matches = [x for x in matches if x.winner]
+    # wins = matches.filter(winner=user)
+    wins = [x for x in matches if x.winner == user]
     winrate = round(len(wins) / len(matches), 2) if len(matches) != 0 else 0
     tournament_wins = Tournament.objects.filter(winner=user)
 
