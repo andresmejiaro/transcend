@@ -12,7 +12,7 @@
   position: fixed;
   border: solid 4px #fbd793;
   background: linear-gradient(180deg, rgba(25, 26, 50, 0.73) 0%, rgba(25, 26, 50, 0.55) 75.27%, rgba(25, 26, 50, 0.00) 92.64%);
-  max-height: 50vh; /* Set maximum height */
+  max-height: 40vh; /* Set maximum height */
   overflow-y: auto; /* Enable vertical scroll if content exceeds max-height */
 }
 
