@@ -21,6 +21,10 @@ const joinQueue = async () => {
 			user_id: userId,
 		},
 	});
+	ctx.clearRect(0, 0, canvas.width, canvas.height);
+	ctx.font = '30pt VT323';
+	ctx.fillText(`Waiting for players..!`, 240, 120);
+
 };
 
 joinQueue();
