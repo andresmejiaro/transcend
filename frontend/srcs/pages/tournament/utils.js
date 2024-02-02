@@ -96,23 +96,26 @@ const showSecondTorTable = async (players) => {
 };
 
 const showlastTorTable = async (players) => {
-	const tournamentRoundDiv = document.getElementById("tournament-winner-round");
-	tournamentRoundDiv.innerHTML = "";
-  const player = players[0];
+    const tournamentRoundDiv = document.getElementById("tournament-winner-round");
+    tournamentRoundDiv.innerHTML = "";
+    const player = players[0];
 
-	const matchDiv = document.createElement("div");
-	matchDiv.className = "match";
+    const matchDiv = document.createElement("div");
+    matchDiv.className = "match";
 
-	const player1Div = document.createElement("div");
-	player1Div.className = "player";
-	player1Div.textContent = player.username;
+    const player1Div = document.createElement("div");
+    player1Div.className = "player";
+    player1Div.textContent = player.username;
 
-	matchDiv.appendChild(player1Div);
+    const crownEmojiBefore = document.createElement("span");
+    crownEmojiBefore.textContent = "👑 "; // Emoji de corona antes del nombre
 
-	tournamentRoundDiv.appendChild(matchDiv);
-};
+    const crownEmojiAfter = document.createElement("span");
+    crownEmojiAfter.textContent = " 👑"; // Emoji de corona después del nombre
 
-const handleTournamentFinished = (player_name) => {
-  const namess = player_name[0].username;
-  showAlertDanger(namess + "WON!");
+    player1Div.prepend(crownEmojiBefore); // Agrega la corona antes del nombre del jugador
+    player1Div.appendChild(crownEmojiAfter); // Agrega la corona después del nombre del jugador
+
+    matchDiv.appendChild(player1Div);
+    tournamentRoundDiv.appendChild(matchDiv);
 };
