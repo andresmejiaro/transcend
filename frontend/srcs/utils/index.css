@@ -184,7 +184,7 @@ p {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
     z-index: 1000;
 	color: #000; /* Set text color to black */
-	border-radius: 5%;
+	border-radius: 0.375rem;
 	border-color: aqua;
 	border: 1cm;
 }

@@ -45,6 +45,4 @@
   transform: translate(-50%, -50%);
   z-index: 1; /* Ensure it's above other content */
   padding: 10px 20px; /* Optional: Add some padding */
-  border-radius: 5px; /* Optional: Add border radius */
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Optional: Add a box shadow */
 }
