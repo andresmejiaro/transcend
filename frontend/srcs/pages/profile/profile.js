@@ -105,7 +105,7 @@ function searchUser() {
 
     // Perform a check to ensure the username is not empty
     if (username.trim() === '') {
-        alert('Please enter a username');
+        showAlertDanger('Please enter a username!');
         return;
     }
 
@@ -192,7 +192,7 @@ function displayUserInfoPopup(userData, statsData, matchHistoryData) {
     // Create avatar image element
     const avatarImageElement = document.createElement("img");
     avatarImageElement.alt = "User Avatar";
-    avatarImageElement.style.width = "300px";
+    avatarImageElement.style.width = "360px";
 
     // Check if the user has an avatar URL
     if (userData.avatar_url) {

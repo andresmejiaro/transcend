@@ -114,7 +114,7 @@ const listFriendsNav = async () => {
   });
 
   document.getElementById("friendsModalLabel").innerHTML =
-    "Online: " + nowOnlineFriends;
+    "Online " + nowOnlineFriends;
 };
 
 const friendsIconNav = document.getElementById("nav-friends-icon");

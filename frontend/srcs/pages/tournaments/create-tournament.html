@@ -1,16 +1,22 @@
 <div class="tournament-div">
-  <h2>Tournaments</h2>
-  <div class="col-md-6 mt-2 tournaments-box mx-auto">
-    <div id="tournaments" style="padding-top: 10px;"></div>
-    <button
-      type="button"
-      class="btn btn-primary mb-2"
-      data-bs-toggle="modal"
-      data-bs-target="#exampleModal"
-      style="background-color: #15142E; color: fffeee;"
-    >
-      Create a Tournament!
-    </button>
+  <div class="container-fluid">
+    <h2 class="center-fixed-heading">Tournaments</h2>
+  </div>
+  <div class="container-fluid d-flex align-items-center justify-content-center" style="height: 50vh;">
+    <div class="row justify-content-center">
+      <div class="col-md-6 mt-1 tournaments-box">
+        <div id="tournaments" style="padding-top: 10px;"></div>
+        <button
+          type="button"
+          class="btn btn-primary mb-2"
+          data-bs-toggle="modal"
+          data-bs-target="#exampleModal"
+          style="background-color: #15142E; color: fffeee;"
+        >
+          Create a Tournament!
+        </button>
+      </div>
+    </div>
   </div>
 
   <!-- Modal -->
@@ -27,12 +33,7 @@
           <h5 class="modal-title text-light" id="exampleModalLabel">
             Create a Tournament!
           </h5>
-          <button
-            type="button"
-            class="btn-close"
-            data-bs-dismiss="modal"
-            aria-label="Close"
-          ></button>
+          <span class="close-modal" data-bs-dismiss="modal" style="font-size: 24px; color: red; padding: 10px;">×</span>
         </div>
         <form id="createTornForm">
           <div class="modal-body">
