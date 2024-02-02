@@ -228,6 +228,7 @@ function displayUserInfoPopup(userData, statsData, matchHistoryData) {
 	// Create element to display match history similar to the one on the profile page
 	const matchHistoryList = document.createElement("ul");
 	matchHistoryList.classList.add("list-group");
+	matchHistoryList.style.maxHeight = "300px";
 	matchHistoryList.style.height = "auto"; // Set a fixed height for the scrollable area
 	matchHistoryList.style.overflowY = "auto"; // Enable vertical scrolling
 
