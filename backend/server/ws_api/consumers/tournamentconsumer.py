@@ -73,7 +73,7 @@ class TournamentConsumer(AsyncWebsocketConsumer):
 
         # If the user or tournament does not exist, close the connection
         if user is None or tournament is None:
-            await self.send_info_to_client("message", "Tournament or User not found or registered for the tournament.")
+            await self.send_info_to_client("error", "tournament_not_found")
             await self.close()
             return
         
