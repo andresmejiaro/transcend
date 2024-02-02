@@ -1,10 +1,14 @@
 <div style="margin-top: 6rem;">
     <div class="text-center">
-        <input type="text" id="searchUsername" placeholder="Enter username">
-        <button onclick="searchUser()">Search</button>
+        <div class="row justify-content-center">
+            <div class="form-group col-md-4 mb-2">
+                <input class="form-control input-signup" type="text" id="searchUsername" placeholder="Search friend">
+            </div>
+        </div>
+        <button class="btn bg-white" onclick="searchUser()">Search</button>
     </div>
     
-    <div class="text-center">
+    <div class="text-center" style="padding-top: 50px;">
         <img src="./srcs/assets/imgs/default-avatar.jpeg" alt="" srcset="" id="avatarImageUser" style="width: 350px;"> 
         <h3 id="user-username">Username</h3>
 

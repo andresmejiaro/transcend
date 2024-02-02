@@ -11,7 +11,6 @@ p {
 }
 
 body {
-	cursor: url('../assets/imgs/mouse.png'), auto;
 	margin: 0;
 	padding: 0;
 	font-family: 'Open Sans', sans-serif;
@@ -90,7 +89,6 @@ p {
     margin: auto !important;
     margin-top: 15px !important; /* Adjust this value to increase or decrease the top space */
 }
-
 /* Custom styles for collapsed navbar and dropdown background color */
 @media (max-width: 1200px) {
 	.navbar-nav .nav-link {
@@ -181,12 +179,12 @@ p {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background-color: #545753;
+    background-color: #15142E;
     padding: 20px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
     z-index: 1000;
 	color: #000; /* Set text color to black */
-	border-radius: 5%;
+	border-radius: 0.375rem;
 	border-color: aqua;
 	border: 1cm;
 }

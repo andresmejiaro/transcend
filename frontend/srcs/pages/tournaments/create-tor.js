@@ -67,8 +67,6 @@ const getListofTournaments = async () => {
     const data = await makeRequest(true, url, options, "");
 
     if (data.data.length === 0) {
-      const tournamentElement = document.createElement("div");
-      tournamentElement.innerHTML = `<p>Be the first to create a tournament!</p>`;
       tournamentsContainer.appendChild(tournamentElement);
     } else {
       // Update the content of the 'tournaments' div with the list of tournaments

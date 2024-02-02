@@ -1,10 +1,10 @@
-const startNextRound = document.getElementById("start-round-btn");
-startNextRound.addEventListener("click", function () {
-	sendTorSocketMessage("command", {
-		command: "start_round",
-		data: {},
-	});
-});
+// const startNextRound = document.getElementById("start-round-btn");
+// startNextRound.addEventListener("click", function () {
+// 	sendTorSocketMessage("command", {
+// 		command: "start_round",
+// 		data: {},
+// 	});
+// });
 
 function showTournamentAdmin(canStartMatches, data) {
 	let tournamentAdminDiv = document.getElementById("tournament-admin");
@@ -19,7 +19,7 @@ function showTournamentAdmin(canStartMatches, data) {
 	}
 
 	if (canStartMatches) {
-		document.getElementById("status-admin").innerHTML = "On your click, tournament starts";
+		document.getElementById("status-admin").innerHTML = "Starting tournament, wait!";
 		startNextRound.disabled = false;
 	}
 
