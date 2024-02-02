@@ -311,7 +311,7 @@ class PongConsumer(AsyncWebsocketConsumer):
                 })
             else:
                 await self.broadcast_to_group(f"{self.match_id}", "message", {
-                    "message": 'Waiting for other player',
+                    "message": 'Please refresh the page',
                 })
                   
         except Exception as e:
