@@ -604,12 +604,9 @@ class TournamentConsumer(AsyncWebsocketConsumer):
             
             # Delete the round associated with the tournament and the matches withing the round since rounds are saved as ints to avoid circular dependency we need to import the Round model here
             print(f'Rounds to delete: {self.list_of_rounds}')
-            for round in self.list_of_rounds.values():
-                # Delete the matches associated with the round
-                matches = round.matches.all()
-                print(f'Matches to delete: {matches}')
-                for match in matches:
-                    match.delete()
+            rounds_list = tournament.rounds.all()
+            for round in rounds_list:
+                print(f'Deleting round {round}')
                 round.delete()
          
             tournament.delete()
