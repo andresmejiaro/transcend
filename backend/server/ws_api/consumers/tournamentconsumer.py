@@ -128,44 +128,56 @@ class TournamentConsumer(AsyncWebsocketConsumer):
                 await self.close()
                 return
 
-            # If the tournament has not ended, check if the client is the tournament admin
-            if self.client_id == str(self.tournament_admin_id):
-                print(f'Tournament admin {self.client_id} disconnected')
-                await self.assign_new_tournament_admin()
-                await self.broadcast_to_group(
-                    str(self.tournament_id),
-                    'tournament_admin_disconnected',
-                    {
-                        'tournament_id': self.tournament_id,
-                        'new_admin': self.tournament_admin_id,
-                        'info': 'Tournament admin disconnected.',
-                    }
-                )
-            else:
-                print(f'Player {self.client_id} disconnected')
-                await self.broadcast_to_group(
-                    str(self.tournament_id),
-                    'player_disconnected',
-                    {
-                        'tournament_id': self.tournament_id,
-                        'player_id': self.client_id,
-                        'info': 'Player disconnected.',
-                    }
-                )
-            if self.tournament_admin_id is None:
-                await self.delete_tournament()
-                await self.broadcast_to_group(
-                    str(self.tournament_id),
-                    'tournament_deleted',
-                    {
-                        'tournament_id': self.tournament_id,
-                        'info': 'Tournament deleted.',
-                    }
-                )
-                await self.close()
-                return
+            await self.broadcast_to_group(
+                str(self.tournament_id),
+                'player_disconnected',
+                {
+                    'tournament_id': self.tournament_id,
+                    'info': 'Tournament ended',
+                })
+            await self.delete_tournament()
             await self.close()
-            return
+                
+            
+
+            # If the tournament has not ended, check if the client is the tournament admin
+            # if self.client_id == str(self.tournament_admin_id):
+            #     print(f'Tournament admin {self.client_id} disconnected')
+            #     await self.assign_new_tournament_admin()
+            #     await self.broadcast_to_group(
+            #         str(self.tournament_id),
+            #         'tournament_admin_disconnected',
+            #         {
+            #             'tournament_id': self.tournament_id,
+            #             'new_admin': self.tournament_admin_id,
+            #             'info': 'Tournament admin disconnected.',
+            #         }
+            #     )
+            # else:
+            #     print(f'Player {self.client_id} disconnected')
+            #     await self.broadcast_to_group(
+            #         str(self.tournament_id),
+            #         'player_disconnected',
+            #         {
+            #             'tournament_id': self.tournament_id,
+            #             'player_id': self.client_id,
+            #             'info': 'Player disconnected.',
+            #         }
+            #     )
+            # if self.tournament_admin_id is None:
+            #     await self.delete_tournament()
+            #     await self.broadcast_to_group(
+            #         str(self.tournament_id),
+            #         'tournament_deleted',
+            #         {
+            #             'tournament_id': self.tournament_id,
+            #             'info': 'Tournament deleted.',
+            #         }
+            #     )
+            #     await self.close()
+            #     return
+            # await self.close()
+            # return
         except Exception as e:
             print(f"Error in disconnect method: {e}")
 
