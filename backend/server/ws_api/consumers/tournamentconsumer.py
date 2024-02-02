@@ -599,7 +599,19 @@ class TournamentConsumer(AsyncWebsocketConsumer):
         try:
             print(f'Deleting tournament {self.tournament_id}')
             Tournament = import_string('api.tournament.models.Tournament')
+            Round = import_string('api.tournament.models.Round')
             tournament = get_object_or_404(Tournament, pk=self.tournament_id)
+            
+            # Delete the round associated with the tournament and the matches withing the round since rounds are saved as ints to avoid circular dependency we need to import the Round model here
+            print(f'Rounds to delete: {self.list_of_rounds}')
+            for round in self.list_of_rounds.values():
+                # Delete the matches associated with the round
+                matches = round.matches.all()
+                print(f'Matches to delete: {matches}')
+                for match in matches:
+                    match.delete()
+                round.delete()
+         
             tournament.delete()
             return True
         except Exception as e:
