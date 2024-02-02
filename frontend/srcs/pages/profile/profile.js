@@ -192,7 +192,7 @@ function displayUserInfoPopup(userData, statsData, matchHistoryData) {
     // Create avatar image element
     const avatarImageElement = document.createElement("img");
     avatarImageElement.alt = "User Avatar";
-    avatarImageElement.style.width = "360px";
+    avatarImageElement.style.width = "320px";
 
     // Check if the user has an avatar URL
     if (userData.avatar_url) {
