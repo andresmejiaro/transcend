@@ -89,7 +89,6 @@ p {
     margin: auto !important;
     margin-top: 15px !important; /* Adjust this value to increase or decrease the top space */
 }
-
 /* Custom styles for collapsed navbar and dropdown background color */
 @media (max-width: 1200px) {
 	.navbar-nav .nav-link {
