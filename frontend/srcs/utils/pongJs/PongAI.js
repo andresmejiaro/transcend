@@ -27,7 +27,9 @@ class PongAI {
         }
         this.#canvas = game.getCanvas();
         this.updateBallSpeed();
-        this.calculateCollisionPoint()
+        if (this.#game.frame % 25 == 0){
+            this.calculateCollisionPoint()
+        }
         this.deadCenterMethod();
     }
     
@@ -60,7 +62,7 @@ class PongAI {
     }
 
     calculateCollisionPoint(){
-        let offset = 90 * Math.sin(this.#game.frame/10);
+        let offset = 70 * Math.sin(this.#game.frame/10);
         //let offset = Math.sin(this.#game.frame/17);
 		//console.log(offset);
 		if (this.#ballspeed["x"] > 0){
